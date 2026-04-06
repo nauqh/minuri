@@ -5,27 +5,27 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, ArrowUpRight, Menu } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { SpotlightScrollSection } from "@/components/landing/spotlight-scroll-section";
 
 const steps = [
 	{
-		title: "Health Reminder System",
-		line: "Warm nudges for water, meals, sleep, and medication — the rhythm a household used to hold.",
+		title: "First Time Guides",
+		line: "Practical, plain-language guides for food, transport, health, and everyday adulting in Melbourne.",
 	},
 	{
-		title: "Guideline Article Library",
-		line: "Plain-language guides, GP vs ED triage, and suburb-aware bulk-billing discovery.",
+		title: "Local Services Near You",
+		line: "Find nearby support and essentials with City of Melbourne open data, mapped to the suburbs you use every day.",
 	},
 	{
-		title: "Health Habit Tracker",
-		line: "Light daily check-ins with trends and gentle insights from your own patterns.",
+		title: "Clear Next Steps",
+		line: "Know what to do first, from booking a GP to setting up a first rental routine, without information overload.",
 	},
 	{
-		title: "Care Circle",
-		line: "Optional wellness snapshots for up to three trusted contacts — never raw logs, always your call.",
+		title: "Mobile-First Navigation",
+		line: "A simple homepage entry point built for quick decisions: browse guides or find nearby services in one tap.",
 	},
 ];
 
@@ -142,7 +142,7 @@ function PillNavLink({
 	return (
 		<Link
 			href={href}
-			className="rounded-full px-5 py-2 pb-2.5 text-sm font-medium text-foreground/75 transition-colors hover:bg-foreground/6 hover:text-foreground"
+			className="whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-medium text-foreground/75 transition-colors hover:bg-foreground/6 hover:text-foreground"
 		>
 			{children}
 		</Link>
@@ -195,7 +195,7 @@ const HOVER_GROW_NARROW = 1;
 
 /** Glass inner panel + solid CTA — reference: frosted strip + pill button (hover scales only). */
 const heroIntersectGlassClass =
-	"relative rounded-2xl border-[0.5px] border-minuri-white/70 bg-minuri-white/45 p-4 shadow-[0_8px_40px_-10px_color-mix(in_oklch,var(--minuri-ocean)_22%,transparent)] ring-[0.5px] ring-inset ring-minuri-white/40 backdrop-blur-2xl backdrop-saturate-150 transition-opacity duration-300 md:p-5";
+	"relative rounded-2xl border-[0.5px] border-minuri-white/70 bg-minuri-white/45 p-4 shadow-[0_8px_40px_-10px_color-mix(in_oklch,var(--minuri-ocean)_22%,transparent)] ring-[0.5px] ring-inset ring-minuri-white/40 backdrop-blur-2xl backdrop-saturate-150 md:p-5";
 
 const heroIntersectCtaClass =
 	"mt-4 inline-flex w-full origin-center items-center justify-center gap-2 rounded-full bg-minuri-ink py-3 text-sm font-semibold text-minuri-white transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:px-8";
@@ -247,15 +247,10 @@ function HeroIntersectCards() {
 	const showLeftInner = reduce || !isMd || focus === "left";
 	const showRightInner = reduce || !isMd || focus === "right";
 
-	const innerRowClass = cn(
-		"mt-auto grid w-full transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-		reduce && "duration-75",
-	);
-
 	return (
 		<>
 			<p className="text-sm font-semibold text-foreground">
-				Open your journey
+				Choose your starting point
 			</p>
 			<div
 				ref={rowRef}
@@ -272,7 +267,7 @@ function HeroIntersectCards() {
 					onMouseEnter={() => isMd && setFocus("left")}
 				>
 					<Link
-						href="#flow"
+						href="/guides"
 						className="landing-hero-card-mint-a group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 md:min-h-0 md:h-full md:flex-1"
 						onMouseEnter={() => {
 							isMd && setFocus("left");
@@ -282,36 +277,39 @@ function HeroIntersectCards() {
 						}}
 					>
 						<h2 className="relative w-fit pb-0.5 text-2xl font-medium text-foreground md:text-3xl">
-							For independents
+							Alex &amp; Chloe
 						</h2>
+						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
+							<Image
+								src="/amico.svg"
+								alt=""
+								aria-hidden
+								loading="eager"
+								width={320}
+								height={320}
+								className="h-full w-auto object-contain opacity-95"
+							/>
+						</div>
 						<div
 							className={cn(
-								innerRowClass,
+								"absolute bottom-4 left-4 z-20 w-[min(34rem,calc(100%-2rem))] transition-transform ease-[cubic-bezier(0.22,1,0.36,1)]",
 								showLeftInner
-									? "grid-rows-[1fr]"
-									: "grid-rows-[0fr]",
+									? "translate-y-0 duration-260 delay-180"
+									: "translate-y-[120%] duration-160 delay-0",
 								!showLeftInner && isMd && "pointer-events-none",
+								reduce && "duration-75 delay-0",
 							)}
 						>
-							<div className="min-h-0 overflow-hidden">
-								<div
-									className={cn(
-										heroIntersectGlassClass,
-										showLeftInner
-											? "opacity-100"
-											: "opacity-0",
-										reduce && "opacity-100",
-									)}
-								>
-									<p className="text-sm leading-relaxed text-foreground/90">
-										Uni, share house, or first solo lease —
-										routines and local care in one place.
-									</p>
-									<span className={heroIntersectCtaClass}>
-										Explore modules
-										<ArrowRight className="size-4" />
-									</span>
-								</div>
+							<div className={heroIntersectGlassClass}>
+								<p className="text-sm leading-relaxed text-foreground/90">
+									Uni life or first rental in Melbourne? Start
+									with first-time guides for food, transport,
+									health, and solo living.
+								</p>
+								<span className={heroIntersectCtaClass}>
+									Browse First Time Guides
+									<ArrowRight className="size-4" />
+								</span>
 							</div>
 						</div>
 					</Link>
@@ -325,7 +323,7 @@ function HeroIntersectCards() {
 					onMouseEnter={() => isMd && setFocus("right")}
 				>
 					<Link
-						href="#care"
+						href="/near-me"
 						className="landing-hero-card-mint-b group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 md:min-h-0 md:h-full md:flex-1"
 						onMouseEnter={() => {
 							isMd && setFocus("right");
@@ -335,38 +333,41 @@ function HeroIntersectCards() {
 						}}
 					>
 						<h2 className="relative w-fit pb-0.5 text-2xl font-medium text-foreground md:text-3xl">
-							For new professionals
+							Jordan
 						</h2>
+						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
+							<Image
+								src="/pana.svg"
+								alt=""
+								aria-hidden
+								loading="eager"
+								width={320}
+								height={320}
+								className="h-full w-auto object-contain opacity-95"
+							/>
+						</div>
 						<div
 							className={cn(
-								innerRowClass,
+								"absolute bottom-4 left-4 z-20 w-[min(34rem,calc(100%-2rem))] transition-transform ease-[cubic-bezier(0.22,1,0.36,1)]",
 								showRightInner
-									? "grid-rows-[1fr]"
-									: "grid-rows-[0fr]",
+									? "translate-y-0 duration-260 delay-180"
+									: "translate-y-[120%] duration-160 delay-0",
 								!showRightInner &&
 									isMd &&
 									"pointer-events-none",
+								reduce && "duration-75 delay-0",
 							)}
 						>
-							<div className="min-h-0 overflow-hidden">
-								<div
-									className={cn(
-										heroIntersectGlassClass,
-										showRightInner
-											? "opacity-100"
-											: "opacity-0",
-										reduce && "opacity-100",
-									)}
-								>
-									<p className="text-sm leading-relaxed text-foreground/90">
-										Care Circle and trends when work runs
-										long — support, not surveillance.
-									</p>
-									<span className={heroIntersectCtaClass}>
-										Care Circle
-										<ArrowRight className="size-4" />
-									</span>
-								</div>
+							<div className={heroIntersectGlassClass}>
+								<p className="text-sm leading-relaxed text-foreground/90">
+									First job, new suburb, tight schedule. Find
+									nearby services and essentials fast with
+									Melbourne open data.
+								</p>
+								<span className={heroIntersectCtaClass}>
+									Find services near me
+									<ArrowRight className="size-4" />
+								</span>
 							</div>
 						</div>
 					</Link>
@@ -399,21 +400,21 @@ export function HomeView() {
 					</Link>
 
 					<motion.nav
-						className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-full border border-minuri-white/65 bg-minuri-white py-1.5 pl-3 pr-2.5 shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--minuri-white)_82%,transparent),0_0_0_1px_color-mix(in_oklch,var(--minuri-ocean)_14%,transparent),0_20px_50px_-18px_color-mix(in_oklch,var(--minuri-ocean)_32%,transparent)] backdrop-blur-xl md:flex"
+						className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-minuri-white/65 bg-minuri-white py-1.5 pl-2.5 pr-2 shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--minuri-white)_82%,transparent),0_0_0_1px_color-mix(in_oklch,var(--minuri-ocean)_14%,transparent),0_20px_50px_-18px_color-mix(in_oklch,var(--minuri-ocean)_32%,transparent)] backdrop-blur-xl md:flex"
 						aria-label="Primary"
 						initial={{ opacity: 0, y: -14 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, ease: easeOut }}
 					>
 						<PillNavLink href="#spotlight">Spotlight</PillNavLink>
-						<PillNavLink href="#flow">Modules</PillNavLink>
-						<PillNavLink href="#care">Care Circle</PillNavLink>
+						<PillNavLink href="#flow">Guides</PillNavLink>
+						<PillNavLink href="#care">Near Me</PillNavLink>
 						<PillNavLink href="#proof">Impact</PillNavLink>
 						<Link
-							href="#access"
-							className="ml-1 rounded-full bg-minuri-teal px-5 py-2 pb-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+							href="/guides"
+							className="ml-0.5 whitespace-nowrap rounded-full bg-minuri-teal px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 						>
-							Get in touch
+							Browse Guides
 						</Link>
 					</motion.nav>
 
@@ -425,10 +426,10 @@ export function HomeView() {
 							Log in
 						</Link>
 						<Link
-							href="#access"
+							href="/near-me"
 							className="hidden rounded-full bg-minuri-teal px-4 py-2 pb-2.5 text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 						>
-							Sign up
+							Find services near me
 						</Link>
 						<details className="relative md:hidden">
 							<summary
@@ -443,10 +444,10 @@ export function HomeView() {
 										Spotlight
 									</MenuNavLink>
 									<MenuNavLink href="#flow">
-										Modules
+										Guides
 									</MenuNavLink>
 									<MenuNavLink href="#care">
-										Care Circle
+										Near Me
 									</MenuNavLink>
 									<MenuNavLink href="#proof">
 										Impact
@@ -454,10 +455,10 @@ export function HomeView() {
 									<hr className="my-2 border-minuri-silver/80" />
 									<MenuNavLink href="#">Log in</MenuNavLink>
 									<Link
-										href="#access"
-										className="mt-1 rounded-full bg-minuri-teal py-2.5 pb-3 text-center text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+										href="/guides"
+										className="mt-1 whitespace-nowrap rounded-full bg-minuri-teal py-2.5 text-center text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 									>
-										Sign up
+										Browse Guides
 									</Link>
 								</nav>
 							</div>
@@ -469,7 +470,7 @@ export function HomeView() {
 			{/* Concept §9 — Deep Ocean hero + white band; shell centered on the seam */}
 			<div className="relative overflow-x-clip">
 				<div className="landing-hero-dots relative flex min-h-[84dvh] flex-col pt-24 md:min-h-[92dvh] md:pt-28">
-					<div className="relative z-10 mx-auto flex max-w-3xl flex-1 flex-col justify-center px-4 py-16 text-center md:px-8 md:py-20 -translate-y-6 md:-translate-y-10">
+					<div className="absolute inset-x-0 top-[30%] z-10 mx-auto flex w-full max-w-3xl justify-center px-4 text-center md:px-8">
 						<motion.h1
 							className="font-sans text-[clamp(2.25rem,7vw,4rem)] font-bold leading-[1.08] tracking-tight text-minuri-white"
 							initial={{ opacity: 0, y: 24 }}
@@ -483,6 +484,23 @@ export function HomeView() {
 								secondClassName="font-hero-serif font-normal italic text-minuri-ice"
 							/>
 						</motion.h1>
+					</div>
+					<div className="absolute inset-x-0 top-[48%] z-10 mx-auto w-full max-w-3xl px-5 text-center md:top-[46%] md:px-8">
+						<motion.p
+							className="mx-auto max-w-2xl text-sm leading-relaxed text-minuri-ice/90 md:text-base"
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{
+								duration: 0.55,
+								delay: 0.2,
+								ease: easeOut,
+							}}
+						>
+							Your starter guide to independent living. Just moved
+							to Melbourne? Minuri helps you find where to eat,
+							where to get help, and how to do the things nobody
+							taught you.
+						</motion.p>
 					</div>
 				</div>
 
@@ -514,6 +532,27 @@ export function HomeView() {
 
 			<main>
 				<SpotlightScrollSection />
+				<section
+					className="bg-minuri-white py-6 md:py-8"
+					aria-label="Quick stats"
+				>
+					<div className="mx-auto w-full max-w-6xl px-5 md:px-8">
+						<div className="grid gap-3 md:grid-cols-3">
+							{[
+								"93.3% of uni students report loneliness.",
+								"29% of young Australians say mental health is their top concern.",
+								"Melbourne-first support, built around local services and routines.",
+							].map((stat) => (
+								<div
+									key={stat}
+									className="rounded-minuri border border-minuri-silver/80 bg-minuri-fog/35 px-4 py-3 text-sm text-minuri-slate"
+								>
+									{stat}
+								</div>
+							))}
+						</div>
+					</div>
+				</section>
 
 				<section
 					id="flow"
@@ -525,14 +564,14 @@ export function HomeView() {
 								<div className="max-w-xl">
 									<FadeUp>
 										<p className="text-xs font-medium tracking-[0.22em] text-minuri-teal">
-											How it works
+											Epic 1 focus
 										</p>
 									</FadeUp>
 									<FadeUp delay={0.06}>
 										<h2 className="mt-4 text-4xl font-semibold tracking-tight text-minuri-mid md:text-5xl md:leading-[1.03]">
-											Fast. Safe.
+											Start here.
 											<br />
-											Always on.
+											Move with confidence.
 										</h2>
 									</FadeUp>
 									<FadeUp
@@ -540,10 +579,9 @@ export function HomeView() {
 										className="mt-6 max-w-md text-sm leading-relaxed text-minuri-slate md:text-base"
 									>
 										<p>
-											Minuri keeps each routine dependable
-											with lightweight checks, clear
-											signals, and calm support across the
-											full care loop.
+											The homepage is your launch point:
+											browse first-time guides or jump
+											straight to nearby services.
 										</p>
 									</FadeUp>
 								</div>
@@ -615,22 +653,21 @@ export function HomeView() {
 							<div>
 								<FadeUp>
 									<p className="text-xs font-medium tracking-[0.22em] text-minuri-pale">
-										Innovation
+										Near Me
 									</p>
 								</FadeUp>
 								<FadeUp delay={0.06}>
 									<h2 className="mt-4 text-3xl font-semibold tracking-tight text-minuri-white md:text-4xl">
-										Care Circle stays close without becoming
-										surveillance.
+										Find nearby support and essentials when
+										you need them.
 									</h2>
 								</FadeUp>
 								<FadeUp delay={0.12}>
 									<p className="mt-6 max-w-xl text-base leading-relaxed text-minuri-ice/95">
-										Invite up to three contacts to see a
-										simplified wellness signal — not
-										clinical data, not a feed of your life.
-										You control what&apos;s shared and can
-										revoke anytime.
+										From GP clinics to everyday services,
+										Near Me helps new Melburnians navigate a
+										suburb with less stress and clearer next
+										steps.
 									</p>
 								</FadeUp>
 							</div>
@@ -647,21 +684,20 @@ export function HomeView() {
 								}}
 							>
 								<p className="inline-block rounded-minuri bg-minuri-coral px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-minuri-white">
-									Crisis-aware
+									Designed for day one
 								</p>
 								<p className="mt-5 text-sm leading-relaxed text-minuri-mist/95 md:text-base">
-									When the pattern drops sharply over several
-									days, Minuri offers a gentle prompt: reach
-									out to your Care Circle, or pause — your
-									choice.
+									Built around common first-month questions:
+									where to get help, what to do first, and how
+									to settle into independent life.
 								</p>
 								<div className="mt-8 space-y-3 border-t border-minuri-mid pt-6 text-xs text-minuri-pale">
 									<p className="font-medium text-minuri-ice">
-										Snapshot (example)
+										Core paths
 									</p>
 									<p>
-										No PII to contacts · Plain language only
-										· Revocable access
+										Browse First Time Guides · Find Services
+										Near Me · Mobile-first navigation
 									</p>
 								</div>
 							</motion.aside>

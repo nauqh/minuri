@@ -27,34 +27,34 @@ const cards: {
 }[] = [
 	{
 		icon: HeartPulse,
-		title: "Rhythm that feels human",
-		body: "Warm nudges for water, meals, sleep, and medication — the cadence a household used to hold, without turning life into a dashboard.",
+		title: "Start with practical guides",
+		body: "First-time guidance for uni life, renting, and daily routines so independent living in Melbourne feels manageable from day one.",
 		href: "#flow",
-		linkLabel: "See modules",
+		linkLabel: "Browse guide topics",
 		visual: "mist",
 	},
 	{
 		icon: BookOpen,
-		title: "Guidance you can actually use",
-		body: "Plain-language articles, triage cues, and suburb-aware care discovery — written for first-time renters and regional transplants.",
+		title: "Plain language, local context",
+		body: "Guides are written for Alex, Chloe, and Jordan-style transitions: uni, first rental, and first full-time job in a new suburb.",
 		href: "#flow",
 		linkLabel: "Explore the library",
 		visual: "fog",
 	},
 	{
 		icon: Activity,
-		title: "Patterns, not surveillance",
-		body: "Light daily check-ins build trends you own. Insights stay private until you choose to share a snapshot.",
-		href: "#flow",
-		linkLabel: "How tracking works",
+		title: "Two clear actions",
+		body: "Use one of two homepage paths: Browse First Time Guides or Find Services Near Me. No setup friction, no heavy onboarding.",
+		href: "/guides",
+		linkLabel: "Go to guides",
 		visual: "seafoam",
 	},
 	{
 		icon: UsersRound,
-		title: "Care Circle, on your terms",
-		body: "Optional wellness summaries for up to three people you trust — never raw logs, always your call.",
-		href: "#care",
-		linkLabel: "About Care Circle",
+		title: "Melbourne-first support",
+		body: "Homepage messaging is grounded in local context and open data so new residents can make decisions faster with less guesswork.",
+		href: "/near-me",
+		linkLabel: "Find services nearby",
 		visual: "ocean",
 	},
 ];
@@ -192,14 +192,13 @@ export function SpotlightScrollSection() {
 											id="spotlight-heading"
 											className="mt-3 text-xl font-semibold tracking-tight text-foreground md:text-2xl"
 										>
-											Four ways Minuri fits solo life.
+											Four ways Minuri helps you start.
 										</h2>
 									</div>
 								</div>
 								<p className="mt-5 text-sm leading-relaxed text-minuri-slate md:mt-6 md:text-[0.9375rem]">
-									Scroll down through each module — the same
-									spine as below, in a narrower column over
-									the type.
+									Scroll for the core homepage message before
+									choosing your next action.
 								</p>
 							</div>
 						</motion.article>
