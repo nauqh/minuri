@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
 	Activity,
@@ -27,32 +28,32 @@ const cards: {
 }[] = [
 	{
 		icon: HeartPulse,
-		title: "Start with practical guides",
-		body: "First-time guidance for uni life, renting, and daily routines so independent living in Melbourne feels manageable from day one.",
+		title: "Where we started",
+		body: "We built Minuri because moving into independent life — uni, a first lease, a new job — can feel isolating. We wanted one calm place that acknowledges that reality and points you toward practical next steps, not generic advice.",
 		href: "#flow",
-		linkLabel: "Browse guide topics",
+		linkLabel: "See how guides help",
 		visual: "mist",
 	},
 	{
 		icon: BookOpen,
-		title: "Plain language, local context",
-		body: "Guides are written for Alex, Chloe, and Jordan-style transitions: uni, first rental, and first full-time job in a new suburb.",
+		title: "Who we’re here for",
+		body: "If you’re new to Melbourne or going through a big change, this is for you. We write in plain language about real situations: renting, study, work, and staying connected — so you’re not decoding jargon when you already have enough on your plate.",
 		href: "#flow",
-		linkLabel: "Explore the library",
+		linkLabel: "Browse the library",
 		visual: "fog",
 	},
 	{
 		icon: Activity,
-		title: "Two clear actions",
-		body: "Use one of two homepage paths: Browse First Time Guides or Find Services Near Me. No setup friction, no heavy onboarding.",
+		title: "What we believe",
+		body: "Help should feel reachable, not like another project. That’s why the homepage stays simple: browse first-time guides or find services near you — no long onboarding or pressure to “do everything at once.”",
 		href: "/guides",
 		linkLabel: "Go to guides",
 		visual: "seafoam",
 	},
 	{
 		icon: UsersRound,
-		title: "Melbourne-first support",
-		body: "Homepage messaging is grounded in local context and open data so new residents can make decisions faster with less guesswork.",
+		title: "Rooted in Melbourne",
+		body: "We focus on local context so decisions feel grounded: what matters in this city, where to look, and how to take the next step without wading through information that doesn’t apply to you.",
 		href: "/near-me",
 		linkLabel: "Find services nearby",
 		visual: "ocean",
@@ -60,7 +61,7 @@ const cards: {
 ];
 
 /** Large display title: muted base + teal “highlight” sweep (cf. Services wordmark). */
-function SpotlightWordmark({ reduce }: { reduce: boolean }) {
+function OurStoryWordmark({ reduce }: { reduce: boolean }) {
 	const gradient =
 		"linear-gradient(90deg, color-mix(in oklch, var(--minuri-silver) 88%, var(--minuri-white)) 0%, color-mix(in oklch, var(--minuri-silver) 72%, var(--minuri-fog)) 10%, var(--minuri-teal) 24%, color-mix(in oklch, var(--minuri-teal) 92%, var(--minuri-seafoam)) 100%)";
 
@@ -88,7 +89,7 @@ function SpotlightWordmark({ reduce }: { reduce: boolean }) {
 				}}
 				aria-hidden
 			>
-				Wellbeing
+				Our story
 			</motion.span>
 		</motion.div>
 	);
@@ -97,25 +98,40 @@ function SpotlightWordmark({ reduce }: { reduce: boolean }) {
 function CardVisual({ kind }: { kind: VisualKind }) {
 	const base =
 		"relative mt-5 h-52 w-full overflow-hidden rounded-xl md:mt-6 md:h-64";
-	const layers: Record<VisualKind, string> = {
-		mist: "bg-[radial-gradient(ellipse_at_30%_20%,color-mix(in_oklch,var(--minuri-teal)_22%,transparent)_0%,transparent_55%),linear-gradient(145deg,color-mix(in_oklch,var(--minuri-mist)_65%,var(--minuri-white))_0%,var(--minuri-white)_45%,color-mix(in_oklch,var(--minuri-seafoam)_35%,var(--minuri-white))_100%)]",
-		fog: "bg-[linear-gradient(165deg,color-mix(in_oklch,var(--minuri-fog)_40%,var(--minuri-white))_0%,var(--minuri-white)_50%,color-mix(in_oklch,var(--minuri-mid)_12%,var(--minuri-white))_100%)]",
-		seafoam:
-			"bg-[radial-gradient(circle_at_80%_80%,color-mix(in_oklch,var(--minuri-teal)_28%,transparent)_0%,transparent_50%),linear-gradient(135deg,var(--minuri-white)_0%,color-mix(in_oklch,var(--minuri-seafoam)_45%,var(--minuri-white))_100%)]",
-		ocean: "bg-[radial-gradient(ellipse_at_50%_120%,color-mix(in_oklch,var(--minuri-teal)_35%,transparent)_0%,transparent_55%),linear-gradient(180deg,var(--minuri-ocean)_0%,color-mix(in_oklch,var(--minuri-mid)_85%,var(--minuri-ocean))_100%)]",
+	const images: Record<VisualKind, { src: string; alt: string }> = {
+		mist: {
+			src: "https://illustrations.popsy.co/gray/app-launch.svg",
+			alt: "Starting out with Minuri",
+		},
+		fog: {
+			src: "https://illustrations.popsy.co/gray/remote-work.svg",
+			alt: "Readers and everyday life",
+		},
+		seafoam: {
+			src: "https://illustrations.popsy.co/gray/app-launch.svg",
+			alt: "Simple choices on the homepage",
+		},
+		ocean: {
+			src: "https://illustrations.popsy.co/gray/remote-work.svg",
+			alt: "Community and place in Melbourne",
+		},
 	};
 	return (
-		<div className={cn(base, layers[kind])} aria-hidden>
-			<div
-				className="absolute inset-0 opacity-[0.35]"
-				style={{
-					backgroundImage:
-						"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-				}}
-			/>
-			{kind === "ocean" && (
-				<div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,color-mix(in_oklch,var(--minuri-ice)_25%,transparent)_0%,transparent_65%)]" />
+		<div
+			className={cn(
+				base,
+				"border border-minuri-silver/60 bg-minuri-fog/35",
 			)}
+		>
+			<div className="relative h-full w-full overflow-hidden rounded-lg bg-minuri-white/70">
+				<Image
+					src={images[kind].src}
+					alt={images[kind].alt}
+					fill
+					className="object-cover"
+					sizes="(max-width: 768px) 90vw, 640px"
+				/>
+			</div>
 		</div>
 	);
 }
@@ -125,22 +141,22 @@ export function SpotlightScrollSection() {
 
 	return (
 		<section
-			id="spotlight"
+			id="our-story"
 			className="relative isolate scroll-mt-24 overflow-x-clip bg-minuri-white pt-26 pb-20 md:scroll-mt-28 md:pt-34 md:pb-28"
-			aria-labelledby="spotlight-heading"
+			aria-labelledby="our-story-heading"
 		>
 			{/*
 			  Grid overlay: sticky layer + content share one cell so row height = cards.
 			  Watermark stays pinned (top-0, h-screen) until the section scrolls away after the last card.
 
-			  First viewport: mostly the “Spotlight” display type; intro + module cards follow after scroll.
+			  First viewport: large “Our story” display type; intro + module cards follow after scroll.
 			*/}
 			<div className="grid grid-cols-1">
 				<div
 					className="pointer-events-none sticky top-0 z-1 col-start-1 row-start-1 flex h-screen w-full max-w-none items-center justify-center self-start px-0"
 					aria-hidden
 				>
-					<SpotlightWordmark reduce={reduce ?? false} />
+					<OurStoryWordmark reduce={reduce ?? false} />
 				</div>
 
 				<div className="relative z-10 col-start-1 row-start-1 mx-auto w-full max-w-6xl px-5 md:px-8">
@@ -186,19 +202,21 @@ export function SpotlightScrollSection() {
 									</span>
 									<div className="min-w-0 flex-1">
 										<p className="text-xs font-medium tracking-[0.22em] text-minuri-teal">
-											Closer look
+											For new visitors
 										</p>
 										<h2
-											id="spotlight-heading"
+											id="our-story-heading"
 											className="mt-3 text-xl font-semibold tracking-tight text-foreground md:text-2xl"
 										>
-											Four ways Minuri helps you start.
+											Here’s our story — and why Minuri
+											exists.
 										</h2>
 									</div>
 								</div>
 								<p className="mt-5 text-sm leading-relaxed text-minuri-slate md:mt-6 md:text-[0.9375rem]">
-									Scroll for the core homepage message before
-									choosing your next action.
+									Scroll to learn who we’re for, what we
+									believe, and how we help you take a clear
+									first step.
 								</p>
 							</div>
 						</motion.article>
