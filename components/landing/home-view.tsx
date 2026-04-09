@@ -13,19 +13,15 @@ import { SpotlightScrollSection } from "@/components/landing/spotlight-scroll-se
 const steps = [
 	{
 		title: "First Time Guides",
-		line: "Practical, plain-language guides for food, transport, health, and everyday adulting in Melbourne.",
+		line: "Practical, plain-language guides for food, health, transport, and social connection while you settle into independent life.",
 	},
 	{
 		title: "Local Services Near You",
-		line: "Find nearby support and essentials with City of Melbourne open data, mapped to the suburbs you use every day.",
+		line: "Find nearby essentials and support without guesswork, mapped to where you already live, study, and commute.",
 	},
 	{
 		title: "Clear Next Steps",
-		line: "Know what to do first, from booking a GP to setting up a first rental routine, without information overload.",
-	},
-	{
-		title: "Mobile-First Navigation",
-		line: "A simple homepage entry point built for quick decisions: browse guides or find nearby services in one tap.",
+		line: "Know what to do first when family support is no longer close by, from booking a GP to setting up your first routine.",
 	},
 ];
 
@@ -205,6 +201,7 @@ function HeroIntersectCards() {
 	const [isMd, setIsMd] = useState(false);
 	const reduce = useReducedMotion();
 	const rowRef = useRef<HTMLDivElement>(null);
+	const lastHoverScrollAtRef = useRef(0);
 
 	useEffect(() => {
 		const mq = window.matchMedia("(min-width: 768px)");
@@ -224,6 +221,23 @@ function HeroIntersectCards() {
 		if (rowRef.current?.contains(document.activeElement)) return;
 		setFocus(null);
 	}, []);
+
+	const triggerHoverScroll = useCallback(() => {
+		const now = Date.now();
+		if (now - lastHoverScrollAtRef.current < 900) return;
+		const row = rowRef.current;
+		if (!row) return;
+		const rect = row.getBoundingClientRect();
+		const viewportBottom = window.innerHeight;
+		const bottomGap = 24;
+		const needed = rect.bottom - (viewportBottom - bottomGap);
+		if (needed <= 0) return;
+		lastHoverScrollAtRef.current = now;
+		window.scrollBy({
+			top: needed,
+			behavior: reduce ? "auto" : "smooth",
+		});
+	}, [reduce]);
 
 	const spring = reduce
 		? { duration: 0.2 }
@@ -268,16 +282,17 @@ function HeroIntersectCards() {
 				>
 					<Link
 						href="/guides"
-						className="landing-hero-card-mint-a group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 md:min-h-0 md:h-full md:flex-1"
+						className="landing-hero-card-mint-a group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out hover:-translate-y-1 md:min-h-0 md:h-full md:flex-1"
 						onMouseEnter={() => {
 							isMd && setFocus("left");
+							triggerHoverScroll();
 						}}
 						onFocus={() => {
 							isMd && setFocus("left");
 						}}
 					>
 						<h2 className="relative w-fit pb-0.5 text-2xl font-medium text-foreground md:text-3xl">
-							Alex &amp; Chloe
+							Alex - Uni Student
 						</h2>
 						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
 							<Image
@@ -302,13 +317,13 @@ function HeroIntersectCards() {
 						>
 							<div className={heroIntersectGlassClass}>
 								<p className="text-sm leading-relaxed text-foreground/90">
-									Uni life or first rental in Melbourne? Start
-									with first-time guides for food, transport,
-									health, and solo living.
+									&quot;I moved for uni and suddenly had to
+									figure out groceries, appointments, and
+									getting around by myself.&quot; Start with
+									first-time guides built for that shift.
 								</p>
 								<span className={heroIntersectCtaClass}>
 									Browse First Time Guides
-									<ArrowRight className="size-4" />
 								</span>
 							</div>
 						</div>
@@ -324,16 +339,17 @@ function HeroIntersectCards() {
 				>
 					<Link
 						href="/near-me"
-						className="landing-hero-card-mint-b group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 md:min-h-0 md:h-full md:flex-1"
+						className="landing-hero-card-mint-b group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out hover:-translate-y-1 md:min-h-0 md:h-full md:flex-1"
 						onMouseEnter={() => {
 							isMd && setFocus("right");
+							triggerHoverScroll();
 						}}
 						onFocus={() => {
 							isMd && setFocus("right");
 						}}
 					>
 						<h2 className="relative w-fit pb-0.5 text-2xl font-medium text-foreground md:text-3xl">
-							Jordan
+							Jordan - First Jobber
 						</h2>
 						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
 							<Image
@@ -360,13 +376,14 @@ function HeroIntersectCards() {
 						>
 							<div className={heroIntersectGlassClass}>
 								<p className="text-sm leading-relaxed text-foreground/90">
-									First job, new suburb, tight schedule. Find
-									nearby services and essentials fast with
-									Melbourne open data.
+									&quot;I started my first full-time job and
+									didn&apos;t know where to find reliable
+									local help outside work hours.&quot; Use
+									Near Me to find services and essentials
+									fast.
 								</p>
 								<span className={heroIntersectCtaClass}>
 									Find services near me
-									<ArrowRight className="size-4" />
 								</span>
 							</div>
 						</div>
@@ -406,10 +423,9 @@ export function HomeView() {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, ease: easeOut }}
 					>
-						<PillNavLink href="#spotlight">Spotlight</PillNavLink>
-						<PillNavLink href="#flow">Guides</PillNavLink>
-						<PillNavLink href="#care">Near Me</PillNavLink>
-						<PillNavLink href="#proof">Impact</PillNavLink>
+						<PillNavLink href="#our-story">Our story</PillNavLink>
+						<PillNavLink href="/guides">Guides</PillNavLink>
+						<PillNavLink href="/near-me">Near Me</PillNavLink>
 						<Link
 							href="/guides"
 							className="ml-0.5 whitespace-nowrap rounded-full bg-minuri-teal px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
@@ -420,16 +436,16 @@ export function HomeView() {
 
 					<div className="z-10 ml-auto flex items-center gap-2">
 						<Link
-							href="#"
-							className="hidden rounded-full border border-minuri-silver/55 bg-minuri-white/95 px-4 py-2 pb-2.5 text-sm font-medium text-minuri-slate shadow-[0_1px_2px_color-mix(in_oklch,var(--minuri-ocean)_10%,transparent)] backdrop-blur-sm transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
-						>
-							Log in
-						</Link>
-						<Link
 							href="/near-me"
 							className="hidden rounded-full bg-minuri-teal px-4 py-2 pb-2.5 text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 						>
 							Find services near me
+						</Link>
+						<Link
+							href="#"
+							className="hidden rounded-full border border-minuri-silver/55 bg-minuri-white/95 px-4 py-2 pb-2.5 text-sm font-medium text-minuri-slate shadow-[0_1px_2px_color-mix(in_oklch,var(--minuri-ocean)_10%,transparent)] backdrop-blur-sm transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
+						>
+							Log in
 						</Link>
 						<details className="relative md:hidden">
 							<summary
@@ -440,8 +456,8 @@ export function HomeView() {
 							</summary>
 							<div className="absolute right-0 z-30 mt-2 w-56 rounded-minuri border border-minuri-silver/50 bg-minuri-white/95 p-4 shadow-[0_0_0_1px_color-mix(in_oklch,var(--minuri-ocean)_10%,transparent),0_18px_44px_-14px_color-mix(in_oklch,var(--minuri-ocean)_26%,transparent)] backdrop-blur-md">
 								<nav className="flex flex-col gap-1">
-									<MenuNavLink href="#spotlight">
-										Spotlight
+									<MenuNavLink href="#our-story">
+										Our story
 									</MenuNavLink>
 									<MenuNavLink href="#flow">
 										Guides
@@ -449,11 +465,7 @@ export function HomeView() {
 									<MenuNavLink href="#care">
 										Near Me
 									</MenuNavLink>
-									<MenuNavLink href="#proof">
-										Impact
-									</MenuNavLink>
 									<hr className="my-2 border-minuri-silver/80" />
-									<MenuNavLink href="#">Log in</MenuNavLink>
 									<Link
 										href="/guides"
 										className="mt-1 whitespace-nowrap rounded-full bg-minuri-teal py-2.5 text-center text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
@@ -496,10 +508,9 @@ export function HomeView() {
 								ease: easeOut,
 							}}
 						>
-							Your starter guide to independent living. Just moved
-							to Melbourne? Minuri helps you find where to eat,
-							where to get help, and how to do the things nobody
-							taught you.
+							Minuri helps you navigate independent life with
+							practical support for food, health, transport, and
+							connection.
 						</motion.p>
 					</div>
 				</div>
@@ -522,7 +533,7 @@ export function HomeView() {
 							</motion.div>
 						</div>
 					</div>
-					{/* White band below shell — clamp separates two-card shell from Spotlight below */}
+					{/* White band below shell — clamp separates two-card shell from Our story below */}
 					<div
 						className="h-[clamp(11rem,26vmin,20rem)] md:h-[clamp(13rem,30vmin,24rem)]"
 						aria-hidden
@@ -532,27 +543,6 @@ export function HomeView() {
 
 			<main>
 				<SpotlightScrollSection />
-				<section
-					className="bg-minuri-white py-6 md:py-8"
-					aria-label="Quick stats"
-				>
-					<div className="mx-auto w-full max-w-6xl px-5 md:px-8">
-						<div className="grid gap-3 md:grid-cols-3">
-							{[
-								"93.3% of uni students report loneliness.",
-								"29% of young Australians say mental health is their top concern.",
-								"Melbourne-first support, built around local services and routines.",
-							].map((stat) => (
-								<div
-									key={stat}
-									className="rounded-minuri border border-minuri-silver/80 bg-minuri-fog/35 px-4 py-3 text-sm text-minuri-slate"
-								>
-									{stat}
-								</div>
-							))}
-						</div>
-					</div>
-				</section>
 
 				<section
 					id="flow"
@@ -560,27 +550,20 @@ export function HomeView() {
 				>
 					<div className="mx-auto w-full max-w-6xl px-5 md:px-8">
 						<div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-							<div className="space-y-10">
-								<div className="max-w-xl">
-									<FadeUp>
-										<p className="text-xs font-medium tracking-[0.22em] text-minuri-teal">
-											Epic 1 focus
-										</p>
-									</FadeUp>
+							<div className="space-y-8">
+								<div className="-mt-4 mx-auto max-w-2xl text-center">
 									<FadeUp delay={0.06}>
-										<h2 className="mt-4 text-4xl font-semibold tracking-tight text-minuri-mid md:text-5xl md:leading-[1.03]">
-											Start here.
-											<br />
-											Move with confidence.
+										<h2 className="mt-2 text-5xl font-semibold tracking-tight text-minuri-mid md:text-6xl md:leading-[1.03]">
+											Settle in, faster.
 										</h2>
 									</FadeUp>
 									<FadeUp
 										delay={0.1}
-										className="mt-6 max-w-md text-sm leading-relaxed text-minuri-slate md:text-base"
+										className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-minuri-slate md:text-base"
 									>
 										<p>
-											The homepage is your launch point:
-											browse first-time guides or jump
+											Wherever you are in your move, start
+											with first-time guides or jump
 											straight to nearby services.
 										</p>
 									</FadeUp>
@@ -588,22 +571,15 @@ export function HomeView() {
 
 								<FadeUp
 									delay={0.14}
-									className="relative h-[280px] w-full max-w-[420px]"
+									className="relative h-[340px] w-full max-w-[520px]"
 								>
-									<div className="absolute left-2 top-16 h-48 w-32 rounded-2xl border border-minuri-silver/60 bg-[linear-gradient(145deg,#9be7d8_10%,#69d2b0_45%,#5e9de8_100%)] shadow-[0_18px_40px_-26px_rgba(15,23,42,0.5)]" />
-									{Array.from({ length: 10 }).map(
-										(_, idx) => (
-											<div
-												key={idx}
-												className="absolute left-12 top-8 h-44 w-28 rounded-2xl border border-minuri-silver/70 bg-[linear-gradient(145deg,#7dbfe3_0%,#78d7bc_45%,#8da1f3_100%)] shadow-[0_16px_32px_-26px_rgba(15,23,42,0.55)]"
-												style={{
-													transform: `translate(${idx * 18}px, ${idx * 8}px) rotate(${idx * 6 - 24}deg)`,
-													opacity: 1 - idx * 0.04,
-												}}
-												aria-hidden
-											/>
-										),
-									)}
+									<Image
+										src="/homescreen.svg"
+										alt="Minuri homescreen preview"
+										fill
+										className="object-contain"
+										sizes="(max-width: 768px) 90vw, 420px"
+									/>
 								</FadeUp>
 							</div>
 
@@ -626,7 +602,7 @@ export function HomeView() {
 											ease: easeOut,
 										}}
 									>
-										<span className="inline-flex size-6 items-center justify-center rounded-full border border-minuri-silver bg-minuri-white text-[0.68rem] font-semibold text-minuri-teal shadow-sm">
+										<span className="inline-block text-3xl font-semibold leading-none tracking-tight text-minuri-teal md:text-4xl">
 											{String(i + 1).padStart(2, "0")}
 										</span>
 										<div>
@@ -735,7 +711,7 @@ export function HomeView() {
 									tint: "bg-minuri-mist/50",
 								},
 								{
-									title: "Privacy",
+									title: "Safe by default",
 									body: "JWT auth, encryption at rest, and Care Circle boundaries per the security plan — coral stays semantic.",
 									tint: "bg-minuri-white sm:col-span-2 lg:col-span-1",
 								},
