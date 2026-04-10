@@ -53,14 +53,17 @@ export function PillNavLink({
 export function MenuNavLink({
 	href,
 	children,
+	onNavigate,
 }: {
 	href: string;
 	children: ReactNode;
+	onNavigate?: () => void;
 }) {
 	return (
 		<Link
 			href={href}
 			className="rounded-minuri px-1 py-0.5 text-sm text-minuri-slate transition-colors hover:text-minuri-teal"
+			onClick={onNavigate}
 		>
 			{children}
 		</Link>

@@ -26,7 +26,8 @@ function TwoStepTypewriter({
 	charDelay = 85,
 	startDelay = 300,
 	stepPause = 2000,
-	cursor = true,
+	onFirstComplete,
+	onComplete,
 }: {
 	firstText: string;
 	secondText: string;
@@ -35,11 +36,18 @@ function TwoStepTypewriter({
 	charDelay?: number;
 	startDelay?: number;
 	stepPause?: number;
-	cursor?: boolean;
+	onFirstComplete?: () => void;
+	onComplete?: () => void;
 }) {
 	const [firstDisplay, setFirstDisplay] = useState("");
 	const [secondDisplay, setSecondDisplay] = useState("");
-	const [isDone, setIsDone] = useState(false);
+	const onFirstCompleteRef = useRef(onFirstComplete);
+	const onCompleteRef = useRef(onComplete);
+
+	useEffect(() => {
+		onFirstCompleteRef.current = onFirstComplete;
+		onCompleteRef.current = onComplete;
+	}, [onFirstComplete, onComplete]);
 
 	useEffect(() => {
 		let timer: ReturnType<typeof setTimeout> | null = null;
@@ -50,7 +58,7 @@ function TwoStepTypewriter({
 			if (next < secondText.length) {
 				timer = setTimeout(() => typeSecond(next), charDelay);
 			} else {
-				setIsDone(true);
+				onCompleteRef.current?.();
 			}
 		};
 
@@ -61,6 +69,7 @@ function TwoStepTypewriter({
 				timer = setTimeout(() => typeFirst(next), charDelay);
 				return;
 			}
+			onFirstCompleteRef.current?.();
 			timer = setTimeout(() => typeSecond(), stepPause);
 		};
 
@@ -77,12 +86,10 @@ function TwoStepTypewriter({
 		<span className={className}>
 			{firstDisplay}
 			{firstDisplay.length === firstText.length && (
-				<span className={secondClassName}>{secondDisplay}</span>
-			)}
-			{cursor && !isDone && (
-				<span className="ml-px inline-block animate-pulse" aria-hidden>
-					|
-				</span>
+				<>
+					<br />
+					<span className={secondClassName}>{secondDisplay}</span>
+				</>
 			)}
 		</span>
 	);
@@ -93,7 +100,6 @@ function HeroIntersectCards() {
 	const [isMd, setIsMd] = useState(false);
 	const reduce = useReducedMotion();
 	const rowRef = useRef<HTMLDivElement>(null);
-	const lastHoverScrollAtRef = useRef(0);
 
 	useEffect(() => {
 		const mq = window.matchMedia("(min-width: 768px)");
@@ -113,23 +119,6 @@ function HeroIntersectCards() {
 		if (rowRef.current?.contains(document.activeElement)) return;
 		setFocus(null);
 	}, []);
-
-	const triggerHoverScroll = useCallback(() => {
-		const now = Date.now();
-		if (now - lastHoverScrollAtRef.current < 900) return;
-		const row = rowRef.current;
-		if (!row) return;
-		const rect = row.getBoundingClientRect();
-		const viewportBottom = window.innerHeight;
-		const bottomGap = 24;
-		const needed = rect.bottom - (viewportBottom - bottomGap);
-		if (needed <= 0) return;
-		lastHoverScrollAtRef.current = now;
-		window.scrollBy({
-			top: needed,
-			behavior: reduce ? "auto" : "smooth",
-		});
-	}, [reduce]);
 
 	const spring = reduce
 		? { duration: 0.2 }
@@ -174,10 +163,9 @@ function HeroIntersectCards() {
 				>
 					<Link
 						href="/guides"
-						className="landing-hero-card-mint-a group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out hover:-translate-y-1 md:min-h-0 md:h-full md:flex-1"
+						className="landing-hero-card-mint-a group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out md:min-h-0 md:h-full md:flex-1 md:hover:-translate-y-1"
 						onMouseEnter={() => {
 							if (isMd) setFocus("left");
-							triggerHoverScroll();
 						}}
 						onFocus={() => {
 							if (isMd) setFocus("left");
@@ -231,10 +219,9 @@ function HeroIntersectCards() {
 				>
 					<Link
 						href="/near-me"
-						className="landing-hero-card-mint-b group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out hover:-translate-y-1 md:min-h-0 md:h-full md:flex-1"
+						className="landing-hero-card-mint-b group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out md:min-h-0 md:h-full md:flex-1 md:hover:-translate-y-1"
 						onMouseEnter={() => {
 							if (isMd) setFocus("right");
-							triggerHoverScroll();
 						}}
 						onFocus={() => {
 							if (isMd) setFocus("right");
@@ -286,53 +273,51 @@ function HeroIntersectCards() {
 	);
 }
 
-export function LandingHeroSection() {
+export function LandingHeroSection({
+	onHeroReveal,
+}: {
+	onHeroReveal?: () => void;
+}) {
+	const heroRevealNotified = useRef(false);
+	const handleHeroReveal = useCallback(() => {
+		if (heroRevealNotified.current) return;
+		heroRevealNotified.current = true;
+		window.setTimeout(() => {
+			onHeroReveal?.();
+		}, 240);
+	}, [onHeroReveal]);
+
 	return (
 		<div className="relative overflow-x-clip">
-			<div className="landing-hero-dots relative flex min-h-[84dvh] flex-col pt-24 md:min-h-[92dvh] md:pt-28">
-				<div className="absolute inset-x-0 top-[30%] z-10 mx-auto flex w-full max-w-3xl justify-center px-4 text-center md:px-8">
+			<div className="landing-hero-dots relative flex min-h-[min(92dvh,52rem)] flex-col pt-24 pb-[clamp(7rem,26dvh,14rem)] md:min-h-[92dvh] md:pb-0 md:pt-28">
+				<div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-4 px-4 text-center max-md:min-h-0 md:static md:block md:flex-none md:justify-center md:gap-5 md:px-8 md:pt-0">
 					<motion.h1
-						className="font-sans text-[clamp(2.25rem,7vw,4rem)] font-bold leading-[1.08] tracking-tight text-minuri-white"
+						className="font-sans text-5xl font-bold leading-[1.08] tracking-tight text-minuri-white md:absolute md:inset-x-0 md:top-[30%] md:mx-auto md:w-full md:max-w-3xl md:px-8 md:text-7xl"
 						initial={{ opacity: 0, y: 24 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.55, ease: easeOut }}
 					>
 						<TwoStepTypewriter
-							firstText="You leave home. "
-							secondText="Still"
+							firstText="Still home, "
+							secondText="wherever you are"
 							stepPause={1000}
 							secondClassName="font-hero-serif font-normal italic text-minuri-ice"
+							onFirstComplete={handleHeroReveal}
 						/>
 					</motion.h1>
-				</div>
-				<div className="absolute inset-x-0 top-[48%] z-10 mx-auto w-full max-w-3xl px-5 text-center md:top-[46%] md:px-8">
-					<motion.p
-						className="mx-auto max-w-2xl text-sm leading-relaxed text-minuri-ice/90 md:text-base"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{
-							duration: 0.55,
-							delay: 0.2,
-							ease: easeOut,
-						}}
-					>
-						Minuri helps you navigate independent life with
-						practical support for food, health, transport, and
-						connection.
-					</motion.p>
 				</div>
 			</div>
 
 			<div className="relative bg-minuri-white">
-				<div className="absolute inset-x-0 top-0 z-20 flex -translate-y-1/2 justify-center px-4 md:px-8">
+				<div className="absolute inset-x-0 top-0 z-20 flex -translate-y-[32%] justify-center px-4 max-md:max-w-[100vw] md:-translate-y-1/2 md:px-8">
 					<div className="pointer-events-none mx-auto w-full max-w-6xl">
 						<motion.div
 							className="pointer-events-auto rounded-minuri border border-minuri-silver/25 bg-minuri-white px-4 py-6 md:px-6 md:py-8"
 							initial={{ opacity: 0, y: 44 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{
-								duration: 0.65,
-								delay: 0.08,
+								duration: 1.5,
+								delay: 1,
 								ease: easeOut,
 							}}
 						>
