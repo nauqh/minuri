@@ -9,7 +9,7 @@ export function LandingAccessSection() {
 	return (
 		<section
 			id="access"
-			className="flex min-h-[70dvh] flex-col justify-center bg-minuri-white py-20 md:py-24"
+			className="flex min-h-[88dvh] flex-col justify-center bg-minuri-white py-28 md:py-32"
 		>
 			<div className="mx-auto w-full max-w-4xl px-5 text-center md:px-8">
 				<FadeUp>

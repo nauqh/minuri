@@ -11,6 +11,7 @@ import { easeOut } from "@/components/landing/home-constants";
 
 const HOVER_GROW_WIDE = 1.35;
 const HOVER_GROW_NARROW = 1;
+const TYPEWRITER_TOTAL_DURATION_SECONDS = 3;
 
 const heroIntersectGlassClass =
 	"relative rounded-2xl border-[0.5px] border-minuri-white/70 bg-minuri-white/45 p-4 shadow-[0_8px_40px_-10px_color-mix(in_oklch,var(--minuri-ocean)_22%,transparent)] ring-[0.5px] ring-inset ring-minuri-white/40 backdrop-blur-2xl backdrop-saturate-150 md:p-5";
@@ -27,6 +28,7 @@ function TwoStepTypewriter({
 	startDelay = 300,
 	stepPause = 2000,
 	onFirstComplete,
+	onSecondStart,
 	onComplete,
 }: {
 	firstText: string;
@@ -37,22 +39,28 @@ function TwoStepTypewriter({
 	startDelay?: number;
 	stepPause?: number;
 	onFirstComplete?: () => void;
+	onSecondStart?: () => void;
 	onComplete?: () => void;
 }) {
 	const [firstDisplay, setFirstDisplay] = useState("");
 	const [secondDisplay, setSecondDisplay] = useState("");
 	const onFirstCompleteRef = useRef(onFirstComplete);
+	const onSecondStartRef = useRef(onSecondStart);
 	const onCompleteRef = useRef(onComplete);
 
 	useEffect(() => {
 		onFirstCompleteRef.current = onFirstComplete;
+		onSecondStartRef.current = onSecondStart;
 		onCompleteRef.current = onComplete;
-	}, [onFirstComplete, onComplete]);
+	}, [onFirstComplete, onSecondStart, onComplete]);
 
 	useEffect(() => {
 		let timer: ReturnType<typeof setTimeout> | null = null;
 
 		const typeSecond = (index = 0) => {
+			if (index === 0) {
+				onSecondStartRef.current?.();
+			}
 			const next = index + 1;
 			setSecondDisplay(secondText.slice(0, next));
 			if (next < secondText.length) {
@@ -279,6 +287,15 @@ export function LandingHeroSection({
 	onHeroReveal?: () => void;
 }) {
 	const heroRevealNotified = useRef(false);
+	const cardsRevealNotified = useRef(false);
+	const [cardsVisible, setCardsVisible] = useState(false);
+
+	const handleCardsReveal = useCallback(() => {
+		if (cardsRevealNotified.current) return;
+		cardsRevealNotified.current = true;
+		setCardsVisible(true);
+	}, []);
+
 	const handleHeroReveal = useCallback(() => {
 		if (heroRevealNotified.current) return;
 		heroRevealNotified.current = true;
@@ -289,7 +306,7 @@ export function LandingHeroSection({
 
 	return (
 		<div className="relative overflow-x-clip">
-			<div className="landing-hero-dots relative flex min-h-[min(92dvh,52rem)] flex-col pt-24 pb-[clamp(7rem,26dvh,14rem)] md:min-h-[92dvh] md:pb-0 md:pt-28">
+			<div className="relative flex min-h-[min(92dvh,52rem)] flex-col bg-minuri-ocean pt-24 pb-[clamp(7rem,26dvh,14rem)] md:min-h-[92dvh] md:pb-0 md:pt-28">
 				<div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-4 px-4 text-center max-md:min-h-0 md:static md:block md:flex-none md:justify-center md:gap-5 md:px-8 md:pt-0">
 					<motion.h1
 						className="font-sans text-5xl font-bold leading-[1.08] tracking-tight text-minuri-white md:absolute md:inset-x-0 md:top-[30%] md:mx-auto md:w-full md:max-w-3xl md:px-8 md:text-7xl"
@@ -298,11 +315,12 @@ export function LandingHeroSection({
 						transition={{ duration: 0.55, ease: easeOut }}
 					>
 						<TwoStepTypewriter
-							firstText="Still home, "
+							firstText="Still living home, "
 							secondText="wherever you are"
 							stepPause={1000}
 							secondClassName="font-hero-serif font-normal italic text-minuri-ice"
-							onFirstComplete={handleHeroReveal}
+							onFirstComplete={handleCardsReveal}
+							onSecondStart={handleHeroReveal}
 						/>
 					</motion.h1>
 				</div>
@@ -313,11 +331,14 @@ export function LandingHeroSection({
 					<div className="pointer-events-none mx-auto w-full max-w-6xl">
 						<motion.div
 							className="pointer-events-auto rounded-minuri border border-minuri-silver/25 bg-minuri-white px-4 py-6 md:px-6 md:py-8"
-							initial={{ opacity: 0, y: 44 }}
-							animate={{ opacity: 1, y: 0 }}
+							initial={false}
+							animate={
+								cardsVisible
+									? { opacity: 1, y: 0 }
+									: { opacity: 0, y: 44 }
+							}
 							transition={{
-								duration: 1.5,
-								delay: 1,
+								duration: TYPEWRITER_TOTAL_DURATION_SECONDS,
 								ease: easeOut,
 							}}
 						>
