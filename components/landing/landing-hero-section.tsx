@@ -315,7 +315,7 @@ export function LandingHeroSection({
 						transition={{ duration: 0.55, ease: easeOut }}
 					>
 						<TwoStepTypewriter
-							firstText="Still living home, "
+							firstText="Still feeling home, "
 							secondText="wherever you are"
 							stepPause={1000}
 							secondClassName="font-hero-serif font-normal italic text-minuri-ice"
