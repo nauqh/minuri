@@ -199,6 +199,14 @@
 	background-size: 1.35rem 1.35rem;
 }
 
+/* Desktop header should not inherit hero ocean grid background */
+@media (min-width: 48rem) {
+	.landing-header-no-bg-desktop {
+		background-color: transparent !important;
+		background-image: none !important;
+	}
+}
+
 /* Hero intersect cards — teal-hue field + sky blue (reference: bright mint + sky panels) */
 .landing-hero-card-mint-a {
 	background-color: var(--minuri-mint);

@@ -31,7 +31,7 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 	return (
 		<motion.header
 			className={cn(
-				"landing-hero-dots fixed top-0 right-0 left-0 z-50 px-4 py-2 md:px-8 md:py-3",
+				"landing-header-no-bg-desktop landing-hero-dots fixed top-0 right-0 left-0 z-50 px-4 py-2 md:px-8 md:py-3",
 				isVisible ? "pointer-events-auto" : "pointer-events-none",
 			)}
 			initial={false}
@@ -51,7 +51,7 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 						priority
 						className="h-10 w-auto shrink-0 object-contain"
 					/>
-					<p className="text-xl font-bold tracking-wide text-minuri-ice">
+					<p className="text-xl font-bold tracking-wide text-minuri-white">
 						Minuri
 					</p>
 				</Link>
