@@ -52,8 +52,8 @@ const cards: {
 	},
 	{
 		icon: UsersRound,
-		title: "Rooted in Melbourne",
-		body: "We focus on local context so decisions feel grounded: what matters in this city, where to look, and how to take the next step without wading through information that doesn’t apply to you.",
+		title: "Why this matters",
+		body: "Starting independent life often means figuring out everything at once — housing, study or work, money, and support — while information is scattered and overwhelming. Our problem statement is simple: people need one clear, local starting point that turns uncertainty into practical next steps.",
 		href: "/near-me",
 		linkLabel: "Find services nearby",
 		visual: "ocean",
@@ -97,22 +97,22 @@ function OurStoryWordmark({ reduce }: { reduce: boolean }) {
 
 function CardVisual({ kind }: { kind: VisualKind }) {
 	const base =
-		"relative mt-5 h-52 w-full overflow-hidden rounded-xl md:mt-6 md:h-64";
+		"relative mt-5 h-64 w-full overflow-hidden rounded-xl md:mt-6 md:h-80";
 	const images: Record<VisualKind, { src: string; alt: string }> = {
 		mist: {
-			src: "https://illustrations.popsy.co/gray/app-launch.svg",
+			src: "where-we-start.svg",
 			alt: "Starting out with Minuri",
 		},
 		fog: {
-			src: "https://illustrations.popsy.co/gray/remote-work.svg",
+			src: "/who-we-for.svg",
 			alt: "Readers and everyday life",
 		},
 		seafoam: {
-			src: "https://illustrations.popsy.co/gray/app-launch.svg",
+			src: "/what-we-believe.svg",
 			alt: "Simple choices on the homepage",
 		},
 		ocean: {
-			src: "https://illustrations.popsy.co/gray/remote-work.svg",
+			src: "/why-this-matter.svg",
 			alt: "Community and place in Melbourne",
 		},
 	};
@@ -128,7 +128,7 @@ function CardVisual({ kind }: { kind: VisualKind }) {
 					src={images[kind].src}
 					alt={images[kind].alt}
 					fill
-					className="object-cover"
+					className="object-contain"
 					sizes="(max-width: 768px) 90vw, 640px"
 				/>
 			</div>
@@ -159,7 +159,7 @@ export function SpotlightScrollSection() {
 					<OurStoryWordmark reduce={reduce ?? false} />
 				</div>
 
-				<div className="relative z-10 col-start-1 row-start-1 mx-auto w-full max-w-6xl px-5 md:px-8">
+				<div className="relative z-10 col-start-1 row-start-1 mx-auto w-full max-w-2xl px-5 md:px-8">
 					{/* Reserve ~one screen so the watermark reads before cards enter */}
 					<div
 						className="min-h-[min(92svh,56rem)] w-full"

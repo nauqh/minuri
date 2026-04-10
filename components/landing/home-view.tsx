@@ -11,7 +11,7 @@ import { LandingHeader } from "@/components/landing/landing-header";
 import { LandingHeroSection } from "@/components/landing/landing-hero-section";
 
 export function HomeView() {
-	const [headerVisible, setHeaderVisible] = useState(false);
+	const [headerVisible, setHeaderVisible] = useState(true);
 
 	return (
 		<div className="min-h-screen bg-minuri-fog text-foreground">
