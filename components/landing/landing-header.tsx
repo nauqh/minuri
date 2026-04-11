@@ -29,16 +29,16 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 	}, [mobileMenuOpen]);
 
 	return (
-		<motion.header
-			className={cn(
-					"landing-header-no-bg-desktop fixed top-0 right-0 left-0 z-50 px-4 py-2 md:px-8 md:py-3",
-				isVisible ? "pointer-events-auto" : "pointer-events-none",
-			)}
-			initial={false}
-			animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -18 }}
-			transition={{ duration: 3, ease: easeOut }}
-		>
-			<div className="relative mx-auto flex h-12 max-w-full items-center md:h-14">
+		<header className="relative z-50 w-full bg-minuri-ocean px-4 py-2 md:px-8 md:py-3">
+			<motion.div
+				className={cn(
+					isVisible ? "pointer-events-auto" : "pointer-events-none",
+				)}
+				initial={false}
+				animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -18 }}
+				transition={{ duration: 3, ease: easeOut }}
+			>
+				<div className="relative mx-auto flex h-12 max-w-full items-center md:h-14">
 				<Link
 					href="/"
 					className="z-10 flex w-fit shrink-0 items-center gap-2 md:gap-2.5"
@@ -123,6 +123,7 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 					</div>
 				</div>
 			</div>
+			</motion.div>
 			<div
 				id="landing-mobile-menu"
 				className={cn(
@@ -167,6 +168,6 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 					</nav>
 				</div>
 			</div>
-		</motion.header>
+		</header>
 	);
 }

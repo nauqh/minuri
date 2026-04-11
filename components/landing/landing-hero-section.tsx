@@ -4,10 +4,11 @@ import type { FocusEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { easeOut } from "@/components/landing/home-constants";
+import { LandingHeader } from "@/components/landing/landing-header";
 
 const HOVER_GROW_WIDE = 1.35;
 const HOVER_GROW_NARROW = 1;
@@ -106,7 +107,6 @@ function TwoStepTypewriter({
 function HeroIntersectCards() {
 	const [focus, setFocus] = useState<"left" | "right" | null>(null);
 	const [isMd, setIsMd] = useState(false);
-	const reduce = useReducedMotion();
 	const rowRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -128,9 +128,7 @@ function HeroIntersectCards() {
 		setFocus(null);
 	}, []);
 
-	const spring = reduce
-		? { duration: 0.2 }
-		: { type: "spring" as const, stiffness: 280, damping: 38 };
+	const spring = { type: "spring" as const, stiffness: 280, damping: 38 };
 
 	const leftGrow = !isMd
 		? 1
@@ -147,8 +145,8 @@ function HeroIntersectCards() {
 				? HOVER_GROW_NARROW
 				: 1;
 
-	const showLeftInner = reduce || !isMd || focus === "left";
-	const showRightInner = reduce || !isMd || focus === "right";
+	const showLeftInner = !isMd || focus === "left";
+	const showRightInner = !isMd || focus === "right";
 
 	return (
 		<>
@@ -200,7 +198,6 @@ function HeroIntersectCards() {
 									? "translate-y-0 duration-260 delay-180"
 									: "translate-y-[120%] duration-160 delay-0",
 								!showLeftInner && isMd && "pointer-events-none",
-								reduce && "duration-75 delay-0",
 							)}
 						>
 							<div className={heroIntersectGlassClass}>
@@ -258,7 +255,6 @@ function HeroIntersectCards() {
 								!showRightInner &&
 									isMd &&
 									"pointer-events-none",
-								reduce && "duration-75 delay-0",
 							)}
 						>
 							<div className={heroIntersectGlassClass}>
@@ -283,8 +279,10 @@ function HeroIntersectCards() {
 
 export function LandingHeroSection({
 	onHeroReveal,
+	headerVisible = true,
 }: {
 	onHeroReveal?: () => void;
+	headerVisible?: boolean;
 }) {
 	const heroRevealNotified = useRef(false);
 	const cardsRevealNotified = useRef(false);
@@ -306,10 +304,12 @@ export function LandingHeroSection({
 
 	return (
 		<div className="relative overflow-x-clip">
-			<div className="relative flex min-h-[min(92dvh,52rem)] flex-col bg-minuri-ocean pt-24 pb-[clamp(7rem,26dvh,14rem)] md:min-h-[92dvh] md:pb-0 md:pt-28">
-				<div className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-4 px-4 text-center max-md:min-h-0 md:static md:block md:flex-none md:justify-center md:gap-5 md:px-8 md:pt-0">
+			{/* Anchor tagline near the top third of the viewport. */}
+			<div className="relative flex h-screen flex-col bg-minuri-ocean max-h-200">
+				<LandingHeader isVisible={headerVisible} />
+				<div className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-start gap-3 px-4 pt-[20vh] text-center max-md:min-h-0 md:gap-5 md:px-8 ">
 					<motion.h1
-						className="font-sans text-5xl font-bold leading-[1.08] tracking-tight text-minuri-white md:absolute md:inset-x-0 md:top-[30%] md:mx-auto md:w-full md:max-w-3xl md:px-8 md:text-7xl"
+						className="w-full max-w-3xl font-sans text-4xl font-bold leading-[1.08] tracking-tight text-minuri-white md:text-7xl"
 						initial={{ opacity: 0, y: 24 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.55, ease: easeOut }}

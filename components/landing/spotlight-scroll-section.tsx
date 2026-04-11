@@ -10,7 +10,7 @@ import {
 	Sparkles,
 	UsersRound,
 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -61,30 +61,30 @@ const cards: {
 ];
 
 /** Large display title: muted base + teal “highlight” sweep (cf. Services wordmark). */
-function OurStoryWordmark({ reduce }: { reduce: boolean }) {
+function OurStoryWordmark() {
 	const gradient =
 		"linear-gradient(90deg, color-mix(in oklch, var(--minuri-silver) 88%, var(--minuri-white)) 0%, color-mix(in oklch, var(--minuri-silver) 72%, var(--minuri-fog)) 10%, var(--minuri-teal) 24%, color-mix(in oklch, var(--minuri-teal) 92%, var(--minuri-seafoam)) 100%)";
 
 	return (
 		<motion.div
 			className="flex w-full max-w-[100vw] select-none items-baseline justify-center px-3 pb-16 pt-4 md:pb-20 md:pt-6"
-			initial={reduce ? false : { opacity: 0.92 }}
-			animate={{ opacity: 1 }}
-			transition={{ duration: reduce ? 0 : 0.45, ease: easeOut }}
+			initial={{ opacity: 0, y: 40 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
+			transition={{ duration: 1, ease: easeOut }}
 		>
 			<motion.span
 				className="inline-block bg-clip-text pb-[0.12em] pt-[0.06em] font-sans text-[clamp(3.75rem,20vw,24rem)] font-bold leading-[0.92] tracking-[-0.055em] text-transparent md:text-[clamp(4.25rem,22vw,26rem)]"
 				style={{
 					backgroundImage: gradient,
-					backgroundSize: reduce ? "100% 100%" : "220% 100%",
-					backgroundPosition: reduce ? "0% 50%" : undefined,
+					backgroundSize: "220% 100%",
 					WebkitBackgroundClip: "text",
 					backgroundClip: "text",
 				}}
-				initial={reduce ? false : { backgroundPositionX: "88%" }}
-				animate={reduce ? undefined : { backgroundPositionX: "0%" }}
+				initial={{ backgroundPositionX: "88%" }}
+				animate={{ backgroundPositionX: "0%" }}
 				transition={{
-					duration: reduce ? 0 : 1.35,
+					duration: 1.35,
 					ease: easeOut,
 				}}
 				aria-hidden
@@ -137,8 +137,6 @@ function CardVisual({ kind }: { kind: VisualKind }) {
 }
 
 export function SpotlightScrollSection() {
-	const reduce = useReducedMotion();
-
 	return (
 		<section
 			id="our-story"
@@ -156,7 +154,7 @@ export function SpotlightScrollSection() {
 					className="pointer-events-none sticky top-0 z-1 col-start-1 row-start-1 flex h-screen w-full max-w-none items-center justify-center self-start px-0"
 					aria-hidden
 				>
-					<OurStoryWordmark reduce={reduce ?? false} />
+					<OurStoryWordmark />
 				</div>
 
 				<div className="relative z-10 col-start-1 row-start-1 mx-auto w-full max-w-2xl px-5 md:px-8">
@@ -174,7 +172,7 @@ export function SpotlightScrollSection() {
 						<motion.article
 							role="listitem"
 							className="w-full"
-							initial={reduce ? false : { opacity: 0, y: 96 }}
+							initial={{ opacity: 0, y: 96 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{
 								once: true,
@@ -182,7 +180,7 @@ export function SpotlightScrollSection() {
 								amount: 0.2,
 							}}
 							transition={{
-								duration: reduce ? 0 : 0.65,
+								duration: 0.65,
 								delay: 0,
 								ease: easeOut,
 							}}
@@ -228,9 +226,7 @@ export function SpotlightScrollSection() {
 									key={card.title}
 									role="listitem"
 									className="w-full"
-									initial={
-										reduce ? false : { opacity: 0, y: 96 }
-									}
+									initial={{ opacity: 0, y: 96 }}
 									whileInView={{ opacity: 1, y: 0 }}
 									viewport={{
 										once: true,
@@ -238,8 +234,8 @@ export function SpotlightScrollSection() {
 										amount: 0.2,
 									}}
 									transition={{
-										duration: reduce ? 0 : 0.65,
-										delay: reduce ? 0 : (i + 1) * 0.06,
+										duration: 0.65,
+										delay: (i + 1) * 0.06,
 										ease: easeOut,
 									}}
 								>
@@ -278,7 +274,7 @@ export function SpotlightScrollSection() {
 
 						<motion.div
 							className="w-full"
-							initial={reduce ? false : { opacity: 0, y: 72 }}
+							initial={{ opacity: 0, y: 72 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{
 								once: true,
@@ -286,8 +282,8 @@ export function SpotlightScrollSection() {
 								amount: 0.2,
 							}}
 							transition={{
-								duration: reduce ? 0 : 0.55,
-								delay: reduce ? 0 : 0.24,
+								duration: 0.55,
+								delay: 0.24,
 								ease: easeOut,
 							}}
 						>
