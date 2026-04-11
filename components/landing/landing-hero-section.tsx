@@ -307,9 +307,9 @@ export function LandingHeroSection({
 			{/* Anchor tagline near the top third of the viewport. */}
 			<div className="relative flex h-screen flex-col bg-minuri-ocean max-h-200">
 				<LandingHeader isVisible={headerVisible} />
-				<div className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-start gap-3 px-4 pt-[20vh] text-center max-md:min-h-0 md:gap-5 md:px-8 ">
+				<div className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col items-start justify-start gap-3 px-4 pt-[20vh] text-left max-md:min-h-0 md:items-center md:gap-5 md:px-8 md:text-center">
 					<motion.h1
-						className="w-full max-w-3xl font-sans text-4xl font-bold leading-[1.08] tracking-tight text-minuri-white md:text-7xl"
+						className="w-full max-w-3xl font-sans text-5xl font-bold leading-[1.08] tracking-tight text-minuri-white md:text-7xl"
 						initial={{ opacity: 0, y: 24 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.55, ease: easeOut }}
