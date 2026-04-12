@@ -8,7 +8,7 @@ import { FadeUp } from "@/components/landing/home-shared";
 export function LandingAccessSection() {
 	return (
 		<section
-			id="access"
+			id="contact"
 			className="flex min-h-[88dvh] flex-col justify-center bg-minuri-white py-28 md:py-32"
 		>
 			<div className="mx-auto w-full max-w-4xl px-5 text-center md:px-8">

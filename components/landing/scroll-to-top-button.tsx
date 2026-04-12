@@ -21,6 +21,15 @@ export function ScrollToTopButton() {
 
 	const scrollToTop = useCallback(() => {
 		window.scrollTo({ top: 0, behavior: "smooth" });
+
+		// Remove hash from URL
+		if (window.location.hash) {
+			window.history.replaceState(
+				null,
+				"",
+				`${window.location.pathname}${window.location.search}`,
+			);
+		}
 	}, []);
 
 	return (

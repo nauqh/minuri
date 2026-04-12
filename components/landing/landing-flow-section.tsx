@@ -10,7 +10,7 @@ import { FadeUp } from "@/components/landing/home-shared";
 export function LandingFlowSection() {
 	return (
 		<section
-			id="flow"
+			id="service"
 			className="flex min-h-[88dvh] flex-col justify-center bg-[#f4f5f7] py-20 md:py-28"
 		>
 			<div className="mx-auto w-full max-w-6xl px-5 md:px-8">

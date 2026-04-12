@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -22,40 +21,30 @@ const cards: {
 	icon: LucideIcon;
 	title: string;
 	body: string;
-	href: string;
-	linkLabel: string;
 	visual: VisualKind;
 }[] = [
 	{
 		icon: HeartPulse,
 		title: "Where we started",
 		body: "We built Minuri because moving into independent life — uni, a first lease, a new job — can feel isolating. We wanted one calm place that acknowledges that reality and points you toward practical next steps, not generic advice.",
-		href: "#flow",
-		linkLabel: "See how guides help",
 		visual: "mist",
 	},
 	{
 		icon: BookOpen,
 		title: "Who we’re here for",
 		body: "If you’re new to Melbourne or going through a big change, this is for you. We write in plain language about real situations: renting, study, work, and staying connected — so you’re not decoding jargon when you already have enough on your plate.",
-		href: "#flow",
-		linkLabel: "Browse the library",
 		visual: "fog",
 	},
 	{
 		icon: Activity,
 		title: "What we believe",
 		body: "Help should feel reachable, not like another project. That’s why the homepage stays simple: browse first-time guides or find services near you — no long onboarding or pressure to “do everything at once.”",
-		href: "/guides",
-		linkLabel: "Go to guides",
 		visual: "seafoam",
 	},
 	{
 		icon: UsersRound,
 		title: "Why this matters",
 		body: "Starting independent life often means figuring out everything at once — housing, study or work, money, and support — while information is scattered and overwhelming. Our problem statement is simple: people need one clear, local starting point that turns uncertainty into practical next steps.",
-		href: "/near-me",
-		linkLabel: "Find services nearby",
 		visual: "ocean",
 	},
 ];
@@ -253,13 +242,6 @@ export function SpotlightScrollSection() {
 										<p className="mt-5 flex-1 text-sm leading-relaxed text-minuri-slate md:mt-6 md:text-[0.9375rem]">
 											{card.body}
 										</p>
-										<Link
-											href={card.href}
-											className="mt-6 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-minuri-teal transition-colors hover:text-minuri-mid md:mt-8"
-										>
-											{card.linkLabel}
-											<span aria-hidden>→</span>
-										</Link>
 									</div>
 								</motion.article>
 							);

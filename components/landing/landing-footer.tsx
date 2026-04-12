@@ -14,7 +14,7 @@ export function LandingFooter() {
 			<div className="relative z-20 mx-auto max-w-6xl px-5 pb-16 pt-14 md:px-8 md:pb-20 md:pt-16">
 				<div className="flex flex-col items-start gap-5">
 					<Link
-						href="#access"
+						href="#contact"
 						className="group max-w-4xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-mist"
 					>
 						<motion.div
@@ -70,7 +70,7 @@ export function LandingFooter() {
 							Instagram
 						</Link>
 						<Link
-							href="#access"
+							href="#contact"
 							className="minuri-link-underline transition-colors hover:text-minuri-teal"
 						>
 							Contact

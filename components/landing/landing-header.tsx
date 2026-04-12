@@ -66,8 +66,8 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 						transition={{ duration: 0.5, ease: easeOut }}
 					>
 						<PillNavLink href="#our-story">Why we&apos;re here</PillNavLink>
-						<PillNavLink href="#flow">How we help</PillNavLink>
-						<PillNavLink href="#access">Get in touch</PillNavLink>
+						<PillNavLink href="#service">How we help</PillNavLink>
+						<PillNavLink href="#contact">Get in touch</PillNavLink>
 						<Link
 							href="/guides"
 							className="ml-0.5 whitespace-nowrap rounded-full bg-minuri-teal px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
@@ -154,14 +154,14 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 							Why we&apos;re here
 						</Link>
 						<Link
-							href="#flow"
+							href="#service"
 							className="text-5xl font-semibold tracking-tight text-minuri-slate transition-colors duration-200 hover:text-minuri-teal"
 							onClick={closeMobileMenu}
 						>
 							How we help
 						</Link>
 						<Link
-							href="#access"
+							href="#contact"
 							className="text-5xl font-semibold tracking-tight text-minuri-slate transition-colors duration-200 hover:text-minuri-teal"
 							onClick={closeMobileMenu}
 						>
