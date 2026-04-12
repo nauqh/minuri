@@ -60,37 +60,30 @@ const cards: {
 	},
 ];
 
-/** Large display title: muted base + teal “highlight” sweep (cf. Services wordmark). */
+/** Large display title: gradient fill on text. */
 function OurStoryWordmark() {
 	const gradient =
 		"linear-gradient(90deg, color-mix(in oklch, var(--minuri-silver) 88%, var(--minuri-white)) 0%, color-mix(in oklch, var(--minuri-silver) 72%, var(--minuri-fog)) 10%, var(--minuri-teal) 24%, color-mix(in oklch, var(--minuri-teal) 92%, var(--minuri-seafoam)) 100%)";
 
 	return (
 		<motion.div
-			className="flex w-full max-w-[100vw] select-none items-baseline justify-center px-3 pb-16 pt-4 md:pb-20 md:pt-6"
+			className="flex w-full min-w-0 max-w-full select-none items-baseline justify-center overflow-x-hidden px-3 pb-16 pt-4 md:pb-20 md:pt-6"
 			initial={{ opacity: 0, y: 40 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
 			transition={{ duration: 1, ease: easeOut }}
 		>
-			<motion.span
-				className="inline-block bg-clip-text pb-[0.12em] pt-[0.06em] font-sans text-[clamp(3.75rem,20vw,24rem)] font-bold leading-[0.92] tracking-[-0.055em] text-transparent md:text-[clamp(4.25rem,22vw,26rem)]"
+			<span
+				className="inline-block max-w-full whitespace-nowrap bg-clip-text text-[clamp(2.75rem,15vw,24rem)] font-bold text-transparent md:text-[clamp(3.5rem,17vw,26rem)]"
 				style={{
 					backgroundImage: gradient,
-					backgroundSize: "220% 100%",
 					WebkitBackgroundClip: "text",
 					backgroundClip: "text",
-				}}
-				initial={{ backgroundPositionX: "88%" }}
-				animate={{ backgroundPositionX: "0%" }}
-				transition={{
-					duration: 1.35,
-					ease: easeOut,
 				}}
 				aria-hidden
 			>
 				Our story
-			</motion.span>
+			</span>
 		</motion.div>
 	);
 }
@@ -140,7 +133,7 @@ export function SpotlightScrollSection() {
 	return (
 		<section
 			id="our-story"
-			className="relative isolate scroll-mt-24 overflow-x-clip bg-minuri-white pt-26 pb-20 md:scroll-mt-28 md:pt-34 md:pb-28"
+			className="relative isolate scroll-mt-24 overflow-x-clip bg-minuri-white md:scroll-mt-28 pb-20"
 			aria-labelledby="our-story-heading"
 		>
 			{/*

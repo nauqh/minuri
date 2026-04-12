@@ -65,14 +65,14 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, ease: easeOut }}
 					>
-						<PillNavLink href="#our-story">Our story</PillNavLink>
-						<PillNavLink href="/guides">Guides</PillNavLink>
-						<PillNavLink href="/near-me">Near Me</PillNavLink>
+						<PillNavLink href="#our-story">Why we&apos;re here</PillNavLink>
+						<PillNavLink href="#flow">How we help</PillNavLink>
+						<PillNavLink href="#access">Get in touch</PillNavLink>
 						<Link
 							href="/guides"
 							className="ml-0.5 whitespace-nowrap rounded-full bg-minuri-teal px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 						>
-							Browse Guides
+							Browse first-time guides
 						</Link>
 					</motion.nav>
 
@@ -151,18 +151,32 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 							className="text-5xl font-semibold tracking-tight text-minuri-slate transition-colors duration-200 hover:text-minuri-teal"
 							onClick={closeMobileMenu}
 						>
-							About
+							Why we&apos;re here
 						</Link>
 						<Link
-							href="/guides"
+							href="#flow"
 							className="text-5xl font-semibold tracking-tight text-minuri-slate transition-colors duration-200 hover:text-minuri-teal"
 							onClick={closeMobileMenu}
 						>
-							Collection
+							How we help
+						</Link>
+						<Link
+							href="#access"
+							className="text-5xl font-semibold tracking-tight text-minuri-slate transition-colors duration-200 hover:text-minuri-teal"
+							onClick={closeMobileMenu}
+						>
+							Get in touch
+						</Link>
+						<Link
+							href="/guides"
+							className="mt-2 rounded-full bg-minuri-teal px-6 py-3 text-base font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+							onClick={closeMobileMenu}
+						>
+							Browse first-time guides
 						</Link>
 						<Link
 							href="/near-me"
-							className="mt-2 rounded-full bg-minuri-teal px-6 py-3 text-base font-semibold text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+							className="rounded-full border border-minuri-white/40 bg-minuri-white/10 px-6 py-3 text-base font-semibold text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
 							onClick={closeMobileMenu}
 						>
 							Find services near me
