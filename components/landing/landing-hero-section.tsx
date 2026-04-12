@@ -13,12 +13,13 @@ import { LandingHeader } from "@/components/landing/landing-header";
 const HOVER_GROW_WIDE = 1.35;
 const HOVER_GROW_NARROW = 1;
 const TYPEWRITER_TOTAL_DURATION_SECONDS = 3;
+const HERO_CARDS_REVEAL_DELAY_SECONDS = 0.5;
 
 const heroIntersectGlassClass =
 	"relative rounded-2xl border-[0.5px] border-minuri-white/70 bg-minuri-white/45 p-4 shadow-[0_8px_40px_-10px_color-mix(in_oklch,var(--minuri-ocean)_22%,transparent)] ring-[0.5px] ring-inset ring-minuri-white/40 backdrop-blur-2xl backdrop-saturate-150 md:p-5";
 
 const heroIntersectCtaClass =
-	"mt-4 inline-flex w-full origin-center items-center justify-center gap-2 rounded-full bg-minuri-ink py-3 text-sm font-semibold text-minuri-white transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:px-8";
+	"mt-4 inline-flex w-full origin-center items-center justify-center gap-2 rounded-2xl bg-minuri-ink py-3 text-sm font-semibold text-minuri-white transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:px-8";
 
 function TwoStepTypewriter({
 	firstText,
@@ -178,7 +179,7 @@ function HeroIntersectCards() {
 						}}
 					>
 						<h2 className="relative w-fit pb-0.5 text-2xl font-medium text-foreground md:text-3xl">
-							Alex - Uni Student
+							Alex - Uni Fresher
 						</h2>
 						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
 							<Image
@@ -202,13 +203,14 @@ function HeroIntersectCards() {
 						>
 							<div className={heroIntersectGlassClass}>
 								<p className="text-sm leading-relaxed text-foreground/90">
-									&quot;I moved for uni and suddenly had to
-									figure out groceries, appointments, and
-									getting around by myself.&quot; Start with
-									first-time guides built for that shift.
+									&quot;I&apos;m a fresher - new city, new
+									flat, and a hundred little first-things no
+									one warns me about.&quot; Our First-time
+									guides walk you through the basics so uni
+									life feels less overwhelming.
 								</p>
 								<span className={heroIntersectCtaClass}>
-									Browse First Time Guides
+									Browse First-time guides
 								</span>
 							</div>
 						</div>
@@ -233,7 +235,7 @@ function HeroIntersectCards() {
 						}}
 					>
 						<h2 className="relative w-fit pb-0.5 text-2xl font-medium text-foreground md:text-3xl">
-							Jordan - First Jobber
+							Jordan - Career Starter
 						</h2>
 						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
 							<Image
@@ -259,14 +261,14 @@ function HeroIntersectCards() {
 						>
 							<div className={heroIntersectGlassClass}>
 								<p className="text-sm leading-relaxed text-foreground/90">
-									&quot;I started my first full-time job and
-									didn&apos;t know where to find reliable
-									local help outside work hours.&quot; Use
-									Near Me to find services and essentials
-									fast.
+									&quot;I&apos;ve landed my first job - busy
+									days, new area, and I still need life
+									assistant after 5pm.&quot; Our Near-me
+									services points you to handy local spots
+									without the endless scroll.
 								</p>
 								<span className={heroIntersectCtaClass}>
-									Find services near me
+									Find Near-me services
 								</span>
 							</div>
 						</div>
@@ -340,6 +342,7 @@ export function LandingHeroSection({
 							transition={{
 								duration: TYPEWRITER_TOTAL_DURATION_SECONDS,
 								ease: easeOut,
+								delay: HERO_CARDS_REVEAL_DELAY_SECONDS,
 							}}
 						>
 							<HeroIntersectCards />

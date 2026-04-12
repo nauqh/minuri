@@ -14,18 +14,18 @@ export function LandingAccessSection() {
 			<div className="mx-auto w-full max-w-4xl px-5 text-center md:px-8">
 				<FadeUp>
 					<p className="text-xs font-medium tracking-[0.22em] text-minuri-teal">
-						Early access
+						Contact us
 					</p>
 				</FadeUp>
 				<FadeUp delay={0.06}>
 					<h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
-						Be first when Melbourne onboarding opens.
+						Get help navigating independent adult life.
 					</h2>
 				</FadeUp>
 				<FadeUp delay={0.12}>
 					<p className="mt-4 text-sm leading-relaxed text-minuri-slate md:text-base">
-						Leave your email for launch updates. No spam — just the
-						product when it&apos;s ready.
+						Share your email and what you&apos;re working through.
+						We&apos;ll reply with practical next steps.
 					</p>
 				</FadeUp>
 				<FadeUp
@@ -49,7 +49,7 @@ export function LandingAccessSection() {
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.97 }}
 					>
-						Notify me
+						Get in touch
 						<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 					</motion.button>
 				</FadeUp>

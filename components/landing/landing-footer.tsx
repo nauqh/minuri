@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 
 import { easeOut } from "@/components/landing/home-constants";
@@ -23,17 +24,20 @@ export function LandingFooter() {
 							transition={{ duration: 0.5, ease: easeOut }}
 						>
 							<h2 className="minuri-link-underline w-fit pb-1 font-hero-serif text-[clamp(2.4rem,7vw,5.2rem)] font-medium leading-[1.03] tracking-tight text-minuri-ocean">
-								Let&apos;s work together{" "}
+								Let's get started
 								<span
-									className="inline-block transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+									className="inline-block translate-y-px transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
 									aria-hidden
 								>
-									↗
+									<ArrowUpRight
+										className="inline-block size-20"
+										aria-hidden
+									/>
 								</span>
 							</h2>
 							<p className="mt-3 text-sm text-minuri-slate md:text-base">
-								Tell us about your project and we will get back
-								to you.
+								Reach out — wherever you are, we&apos;re happy
+								to help.
 							</p>
 						</motion.div>
 					</Link>
