@@ -1,6 +1,6 @@
 "use client";
 
-import type { FocusEvent } from "react";
+import type { FocusEvent, MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -129,6 +129,17 @@ function HeroIntersectCards() {
 		setFocus(null);
 	}, []);
 
+	const handleMobileCardClick = useCallback(
+		(card: "left" | "right", e: ReactMouseEvent) => {
+			if (isMd) return;
+			if (focus !== card) {
+				e.preventDefault();
+				setFocus(card);
+			}
+		},
+		[isMd, focus],
+	);
+
 	const spring = { type: "spring" as const, stiffness: 280, damping: 38 };
 
 	const leftGrow = !isMd
@@ -146,8 +157,8 @@ function HeroIntersectCards() {
 				? HOVER_GROW_NARROW
 				: 1;
 
-	const showLeftInner = !isMd || focus === "left";
-	const showRightInner = !isMd || focus === "right";
+	const showLeftInner = focus === "left";
+	const showRightInner = focus === "right";
 
 	return (
 		<>
@@ -171,6 +182,7 @@ function HeroIntersectCards() {
 					<Link
 						href="/guides"
 						className="landing-hero-card-mint-a group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out md:min-h-0 md:h-full md:flex-1 md:hover:-translate-y-1"
+						onClick={(e) => handleMobileCardClick("left", e)}
 						onMouseEnter={() => {
 							if (isMd) setFocus("left");
 						}}
@@ -198,7 +210,7 @@ function HeroIntersectCards() {
 								showLeftInner
 									? "translate-y-0 duration-260 delay-180"
 									: "translate-y-[120%] duration-160 delay-0",
-								!showLeftInner && isMd && "pointer-events-none",
+								!showLeftInner && "pointer-events-none",
 							)}
 						>
 							<div className={heroIntersectGlassClass}>
@@ -227,6 +239,7 @@ function HeroIntersectCards() {
 					<Link
 						href="/near-me"
 						className="landing-hero-card-mint-b group relative flex min-h-96 w-full flex-col overflow-hidden rounded-lg border border-minuri-white/35 p-4 transition-transform duration-300 ease-out md:min-h-0 md:h-full md:flex-1 md:hover:-translate-y-1"
+						onClick={(e) => handleMobileCardClick("right", e)}
 						onMouseEnter={() => {
 							if (isMd) setFocus("right");
 						}}
@@ -254,9 +267,7 @@ function HeroIntersectCards() {
 								showRightInner
 									? "translate-y-0 duration-260 delay-180"
 									: "translate-y-[120%] duration-160 delay-0",
-								!showRightInner &&
-									isMd &&
-									"pointer-events-none",
+								!showRightInner && "pointer-events-none",
 							)}
 						>
 							<div className={heroIntersectGlassClass}>

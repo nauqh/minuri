@@ -15,37 +15,35 @@ import { cn } from "@/lib/utils";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
-type VisualKind = "mist" | "ocean" | "seafoam" | "fog";
-
 const cards: {
 	icon: LucideIcon;
 	title: string;
 	body: string;
-	visual: VisualKind;
+	imageSrc: string;
 }[] = [
 	{
 		icon: HeartPulse,
 		title: "Where we started",
 		body: "We built Minuri because moving into independent life — uni, a first lease, a new job — can feel isolating. We wanted one calm place that acknowledges that reality and points you toward practical next steps, not generic advice.",
-		visual: "mist",
+		imageSrc: "/where-we-start.svg",
 	},
 	{
 		icon: BookOpen,
 		title: "Who we’re here for",
 		body: "If you’re new to Melbourne or going through a big change, this is for you. We write in plain language about real situations: renting, study, work, and staying connected — so you’re not decoding jargon when you already have enough on your plate.",
-		visual: "fog",
+		imageSrc: "/who-we-for.svg",
 	},
 	{
 		icon: Activity,
 		title: "What we believe",
 		body: "Help should feel reachable, not like another project. That’s why the homepage stays simple: browse first-time guides or find services near you — no long onboarding or pressure to “do everything at once.”",
-		visual: "seafoam",
+		imageSrc: "/what-we-believe.svg",
 	},
 	{
 		icon: UsersRound,
 		title: "Why this matters",
 		body: "Starting independent life often means figuring out everything at once — housing, study or work, money, and support — while information is scattered and overwhelming. Our problem statement is simple: people need one clear, local starting point that turns uncertainty into practical next steps.",
-		visual: "ocean",
+		imageSrc: "/why-this-matter.svg",
 	},
 ];
 
@@ -77,27 +75,9 @@ function OurStoryWordmark() {
 	);
 }
 
-function CardVisual({ kind }: { kind: VisualKind }) {
+function CardVisual({ src }: { src: string }) {
 	const base =
 		"relative mt-5 h-64 w-full overflow-hidden rounded-xl md:mt-6 md:h-80";
-	const images: Record<VisualKind, { src: string; alt: string }> = {
-		mist: {
-			src: "where-we-start.svg",
-			alt: "Starting out with Minuri",
-		},
-		fog: {
-			src: "/who-we-for.svg",
-			alt: "Readers and everyday life",
-		},
-		seafoam: {
-			src: "/what-we-believe.svg",
-			alt: "Simple choices on the homepage",
-		},
-		ocean: {
-			src: "/why-this-matter.svg",
-			alt: "Community and place in Melbourne",
-		},
-	};
 	return (
 		<div
 			className={cn(
@@ -107,8 +87,8 @@ function CardVisual({ kind }: { kind: VisualKind }) {
 		>
 			<div className="relative h-full w-full overflow-hidden rounded-lg bg-minuri-white/70">
 				<Image
-					src={images[kind].src}
-					alt={images[kind].alt}
+					src={src}
+					alt=""
 					fill
 					className="object-contain"
 					sizes="(max-width: 768px) 90vw, 640px"
@@ -238,7 +218,7 @@ export function SpotlightScrollSection() {
 												{card.title}
 											</h3>
 										</div>
-										<CardVisual kind={card.visual} />
+										<CardVisual src={card.imageSrc} />
 										<p className="mt-5 flex-1 text-sm leading-relaxed text-minuri-slate md:mt-6 md:text-[0.9375rem]">
 											{card.body}
 										</p>
