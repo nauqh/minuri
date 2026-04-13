@@ -47,7 +47,7 @@ export function GuidesShell({
 
     return (
         <div className="min-h-screen bg-minuri-fog text-foreground">
-            <header className="sticky top-0 z-40 border-b border-minuri-silver/70 bg-minuri-white/90 backdrop-blur">
+            <header className="z-40 border-b border-minuri-silver/70 bg-minuri-white/90 backdrop-blur">
                 <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 md:px-8 md:py-5">
                     <div className="flex items-center justify-between gap-4">
                         <Link
@@ -78,13 +78,13 @@ export function GuidesShell({
                     </div>
 
                     <div className="rounded-[2rem] bg-minuri-white p-6 shadow-sm ring-1 ring-minuri-silver/40 md:p-8">
-                        <p className="text-sm font-medium uppercase tracking-[0.18em] text-minuri-teal">
+                        <p className="text-xs font-medium uppercase tracking-[0.18em] text-minuri-teal">
                             Knowledge is Power · Your First-time Guides
                         </p>
-                        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-minuri-ocean md:text-5xl">
+                        <h1 className="mt-3 text-2xl font-semibold tracking-tight text-minuri-ocean md:text-4xl">
                             {title}
                         </h1>
-                        <p className="mt-4 max-w-3xl text-base leading-7 text-minuri-slate md:text-lg">
+                        <p className="mt-4 max-w-3xl text-sm leading-6 text-minuri-slate md:text-base">
                             {description}
                         </p>
                     </div>

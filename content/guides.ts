@@ -18,6 +18,10 @@ export type Guide = {
     title: string;
     category: GuideCategory;
     summary: string;
+    thumbnail: {
+        src: string;
+        alt: "";
+    };
     readMinutes: 2 | 3 | 4 | 5;
     searchTerms: string[];
     sections: GuideSection[];
@@ -146,6 +150,10 @@ export const GUIDES: Guide[] = [
         category: "setup",
         summary:
             "A plain-language intro to leases, bonds and condition reports before you sign anything.",
+        thumbnail: {
+            src: "/guides/thumbnails/understanding-rental-paperwork.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "lease",
@@ -188,6 +196,10 @@ export const GUIDES: Guide[] = [
         category: "setup",
         summary:
             "Learn the basic renter rights that matter in your first weeks living independently.",
+        thumbnail: {
+            src: "/guides/thumbnails/know-your-rights-as-a-renter.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "renter rights",
@@ -229,6 +241,10 @@ export const GUIDES: Guide[] = [
         category: "setup",
         summary:
             "Use this first-week checklist to set up utilities, transport and your basic admin.",
+        thumbnail: {
+            src: "/guides/thumbnails/moving-in-essentials-checklist.svg",
+            alt: "",
+        },
         readMinutes: 3,
         searchTerms: [
             "moving checklist",
@@ -271,6 +287,10 @@ export const GUIDES: Guide[] = [
         category: "survive",
         summary:
             "Stretch your grocery budget with planning habits that reduce waste and impulse spending.",
+        thumbnail: {
+            src: "/guides/thumbnails/cheap-groceries-in-australia.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "groceries",
@@ -311,6 +331,10 @@ export const GUIDES: Guide[] = [
         category: "survive",
         summary:
             "Find affordable meal options and build a fallback list for low-energy days.",
+        thumbnail: {
+            src: "/guides/thumbnails/cheap-eats-in-melbourne.svg",
+            alt: "",
+        },
         readMinutes: 3,
         searchTerms: [
             "cheap eats",
@@ -356,6 +380,10 @@ export const GUIDES: Guide[] = [
         category: "survive",
         summary:
             "Start with a simple budget and learn which discounts or support schemes are worth checking.",
+        thumbnail: {
+            src: "/guides/thumbnails/budgeting-discounts-and-youth-allowance.svg",
+            alt: "",
+        },
         readMinutes: 5,
         searchTerms: [
             "budget",
@@ -397,6 +425,10 @@ export const GUIDES: Guide[] = [
         category: "get-around",
         summary:
             "A beginner-friendly guide to Myki, trains, trams and building confidence with public transport.",
+        thumbnail: {
+            src: "/guides/thumbnails/melbourne-public-transport-101.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "myki",
@@ -438,6 +470,10 @@ export const GUIDES: Guide[] = [
         category: "get-around",
         summary:
             "Understand the discounts and concession pathways that can lower your weekly transport costs.",
+        thumbnail: {
+            src: "/guides/thumbnails/transport-discounts-and-concessions.svg",
+            alt: "",
+        },
         readMinutes: 3,
         searchTerms: [
             "transport concession",
@@ -476,6 +512,10 @@ export const GUIDES: Guide[] = [
         category: "get-around",
         summary:
             "Plan safer travel when public transport is limited or you want alternatives to your usual route.",
+        thumbnail: {
+            src: "/guides/thumbnails/cycling-and-late-night-travel.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "cycling",
@@ -517,6 +557,10 @@ export const GUIDES: Guide[] = [
         category: "health",
         summary:
             "Know what to expect before booking a doctor and how to prepare for a first appointment.",
+        thumbnail: {
+            src: "/guides/thumbnails/your-first-gp-visit.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "gp",
@@ -561,6 +605,10 @@ export const GUIDES: Guide[] = [
         category: "health",
         summary:
             "Understand common health costs, what bulk billing means and when a pharmacist can help.",
+        thumbnail: {
+            src: "/guides/thumbnails/bulk-billing-and-pharmacy-basics.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "bulk billing",
@@ -606,6 +654,10 @@ export const GUIDES: Guide[] = [
         category: "health",
         summary:
             "Recognise common emotional strain in early independence and take small actions before it snowballs.",
+        thumbnail: {
+            src: "/guides/thumbnails/homesickness-loneliness-and-mental-wellbeing.svg",
+            alt: "",
+        },
         readMinutes: 5,
         searchTerms: [
             "loneliness",
@@ -647,6 +699,10 @@ export const GUIDES: Guide[] = [
         category: "connect",
         summary:
             "Use free activities to explore the city, reset on a budget and make weekends feel less isolating.",
+        thumbnail: {
+            src: "/guides/thumbnails/free-things-to-do-in-melbourne.svg",
+            alt: "",
+        },
         readMinutes: 3,
         searchTerms: [
             "free things",
@@ -692,6 +748,10 @@ export const GUIDES: Guide[] = [
         category: "connect",
         summary:
             "Find low-pressure ways to build belonging through volunteering, public spaces and youth-friendly programs.",
+        thumbnail: {
+            src: "/guides/thumbnails/ways-to-meet-people-and-volunteer.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "volunteer",
@@ -732,6 +792,10 @@ export const GUIDES: Guide[] = [
         category: "connect",
         summary:
             "Build better shared-living habits and use local spaces to feel less alone in a new city.",
+        thumbnail: {
+            src: "/guides/thumbnails/sharehouse-and-community-life.svg",
+            alt: "",
+        },
         readMinutes: 4,
         searchTerms: [
             "sharehouse",

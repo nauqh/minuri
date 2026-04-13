@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
     ArrowRight,
@@ -42,8 +43,17 @@ export function GuideCard({
 
     return (
         <article className="flex h-full flex-col rounded-[2rem] bg-minuri-white p-5 shadow-sm ring-1 ring-minuri-silver/40 md:p-6">
+            <div className="relative mb-5 aspect-video overflow-hidden rounded-[1.5rem] bg-minuri-mist">
+                <Image
+                    src={guide.thumbnail.src}
+                    alt={guide.thumbnail.alt}
+                    fill
+                    sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
+                    className="object-cover"
+                />
+            </div>
             <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-2 rounded-full bg-minuri-mist px-3 py-2 text-sm font-medium text-minuri-mid">
+                <div className="flex items-center gap-2 rounded-full bg-minuri-mist px-3 py-2 text-xs font-medium text-minuri-mid">
                     <Icon className="size-4" aria-hidden="true" />
                     <span>{categoryMeta?.label ?? guide.category}</span>
                 </div>
@@ -54,22 +64,22 @@ export function GuideCard({
                 />
             </div>
 
-            <h2 className="mt-5 text-2xl font-semibold tracking-tight text-minuri-ocean">
+            <h2 className="mt-5 text-xl font-semibold tracking-tight text-minuri-ocean">
                 {guide.title}
             </h2>
 
-            <div className="mt-3 flex items-center gap-2 text-sm text-minuri-slate">
+            <div className="mt-3 flex items-center gap-2 text-xs text-minuri-slate">
                 <span className="rounded-full bg-minuri-fog px-3 py-1">
                     {guide.readMinutes} min read
                 </span>
             </div>
 
-            <p className="mt-4 flex-1 text-base leading-7 text-minuri-slate">
+            <p className="mt-4 flex-1 text-sm leading-6 text-minuri-slate">
                 {guide.summary}
             </p>
 
             <div className="mt-6">
-                <Button asChild className="rounded-full px-5">
+                <Button asChild className="rounded-full px-5 text-xs">
                     <Link href={href}>
                         Read guide
                         <ArrowRight className="size-4" aria-hidden="true" />

@@ -61,7 +61,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
     }
 
     const isBookmarksMode = mode === "bookmarks";
-    const title = isBookmarksMode ? "My Bookmarks" : "Find the guide that closes your knowledge gap";
+    const title = isBookmarksMode ? "My Bookmarks" : "Find the guide that suits your needs";
     const description = isBookmarksMode
         ? "Your saved guides, all in one place."
         : "Browse, search, and save practical guides to learn exactly what you need.";
@@ -98,7 +98,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
                                 type="search"
                                 value={rawQuery}
                                 placeholder="Search topics like bulk billing, Myki or rent"
-                                className="h-12 w-full rounded-full border border-minuri-silver bg-minuri-fog pl-12 pr-12 text-sm text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate focus:border-minuri-teal"
+                                className="h-12 w-full rounded-full border border-minuri-silver bg-minuri-fog pl-12 pr-12 text-xs text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate focus:border-minuri-teal"
                                 onChange={(event) =>
                                     updateParams((params) => {
                                         const nextValue = event.target.value.trimStart();
@@ -127,7 +127,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
                             ) : null}
                         </div>
 
-                        <p className="text-sm font-medium text-minuri-slate">
+                        <p className="text-xs font-medium text-minuri-slate">
                             {visibleGuides.length} guide{visibleGuides.length === 1 ? "" : "s"}
                         </p>
                     </div>
@@ -138,7 +138,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
                                 key={option.value}
                                 type="button"
                                 className={cn(
-                                    "min-h-11 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                                    "min-h-11 rounded-full px-4 py-2 text-xs font-medium transition-colors",
                                     activeFilter === option.value
                                         ? "bg-minuri-teal text-primary-foreground"
                                         : "bg-minuri-mist text-minuri-slate hover:bg-minuri-ice",
@@ -163,7 +163,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 
             {isBookmarksMode && !hasHydrated ? (
                 <section className="mt-8 rounded-[2rem] bg-minuri-white p-6 shadow-sm ring-1 ring-minuri-silver/40">
-                    <p className="text-base leading-7 text-minuri-slate">
+                    <p className="text-sm leading-6 text-minuri-slate">
                         Loading bookmarks...
                     </p>
                 </section>
@@ -185,10 +185,10 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
                 </section>
             ) : (
                 <section className="mt-8 rounded-[2rem] bg-minuri-white p-8 text-center shadow-sm ring-1 ring-minuri-silver/40">
-                    <h2 className="text-2xl font-semibold tracking-tight text-minuri-ocean">
+                    <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
                         {emptyTitle}
                     </h2>
-                    <p className="mt-4 mx-auto max-w-2xl text-base leading-7 text-minuri-slate">
+                    <p className="mt-4 mx-auto max-w-2xl text-sm leading-6 text-minuri-slate">
                         {emptyBody}
                     </p>
                 </section>
