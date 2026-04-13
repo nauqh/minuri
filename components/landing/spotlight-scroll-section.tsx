@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
-import {
-	Activity,
-	BookOpen,
-	HeartPulse,
-	Sparkles,
-	UsersRound,
-} from "lucide-react";
+import { Activity, BookOpen, HeartPulse, UsersRound } from "lucide-react";
 import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -109,7 +103,7 @@ export function SpotlightScrollSection() {
 			  Grid overlay: sticky layer + content share one cell so row height = cards.
 			  Watermark stays pinned (top-0, h-screen) until the section scrolls away after the last card.
 
-			  First viewport: large “Our story” display type; intro + module cards follow after scroll.
+			  First viewport: large “Our story” display type; story cards follow after scroll.
 			*/}
 			<div className="grid grid-cols-1">
 				<div
@@ -127,60 +121,13 @@ export function SpotlightScrollSection() {
 					/>
 
 					{/* Slightly narrower than page grid so watermark reads large; still wider than pill nav */}
+					<h2 id="our-story-heading" className="sr-only">
+						Here&apos;s our story — and why Minuri exists.
+					</h2>
 					<div
 						className="mx-auto flex w-full max-w-xl flex-col gap-10 sm:max-w-2xl"
 						role="list"
 					>
-						<motion.article
-							role="listitem"
-							className="w-full"
-							initial={{ opacity: 0, y: 96 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{
-								once: true,
-								margin: "0% 0px -12% 0px",
-								amount: 0.2,
-							}}
-							transition={{
-								duration: 0.65,
-								delay: 0,
-								ease: easeOut,
-							}}
-						>
-							<div
-								className={cn(
-									"rounded-[1.5rem] border border-minuri-silver/45 bg-minuri-white p-6 shadow-[0_20px_50px_-44px_color-mix(in_oklch,var(--minuri-mid)_22%,transparent)] md:rounded-[1.75rem] md:p-8",
-								)}
-							>
-								<div className="flex flex-col gap-2.5 sm:flex-row sm:items-start sm:gap-3">
-									<span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-minuri-teal/15 text-minuri-mid md:size-11">
-										<Sparkles
-											className="size-4 md:size-5"
-											strokeWidth={1.75}
-											aria-hidden
-										/>
-									</span>
-									<div className="min-w-0 flex-1">
-										<p className="text-xs font-medium tracking-[0.22em] text-minuri-teal">
-											For new visitors
-										</p>
-										<h2
-											id="our-story-heading"
-											className="mt-3 text-xl font-semibold tracking-tight text-foreground md:text-2xl"
-										>
-											Here’s our story — and why Minuri
-											exists.
-										</h2>
-									</div>
-								</div>
-								<p className="mt-5 text-sm leading-relaxed text-minuri-slate md:mt-6 md:text-[0.9375rem]">
-									Scroll to learn who we’re for, what we
-									believe, and how we help you take a clear
-									first step.
-								</p>
-							</div>
-						</motion.article>
-
 						{cards.map((card, i) => {
 							const Icon = card.icon;
 							return (
@@ -197,7 +144,7 @@ export function SpotlightScrollSection() {
 									}}
 									transition={{
 										duration: 0.65,
-										delay: (i + 1) * 0.06,
+										delay: i * 0.06,
 										ease: easeOut,
 									}}
 								>

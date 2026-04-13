@@ -300,6 +300,7 @@ export function LandingHeroSection({
 	const heroRevealNotified = useRef(false);
 	const cardsRevealNotified = useRef(false);
 	const [cardsVisible, setCardsVisible] = useState(false);
+	const [subheadlineVisible, setSubheadlineVisible] = useState(false);
 
 	const handleCardsReveal = useCallback(() => {
 		if (cardsRevealNotified.current) return;
@@ -315,12 +316,16 @@ export function LandingHeroSection({
 		}, 240);
 	}, [onHeroReveal]);
 
+	const handleSubheadlineReveal = useCallback(() => {
+		setSubheadlineVisible(true);
+	}, []);
+
 	return (
 		<div className="relative overflow-x-clip">
 			{/* Anchor tagline near the top third of the viewport. */}
 			<div className="relative flex h-screen flex-col bg-minuri-ocean max-h-200">
 				<LandingHeader isVisible={headerVisible} />
-				<div className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col items-start justify-start gap-3 px-4 pt-[20vh] text-left max-md:min-h-0 md:items-center md:gap-5 md:px-8 md:text-center">
+				<div className="relative z-10 mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col items-start justify-start gap-3 px-4 pt-[8vh] text-left max-md:min-h-0 md:items-center md:gap-5 md:px-8 md:text-center">
 					<motion.h1
 						className="w-full max-w-3xl font-sans text-5xl font-bold leading-[1.08] tracking-tight text-minuri-white md:text-7xl"
 						initial={{ opacity: 0, y: 24 }}
@@ -334,8 +339,27 @@ export function LandingHeroSection({
 							secondClassName="font-hero-serif font-normal italic text-minuri-ice"
 							onFirstComplete={handleCardsReveal}
 							onSecondStart={handleHeroReveal}
+							onComplete={handleSubheadlineReveal}
 						/>
 					</motion.h1>
+					<motion.p
+						className="w-full max-w-5xl text-base leading-relaxed text-minuri-ice/90 md:text-lg"
+						initial={{ opacity: 0, y: 16 }}
+						animate={
+							headerVisible && subheadlineVisible
+								? { opacity: 1, y: 0 }
+								: { opacity: 0, y: 16 }
+						}
+						transition={{
+							duration: 3,
+							delay: 0.5,
+							ease: easeOut,
+						}}
+					>
+						We help young adults feel confident living independently
+						for the first time with practical guides, local tips,
+						and everyday support.
+					</motion.p>
 				</div>
 			</div>
 
