@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
     ArrowRight,
@@ -42,6 +43,15 @@ export function GuideCard({
 
     return (
         <article className="flex h-full flex-col rounded-[2rem] bg-minuri-white p-5 shadow-sm ring-1 ring-minuri-silver/40 md:p-6">
+            <div className="relative mb-5 aspect-video overflow-hidden rounded-[1.5rem] bg-minuri-mist">
+                <Image
+                    src={guide.thumbnail.src}
+                    alt={guide.thumbnail.alt}
+                    fill
+                    sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
+                    className="object-cover"
+                />
+            </div>
             <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-2 rounded-full bg-minuri-mist px-3 py-2 text-xs font-medium text-minuri-mid">
                     <Icon className="size-4" aria-hidden="true" />

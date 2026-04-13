@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title">
+  <title>Cycling and Late-night Travel</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1d4f72"/>
+      <stop offset="100%" stop-color="#7fb3cf"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="120" y="120" width="308" height="64" rx="32" fill="#dbeff8"/>
+  <text x="160" y="162" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="4" fill="#1d4f72">GET AROUND</text>
+  <text x="136" y="292" font-family="Inter, Arial, sans-serif" font-size="84" font-weight="700" fill="#f3fbff">
+    <tspan x="136" dy="0">Cycling and</tspan>
+    <tspan x="136" dy="92">Late-night Travel</tspan>
+  </text>
+  <text x="140" y="792" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500" letter-spacing="2" fill="#d8eef8">Minuri first-time guide</text>
+  <g opacity="0.92">
+    <rect x="1030" y="596" width="250" height="250" rx="64" fill="#8dc4df" transform="rotate(-12 1155 721)"/>
+    <circle cx="1325" cy="650" r="180" fill="#c0e4f4"/>
+    <circle cx="1455" cy="792" r="110" fill="#8dc4df"/>
+    <path d="M1060 836c134-94 276-116 404-64v128H1060z" fill="#dbeff8" opacity="0.58"/>
+  </g>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title">
+  <title>Bulk Billing and Pharmacy Basics</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#156f66"/>
+      <stop offset="100%" stop-color="#6fd0b8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="120" y="120" width="236" height="64" rx="32" fill="#dff6ef"/>
+  <text x="160" y="162" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="4" fill="#156f66">HEALTH</text>
+  <text x="136" y="300" font-family="Inter, Arial, sans-serif" font-size="86" font-weight="700" fill="#f4fffc">
+    <tspan x="136" dy="0">Bulk Billing</tspan>
+    <tspan x="136" dy="94">and Pharmacy</tspan>
+    <tspan x="136" dy="94">Basics</tspan>
+  </text>
+  <text x="140" y="792" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500" letter-spacing="2" fill="#ddf7f0">Minuri first-time guide</text>
+  <g opacity="0.92">
+    <rect x="1030" y="596" width="250" height="250" rx="64" fill="#8bdbc8" transform="rotate(-12 1155 721)"/>
+    <circle cx="1325" cy="650" r="180" fill="#b8eadc"/>
+    <circle cx="1455" cy="792" r="110" fill="#8bdbc8"/>
+    <path d="M1060 836c134-94 276-116 404-64v128H1060z" fill="#dff6ef" opacity="0.58"/>
+  </g>
+</svg>
