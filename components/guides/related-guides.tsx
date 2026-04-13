@@ -28,11 +28,11 @@ export function RelatedGuides({
 
     return (
         <section className="mt-12">
-            <h2 className="text-2xl font-semibold tracking-tight text-minuri-ocean">
+            <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
                 Related guides
             </h2>
-            <p className="mt-3 text-base leading-7 text-minuri-slate">
-                More guides related to what you're reading.
+            <p className="mt-3 text-sm leading-6 text-minuri-slate">
+                More guides related to what you&apos;re reading.
             </p>
 
             <div className="mt-6 grid gap-4 lg:grid-cols-2">

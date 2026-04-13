@@ -45,26 +45,26 @@ export function GuideDetailView({
                     <div>
                         <Link
                             href={backHref}
-                            className="inline-flex items-center gap-2 text-sm font-medium text-minuri-mid hover:text-minuri-teal"
+                            className="inline-flex items-center gap-2 text-xs font-medium text-minuri-mid hover:text-minuri-teal"
                         >
                             <ArrowLeft className="size-4" aria-hidden="true" />
                             Back to library
                         </Link>
 
                         <div className="mt-5 flex flex-wrap items-center gap-3">
-                            <span className="rounded-full bg-minuri-mist px-3 py-2 text-sm font-medium text-minuri-mid">
+                            <span className="rounded-full bg-minuri-mist px-3 py-2 text-xs font-medium text-minuri-mid">
                                 {categoryMeta?.label ?? guide.category}
                             </span>
-                            <span className="rounded-full bg-minuri-fog px-3 py-2 text-sm text-minuri-slate">
+                            <span className="rounded-full bg-minuri-fog px-3 py-2 text-xs text-minuri-slate">
                                 {guide.readMinutes} min read
                             </span>
                         </div>
 
-                        <h1 className="mt-5 text-3xl font-semibold tracking-tight text-minuri-ocean md:text-5xl">
+                        <h1 className="mt-5 text-2xl font-semibold tracking-tight text-minuri-ocean md:text-4xl">
                             {guide.title}
                         </h1>
 
-                        <p className="mt-4 max-w-3xl text-base leading-7 text-minuri-slate md:text-lg">
+                        <p className="mt-4 max-w-3xl text-sm leading-6 text-minuri-slate md:text-base">
                             {guide.summary}
                         </p>
                     </div>
@@ -78,7 +78,7 @@ export function GuideDetailView({
                 <div className="mt-10 space-y-10">
                     {guide.sections.map((section) => (
                         <section key={section.heading}>
-                            <h2 className="text-2xl font-semibold tracking-tight text-minuri-ocean">
+                            <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
                                 {section.heading}
                             </h2>
 
@@ -86,7 +86,7 @@ export function GuideDetailView({
                                 {section.body.map((paragraph) => (
                                     <p
                                         key={paragraph}
-                                        className="text-base leading-7 text-minuri-slate"
+                                        className="text-sm leading-6 text-minuri-slate"
                                     >
                                         {paragraph}
                                     </p>
@@ -94,7 +94,7 @@ export function GuideDetailView({
                             </div>
 
                             {section.checklist ? (
-                                <ul className="mt-5 space-y-3 rounded-[1.5rem] bg-minuri-fog p-5 text-base leading-7 text-minuri-slate">
+                                <ul className="mt-5 space-y-3 rounded-[1.5rem] bg-minuri-fog p-5 text-sm leading-6 text-minuri-slate">
                                     {section.checklist.map((item) => (
                                         <li key={item} className="flex gap-3">
                                             <span
@@ -118,15 +118,15 @@ export function GuideDetailView({
 
                 {guide.cta ? (
                     <section className="mt-12 rounded-[2rem] bg-minuri-mist p-6 md:p-8">
-                        <h2 className="text-2xl font-semibold tracking-tight text-minuri-ocean">
+                        <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
                             Ready for the next step?
                         </h2>
-                        <p className="mt-3 max-w-2xl text-base leading-7 text-minuri-slate">
+                        <p className="mt-3 max-w-2xl text-sm leading-6 text-minuri-slate">
                             Small steps lead to big changes. Start with one today.
                         </p>
 
                         <div className="mt-5">
-                            <Button asChild className="rounded-full px-5">
+                            <Button asChild className="rounded-full px-5 text-xs">
                                 <Link href={guide.cta.href}>{guide.cta.label}</Link>
                             </Button>
                         </div>
@@ -134,7 +134,7 @@ export function GuideDetailView({
                 ) : null}
 
                 <section className="mt-12">
-                    <h2 className="text-2xl font-semibold tracking-tight text-minuri-ocean">
+                    <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
                         Further reading
                     </h2>
                     <div className="mt-5 grid gap-3">
@@ -144,7 +144,7 @@ export function GuideDetailView({
                                 href={link.href}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-flex items-center gap-2 rounded-[1.25rem] bg-minuri-fog px-4 py-3 text-sm font-medium text-minuri-mid hover:bg-minuri-ice"
+                                className="inline-flex items-center gap-2 rounded-[1.25rem] bg-minuri-fog px-4 py-3 text-xs font-medium text-minuri-mid hover:bg-minuri-ice"
                             >
                                 {link.label}
                                 <ExternalLink className="size-4" aria-hidden="true" />
