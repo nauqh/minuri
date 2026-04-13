@@ -19,25 +19,25 @@ const cards: {
 		icon: HeartPulse,
 		title: "Where we started",
 		body: "We built Minuri because moving into independent life — uni, a first lease, a new job — can feel isolating. We wanted one calm place that acknowledges that reality and points you toward practical next steps, not generic advice.",
-		imageSrc: "/where-we-start.svg",
+		imageSrc: "/landing/where-we-start.svg",
 	},
 	{
 		icon: BookOpen,
 		title: "Who we’re here for",
 		body: "If you’re new to Melbourne or going through a big change, this is for you. We write in plain language about real situations: renting, study, work, and staying connected — so you’re not decoding jargon when you already have enough on your plate.",
-		imageSrc: "/who-we-for.svg",
+		imageSrc: "/landing/who-we-for.svg",
 	},
 	{
 		icon: Activity,
 		title: "What we believe",
 		body: "Help should feel reachable, not like another project. That’s why the homepage stays simple: browse first-time guides or find services near you — no long onboarding or pressure to “do everything at once.”",
-		imageSrc: "/what-we-believe.svg",
+		imageSrc: "/landing/what-we-believe.svg",
 	},
 	{
 		icon: UsersRound,
 		title: "Why this matters",
 		body: "Starting independent life often means figuring out everything at once — housing, study or work, money, and support — while information is scattered and overwhelming. Our problem statement is simple: people need one clear, local starting point that turns uncertainty into practical next steps.",
-		imageSrc: "/why-this-matter.svg",
+		imageSrc: "/landing/why-this-matter.svg",
 	},
 ];
 

@@ -43,19 +43,16 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 				<div className="relative mx-auto flex h-12 max-w-full items-center md:h-14">
 					<Link
 						href="/"
-						className="z-10 flex w-fit shrink-0 items-center gap-2 md:gap-2.5"
+						className="z-10 flex w-fit shrink-0 items-center justify-center gap-2 md:gap-2.5"
 					>
 						<Image
-							src="https://cdn-icons-png.flaticon.com/512/6959/6959474.png"
+							src="/icon.png"
 							alt="Minuri"
-							width={200}
-							height={200}
+							width={400}
+							height={400}
 							priority
-							className="h-10 w-auto shrink-0 object-contain"
+							className="mx-auto h-30 w-auto shrink-0 object-contain"
 						/>
-						<p className="text-xl font-bold tracking-wide text-minuri-white">
-							Minuri
-						</p>
 					</Link>
 
 					<motion.nav
@@ -65,7 +62,9 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, ease: easeOut }}
 					>
-						<PillNavLink href="#our-story">Why we&apos;re here</PillNavLink>
+						<PillNavLink href="#our-story">
+							Why we&apos;re here
+						</PillNavLink>
 						<PillNavLink href="#service">How we help</PillNavLink>
 						<PillNavLink href="#contact">Get in touch</PillNavLink>
 						<Link

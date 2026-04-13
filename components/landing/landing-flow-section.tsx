@@ -39,7 +39,7 @@ export function LandingFlowSection() {
 							className="relative h-[340px] w-full max-w-[520px]"
 						>
 							<Image
-								src="/homescreen.svg"
+								src="/landing/homescreen.svg"
 								alt="Minuri homescreen preview"
 								fill
 								className="object-contain"

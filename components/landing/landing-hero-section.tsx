@@ -195,7 +195,7 @@ function HeroIntersectCards() {
 						</h2>
 						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
 							<Image
-								src="/amico.svg"
+								src="/landing/amico.svg"
 								alt=""
 								aria-hidden
 								loading="eager"
@@ -252,7 +252,7 @@ function HeroIntersectCards() {
 						</h2>
 						<div className="pointer-events-none relative mt-4 flex min-h-44 flex-1 items-end justify-center md:min-h-52">
 							<Image
-								src="/pana.svg"
+								src="/landing/pana.svg"
 								alt=""
 								aria-hidden
 								loading="eager"
