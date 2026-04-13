@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minuri - Iteration 1 Milestone Roadmap</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #f7f8fc;
+            --surface: #ffffff;
+            --text: #111827;
+            --muted: #4b5563;
+            --line: #d1d5db;
+            --primary: #1e3a8a;
+            --primary-soft: #e0e7ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 28px 16px;
+        }
+
+        .page {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--surface);
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 28px 26px 20px;
+            box-shadow: 0 8px 30px rgba(17, 24, 39, 0.06);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            font-size: clamp(20px, 2vw, 28px);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .timeline {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(var(--line), #bfc7d9);
+            transform: translateX(-50%);
+        }
+
+        .item {
+            display: grid;
+            grid-template-columns: 1fr 56px 1fr;
+            align-items: center;
+            min-height: 112px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 3px 14px rgba(17, 24, 39, 0.04);
+        }
+
+        .item:nth-child(odd) .card {
+            grid-column: 1;
+            text-align: right;
+        }
+
+        .item:nth-child(even) .card {
+            grid-column: 3;
+            text-align: left;
+        }
+
+        .dot-wrap {
+            grid-column: 2;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--primary-soft);
+        }
+
+        .kicker {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .item-text {
+            font-size: 13px;
+            line-height: 1.45;
+            color: var(--muted);
+        }
+
+        @media (max-width: 760px) {
+            .page {
+                padding: 22px 14px 16px;
+            }
+
+            .timeline::before {
+                left: 14px;
+                transform: none;
+            }
+
+            .item {
+                grid-template-columns: 28px 1fr;
+                min-height: 0;
+            }
+
+            .dot-wrap {
+                grid-column: 1;
+                justify-content: flex-start;
+            }
+
+            .item .card,
+            .item:nth-child(odd) .card,
+            .item:nth-child(even) .card {
+                grid-column: 2;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <header class="header">
+            <h1 class="title">Iteration 1 Milestone Roadmap</h1>
+
+        </header>
+
+        <section class="timeline">
+            <article class="item">
+                <div class="card">
+                    <p class="kicker">Milestone 1</p>
+                    <h2 class="item-title">User and Problem Analysis</h2>
+                    <p class="item-text">Define core personas, map pain points, and scope the first release to the City
+                        of Melbourne LGA.</p>
+                </div>
+                <div class="dot-wrap"><span class="dot"></span></div>
+            </article>
+
+            <article class="item">
+                <div class="card">
+                    <p class="kicker">Milestone 2</p>
+                    <h2 class="item-title">Epics and User Stories</h2>
+                    <p class="item-text">Create epics and stories with clear acceptance criteria, then map dependencies
+                        into the planning board.</p>
+                </div>
+                <div class="dot-wrap"><span class="dot"></span></div>
+            </article>
+
+            <article class="item">
+                <div class="card">
+                    <p class="kicker">Milestone 3 - Epic 1</p>
+                    <h2 class="item-title">Landing and Navigation</h2>
+                    <p class="item-text">Build the app shell, route structure, and clear entry points, with persistent
+                        access to crisis support.</p>
+                </div>
+                <div class="dot-wrap"><span class="dot"></span></div>
+            </article>
+
+            <article class="item">
+                <div class="card">
+                    <p class="kicker">Milestone 4 - Epic 2</p>
+                    <h2 class="item-title">First-Time Guides</h2>
+                    <p class="item-text">Publish guide content with category filters, keyword search, inline data
+                        widgets, and bookmark support.</p>
+                </div>
+                <div class="dot-wrap"><span class="dot"></span></div>
+            </article>
+
+            <article class="item">
+                <div class="card">
+                    <p class="kicker">Milestone 5 - Epic 3</p>
+                    <h2 class="item-title">Near Me</h2>
+                    <p class="item-text">Ship suburb/geolocation search, topic filtering, synchronized list-map results,
+                        and demographic snapshots.</p>
+                </div>
+                <div class="dot-wrap"><span class="dot"></span></div>
+            </article>
+
+            <article class="item">
+                <div class="card">
+                    <p class="kicker">Ongoing</p>
+                    <h2 class="item-title">Evaluation and Iteration 2 Prep</h2>
+                    <p class="item-text">Run user feedback loops, maintain project documentation, and scope the next
+                        iteration's priorities.</p>
+                </div>
+                <div class="dot-wrap"><span class="dot"></span></div>
+            </article>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -250,3 +250,17 @@ a:focus-visible .minuri-link-underline::after {
 		transition-duration: 0.01ms;
 	}
 }
+
+/* Leaflet map tooltip overrides for near-me */
+.near-me-tooltip {
+	background: white !important;
+	border: 1px solid #ddd !important;
+	border-radius: 8px !important;
+	padding: 4px 10px !important;
+	font-size: 12px !important;
+	font-weight: 500 !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+.near-me-tooltip::before {
+	border-top-color: white !important;
+}
