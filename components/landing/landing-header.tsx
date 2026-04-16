@@ -51,12 +51,12 @@ export function LandingHeader({ isVisible = true }: { isVisible?: boolean }) {
 							width={400}
 							height={400}
 							priority
-							className="mx-auto h-30 w-auto shrink-0 object-contain"
+							className="mx-auto h-12 w-auto shrink-0 object-contain"
 						/>
 					</Link>
 
 					<motion.nav
-						className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-minuri-white/65 bg-minuri-white py-1.5 pl-2.5 pr-2 shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--minuri-white)_82%,transparent),0_0_0_1px_color-mix(in_oklch,var(--minuri-ocean)_14%,transparent),0_20px_50px_-18px_color-mix(in_oklch,var(--minuri-ocean)_32%,transparent)] md:flex"
+						className="absolute left-1/2 top-[56%] z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-minuri-white/65 bg-minuri-white py-1.5 pl-2.5 pr-2 shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--minuri-white)_82%,transparent),0_0_0_1px_color-mix(in_oklch,var(--minuri-ocean)_14%,transparent),0_20px_50px_-18px_color-mix(in_oklch,var(--minuri-ocean)_32%,transparent)] md:flex"
 						aria-label="Primary"
 						initial={{ opacity: 0, y: -14 }}
 						animate={{ opacity: 1, y: 0 }}
