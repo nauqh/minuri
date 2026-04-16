@@ -18,10 +18,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import {
-	rankAndFilterSuburbs,
-	type SuburbOption,
-} from "@/lib/suburbs";
+import { rankAndFilterSuburbs, type SuburbOption } from "@/lib/suburbs";
 import {
 	NEAR_ME_TOPICS,
 	type NearMeTopic,
@@ -69,6 +66,10 @@ type LoadState =
 export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const enabledTopics = useMemo(
+		() => new Set<NearMeTopic>(["survive", "health"]),
+		[],
+	);
 
 	// Location context (set once, persists)
 	const [suburb, setSuburb] = useState(initialSuburb || "Melbourne");
@@ -84,7 +85,9 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	const locationRef = useRef<HTMLDivElement>(null);
 
 	// Browsing state
-	const [topic, setTopic] = useState<NearMeTopic>(initialTopic);
+	const [topic, setTopic] = useState<NearMeTopic>(
+		enabledTopics.has(initialTopic) ? initialTopic : "survive",
+	);
 	const [activeSubtype, setActiveSubtype] = useState<string | null>(null);
 	const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
 	const [places, setPlaces] = useState<NearMePlace[]>([]);
@@ -256,6 +259,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	}
 
 	function switchTopic(t: NearMeTopic) {
+		if (!enabledTopics.has(t)) return;
 		setTopic(t);
 		setActiveSubtype(null);
 	}
@@ -369,22 +373,32 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 					<nav className="flex gap-0 overflow-x-auto px-2 md:px-4">
 						{allTopics.map((t) => {
 							const active = topic === t.slug;
+							const isEnabled = enabledTopics.has(t.slug);
 							return (
 								<button
 									key={t.slug}
 									type="button"
 									onClick={() => switchTopic(t.slug)}
+									disabled={!isEnabled}
 									className={cn(
-										"relative flex shrink-0 cursor-pointer flex-col items-center gap-0.5 px-4 py-3 text-xs font-medium transition md:flex-row md:gap-1.5 md:px-5",
+										"relative flex shrink-0 flex-col items-center gap-0.5 px-4 py-3 text-xs font-medium transition md:flex-row md:gap-1.5 md:px-5",
 										active
 											? "text-minuri-mid"
-											: "text-minuri-slate hover:text-minuri-mid",
+											: "text-minuri-slate",
+										isEnabled
+											? "cursor-pointer hover:text-minuri-mid"
+											: "cursor-not-allowed opacity-60",
 									)}
 								>
 									<span className="text-base md:text-sm">
 										{t.icon}
 									</span>
 									<span>{t.label}</span>
+									{!isEnabled && (
+										<span className="rounded-full bg-minuri-fog px-1.5 py-0.5 text-[10px] font-medium text-minuri-slate">
+											Comming soon
+										</span>
+									)}
 									{active && (
 										<span className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full bg-minuri-teal" />
 									)}
