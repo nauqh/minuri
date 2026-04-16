@@ -13,10 +13,16 @@ import {
 	Map,
 	MapPin,
 	Phone,
+	Search,
 	Star,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import {
+	DEFAULT_SUBURB_LIMIT,
+	rankAndFilterSuburbs,
+	type SuburbOption,
+} from "@/lib/suburbs";
 import {
 	NEAR_ME_TOPICS,
 	type NearMeTopic,
@@ -26,10 +32,8 @@ import {
 	formatNumber,
 	getAllTopicsMeta,
 	getContextHeading,
-	getMockDemographics,
 	getMockPlaces,
 	getSuburbDisplayName,
-	getSuburbSuggestions,
 	getTopicMeta,
 } from "@/lib/near-me";
 
@@ -71,6 +75,12 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	const [suburb, setSuburb] = useState(initialSuburb || "Melbourne");
 	const [locationPickerOpen, setLocationPickerOpen] = useState(false);
 	const [locationQuery, setLocationQuery] = useState("");
+	const [suburbOptions, setSuburbOptions] = useState<SuburbOption[]>([]);
+	const [suburbLoading, setSuburbLoading] = useState(false);
+	const [suburbError, setSuburbError] = useState("");
+	const [youngAdultPopulation, setYoungAdultPopulation] = useState<
+		number | null
+	>(null);
 	const [usingLocation, setUsingLocation] = useState(false);
 	const locationRef = useRef<HTMLDivElement>(null);
 
@@ -86,18 +96,19 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 
 	// Derived
 	const displaySuburb = getSuburbDisplayName(suburb || "Melbourne");
-	const demographics = useMemo(
-		() => getMockDemographics(displaySuburb),
-		[displaySuburb],
-	);
 	const topicMeta = getTopicMeta(topic);
 	const allTopics = getAllTopicsMeta();
 	const subtypes: Subtype[] = topicMeta.subtypes;
 	const layout: TopicLayout = topicMeta.layout;
-	const heading = getContextHeading(topic, demographics.label);
+	const heading = getContextHeading(topic, displaySuburb);
 	const suggestions = useMemo(
-		() => getSuburbSuggestions(locationQuery),
-		[locationQuery],
+		() =>
+			rankAndFilterSuburbs(
+				suburbOptions,
+				locationQuery,
+				DEFAULT_SUBURB_LIMIT,
+			),
+		[locationQuery, suburbOptions],
 	);
 
 	// Close location picker on outside click
@@ -122,11 +133,91 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 		router.replace(`${pathname}?${query.toString()}`, { scroll: false });
 	}, [topic, displaySuburb, pathname, router]);
 
+	// Load suburb options for picker
+	useEffect(() => {
+		let cancelled = false;
+
+		async function loadSuburbs() {
+			setSuburbLoading(true);
+			setSuburbError("");
+			try {
+				const suburbsParams = new URLSearchParams({
+					limit: String(DEFAULT_SUBURB_LIMIT),
+				});
+				const suburbsResponse = await fetch(
+					`/api/suburbs?${suburbsParams.toString()}`,
+				);
+				if (!suburbsResponse.ok) {
+					throw new Error("Failed to fetch suburb data");
+				}
+				const suburbsPayload = (await suburbsResponse.json()) as {
+					suburbs?: SuburbOption[];
+				};
+				if (!cancelled) {
+					setSuburbOptions(suburbsPayload.suburbs ?? []);
+				}
+			} catch {
+				if (!cancelled) {
+					setSuburbError("Could not load suburb suggestions.");
+				}
+			} finally {
+				if (!cancelled) {
+					setSuburbLoading(false);
+				}
+			}
+		}
+
+		void loadSuburbs();
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
 	// Auto-fetch on context changes
 	useEffect(() => {
 		fetchPlaces();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [topic, activeSubtype, displaySuburb]);
+
+	// Fetch live young-adult population by suburb
+	useEffect(() => {
+		let cancelled = false;
+
+		async function loadPopulation() {
+			try {
+				const params = new URLSearchParams({ location: displaySuburb });
+				const response = await fetch(
+					`/api/population?${params.toString()}`,
+				);
+				if (!response.ok) {
+					throw new Error("Failed to load population");
+				}
+				const payload = (await response.json()) as {
+					youngAdultPopulation?: number;
+				};
+				if (!cancelled) {
+					setYoungAdultPopulation(
+						typeof payload.youngAdultPopulation === "number"
+							? payload.youngAdultPopulation
+							: null,
+					);
+				}
+			} catch {
+				if (!cancelled) {
+					setYoungAdultPopulation(null);
+				}
+			}
+		}
+
+		if (!displaySuburb) {
+			setYoungAdultPopulation(null);
+			return;
+		}
+		void loadPopulation();
+		return () => {
+			cancelled = true;
+		};
+	}, [displaySuburb]);
 
 	const onSelectPlace = useCallback((placeId: string) => {
 		setSelectedPlaceId(placeId);
@@ -171,7 +262,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 
 	function useMyLocation() {
 		setUsingLocation(true);
-		setSuburb("Carlton");
+		setSuburb(suggestions[0]?.locality ?? "Carlton");
 		setLocationPickerOpen(false);
 	}
 
@@ -202,22 +293,25 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 							className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-minuri-fog px-3 py-1.5 text-sm font-medium text-minuri-mid transition hover:bg-minuri-mist"
 						>
 							<MapPin className="size-3.5 text-minuri-teal" />
-							{demographics.label}
+							{displaySuburb}
 							<ChevronDown className="size-3 text-minuri-slate" />
 						</button>
 
 						{locationPickerOpen && (
 							<div className="absolute left-0 top-full z-40 mt-1.5 w-72 overflow-hidden rounded-xl border border-minuri-silver/70 bg-minuri-white shadow-xl">
 								<div className="p-3">
-									<input
-										autoFocus
-										value={locationQuery}
-										onChange={(e) =>
-											setLocationQuery(e.target.value)
-										}
-										placeholder="Search suburb..."
-										className="h-10 w-full rounded-lg border border-minuri-silver bg-minuri-fog/50 px-3 text-sm outline-none ring-minuri-teal/30 transition focus:border-minuri-teal focus:ring-2"
-									/>
+									<div className="relative">
+										<Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-minuri-silver" />
+										<input
+											autoFocus
+											value={locationQuery}
+											onChange={(e) =>
+												setLocationQuery(e.target.value)
+											}
+											placeholder="Search suburb..."
+											className="h-10 w-full rounded-lg border border-minuri-silver bg-minuri-fog/50 pl-8 pr-3 text-sm outline-none ring-minuri-teal/30 transition focus:border-minuri-teal focus:ring-2"
+										/>
+									</div>
 								</div>
 								<button
 									type="button"
@@ -228,34 +322,55 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 									Use my location
 								</button>
 								<div className="max-h-48 overflow-y-auto border-t border-minuri-silver/30">
-									{suggestions.map((s) => (
-										<button
-											key={s}
-											type="button"
-											onClick={() => pickSuburb(s)}
-											className={cn(
-												"flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm transition hover:bg-minuri-fog",
-												s.toLowerCase() ===
-													suburb.toLowerCase()
-													? "font-medium text-minuri-teal"
-													: "text-minuri-slate",
-											)}
-										>
-											<MapPin className="size-3 shrink-0 text-minuri-silver" />
-											{s}
-										</button>
-									))}
+									{suburbLoading && (
+										<div className="px-4 py-2 text-xs text-minuri-slate">
+											Loading suburbs...
+										</div>
+									)}
+									{!suburbLoading && suburbError && (
+										<div className="px-4 py-2 text-xs text-rose-700">
+											{suburbError}
+										</div>
+									)}
+									{!suburbLoading &&
+										!suburbError &&
+										suggestions.map((option) => (
+											<button
+												key={option.id}
+												type="button"
+												onClick={() =>
+													pickSuburb(option.locality)
+												}
+												className={cn(
+													"flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm transition hover:bg-minuri-fog",
+													option.locality.toLowerCase() ===
+														suburb.toLowerCase()
+														? "font-medium text-minuri-teal"
+														: "text-minuri-slate",
+												)}
+											>
+												<MapPin className="size-3 shrink-0 text-minuri-silver" />
+												<span>
+													{option.locality}
+													<span className="ml-1 text-xs text-minuri-slate/80">
+														{option.state}{" "}
+														{option.postcode}
+													</span>
+												</span>
+											</button>
+										))}
 								</div>
 							</div>
 						)}
 					</div>
 
-					{demographics.population18to25 && (
-						<span className="hidden text-xs text-minuri-slate sm:inline">
-							~{formatNumber(demographics.population18to25)} young
-							adults (18–25) here
-						</span>
-					)}
+					{youngAdultPopulation !== null &&
+						youngAdultPopulation > 0 && (
+							<span className="text-xs text-minuri-slate">
+								There are {formatNumber(youngAdultPopulation)}{" "}
+								young adults in your area
+							</span>
+						)}
 				</div>
 			</div>
 
