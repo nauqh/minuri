@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { renderToStaticMarkup } from "react-dom/server";
 
 import type { NearMePlace } from "@/lib/near-me";
 
@@ -12,19 +13,57 @@ type NearMeMapProps = {
 	onSelectPlace: (id: string) => void;
 };
 
-function makeNumberedIcon(index: number, active: boolean) {
-	const bg = active ? "#1a3a4a" : "#2a8a7a";
-	const size = active ? 36 : 28;
-	const fontSize = active ? 14 : 12;
-	const svg = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size + 10}" viewBox="0 0 ${size} ${size + 10}">
-			<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${bg}" stroke="white" stroke-width="2"/>
-			<text x="${size / 2}" y="${size / 2 + fontSize / 3}" text-anchor="middle" fill="white" font-size="${fontSize}" font-weight="600" font-family="system-ui,sans-serif">${index + 1}</text>
-			<polygon points="${size / 2 - 4},${size - 2} ${size / 2},${size + 8} ${size / 2 + 4},${size - 2}" fill="${bg}"/>
-		</svg>`;
+function makePinIcon(index: number, active: boolean) {
+	const color = active ? "#1a3a4a" : "#2a8a7a";
+	const size = active ? 34 : 30;
+	const iconMarkup = renderToStaticMarkup(
+		<div
+			style={{
+				position: "relative",
+				width: size,
+				height: size + 10,
+				display: "flex",
+				alignItems: "flex-start",
+				justifyContent: "center",
+			}}
+		>
+			<div
+				style={{
+					width: size,
+					height: size,
+					borderRadius: "9999px",
+					backgroundColor: color,
+					border: "2px solid white",
+					color: "white",
+					fontWeight: 700,
+					fontSize: active ? 14 : 12,
+					lineHeight: 1,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					boxShadow: "0 2px 8px rgba(0, 0, 0, 0.25)",
+				}}
+			>
+				{index + 1}
+			</div>
+			<div
+				style={{
+					position: "absolute",
+					left: "50%",
+					bottom: 0,
+					transform: "translateX(-50%)",
+					width: 0,
+					height: 0,
+					borderLeft: "5px solid transparent",
+					borderRight: "5px solid transparent",
+					borderTop: `8px solid ${color}`,
+				}}
+			/>
+		</div>,
+	);
 
 	return L.divIcon({
-		html: svg,
+		html: iconMarkup,
 		className: "",
 		iconSize: [size, size + 10],
 		iconAnchor: [size / 2, size + 10],
@@ -49,9 +88,10 @@ export function NearMeMap({
 			attributionControl: true,
 		}).setView([-37.813, 144.963], 14);
 
-		L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-			attribution: "&copy; OpenStreetMap contributors",
+		L.tileLayer("https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png", {
 			maxZoom: 19,
+			attribution:
+				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>',
 		}).addTo(mapRef.current);
 
 		L.control.zoom({ position: "topright" }).addTo(mapRef.current);
@@ -82,7 +122,7 @@ export function NearMeMap({
 			const place = places[i];
 			const active = place.id === selectedPlaceId;
 			const marker = L.marker([place.lat, place.lng], {
-				icon: makeNumberedIcon(i, active),
+				icon: makePinIcon(i, active),
 				zIndexOffset: active ? 1000 : 0,
 			});
 			marker.on("click", () => onSelectPlace(place.id));

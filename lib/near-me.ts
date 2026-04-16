@@ -2,6 +2,8 @@
 // Aligned with Epic 2 guide categories so the product feels like one surface.
 // Guides explain *what to do*; Near Me shows *where to go*.
 
+import localResults from "@/lib/local_results.json";
+
 export const NEAR_ME_TOPICS = [
 	"setup",
 	"survive",
@@ -137,6 +139,7 @@ export type NearMePlace = {
 	snippet?: string;
 	tags?: string[];
 	openNow?: boolean;
+	thumbnail?: string;
 };
 
 // ── Demographics ──
@@ -146,6 +149,14 @@ type SuburbDemographics = {
 	population18to25?: number;
 	totalPopulation?: number;
 };
+
+type LocalResultItem = {
+	thumbnail?: string;
+};
+
+const LOCAL_RESULT_THUMBNAILS = (localResults as LocalResultItem[])
+	.map((item) => item.thumbnail)
+	.filter((value): value is string => Boolean(value));
 
 const SUBURBS = [
 	"Melbourne",
@@ -910,6 +921,11 @@ export function getMockPlaces({
 
 	return pool.map((place, index) => ({
 		...place,
+		thumbnail:
+			place.thumbnail ??
+			(place.topic === "survive" && LOCAL_RESULT_THUMBNAILS.length > 0
+				? LOCAL_RESULT_THUMBNAILS[index % LOCAL_RESULT_THUMBNAILS.length]
+				: undefined),
 		distanceKm: useLocation
 			? Number((0.4 + index * 0.7).toFixed(1))
 			: undefined,

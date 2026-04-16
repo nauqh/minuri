@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -481,11 +482,6 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 										showPhone
 									/>
 								)}
-
-								<div className="border-t border-minuri-silver/30 px-5 py-3 text-[11px] text-minuri-slate/60">
-									Minuri does not verify third-party listings.
-									Confirm hours and services before visiting.
-								</div>
 							</>
 						)}
 					</div>
@@ -521,6 +517,44 @@ type ListProps = {
 	showPhone?: boolean;
 };
 
+function PlaceThumbnail({
+	place,
+	className = "h-14 w-14",
+}: {
+	place: NearMePlace;
+	className?: string;
+}) {
+	if (!place.thumbnail) {
+		return (
+			<div
+				className={cn(
+					"flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-minuri-fog",
+					className,
+				)}
+			>
+				<MapPin className="size-4 text-minuri-silver" />
+			</div>
+		);
+	}
+
+	return (
+		<div
+			className={cn(
+				"relative shrink-0 overflow-hidden rounded-lg bg-minuri-fog",
+				className,
+			)}
+		>
+			<Image
+				src={place.thumbnail}
+				alt={`${place.name} thumbnail`}
+				fill
+				sizes="(max-width: 1024px) 100px, 140px"
+				className="object-cover"
+			/>
+		</div>
+	);
+}
+
 // ── DetailList: Health / Setup — phone-forward, practical ──
 
 function DetailList({
@@ -555,6 +589,7 @@ function DetailList({
 						)}
 					>
 						<div className="flex gap-3">
+							<PlaceThumbnail place={place} />
 							<div
 								className={cn(
 									"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
@@ -680,21 +715,14 @@ function CardGridList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 								: "hover:bg-minuri-fog/50",
 						)}
 					>
-						<div className="flex gap-3">
-							<div
-								className={cn(
-									"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-									selected
-										? "bg-minuri-mid text-minuri-white"
-										: "bg-minuri-teal text-minuri-white",
-								)}
-							>
-								{i + 1}
-							</div>
-
+						<div className="flex gap-4">
+							<PlaceThumbnail
+								place={place}
+								className="h-24 w-36"
+							/>
 							<div className="min-w-0 flex-1">
 								<h3 className="text-sm font-semibold text-minuri-mid">
-									{place.name}
+									{i + 1}. {place.name}
 								</h3>
 
 								{/* Rating row */}
@@ -814,6 +842,7 @@ function CompactList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 						)}
 					>
 						<div className="flex items-center gap-3">
+							<PlaceThumbnail place={place} />
 							<div
 								className={cn(
 									"flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold",
