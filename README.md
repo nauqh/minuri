@@ -160,7 +160,7 @@ flowchart LR
     classDef source fill:#e3f2fd,stroke:#1e88e5,color:#0d47a1;
     classDef etl fill:#ede7f6,stroke:#5e35b1,color:#311b92;
     classDef db fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20;
-    classDef serve fill:#fff3e0,stroke:#ef6c00,color:#e65100;
+    classDef serve fill:#f5f5f5,stroke:#9e9e9e,color:#424242;
     classDef client fill:#fce4ec,stroke:#c2185b,color:#880e4f;
 
     class SRC_POST,SRC_ABS,SERP source;
