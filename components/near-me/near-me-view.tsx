@@ -8,6 +8,7 @@ import {
 	ChevronDown,
 	Clock,
 	ExternalLink,
+	House,
 	List,
 	LocateFixed,
 	Map,
@@ -53,13 +54,7 @@ type NearMeViewProps = {
 	initialSuburb: string;
 };
 
-type LoadState =
-	| "idle"
-	| "loading"
-	| "success"
-	| "empty"
-	| "error"
-	| "rate-limit";
+type LoadState = "idle" | "loading" | "success" | "empty" | "error";
 
 // ── Main component ──
 
@@ -316,7 +311,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 		<div className="flex h-screen flex-col overflow-hidden bg-minuri-fog">
 			{/* ═══ Layer 1: Location context strip ═══ */}
 			<div className="shrink-0 border-b border-minuri-silver/50 bg-minuri-white px-4 py-2 md:px-6">
-				<div className="mx-auto flex max-w-[1440px] items-center gap-3">
+				<div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3">
 					<div ref={locationRef} className="relative">
 						<button
 							type="button"
@@ -397,13 +392,24 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 						)}
 					</div>
 
-					{youngAdultPopulation !== null &&
-						youngAdultPopulation > 0 && (
-							<span className="text-xs text-minuri-slate">
-								There are {formatNumber(youngAdultPopulation)}{" "}
-								young adults in your area
-							</span>
-						)}
+					<div className="flex items-center gap-3">
+						{youngAdultPopulation !== null &&
+							youngAdultPopulation > 0 && (
+								<span className="text-xs text-minuri-slate">
+									There are{" "}
+									{formatNumber(youngAdultPopulation)} young
+									adults in your area
+								</span>
+							)}
+						<button
+							type="button"
+							onClick={() => router.push("/")}
+							className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-minuri-silver/60 px-3 py-1.5 text-xs font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
+						>
+							<House className="size-3.5" />
+							Back to home
+						</button>
+					</div>
 				</div>
 			</div>
 
@@ -572,22 +578,6 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 							</div>
 						)}
 
-						{/* Rate limit */}
-						{status === "rate-limit" && (
-							<div className="p-8 text-center">
-								<p className="text-sm text-minuri-slate">
-									{message}
-								</p>
-								<button
-									type="button"
-									onClick={fetchPlaces}
-									className="mt-3 cursor-pointer rounded-full border border-minuri-silver px-4 py-1.5 text-xs font-medium text-minuri-slate hover:border-minuri-teal"
-								>
-									Retry
-								</button>
-							</div>
-						)}
-
 						{/* Empty */}
 						{status === "empty" && (
 							<div className="p-8 text-center">
@@ -662,10 +652,6 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 		</div>
 	);
 }
-
-// ═══════════════════════════════════════════════════════
-// Per-topic list renderers
-// ═══════════════════════════════════════════════════════
 
 type ListProps = {
 	places: NearMePlace[];
