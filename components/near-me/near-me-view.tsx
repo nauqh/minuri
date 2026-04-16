@@ -28,10 +28,10 @@ import {
 	formatNumber,
 	getAllTopicsMeta,
 	getContextHeading,
-	getMockPlaces,
 	getSuburbDisplayName,
 	getTopicMeta,
 } from "@/lib/near-me";
+import { type NearbyInterestRecord } from "@/lib/near-me-api";
 
 const NearMeMap = dynamic(
 	() =>
@@ -66,10 +66,7 @@ type LoadState =
 export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const enabledTopics = useMemo(
-		() => new Set<NearMeTopic>(["survive", "health"]),
-		[],
-	);
+	const enabledTopics = useMemo(() => new Set<NearMeTopic>(["survive"]), []);
 
 	// Location context (set once, persists)
 	const [suburb, setSuburb] = useState(initialSuburb || "Melbourne");
@@ -223,27 +220,70 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 		if (!displaySuburb) return;
 		setStatus("loading");
 		setMessage("");
+		const params = new URLSearchParams({ suburb: displaySuburb });
+		void fetch(`/api/nearby-interest?${params.toString()}`)
+			.then(async (response) => {
+				if (!response.ok) {
+					throw new Error("Failed to load nearby places");
+				}
 
-		window.setTimeout(() => {
-			const next = getMockPlaces({
-				suburb: displaySuburb,
-				topic,
-				subtype: activeSubtype ?? undefined,
-				useLocation: usingLocation,
-			});
+				const payload =
+					(await response.json()) as NearbyInterestRecord[];
+				const mapped = (Array.isArray(payload) ? payload : []).map(
+					(place, index): NearMePlace => {
+						const openState = place.open_state ?? "";
+						const isOpen = /open/i.test(openState);
+						return {
+							id:
+								place.place_id ||
+								`${topic}-${index}-${place.title.replace(/\s+/g, "-").toLowerCase()}`,
+							name: place.title,
+							address: place.address ?? displaySuburb,
+							lat: place.gps_coordinates?.latitude ?? -37.8136,
+							lng: place.gps_coordinates?.longitude ?? 144.9631,
+							topic,
+							subtype: activeSubtype ?? "general",
+							rating:
+								typeof place.rating === "number"
+									? place.rating
+									: undefined,
+							reviewCount:
+								typeof place.reviews === "number"
+									? place.reviews
+									: undefined,
+							type: place.type ?? undefined,
+							hours: openState || undefined,
+							openNow: isOpen,
+							snippet: place.description
+								? place.description.replace(/^"|"$/g, "")
+								: undefined,
+							thumbnail: place.thumbnail ?? undefined,
+							tags: place.price ? [place.price] : undefined,
+							distanceKm: usingLocation
+								? Number((0.4 + index * 0.7).toFixed(1))
+								: undefined,
+						};
+					},
+				);
 
-			if (!next.length) {
-				setStatus("empty");
-				setMessage(topicMeta.emptyPrompt);
+				if (!mapped.length) {
+					setStatus("empty");
+					setMessage(topicMeta.emptyPrompt);
+					setPlaces([]);
+					setSelectedPlaceId(null);
+					return;
+				}
+
+				setPlaces(mapped);
+				setSelectedPlaceId(mapped[0]?.id ?? null);
+				setStatus("success");
+			})
+			.catch(() => {
+				setStatus("error");
+				setMessage("Could not load nearby places right now.");
 				setPlaces([]);
 				setSelectedPlaceId(null);
-				return;
-			}
-
-			setPlaces(next);
-			setSelectedPlaceId(next[0]?.id ?? null);
-			setStatus("success");
-		}, 350);
+			});
 	}
 
 	function pickSuburb(s: string) {
@@ -635,6 +675,13 @@ type ListProps = {
 	showPhone?: boolean;
 };
 
+function getGoogleDirectionsUrl(place: NearMePlace) {
+	if (Number.isFinite(place.lat) && Number.isFinite(place.lng)) {
+		return `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+	}
+	return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.address)}`;
+}
+
 function PlaceThumbnail({
 	place,
 	className = "h-14 w-14",
@@ -706,23 +753,16 @@ function DetailList({
 								: "hover:bg-minuri-fog/50",
 						)}
 					>
-						<div className="flex gap-3">
-							<PlaceThumbnail place={place} />
-							<div
-								className={cn(
-									"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-									selected
-										? "bg-minuri-mid text-minuri-white"
-										: "bg-minuri-teal text-minuri-white",
-								)}
-							>
-								{i + 1}
-							</div>
+						<div className="flex gap-4">
+							<PlaceThumbnail
+								place={place}
+								className="h-20 w-20"
+							/>
 
 							<div className="min-w-0 flex-1">
 								<div className="flex items-start justify-between gap-2">
 									<h3 className="text-sm font-semibold text-minuri-mid">
-										{place.name}
+										{i + 1}. {place.name}
 									</h3>
 									{place.rating && (
 										<span className="inline-flex shrink-0 items-center gap-0.5 rounded bg-minuri-mid px-1.5 py-0.5 text-xs font-bold text-minuri-white">
@@ -787,7 +827,7 @@ function DetailList({
 										</a>
 									)}
 									<a
-										href={`https://maps.google.com/?q=${encodeURIComponent(place.address)}`}
+										href={getGoogleDirectionsUrl(place)}
 										target="_blank"
 										rel="noreferrer"
 										onClick={(e) => e.stopPropagation()}
@@ -839,53 +879,31 @@ function CardGridList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 								className="h-24 w-36"
 							/>
 							<div className="min-w-0 flex-1">
-								<h3 className="text-sm font-semibold text-minuri-mid">
-									{i + 1}. {place.name}
-								</h3>
-
-								{/* Rating row */}
-								<div className="mt-1 flex items-center gap-2">
+								<div className="flex items-start justify-between gap-2">
+									<h3 className="text-sm font-semibold text-minuri-mid">
+										{i + 1}. {place.name}
+									</h3>
 									{place.rating && (
-										<div className="flex items-center gap-1">
-											<div className="flex">
-												{Array.from({ length: 5 }).map(
-													(_, si) => (
-														<Star
-															key={si}
-															className={cn(
-																"size-3",
-																si <
-																	Math.round(
-																		place.rating!,
-																	)
-																	? "fill-amber-400 text-amber-400"
-																	: "fill-minuri-silver/40 text-minuri-silver/40",
-															)}
-														/>
-													),
-												)}
-											</div>
-											<span className="text-xs font-medium text-minuri-mid">
-												{place.rating}
-											</span>
+										<span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-minuri-mid px-2 py-0.5 text-xs font-bold text-minuri-white">
+											<Star className="size-3 fill-current" />
+											{place.rating}
 											{place.reviewCount && (
-												<span className="text-xs text-minuri-slate">
+												<span className="font-normal opacity-90">
 													(
 													{place.reviewCount.toLocaleString()}
 													)
 												</span>
 											)}
-										</div>
+										</span>
 									)}
+								</div>
+
+								{/* Rating row */}
+								<div className="mt-1 flex items-center gap-2">
 									{place.type && (
-										<>
-											<span className="text-minuri-silver">
-												·
-											</span>
-											<span className="text-xs text-minuri-slate">
-												{place.type}
-											</span>
-										</>
+										<span className="text-xs text-minuri-slate">
+											{place.type}
+										</span>
 									)}
 								</div>
 
@@ -923,6 +941,18 @@ function CardGridList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 										))}
 									</div>
 								)}
+								<div className="mt-2.5">
+									<a
+										href={getGoogleDirectionsUrl(place)}
+										target="_blank"
+										rel="noreferrer"
+										onClick={(e) => e.stopPropagation()}
+										className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2.5 py-1 text-[11px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
+									>
+										<ExternalLink className="size-3" />
+										Directions
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1002,6 +1032,18 @@ function CompactList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 										{place.snippet}
 									</p>
 								)}
+								<div className="mt-1.5">
+									<a
+										href={getGoogleDirectionsUrl(place)}
+										target="_blank"
+										rel="noreferrer"
+										onClick={(e) => e.stopPropagation()}
+										className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2 py-0.5 text-[10px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
+									>
+										<ExternalLink className="size-3" />
+										Directions
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
