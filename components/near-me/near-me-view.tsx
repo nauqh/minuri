@@ -19,7 +19,6 @@ import {
 
 import { cn } from "@/lib/utils";
 import {
-	DEFAULT_SUBURB_LIMIT,
 	rankAndFilterSuburbs,
 	type SuburbOption,
 } from "@/lib/suburbs";
@@ -102,12 +101,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	const layout: TopicLayout = topicMeta.layout;
 	const heading = getContextHeading(topic, displaySuburb);
 	const suggestions = useMemo(
-		() =>
-			rankAndFilterSuburbs(
-				suburbOptions,
-				locationQuery,
-				DEFAULT_SUBURB_LIMIT,
-			),
+		() => rankAndFilterSuburbs(suburbOptions, locationQuery),
 		[locationQuery, suburbOptions],
 	);
 
@@ -141,12 +135,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 			setSuburbLoading(true);
 			setSuburbError("");
 			try {
-				const suburbsParams = new URLSearchParams({
-					limit: String(DEFAULT_SUBURB_LIMIT),
-				});
-				const suburbsResponse = await fetch(
-					`/api/suburbs?${suburbsParams.toString()}`,
-				);
+				const suburbsResponse = await fetch("/api/suburbs");
 				if (!suburbsResponse.ok) {
 					throw new Error("Failed to fetch suburb data");
 				}

@@ -18,8 +18,6 @@ export type SuburbOption = {
 	largerRegion: string;
 };
 
-export const DEFAULT_SUBURB_LIMIT = 100;
-
 export function toSuburbOption(input: SuburbRecord): SuburbOption {
 	const locality = input.locality.trim();
 	const postcode = (input.postcode ?? "").trim();
@@ -43,8 +41,40 @@ export function normalizeSuburbName(raw: string) {
 
 export function rankAndFilterSuburbs(
 	options: SuburbOption[],
-	_query: string,
-	limit = DEFAULT_SUBURB_LIMIT,
+	query: string,
 ) {
-	return options.slice(0, limit);
+	const normalizedQuery = normalizeSuburbName(query).toLowerCase();
+	const hasQuery = normalizedQuery.length > 0;
+	const tokens = normalizedQuery.split(" ").filter(Boolean);
+
+	const filtered = hasQuery
+		? options.filter((option) => {
+				const locality = option.locality.toLowerCase();
+				const postcode = option.postcode.toLowerCase();
+				const state = option.state.toLowerCase();
+				const region = option.largerRegion.toLowerCase();
+
+				return tokens.every(
+					(token) =>
+						locality.startsWith(token) ||
+						postcode.startsWith(token) ||
+						state.startsWith(token) ||
+						region.startsWith(token),
+				);
+		  })
+		: options;
+
+	// Prefer locality prefix matches first for better typeahead relevance.
+	const ranked = filtered.sort((a, b) => {
+		const aStarts = a.locality.toLowerCase().startsWith(normalizedQuery);
+		const bStarts = b.locality.toLowerCase().startsWith(normalizedQuery);
+
+		if (aStarts !== bStarts) {
+			return aStarts ? -1 : 1;
+		}
+
+		return a.locality.localeCompare(b.locality);
+	});
+
+	return ranked;
 }

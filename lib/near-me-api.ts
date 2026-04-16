@@ -1,21 +1,20 @@
-import {
-	DEFAULT_SUBURB_LIMIT,
-	type SuburbRecord,
-} from "@/lib/suburbs";
+import { type SuburbRecord } from "@/lib/suburbs";
 
 const MINURI_SERVER_BASE = "https://minuri-server-production.up.railway.app";
 
 // Server-side fetchers (used by local route handlers)
 export async function fetchSuburbs({
-	limit = DEFAULT_SUBURB_LIMIT,
+	limit,
 }: {
 	limit?: number;
 }) {
 	const params = new URLSearchParams();
-	params.set("limit", String(limit));
+	if (typeof limit === "number") {
+		params.set("limit", String(limit));
+	}
 
 	const response = await fetch(
-		`${MINURI_SERVER_BASE}/suburb?${params.toString()}`,
+		`${MINURI_SERVER_BASE}/suburb${params.size ? `?${params.toString()}` : ""}`,
 		{
 			cache: "no-store",
 		},

@@ -1,12 +1,11 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, MapPin, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
-	DEFAULT_SUBURB_LIMIT,
 	normalizeSuburbName,
 	rankAndFilterSuburbs,
 	type SuburbOption,
@@ -22,14 +21,20 @@ export function NearMeEntry() {
 
 	useEffect(() => {
 		let cancelled = false;
+		const normalizedQuery = normalizeSuburbName(query);
+
+		if (!normalizedQuery) {
+			setOptions([]);
+			setLoading(false);
+			setError("");
+			return;
+		}
 
 		async function loadSuburbs() {
 			setLoading(true);
 			setError("");
 			try {
-				const suburbsParams = new URLSearchParams({
-					limit: String(DEFAULT_SUBURB_LIMIT),
-				});
+				const suburbsParams = new URLSearchParams({ q: normalizedQuery });
 				const suburbsResponse = await fetch(
 					`/api/suburbs?${suburbsParams.toString()}`,
 				);
@@ -57,10 +62,10 @@ export function NearMeEntry() {
 		return () => {
 			cancelled = true;
 		};
-	}, []);
+	}, [query]);
 
 	const suggestions = useMemo(
-		() => rankAndFilterSuburbs(options, query, DEFAULT_SUBURB_LIMIT),
+		() => rankAndFilterSuburbs(options, query),
 		[options, query],
 	);
 
@@ -72,11 +77,6 @@ export function NearMeEntry() {
 			category: "survive",
 		});
 		router.push(`/near-me?${params.toString()}`);
-	}
-
-	function onSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		submitWithSuburb(selected?.locality || query);
 	}
 
 	return (
@@ -92,7 +92,12 @@ export function NearMeEntry() {
 					We&apos;ll show nearby essentials based on your suburb.
 				</p>
 
-				<form onSubmit={onSubmit} className="mt-6">
+				<form
+					onSubmit={(event) => {
+						event.preventDefault();
+					}}
+					className="mt-6"
+				>
 					<div className="relative">
 						<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-minuri-silver" />
 						<input
@@ -101,10 +106,18 @@ export function NearMeEntry() {
 								setQuery(event.target.value);
 								setSelected(null);
 							}}
+							onKeyDown={(event) => {
+								if (event.key === "Enter") {
+									event.preventDefault();
+								}
+							}}
 							placeholder="Type your suburb or postcode"
 							className="h-12 w-full rounded-xl border border-minuri-silver bg-minuri-fog/50 pl-10 pr-3 text-sm outline-none ring-minuri-teal/30 transition focus:border-minuri-teal focus:ring-2"
 						/>
 					</div>
+					<p className="mt-2 text-xs text-minuri-slate">
+						Tip: click a suburb from the list to continue.
+					</p>
 
 					<div className="mt-3 max-h-72 overflow-y-auto rounded-xl border border-minuri-silver/40 bg-minuri-white">
 						{loading && (
@@ -120,7 +133,9 @@ export function NearMeEntry() {
 						)}
 						{!loading && !error && suggestions.length === 0 && (
 							<div className="px-3 py-3 text-sm text-minuri-slate">
-								No matching suburb yet.
+								{query.trim()
+									? "No matching suburb yet."
+									: "Type to search suburbs."}
 							</div>
 						)}
 						{!loading &&
@@ -132,6 +147,7 @@ export function NearMeEntry() {
 									onClick={() => {
 										setSelected(option);
 										setQuery(option.locality);
+										submitWithSuburb(option.locality);
 									}}
 									className={cn(
 										"flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm transition hover:bg-minuri-fog",
@@ -159,7 +175,7 @@ export function NearMeEntry() {
 					<button
 						type="submit"
 						disabled={!query.trim() && !selected}
-						className="mt-4 inline-flex h-11 items-center justify-center rounded-full bg-minuri-mid px-5 text-sm font-medium text-minuri-white transition hover:bg-minuri-ocean disabled:cursor-not-allowed disabled:opacity-60"
+						className="mt-4 hidden h-11 items-center justify-center rounded-full bg-minuri-mid px-5 text-sm font-medium text-minuri-white transition hover:bg-minuri-ocean disabled:cursor-not-allowed disabled:opacity-60"
 					>
 						Show services near me
 					</button>
