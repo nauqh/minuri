@@ -98,6 +98,78 @@ Reusable UI primitives live in `components/ui/*` (buttons, icons, menu, etc.).
 - `/api/nearby-interest` - nearby places data
 - `/api/population` - young-adult population context
 
+## System Diagram
+
+This diagram shows the end-to-end system across the Next.js frontend, the FastAPI backend, external data sources, and ingestion pipelines.
+
+```mermaid
+flowchart LR
+    U[User Browser]
+
+    subgraph FE[Minuri Frontend<br/>Next.js / React / TypeScript]
+        PAGES[App Pages<br/>/, /guides, /guides/:slug, /guides/bookmarks, /near-me]
+        API_SUB[GET /api/suburbs<br/>app/api/suburbs/route.ts]
+        API_POP[GET /api/population<br/>app/api/population/route.ts]
+        API_NEAR[GET /api/nearby-interest<br/>app/api/nearby-interest/route.ts]
+        LIB_API[lib/near-me-api.ts<br/>server-side upstream fetchers]
+        LIB_SUB[lib/suburbs.ts<br/>rank + filter suburb options]
+
+        PAGES --> API_SUB
+        PAGES --> API_POP
+        PAGES --> API_NEAR
+        API_SUB --> LIB_API
+        API_SUB --> LIB_SUB
+        API_POP --> LIB_API
+        API_NEAR --> LIB_API
+    end
+
+    subgraph BE[Minuri Server<br/>FastAPI / Python]
+        FASTAPI[FastAPI App<br/>app/main.py + routers]
+        SVC_SUB[suburb_service.py]
+        SVC_POP[population_service.py]
+        SVC_NEAR[near_me.py]
+
+        FASTAPI --> SVC_SUB
+        FASTAPI --> SVC_POP
+        FASTAPI --> SVC_NEAR
+    end
+
+    subgraph DATA[Data and External Sources]
+        DB[(Postgres / Neon DB)]
+        SRC_POST[Australian Postcodes CSV<br/>GitHub source]
+        LOAD_SUB[load_melbourne_suburbs.py]
+        SRC_ABS[ABS Regional Population XLSX]
+        ETL_EXTRACT[extract.py]
+        ETL_CSV[victoria_population_table.csv]
+        LOAD_POP[load_population_records.py]
+        SERP[SerpApi<br/>Google Local results]
+
+        SRC_POST --> LOAD_SUB --> DB
+        SRC_ABS --> ETL_EXTRACT --> ETL_CSV --> LOAD_POP --> DB
+    end
+
+    U --> PAGES
+    LIB_API -->|HTTPS| FASTAPI
+    FASTAPI -->|GET /suburb, /suburb/larger-region| LIB_API
+    FASTAPI -->|GET /api/population| LIB_API
+    FASTAPI -->|GET /api/nearby-interest| LIB_API
+    SVC_SUB --> DB
+    SVC_POP --> DB
+    SVC_NEAR --> SERP
+
+    classDef source fill:#e3f2fd,stroke:#1e88e5,color:#0d47a1;
+    classDef etl fill:#ede7f6,stroke:#5e35b1,color:#311b92;
+    classDef db fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20;
+    classDef serve fill:#fff3e0,stroke:#ef6c00,color:#e65100;
+    classDef client fill:#fce4ec,stroke:#c2185b,color:#880e4f;
+
+    class SRC_POST,SRC_ABS,SERP source;
+    class LOAD_SUB,ETL_EXTRACT,ETL_CSV,LOAD_POP etl;
+    class DB db;
+    class FE,BE,DATA,PAGES,API_SUB,API_POP,API_NEAR,LIB_API,LIB_SUB,FASTAPI,SVC_SUB,SVC_POP,SVC_NEAR serve;
+    class U client;
+```
+
 ## Simple React Component Map
 
 This map shows high-level composition (not every small UI element).
