@@ -250,6 +250,20 @@ a:focus-visible .minuri-link-underline::after {
 	}
 }
 
+@layer components {
+	.landing-section-kicker {
+		@apply mx-auto inline-block rounded-sm bg-[#d9efe4] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[#0b2b2b];
+	}
+
+	.landing-section-heading {
+		@apply mt-4 text-4xl font-black uppercase tracking-tight text-[#062d2d] md:text-6xl;
+	}
+
+	.landing-section-subheading {
+		@apply mx-auto my-2 max-w-2xl text-xs font-semibold uppercase tracking-[0.12em] text-[#1c4647]/75 md:text-sm;
+	}
+}
+
 /* Leaflet map tooltip overrides for near-me */
 .near-me-tooltip {
 	background: white !important;

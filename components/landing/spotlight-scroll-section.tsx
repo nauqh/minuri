@@ -43,9 +43,6 @@ const cards: {
 
 /** Large display title: gradient fill on text. */
 function OurStoryWordmark() {
-	const gradient =
-		"linear-gradient(90deg, color-mix(in oklch, var(--minuri-silver) 88%, var(--minuri-white)) 0%, color-mix(in oklch, var(--minuri-silver) 72%, var(--minuri-fog)) 10%, var(--minuri-teal) 24%, color-mix(in oklch, var(--minuri-teal) 92%, var(--minuri-seafoam)) 100%)";
-
 	return (
 		<motion.div
 			className="flex w-full min-w-0 max-w-full select-none items-baseline justify-center overflow-x-hidden px-3 pb-16 pt-4 md:pb-20 md:pt-6"
@@ -55,15 +52,10 @@ function OurStoryWordmark() {
 			transition={{ duration: 1, ease: easeOut }}
 		>
 			<span
-				className="inline-block max-w-full whitespace-nowrap bg-clip-text text-[clamp(2.75rem,15vw,24rem)] font-bold text-transparent md:text-[clamp(3.5rem,17vw,26rem)]"
-				style={{
-					backgroundImage: gradient,
-					WebkitBackgroundClip: "text",
-					backgroundClip: "text",
-				}}
+				className="inline-block max-w-full whitespace-nowrap text-[clamp(2.75rem,15vw,24rem)] font-bold text-minuri-teal md:text-[clamp(3.5rem,17vw,26rem)]"
 				aria-hidden
 			>
-				Our story
+				Our Story
 			</span>
 		</motion.div>
 	);

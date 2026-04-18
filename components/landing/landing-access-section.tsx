@@ -13,17 +13,15 @@ export function LandingAccessSection() {
 		>
 			<div className="mx-auto w-full max-w-4xl px-5 text-center md:px-8">
 				<FadeUp>
-					<p className="text-xs font-medium tracking-[0.22em] text-minuri-teal">
-						Contact us
-					</p>
+					<p className="landing-section-kicker">Contact us</p>
 				</FadeUp>
 				<FadeUp delay={0.06}>
-					<h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+					<h2 className="landing-section-heading md:text-5xl">
 						Get help navigating independent adult life.
 					</h2>
 				</FadeUp>
 				<FadeUp delay={0.12}>
-					<p className="mt-4 text-sm leading-relaxed text-minuri-slate md:text-base">
+					<p className="landing-section-subheading mt-4 max-w-xl text-minuri-slate md:text-base">
 						Share your email and what you&apos;re working through.
 						We&apos;ll reply with practical next steps.
 					</p>

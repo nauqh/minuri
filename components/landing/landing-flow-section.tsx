@@ -17,19 +17,23 @@ export function LandingFlowSection() {
 				<div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
 					<div className="space-y-8">
 						<div className="-mt-4 mx-auto max-w-2xl text-center">
+							<FadeUp>
+								<p className="landing-section-kicker">
+									How Minuri works
+								</p>
+							</FadeUp>
 							<FadeUp delay={0.06}>
-								<h2 className="mt-2 text-5xl font-semibold tracking-tight text-minuri-mid md:text-6xl md:leading-[1.03]">
+								<h2 className="landing-section-heading">
 									Settle in, faster.
 								</h2>
 							</FadeUp>
 							<FadeUp
 								delay={0.1}
-								className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-minuri-slate md:text-base"
+								className="landing-section-subheading"
 							>
 								<p>
-									Wherever you are in your move, start with
-									first-time guides or jump straight to nearby
-									services.
+									Start with first-time guides or jump
+									straight to nearby services.
 								</p>
 							</FadeUp>
 						</div>
