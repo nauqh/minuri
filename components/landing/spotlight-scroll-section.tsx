@@ -45,12 +45,12 @@ const cards: {
 function OurStoryWordmark() {
 	return (
 		<motion.div
-			className="flex w-full min-w-0 max-w-full select-none items-baseline justify-center overflow-x-hidden px-3 pb-16 pt-4 md:pb-20 md:pt-6"
+			className="flex w-full min-w-0 max-w-full select-none flex-col items-center justify-center overflow-x-hidden text-center"
 			initial={{ opacity: 0, y: 40 }}
 			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, amount: 0.35, margin: "0px 0px -8% 0px" }}
 			transition={{ duration: 1, ease: easeOut }}
 		>
+			<p className="landing-section-kicker">About Us</p>
 			<span
 				className="inline-block max-w-full whitespace-nowrap text-[clamp(2.75rem,15vw,24rem)] font-bold text-minuri-teal md:text-[clamp(3.5rem,17vw,26rem)]"
 				aria-hidden

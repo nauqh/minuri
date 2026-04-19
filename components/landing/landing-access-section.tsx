@@ -11,19 +11,19 @@ export function LandingAccessSection() {
 			id="contact"
 			className="flex min-h-[88dvh] flex-col justify-center bg-minuri-white py-28 md:py-32"
 		>
-			<div className="mx-auto w-full max-w-4xl px-5 text-center md:px-8">
+			<div className="mx-auto w-full px-5 text-center md:px-8">
 				<FadeUp>
-					<p className="landing-section-kicker">Contact us</p>
+					<p className="landing-section-kicker">Talk to Minuri</p>
 				</FadeUp>
 				<FadeUp delay={0.06}>
 					<h2 className="landing-section-heading md:text-5xl">
-						Get help navigating independent adult life.
+						STOP STRESSING OVER ADULTING ALONE.
 					</h2>
 				</FadeUp>
 				<FadeUp delay={0.12}>
-					<p className="landing-section-subheading mt-4 max-w-xl text-minuri-slate md:text-base">
-						Share your email and what you&apos;re working through.
-						We&apos;ll reply with practical next steps.
+					<p className="landing-section-subheading mt-4 max-w-xl md:text-base">
+						Share what you&apos;re stuck on, and we&apos;ll send
+						practical next steps.
 					</p>
 				</FadeUp>
 				<FadeUp
@@ -47,7 +47,7 @@ export function LandingAccessSection() {
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.97 }}
 					>
-						Get in touch
+						Send my question
 						<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 					</motion.button>
 				</FadeUp>

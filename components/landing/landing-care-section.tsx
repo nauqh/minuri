@@ -19,41 +19,41 @@ const TOPIC_CARDS: TopicCard[] = [
 	{
 		title: "Food & Eating",
 		description: "Groceries, cheap meals, and everyday food decisions.",
-		bgClass: "bg-[#f4e4eb]",
-		borderClass: "border-[#e8cfdc]",
+		bgClass: "bg-[#00f5d4]",
+		borderClass: "border-[#00f5d4]",
 	},
 	{
 		title: "Getting Around",
 		description:
 			"Transport options, routes, and daily movement in Melbourne.",
-		bgClass: "bg-[#d8f2e0]",
-		borderClass: "border-[#bee6ca]",
+		bgClass: "bg-[#00bbf9]",
+		borderClass: "border-[#00bbf9]",
 	},
 	{
 		title: "Health & Wellbeing",
 		description:
 			"GPs, pharmacies, Medicare pathways, and mental health support.",
-		bgClass: "bg-[#e8e0f6]",
-		borderClass: "border-[#d5c8ee]",
+		bgClass: "bg-[#fee440]",
+		borderClass: "border-[#fee440]",
 	},
 	{
 		title: "Home & Admin",
 		description:
 			"Renting, utilities, paperwork, and practical setup tasks.",
-		bgClass: "bg-[#e6efe9]",
-		borderClass: "border-[#d2e1d9]",
+		bgClass: "bg-[#f15bb5]",
+		borderClass: "border-[#f15bb5]",
 	},
 	{
 		title: "Social & Belonging",
 		description:
 			"Friendships, community, loneliness, and finding your people.",
-		bgClass: "bg-[#f2e7df]",
-		borderClass: "border-[#e4d2c6]",
+		bgClass: "bg-minuri-mist",
+		borderClass: "border-minuri-mist",
 	},
 ];
 
-const X_OFFSETS = [-360, -180, 0, 180, 360];
-const Y_OFFSETS = [-124, -114, -108, -112, -122];
+const X_OFFSETS = [-350, -175, 0, 175, 350];
+const Y_OFFSETS = [-80, -102, -118, -102, -80];
 const ROTATIONS = [-11, -6, -1, 4, 9];
 
 function ScrollyTopicCard({
@@ -130,7 +130,7 @@ export function LandingCareSection() {
 		<section
 			ref={sectionRef}
 			id="care"
-			className="relative bg-[#f2f3f3] py-16 text-[#0b2b2b] md:min-h-[620vh] md:py-0"
+			className="relative bg-minuri-white py-16 text-minuri-ink md:min-h-[620vh] md:py-0"
 		>
 			<div className="md:sticky md:top-0 md:flex md:h-screen md:items-start md:pt-[12vh]">
 				<div className="mx-auto w-full max-w-6xl px-5 md:px-8">

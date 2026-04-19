@@ -151,7 +151,7 @@
 	--sidebar-accent-foreground: oklch(0.985 0 0);
 	--sidebar-border: oklch(1 0 0 / 10%);
 	--sidebar-ring: oklch(0.556 0 0);
-	--minuri-white: oklch(0.985 0 0);
+	--minuri-white: #fff;
 	--minuri-ocean: oklch(0.28 0.04 232);
 	--minuri-mid: oklch(0.36 0.05 218);
 	--minuri-teal: oklch(0.55 0.1 186);
@@ -175,9 +175,11 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		position: relative;
 	}
 	html {
 		@apply font-sans;
+		position: relative;
 		scroll-behavior: smooth;
 	}
 }
@@ -252,15 +254,15 @@ a:focus-visible .minuri-link-underline::after {
 
 @layer components {
 	.landing-section-kicker {
-		@apply mx-auto inline-block rounded-sm bg-[#d9efe4] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[#0b2b2b];
+		@apply mx-auto inline-block rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-[#0b2b2b];
 	}
 
 	.landing-section-heading {
-		@apply mt-4 text-4xl font-black uppercase tracking-tight text-[#062d2d] md:text-6xl;
+		@apply mt-4 text-4xl font-black uppercase tracking-tight text-minuri-teal md:text-6xl;
 	}
 
 	.landing-section-subheading {
-		@apply mx-auto my-2 max-w-2xl text-xs font-semibold uppercase tracking-[0.12em] text-[#1c4647]/75 md:text-sm;
+		@apply mx-auto my-2 max-w-2xl text-xs font-black uppercase tracking-[0.12em] text-minuri-ocean md:text-sm;
 	}
 }
 

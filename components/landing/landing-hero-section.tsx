@@ -357,8 +357,7 @@ export function LandingHeroSection({
 						}}
 					>
 						We help young adults feel confident living independently
-						for the first time with practical guides, local tips,
-						and everyday support.
+						for the first time.
 					</motion.p>
 				</div>
 			</div>

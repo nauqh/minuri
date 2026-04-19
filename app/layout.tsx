@@ -21,7 +21,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-	title: "Minuri",
+	title: "Living independently - Minuri",
 	description:
 		"Proactive wellbeing for young adults living independently: reminders, guides, habits, and Care Circle.",
 	icons: {
