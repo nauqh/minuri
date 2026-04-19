@@ -493,7 +493,7 @@ export function LandingHeroSectionV2({
 					{heroHighlights.map((highlight) => (
 						<motion.div
 							key={highlight}
-							className="flex min-h-18 items-center gap-3 rounded-md bg-minuri-fog px-5 py-4"
+							className="flex items-center gap-3 rounded-md bg-minuri-fog p-5"
 							variants={{
 								hidden: {
 									opacity: 0,
