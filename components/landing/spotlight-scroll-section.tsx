@@ -75,7 +75,7 @@ export function SpotlightScrollSection() {
 				</div>
 
 				<div
-					className="mx-auto flex w-full max-w-xl flex-col gap-6 sm:max-w-2xl md:gap-8"
+					className="mx-auto flex w-full max-w-xl flex-col gap-8 sm:max-w-2xl md:gap-12"
 					role="list"
 				>
 					{cards.map((card, i) => {
