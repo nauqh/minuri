@@ -3,11 +3,9 @@
 import Image from "next/image";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
-import { CheckCircle2, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { CheckCircle, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
-
-import { easeOut } from "@/components/landing/home-constants";
 
 const heroHighlights = [
 	"WE SPEAK YOUR LANGUAGE",
@@ -40,6 +38,8 @@ export function LandingHeroSectionV2({
 }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [heroImageIndex, setHeroImageIndex] = useState(0);
+	const prefersReducedMotion = useReducedMotion();
+	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 	useEffect(() => {
 		onHeroReveal?.();
@@ -72,22 +72,40 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative mx-auto max-w-7xl px-4 pb-10 pt-4 md:px-8 md:pt-6">
+			<div className="relative mx-auto max-w-7xl px-4 pb-10 pt-4 md:px-8">
 				<div className="relative">
 					<motion.header
 						className="mx-auto flex w-full items-center justify-between bg-minuri-white md:rounded-full"
-						initial={false}
+						initial={{
+							opacity: 0,
+							y: prefersReducedMotion ? 0 : -18,
+						}}
 						animate={
 							headerVisible
 								? { opacity: 1, y: 0 }
 								: { opacity: 0, y: -14 }
 						}
-						transition={{ duration: 0.45, ease: easeOut }}
+						transition={{
+							duration: prefersReducedMotion ? 0.01 : 0.55,
+							ease: entranceEase,
+						}}
 						onAnimationComplete={() => {
 							if (headerVisible) onHeroReveal?.();
 						}}
 					>
-						<div className="flex items-center gap-8 md:gap-12">
+						<motion.div
+							className="flex items-center gap-8 md:gap-12"
+							initial={{
+								opacity: 0,
+								y: prefersReducedMotion ? 0 : 12,
+							}}
+							animate={{ opacity: headerVisible ? 1 : 0, y: 0 }}
+							transition={{
+								duration: prefersReducedMotion ? 0.01 : 0.45,
+								delay: prefersReducedMotion ? 0 : 0.12,
+								ease: entranceEase,
+							}}
+						>
 							<Link
 								href="/"
 								className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean"
@@ -115,9 +133,21 @@ export function LandingHeroSectionV2({
 									Resources
 								</Link>
 							</nav>
-						</div>
+						</motion.div>
 
-						<div className="ml-auto flex items-center gap-2.5 md:gap-3">
+						<motion.div
+							className="ml-auto flex items-center gap-2.5 md:gap-3"
+							initial={{
+								opacity: 0,
+								x: prefersReducedMotion ? 0 : 12,
+							}}
+							animate={{ opacity: headerVisible ? 1 : 0, x: 0 }}
+							transition={{
+								duration: prefersReducedMotion ? 0.01 : 0.45,
+								delay: prefersReducedMotion ? 0 : 0.2,
+								ease: entranceEase,
+							}}
+						>
 							<Link
 								href="/guides"
 								className="group hidden h-10 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-5 text-sm font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
@@ -166,7 +196,7 @@ export function LandingHeroSectionV2({
 									/>
 								)}
 							</button>
-						</div>
+						</motion.div>
 					</motion.header>
 					<div className="-mx-4 mt-2 h-px bg-minuri-silver/65 md:hidden" />
 					<div
@@ -232,19 +262,59 @@ export function LandingHeroSectionV2({
 					</div>
 				</div>
 
-				<div className="pb-10 pt-10 md:pb-14 md:pt-12">
+				<motion.div
+					className="pb-10 pt-10 md:pb-14 md:pt-12"
+					initial="hidden"
+					animate="visible"
+					variants={{
+						hidden: {},
+						visible: {
+							transition: {
+								staggerChildren: prefersReducedMotion ? 0 : 0.1,
+								delayChildren: prefersReducedMotion ? 0 : 0.08,
+							},
+						},
+					}}
+				>
 					<div className="w-full">
-						<span className="inline-flex rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-minuri-ocean">
+						<motion.span
+							className="inline-flex rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-minuri-ocean"
+							variants={{
+								hidden: {
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : 8,
+								},
+								visible: {
+									opacity: 1,
+									y: 0,
+									transition: {
+										duration: prefersReducedMotion
+											? 0.01
+											: 0.45,
+										ease: entranceEase,
+									},
+								},
+							}}
+						>
 							Living independently
-						</span>
+						</motion.span>
 						<motion.h1
 							className="mt-5 w-full text-5xl font-black uppercase tracking-tight text-minuri-teal md:text-7xl"
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{
-								duration: 0.55,
-								ease: easeOut,
-								delay: 0.1,
+							variants={{
+								hidden: {
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : 22,
+								},
+								visible: {
+									opacity: 1,
+									y: 0,
+									transition: {
+										duration: prefersReducedMotion
+											? 0.01
+											: 0.7,
+										ease: entranceEase,
+									},
+								},
 							}}
 						>
 							Feeling at home, wherever you are
@@ -253,15 +323,72 @@ export function LandingHeroSectionV2({
 
 					<div className="mt-0 grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex flex-col md:h-full">
-							<p className="mt-4 text-2xl font-black uppercase tracking-tight text-minuri-ocean md:text-3xl">
+							<motion.p
+								className="mt-4 text-2xl font-black uppercase tracking-tight text-minuri-ocean md:text-3xl"
+								variants={{
+									hidden: {
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 14,
+									},
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											duration: prefersReducedMotion
+												? 0.01
+												: 0.5,
+											ease: entranceEase,
+										},
+									},
+								}}
+							>
 								Practical support that never quits
-							</p>
-							<div className="mt-7 md:mt-auto md:mb-4">
+							</motion.p>
+							<motion.div
+								className="mt-7 md:mt-auto md:mb-4"
+								variants={{
+									hidden: {
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 14,
+									},
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											duration: prefersReducedMotion
+												? 0.01
+												: 0.55,
+											ease: entranceEase,
+										},
+									},
+								}}
+							>
 								<p className="max-w-2xl text-base leading-relaxed text-minuri-ocean/82 md:text-lg">
 									We help young adults feel confident living
 									independently for the first time.
 								</p>
-								<div className="my-6 flex flex-wrap items-center gap-3">
+								<motion.div
+									className="my-6 flex flex-wrap items-center gap-3"
+									variants={{
+										hidden: {
+											opacity: 0,
+											y: prefersReducedMotion ? 0 : 10,
+										},
+										visible: {
+											opacity: 1,
+											y: 0,
+											transition: {
+												duration: prefersReducedMotion
+													? 0.01
+													: 0.45,
+												ease: entranceEase,
+												delay: prefersReducedMotion
+													? 0
+													: 0.05,
+											},
+										},
+									}}
+								>
 									<Link
 										href="/near-me"
 										className="group inline-flex items-center gap-1.5 rounded-full bg-minuri-teal px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
@@ -282,18 +409,29 @@ export function LandingHeroSectionV2({
 											className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 										/>
 									</Link>
-								</div>
-							</div>
+								</motion.div>
+							</motion.div>
 						</div>
 
 						<motion.div
 							className="relative mx-auto w-full max-w-md md:-mt-20"
-							initial={{ opacity: 0, x: 16 }}
-							animate={{ opacity: 1, x: 0 }}
-							transition={{
-								duration: 0.55,
-								ease: easeOut,
-								delay: 0.2,
+							variants={{
+								hidden: {
+									opacity: 0,
+									x: prefersReducedMotion ? 0 : 24,
+									scale: prefersReducedMotion ? 1 : 0.985,
+								},
+								visible: {
+									opacity: 1,
+									x: 0,
+									scale: 1,
+									transition: {
+										duration: prefersReducedMotion
+											? 0.01
+											: 0.75,
+										ease: entranceEase,
+									},
+								},
 							}}
 						>
 							<div className="group relative mx-auto aspect-square w-full">
@@ -319,7 +457,7 @@ export function LandingHeroSectionV2({
 										/>
 									</motion.div>
 								</AnimatePresence>
-								<div className="pointer-events-none absolute -top-20 right-0 z-20 max-w-64 translate-y-1 rounded-4xl border border-minuri-ocean bg-minuri-white/96 px-5 py-4 text-minuri-ocean opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+								<div className="pointer-events-none absolute -top-20 right-0 z-20 max-w-64 translate-y-2 scale-95 rounded-4xl border border-minuri-ocean bg-minuri-white/96 px-5 py-4 text-minuri-ocean opacity-0 backdrop-blur-sm transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100">
 									<p
 										className={`${bubbleHandwriting.className} text-3xl leading-[1.05] text-minuri-ocean/80`}
 									>
@@ -334,25 +472,56 @@ export function LandingHeroSectionV2({
 							</div>
 						</motion.div>
 					</div>
-				</div>
+				</motion.div>
 
-				<div className="grid gap-4 pb-8 md:grid-cols-3 md:gap-6">
+				<motion.div
+					className="grid gap-4 pb-8 md:grid-cols-3 md:gap-6"
+					initial="hidden"
+					animate="visible"
+					variants={{
+						hidden: {},
+						visible: {
+							transition: {
+								staggerChildren: prefersReducedMotion
+									? 0
+									: 0.08,
+								delayChildren: prefersReducedMotion ? 0 : 0.55,
+							},
+						},
+					}}
+				>
 					{heroHighlights.map((highlight) => (
-						<div
+						<motion.div
 							key={highlight}
-							className="flex min-h-18 items-center gap-3 rounded-md bg-[#f9f5f2] px-5 py-4"
+							className="flex min-h-18 items-center gap-3 rounded-md bg-minuri-fog px-5 py-4"
+							variants={{
+								hidden: {
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : 12,
+								},
+								visible: {
+									opacity: 1,
+									y: 0,
+									transition: {
+										duration: prefersReducedMotion
+											? 0.01
+											: 0.45,
+										ease: entranceEase,
+									},
+								},
+							}}
 						>
-							<CheckCircle2
+							<CheckCircle
 								className="size-4 shrink-0 text-minuri-ocean"
 								strokeWidth={2.4}
 								aria-hidden
 							/>
-							<p className="text-sm font-black uppercase tracking-[0.03em] text-minuri-ink">
+							<p className="text-sm font-black uppercase tracking-[0.03em] text-minuri-ocean">
 								{highlight}
 							</p>
-						</div>
+						</motion.div>
 					))}
-				</div>
+				</motion.div>
 			</div>
 		</section>
 	);
