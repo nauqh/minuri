@@ -26,22 +26,22 @@ const TOPIC_CARDS: TopicCard[] = [
 		title: "Getting Around",
 		description:
 			"Transport options, routes, and daily movement in Melbourne.",
-		bgClass: "bg-[#00bbf9]",
-		borderClass: "border-[#00bbf9]",
+		bgClass: "bg-[#7fdcff]",
+		borderClass: "border-[#7fdcff]",
 	},
 	{
 		title: "Health & Wellbeing",
 		description:
 			"GPs, pharmacies, Medicare pathways, and mental health support.",
-		bgClass: "bg-[#fee440]",
-		borderClass: "border-[#fee440]",
+		bgClass: "bg-[#fff14a]",
+		borderClass: "border-[#fff14a]",
 	},
 	{
 		title: "Home & Admin",
 		description:
 			"Renting, utilities, paperwork, and practical setup tasks.",
-		bgClass: "bg-[#f15bb5]",
-		borderClass: "border-[#f15bb5]",
+		bgClass: "bg-[#ff7ecb]",
+		borderClass: "border-[#ff7ecb]",
 	},
 	{
 		title: "Social & Belonging",

@@ -118,13 +118,13 @@ export function LandingHeroSectionV2({
 									href="#service"
 									className="minuri-link-underline inline-flex h-10 items-center whitespace-nowrap"
 								>
-									Services
+									How it works
 								</Link>
 								<Link
-									href="#our-story"
+									href="#care"
 									className="minuri-link-underline inline-flex h-10 items-center whitespace-nowrap"
 								>
-									Company
+									Topics
 								</Link>
 								<Link
 									href="#contact"
@@ -214,15 +214,15 @@ export function LandingHeroSectionV2({
 								className="flex items-center justify-between py-2.5 text-2xl font-medium tracking-tight text-minuri-ocean"
 								onClick={() => setMobileMenuOpen(false)}
 							>
-								<span>Services</span>
+								<span>How it works</span>
 								<ChevronDown className="size-6" aria-hidden />
 							</Link>
 							<Link
-								href="#our-story"
+								href="#care"
 								className="flex items-center justify-between py-2.5 text-2xl font-medium tracking-tight text-minuri-ocean"
 								onClick={() => setMobileMenuOpen(false)}
 							>
-								<span>Company</span>
+								<span>Topics</span>
 								<ChevronDown className="size-6" aria-hidden />
 							</Link>
 							<Link

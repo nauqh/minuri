@@ -13,17 +13,16 @@ export function LandingAccessSection() {
 		>
 			<div className="mx-auto w-full px-5 text-center md:px-8">
 				<FadeUp>
-					<p className="landing-section-kicker">Talk to Minuri</p>
+					<p className="landing-section-kicker">Ask Minuri</p>
 				</FadeUp>
 				<FadeUp delay={0.06}>
 					<h2 className="landing-section-heading md:text-5xl">
-						STOP STRESSING OVER ADULTING ALONE.
+						Stop adulting alone.
 					</h2>
 				</FadeUp>
 				<FadeUp delay={0.12}>
 					<p className="landing-section-subheading mt-4 max-w-xl md:text-base">
-						Share what you&apos;re stuck on, and we&apos;ll send
-						practical next steps.
+						What&apos;s stuck? We&apos;ll email clear next steps.
 					</p>
 				</FadeUp>
 				<FadeUp
@@ -47,7 +46,7 @@ export function LandingAccessSection() {
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.97 }}
 					>
-						Send my question
+						Get next steps
 						<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 					</motion.button>
 				</FadeUp>
