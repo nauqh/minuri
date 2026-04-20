@@ -208,55 +208,67 @@ export function LandingHeroSectionV2({
 						}`}
 						aria-hidden={!mobileMenuOpen}
 					>
-						<nav className="px-4 py-4">
-							<Link
-								href="#service"
-								className="flex items-center justify-between py-2.5 text-2xl font-medium tracking-tight text-minuri-ocean"
-								onClick={() => setMobileMenuOpen(false)}
-							>
-								<span>How it works</span>
-								<ChevronDown className="size-6" aria-hidden />
-							</Link>
-							<Link
-								href="#care"
-								className="flex items-center justify-between py-2.5 text-2xl font-medium tracking-tight text-minuri-ocean"
-								onClick={() => setMobileMenuOpen(false)}
-							>
-								<span>Topics</span>
-								<ChevronDown className="size-6" aria-hidden />
-							</Link>
-							<Link
-								href="#contact"
-								className="flex items-center justify-between py-2.5 text-2xl font-medium tracking-tight text-minuri-ocean"
-								onClick={() => setMobileMenuOpen(false)}
-							>
-								<span>Resources</span>
-							</Link>
-						</nav>
-
-						<div className="mx-4 mb-4 mt-2 rounded-2xl bg-[#d9f2e5] p-4">
-							<p className="text-3xl font-black uppercase leading-[0.95] tracking-tight text-minuri-ocean">
-								Pitch us your problem
-							</p>
-							<div className="mt-3 space-y-2.5">
+						<div className="flex h-full flex-col px-4 pt-3">
+							<nav className="border-t border-minuri-silver/70">
 								<Link
-									href="/guides"
-									className="inline-flex w-full items-center justify-center rounded-full border border-black bg-minuri-white px-5 py-2 text-sm font-medium text-minuri-ocean"
+									href="#service"
+									className="flex items-center justify-between border-b border-minuri-silver/65 py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
 									onClick={() => setMobileMenuOpen(false)}
 								>
-									View pricing
-								</Link>
-								<Link
-									href="/near-me"
-									className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-minuri-ocean px-5 py-2 text-sm font-semibold text-minuri-white"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									Talk to us
+									<span>How it works</span>
 									<ChevronRight
-										className="size-4"
+										className="size-6"
 										aria-hidden
 									/>
 								</Link>
+								<Link
+									href="#care"
+									className="flex items-center justify-between border-b border-minuri-silver/65 py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
+									onClick={() => setMobileMenuOpen(false)}
+								>
+									<span>Topics</span>
+									<ChevronRight
+										className="size-6"
+										aria-hidden
+									/>
+								</Link>
+								<Link
+									href="#contact"
+									className="flex items-center justify-between border-b border-minuri-silver/65 py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
+									onClick={() => setMobileMenuOpen(false)}
+								>
+									<span>Resources</span>
+									<ChevronRight
+										className="size-6"
+										aria-hidden
+									/>
+								</Link>
+							</nav>
+
+							<div className="mt-auto border-t border-minuri-silver/70 bg-minuri-white pb-[max(1rem,env(safe-area-inset-bottom))] pt-4">
+								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-slate">
+									Quick start
+								</p>
+								<div className="mt-3 space-y-2.5">
+									<Link
+										href="/guides"
+										className="inline-flex w-full items-center justify-center rounded-full border border-minuri-ocean bg-minuri-white px-5 py-2 text-sm font-medium text-minuri-ocean"
+										onClick={() => setMobileMenuOpen(false)}
+									>
+										First-time guides
+									</Link>
+									<Link
+										href="/near-me"
+										className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-minuri-ocean px-5 py-2 text-sm font-semibold text-minuri-white"
+										onClick={() => setMobileMenuOpen(false)}
+									>
+										Near me
+										<ChevronRight
+											className="size-4"
+											aria-hidden
+										/>
+									</Link>
+								</div>
 							</div>
 						</div>
 					</div>
