@@ -201,18 +201,18 @@ export function LandingHeroSectionV2({
 					<div className="-mx-4 mt-2 h-px bg-minuri-silver/65 md:hidden" />
 					<div
 						id="landing-mobile-menu-v2"
-						className={`absolute left-0 right-0 top-full z-40 h-screen overflow-y-auto bg-minuri-white transition-[opacity,transform] duration-300 ease-out md:hidden ${
+						className={`absolute left-0 right-0 top-full z-40 h-[calc(100dvh-4.5rem)] overflow-y-auto bg-minuri-white transition-[opacity,transform] duration-300 ease-out md:hidden ${
 							mobileMenuOpen
-								? "mt-3 translate-y-0 opacity-100 pointer-events-auto"
+								? "translate-y-0 opacity-100 pointer-events-auto"
 								: "-translate-y-1 opacity-0 pointer-events-none"
 						}`}
 						aria-hidden={!mobileMenuOpen}
 					>
-						<div className="flex h-full flex-col px-4 pt-3">
-							<nav className="border-t border-minuri-silver/70">
+						<div className="flex h-full flex-col pt-3">
+							<nav>
 								<Link
 									href="#service"
-									className="flex items-center justify-between border-b border-minuri-silver/65 py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
+									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									<span>How it works</span>
@@ -223,7 +223,7 @@ export function LandingHeroSectionV2({
 								</Link>
 								<Link
 									href="#care"
-									className="flex items-center justify-between border-b border-minuri-silver/65 py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
+									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									<span>Topics</span>
@@ -234,7 +234,7 @@ export function LandingHeroSectionV2({
 								</Link>
 								<Link
 									href="#contact"
-									className="flex items-center justify-between border-b border-minuri-silver/65 py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
+									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									<span>Resources</span>
