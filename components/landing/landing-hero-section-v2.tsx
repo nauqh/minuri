@@ -201,14 +201,14 @@ export function LandingHeroSectionV2({
 					<div className="-mx-4 mt-2 h-px bg-minuri-silver/65 md:hidden" />
 					<div
 						id="landing-mobile-menu-v2"
-						className={`absolute left-0 right-0 top-full z-40 h-[calc(100dvh-4.5rem)] overflow-y-auto bg-minuri-white transition-[opacity,transform] duration-300 ease-out md:hidden ${
+						className={`fixed inset-x-0 bottom-0 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 overflow-y-auto bg-minuri-white transition-[opacity,transform] duration-300 ease-out md:hidden ${
 							mobileMenuOpen
 								? "translate-y-0 opacity-100 pointer-events-auto"
 								: "-translate-y-1 opacity-0 pointer-events-none"
 						}`}
 						aria-hidden={!mobileMenuOpen}
 					>
-						<div className="flex h-full flex-col pt-3">
+						<div className="flex h-full flex-col px-4 pt-3">
 							<nav>
 								<Link
 									href="#service"
