@@ -262,7 +262,7 @@ a:focus-visible .minuri-link-underline::after {
 	}
 
 	.landing-section-subheading {
-		@apply mx-auto my-2 max-w-2xl text-xs font-black uppercase tracking-[0.12em] text-minuri-ocean md:text-sm;
+		@apply mx-auto my-2 max-w-2xl text-xs font-semibold uppercase tracking-[0.12em] text-minuri-ocean md:text-sm;
 	}
 }
 

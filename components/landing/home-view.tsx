@@ -24,7 +24,7 @@ export function HomeView() {
 
 			<main>
 				<SpotlightScrollSection
-					onOpenMinuriHub={() => setHubOpen((value) => !value)}
+					onOpenMinuriHub={() => setHubOpen(true)}
 				/>
 				<LandingCareSection />
 				<LandingAccessSection />

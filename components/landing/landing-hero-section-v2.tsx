@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Caveat } from "next/font/google";
 import Link from "next/link";
-import { CheckCircle, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
+import { CheckCircle, ChevronRight, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 

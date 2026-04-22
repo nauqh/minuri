@@ -24,13 +24,18 @@ const cards: HowItWorksCard[] = [
 		color: "#00f5d4",
 		optionLabel: "Moment",
 		options: [
-			{ title: "Just moved in", description: "Opens Week 1" },
-			{ title: "Starting uni", description: "Opens Week 1" },
 			{
-				title: "First job in Melbourne",
-				description: "Opens Month 1",
+				title: "I just arrived",
+				description: "Day 1: essentials and health support.",
 			},
-			{ title: "Between homes", description: "Opens Month 1" },
+			{
+				title: "I'm getting set up",
+				description: "Month 1: home admin and getting around.",
+			},
+			{
+				title: "I'm looking for my people",
+				description: "Month 3: connection and belonging.",
+			},
 		],
 	},
 	{
@@ -153,18 +158,18 @@ export function SpotlightScrollSection({
 									boxShadow: `0 0 0 4px color-mix(in srgb, ${card.color} 35%, transparent)`,
 								}}
 							/>
-							<div className="flex flex-col rounded-[1.5rem] border border-minuri-silver/45 bg-minuri-white p-6 md:rounded-[1.75rem] md:p-8">
+							<div className="flex flex-col rounded-[1.5rem] border border-minuri-silver/55 bg-minuri-white p-6 shadow-[0_18px_36px_-30px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)] md:rounded-[1.75rem] md:p-8">
 								<div className="flex flex-col gap-2.5">
 									<span
-										className="inline-flex w-fit rounded-full border px-2.5 py-1 font-serif text-[0.77rem] italic tracking-[0.08em] text-[#05292a]"
+										className="inline-flex w-fit rounded-full border px-2.5 py-1 font-serif text-[0.77rem] italic tracking-[0.08em] text-minuri-ocean"
 										style={{
-											backgroundColor: card.color,
-											borderColor: card.color,
+											backgroundColor: `color-mix(in srgb, ${card.color} 90%, white)`,
+											borderColor: `color-mix(in srgb, ${card.color} 78%, var(--minuri-silver))`,
 										}}
 									>
 										{card.step}
 									</span>
-									<h3 className="max-w-2xl text-xl font-semibold leading-snug tracking-tight text-foreground md:text-[1.6rem]">
+									<h3 className="max-w-2xl text-xl font-semibold leading-snug tracking-tight text-minuri-ocean md:text-[1.6rem]">
 										{card.title}
 									</h3>
 								</div>
@@ -175,12 +180,20 @@ export function SpotlightScrollSection({
 									{card.options.map((option) => (
 										<div
 											key={option.title}
-											className="rounded-[0.9rem] border px-4 py-3 text-[#05292a]"
+											className="relative overflow-hidden rounded-[0.9rem] border bg-minuri-white/82 px-4 py-3 text-minuri-ocean"
 											style={{
-												backgroundColor: card.color,
-												borderColor: card.color,
+												borderColor: `color-mix(in srgb, ${card.color} 60%, var(--minuri-silver))`,
+												boxShadow:
+													"0 10px 20px -20px color-mix(in oklch, var(--minuri-mid) 55%, transparent)",
 											}}
 										>
+											<span
+												aria-hidden
+												className="absolute inset-y-0 left-0 w-1.5"
+												style={{
+													backgroundColor: `color-mix(in srgb, ${card.color} 76%, white)`,
+												}}
+											/>
 											<p className="text-[0.63rem] font-semibold uppercase tracking-[0.15em] opacity-80">
 												{card.optionLabel}
 											</p>

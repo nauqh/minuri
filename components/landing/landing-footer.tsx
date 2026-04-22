@@ -23,7 +23,7 @@ export function LandingFooter() {
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, ease: easeOut }}
 						>
-							<h2 className="minuri-link-underline w-fit pb-1 font-hero-serif text-[clamp(2.4rem,7vw,5.2rem)] font-medium leading-[1.03] tracking-tight text-minuri-ocean">
+							<h2 className="minuri-link-underline w-fit pb-1 text-[clamp(2.4rem,7vw,5.2rem)] font-bold leading-[1.03] tracking-tight text-minuri-teal">
 								Let's get started
 								<span
 									className="inline-block translate-y-px transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"

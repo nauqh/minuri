@@ -1,27 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
 	ArrowUpRight,
 	ChevronsLeft,
-	ChevronsRight,
 	Download,
+	FileText,
+	Upload,
+	X,
 } from "lucide-react";
 
 import {
 	LANDING_KEYS,
 	exportJourneyState,
+	importJourneyReceipt,
 	readLandingJourneyState,
 	saveLifeMoment,
 	type LandingJourneyState,
 } from "@/components/landing/landing-local-state";
+import { LandingJourneyReceipt } from "@/components/landing/landing-journey-receipt";
 import { cn } from "@/lib/utils";
 
 type LifeMoment = {
 	id: string;
 	title: string;
-	entryArc: "Week 1" | "Month 1";
+	entryArc: "Week 1" | "Month 1" | "Month 3";
 	guideHref: string;
 	nearMeHref: string;
 };
@@ -36,34 +40,34 @@ type TopicEntry = {
 
 const LIFE_MOMENTS: LifeMoment[] = [
 	{
-		id: "just-moved-in",
-		title: "Just moved in",
+		id: "i-just-arrived",
+		title: "I just arrived",
 		entryArc: "Week 1",
-		guideHref: "/guides?category=setup",
-		nearMeHref: "/near-me?category=survive",
-	},
-	{
-		id: "starting-uni",
-		title: "Starting uni",
-		entryArc: "Week 1",
-		guideHref: "/guides?category=connect",
+		guideHref: "/guides?category=survive",
 		nearMeHref: "/near-me?category=health",
 	},
 	{
-		id: "first-job-melbourne",
-		title: "First job in Melbourne",
+		id: "im-getting-set-up",
+		title: "I'm getting set up",
 		entryArc: "Month 1",
-		guideHref: "/guides?category=get-around",
-		nearMeHref: "/near-me?category=setup",
+		guideHref: "/guides?category=setup",
+		nearMeHref: "/near-me?category=get-around",
 	},
 	{
-		id: "between-homes",
-		title: "Between homes",
-		entryArc: "Month 1",
-		guideHref: "/guides?category=health",
+		id: "im-looking-for-my-people",
+		title: "I'm looking for my people",
+		entryArc: "Month 3",
+		guideHref: "/guides?category=connect",
 		nearMeHref: "/near-me?category=connect",
 	},
 ];
+
+const LEGACY_MOMENT_ID_MAP: Record<string, string> = {
+	"just-moved-in": "i-just-arrived",
+	"starting-uni": "im-looking-for-my-people",
+	"first-job-melbourne": "im-getting-set-up",
+	"between-homes": "im-getting-set-up",
+};
 
 const TOPICS: TopicEntry[] = [
 	{
@@ -139,6 +143,17 @@ function sentenceCaseMoment(value: string) {
 		.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+function resolveMomentId(value: string | null) {
+	if (!value) return null;
+	return LEGACY_MOMENT_ID_MAP[value] ?? value;
+}
+
+function findLifeMoment(value: string | null) {
+	const resolved = resolveMomentId(value);
+	if (!resolved) return null;
+	return LIFE_MOMENTS.find((moment) => moment.id === resolved) ?? null;
+}
+
 function sentenceCaseSlug(value: string) {
 	return value
 		.replace(/-/g, " ")
@@ -164,7 +179,17 @@ export function LandingHubSidebar({
 	const [journey, setJourney] = useState<LandingJourneyState>(EMPTY_STATE);
 	const [suburbInput, setSuburbInput] = useState("");
 	const [selectedMood, setSelectedMood] = useState<string | null>(null);
-	const [showTopics, setShowTopics] = useState(false);
+	const [showTopics, setShowTopics] = useState(true);
+	const [showReceiptPreview, setShowReceiptPreview] = useState(false);
+	const [receiptFeedback, setReceiptFeedback] = useState<{
+		tone: "success" | "error";
+		message: string;
+	} | null>(null);
+	const [lastReceiptMeta, setLastReceiptMeta] = useState<{
+		id: string;
+		issuedAt: string;
+	} | null>(null);
+	const receiptInputRef = useRef<HTMLInputElement | null>(null);
 	const [liveStat, setLiveStat] = useState<LiveStat>({
 		status: "loading",
 		location: "Melbourne",
@@ -177,6 +202,26 @@ export function LandingHubSidebar({
 		setJourney(next);
 		setSuburbInput(next.selectedSuburb ?? "");
 	}, []);
+
+	useEffect(() => {
+		const resolved = resolveMomentId(journey.lifeMoment);
+		if (!resolved || resolved === journey.lifeMoment) return;
+		saveLifeMoment(resolved);
+		setJourney((current) => ({ ...current, lifeMoment: resolved }));
+	}, [journey.lifeMoment]);
+
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") onOpenChange(false);
+		};
+
+		document.addEventListener("keydown", onKeyDown);
+		return () => {
+			document.removeEventListener("keydown", onKeyDown);
+		};
+	}, [isOpen, onOpenChange]);
 
 	useEffect(() => {
 		const location = (journey.selectedSuburb || "Melbourne").trim();
@@ -247,26 +292,33 @@ export function LandingHubSidebar({
 			journey.arcProgress.month1 +
 			journey.arcProgress.month3;
 
-		return Boolean(
+		// Suburb alone is not enough to mark setup complete.
+		// Keep users in onboarding flow until they pick a life moment.
+		const hasOnboardingCompleted = Boolean(journey.lifeMoment);
+		const hasJourneySignals = Boolean(
 			journey.lastGuideSlug ||
-			journey.activeArc ||
-			journey.selectedSuburb ||
-			journey.lastTopic ||
-			journey.lifeMoment ||
-			journey.savedLocationsCount > 0 ||
-			journey.topicHistory.length > 0 ||
-			journey.readGuides.length > 0 ||
-			totalArcReads > 0,
+				journey.activeArc ||
+				journey.lastTopic ||
+				journey.savedLocationsCount > 0 ||
+				journey.topicHistory.length > 0 ||
+				journey.readGuides.length > 0 ||
+				totalArcReads > 0,
 		);
+
+		return hasOnboardingCompleted || hasJourneySignals;
 	}, [journey]);
 
 	const reflection = useMemo(() => {
 		if (!isReturningUser) return null;
 
 		const suburb = journey.selectedSuburb || "Melbourne";
-		const weekOneReads = journey.arcProgress.week1;
-		const momentText = journey.lifeMoment
-			? sentenceCaseMoment(journey.lifeMoment)
+		const totalReads =
+			journey.arcProgress.week1 +
+			journey.arcProgress.month1 +
+			journey.arcProgress.month3;
+		const selectedMoment = findLifeMoment(journey.lifeMoment);
+		const momentText = selectedMoment
+			? selectedMoment.title
 			: "your current chapter";
 		const topic =
 			journey.lastTopic ||
@@ -280,15 +332,11 @@ export function LandingHubSidebar({
 						? "You're learning your rhythm one step at a time."
 						: "You are building steady momentum.";
 
-		return `You're settling into ${suburb}. You've read ${weekOneReads} of 5 Week 1 guides, and your journey is centred on ${momentText}${topic ? ` with extra focus on ${topic}` : ""}. ${moodNudge}`;
+		return `You're settling into ${suburb}. You've completed ${totalReads} guides across your arcs, and your journey is centred on ${momentText}${topic ? ` with extra focus on ${topic}` : ""}. ${moodNudge}`;
 	}, [isReturningUser, journey, selectedMood]);
 
 	const activeMoment = useMemo(() => {
-		if (!journey.lifeMoment) return LIFE_MOMENTS[0];
-		return (
-			LIFE_MOMENTS.find((moment) => moment.id === journey.lifeMoment) ??
-			LIFE_MOMENTS[0]
-		);
+		return findLifeMoment(journey.lifeMoment) ?? LIFE_MOMENTS[0];
 	}, [journey.lifeMoment]);
 
 	const continueGuideTitle = useMemo(() => {
@@ -320,6 +368,11 @@ export function LandingHubSidebar({
 		refreshJourneyFromStorage();
 	}
 
+	function chooseLifeMoment(momentId: string) {
+		saveLifeMoment(momentId);
+		refreshJourneyFromStorage();
+	}
+
 	function clearJourney() {
 		if (typeof window === "undefined") return;
 		Object.values(LANDING_KEYS).forEach((key) => {
@@ -332,39 +385,67 @@ export function LandingHubSidebar({
 		setSuburbInput("");
 	}
 
+	async function handleReceiptImport(event: ChangeEvent<HTMLInputElement>) {
+		const file = event.target.files?.[0];
+		event.target.value = "";
+		if (!file) return;
+
+		const result = await importJourneyReceipt(file);
+		if (!result.ok) {
+			setReceiptFeedback({ tone: "error", message: result.error });
+			return;
+		}
+
+		refreshJourneyFromStorage();
+		setReceiptFeedback({
+			tone: "success",
+			message:
+				result.source === "receipt"
+					? "Receipt imported. Your journey has been restored."
+					: "Legacy backup imported. Your journey has been restored.",
+		});
+		setLastReceiptMeta({
+			id: result.receiptId ?? "LOCAL-ONLY",
+			issuedAt: result.issuedAt ?? new Date().toISOString(),
+		});
+	}
+
 	return (
 		<>
-			<button
-				type="button"
-				aria-controls="landing-hub-sidebar"
-				aria-expanded={isOpen}
-				onClick={() => onOpenChange(!isOpen)}
-				className={cn(
-					"fixed top-1/2 z-40 hidden h-50 w-12 -translate-y-1/2 cursor-pointer transform-none rounded-l-[0.9rem] bg-minuri-teal px-2 py-4 text-minuri-ocean shadow-[0_16px_30px_-22px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-[right,background-color] duration-300 hover:scale-100 hover:bg-minuri-teal/90 md:flex md:flex-col md:items-center md:justify-between",
-					isOpen ? "right-[calc(40vw+1rem)]" : "right-0",
-				)}
-			>
-				<span className="[writing-mode:vertical-rl] text-[0.78rem] font-black uppercase tracking-[0.18em] text-minuri-white">
-					Well nest
-				</span>
-				{isOpen ? (
-					<ChevronsRight
-						className="mb-1 size-4 text-minuri-white/95"
-						aria-hidden
-					/>
-				) : (
+			{!isOpen ? (
+				<button
+					type="button"
+					aria-controls="landing-hub-sidebar"
+					aria-expanded={false}
+					onClick={() => onOpenChange(true)}
+					className="fixed right-0 top-1/2 z-40 hidden h-50 w-12 -translate-y-1/2 cursor-pointer transform-none rounded-l-[0.9rem] bg-minuri-teal px-2 py-4 text-minuri-ocean shadow-[0_16px_30px_-22px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] hover:bg-minuri-teal/90 md:flex md:flex-col md:items-center md:justify-between"
+				>
+					<span className="[writing-mode:vertical-rl] text-[0.78rem] font-black uppercase tracking-[0.18em] text-minuri-white">
+						Wellnest
+					</span>
 					<ChevronsLeft
 						className="mb-1 size-4 text-minuri-white/95"
 						aria-hidden
 					/>
+				</button>
+			) : null}
+
+			<div
+				className={cn(
+					"fixed inset-0 z-30 hidden bg-minuri-ocean/12 transition-opacity duration-150 md:block",
+					isOpen
+						? "pointer-events-auto opacity-100"
+						: "pointer-events-none opacity-0",
 				)}
-			</button>
+				aria-hidden
+				onClick={() => onOpenChange(false)}
+			/>
 
 			<aside
 				id="landing-hub-sidebar"
 				aria-label="Your Minuri hub"
 				className={cn(
-					"fixed bottom-4 right-4 z-40 hidden h-[calc(100dvh-2rem)] w-[40vw] overflow-hidden rounded-[1.35rem] border border-minuri-silver/85 bg-minuri-white/96 shadow-[0_20px_52px_-34px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)] backdrop-blur transition-transform duration-300 md:flex",
+					"fixed bottom-4 right-4 z-40 hidden h-[calc(100dvh-2rem)] w-[40vw] overflow-hidden rounded-[1.35rem] border border-minuri-silver/85 bg-minuri-white shadow-[0_20px_52px_-34px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)] transition-transform duration-150 md:flex",
 					isOpen
 						? "translate-x-0"
 						: "translate-x-[calc(100%+1.2rem)]",
@@ -372,19 +453,34 @@ export function LandingHubSidebar({
 			>
 				<div className="flex h-full w-full flex-col">
 					<div className="border-b border-minuri-silver/65 px-5 py-4">
-						<h2 className="text-xl font-black uppercase tracking-tight text-minuri-ocean">
-							Your Well nest
-						</h2>
-						<p className="mt-1 text-xs leading-relaxed text-minuri-slate">
-							Your nest of wellbeing, wherever you are.
-						</p>
+						<div className="flex items-start justify-between gap-3">
+							<div>
+								<h2 className="text-xl font-black uppercase tracking-tight text-minuri-ocean">
+									Your Wellnest
+								</h2>
+								<p className="mt-1 text-xs leading-relaxed text-minuri-slate">
+									Your nest of wellbeing, wherever you are.
+								</p>
+							</div>
+							<button
+								type="button"
+								onClick={() => onOpenChange(false)}
+								aria-label="Close Minuri hub"
+								className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-minuri-silver/70 bg-minuri-white text-minuri-ocean transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
+							>
+								<X className="size-4.5" aria-hidden />
+							</button>
+						</div>
 					</div>
 
 					<div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
 						{isReturningUser ? (
 							<>
 								{reflection ? (
-									<section>
+									<section className="rounded-minuri border border-minuri-silver/65 bg-minuri-fog/45 p-3">
+										<p className="text-[0.66rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+											Welcome back
+										</p>
 										<p className="text-sm leading-relaxed text-minuri-ocean">
 											{reflection}
 										</p>
@@ -424,8 +520,7 @@ export function LandingHubSidebar({
 										Continue reading
 									</p>
 									<h3 className="mt-1 text-base font-black leading-snug">
-										Moment:{" "}
-										{sentenceCaseMoment(activeMoment.id)}
+										Moment: {activeMoment.title}
 									</h3>
 									<p className="mt-1 text-sm text-minuri-white/95">
 										&quot;{continueGuideTitle}&quot; · 3 min
@@ -448,8 +543,8 @@ export function LandingHubSidebar({
 										Your journey
 									</h3>
 									<p className="mt-1 text-[0.68rem] leading-relaxed text-minuri-slate">
-										Week 1 and Month 1 are entry arcs. Month
-										3 opens as you progress.
+										Track your progress and continue at your
+										own pace.
 									</p>
 									<div className="mt-2 grid grid-cols-3 gap-2">
 										{ARC_OVERVIEW.map((arc) => {
@@ -609,20 +704,71 @@ export function LandingHubSidebar({
 
 								<section className="rounded-minuri border border-minuri-silver/50 bg-minuri-white p-3 text-[0.68rem] text-minuri-slate">
 									<p>
-										Your journey stays on this device.
-										Minuri never sees it.
+										Your journey stays on this device. Export
+										a receipt, then import it the next time
+										you visit.
 									</p>
+									<input
+										ref={receiptInputRef}
+										type="file"
+										accept="application/json,.json"
+										className="hidden"
+										onChange={handleReceiptImport}
+									/>
 									<div className="mt-2 flex flex-wrap items-center gap-2">
 										<button
 											type="button"
-											onClick={exportJourneyState}
+											onClick={() => {
+												exportJourneyState();
+												setReceiptFeedback({
+													tone: "success",
+													message:
+														"Receipt exported to your downloads folder.",
+												});
+												setLastReceiptMeta({
+													id: "LOCAL-ONLY",
+													issuedAt: new Date().toISOString(),
+												});
+											}}
 											className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-fog px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/80"
 										>
 											<Download
 												className="size-3.5"
 												aria-hidden
 											/>
-											Export
+											Export receipt
+										</button>
+										<button
+											type="button"
+											onClick={() =>
+												receiptInputRef.current?.click()
+											}
+											className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-white px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/45"
+										>
+											<Upload
+												className="size-3.5"
+												aria-hidden
+											/>
+											Import receipt
+										</button>
+										<button
+											type="button"
+											onClick={() => {
+												if (!lastReceiptMeta) {
+													setLastReceiptMeta({
+														id: "LOCAL-ONLY",
+														issuedAt: new Date().toISOString(),
+													});
+												}
+												setShowReceiptPreview(true);
+											}}
+											className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-white px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/45"
+										>
+											<FileText
+												className="size-3.5"
+												aria-hidden
+											/>
+											Preview receipt
 										</button>
 										<button
 											type="button"
@@ -632,14 +778,33 @@ export function LandingHubSidebar({
 											Clear local data
 										</button>
 									</div>
+									{receiptFeedback ? (
+										<p
+											className={cn(
+												"mt-2 text-[0.66rem]",
+												receiptFeedback.tone === "success"
+													? "text-minuri-teal"
+													: "text-minuri-coral",
+											)}
+										>
+											{receiptFeedback.message}
+										</p>
+									) : null}
 								</section>
 							</>
 						) : (
 							<>
 								<section className="rounded-minuri border border-minuri-silver/65 bg-minuri-fog/60 p-3">
+									<p className="text-[0.66rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+										Step 1 of 2
+									</p>
 									<p className="text-sm leading-relaxed text-minuri-ocean">
 										Welcome to Minuri. Let&apos;s get you
 										set up.
+									</p>
+									<p className="mt-1 text-[0.72rem] text-minuri-slate">
+										Start with your suburb so we can shape
+										your local Wellnest.
 									</p>
 								</section>
 
@@ -661,6 +826,7 @@ export function LandingHubSidebar({
 										<button
 											type="button"
 											onClick={persistSuburb}
+											disabled={!suburbInput.trim()}
 											className="cursor-pointer transform-none rounded-full bg-minuri-teal px-3.5 py-2 text-xs font-semibold text-primary-foreground transition-opacity hover:scale-100 hover:opacity-90"
 										>
 											Set suburb
@@ -668,27 +834,66 @@ export function LandingHubSidebar({
 									</div>
 								</section>
 
-								<section className="rounded-minuri border border-minuri-silver/65 p-3">
-									<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
-										Pick a moment
-									</h3>
+								<section
+									className={cn(
+										"rounded-minuri border p-3",
+										journey.selectedSuburb
+											? "border-minuri-silver/65 opacity-100"
+											: "border-minuri-silver/45 bg-minuri-fog/35 opacity-70",
+									)}
+								>
+									<div className="flex items-start justify-between gap-2">
+										<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+											Step 2 of 2: Pick a moment
+										</h3>
+										{journey.lifeMoment ? (
+											<span className="rounded-full bg-minuri-teal/10 px-2 py-0.5 text-[0.62rem] font-semibold text-minuri-teal">
+												Selected
+											</span>
+										) : null}
+									</div>
+									{!journey.selectedSuburb ? (
+										<p className="mt-2 text-[0.72rem] text-minuri-slate">
+											Set your suburb first to unlock your
+											starting moment.
+										</p>
+									) : null}
 									<div className="mt-2.5 space-y-2">
 										{LIFE_MOMENTS.map((moment) => (
 											<div
 												key={moment.id}
-												className="rounded-minuri border border-minuri-silver/55 bg-minuri-fog/40 p-2.5"
+												className={cn(
+													"rounded-minuri border p-2.5",
+													journey.lifeMoment ===
+														moment.id
+														? "border-minuri-teal/50 bg-minuri-teal/6"
+														: "border-minuri-silver/55 bg-minuri-fog/40",
+												)}
 											>
-												<p className="text-sm font-semibold text-minuri-ocean">
-													{moment.title}
-												</p>
-												<p className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-minuri-slate">
-													Opens {moment.entryArc}
-												</p>
+												<div className="flex items-center justify-between gap-2">
+													<p className="text-sm font-semibold text-minuri-ocean">
+														{moment.title}
+													</p>
+													<button
+														type="button"
+														onClick={() =>
+															chooseLifeMoment(
+																moment.id,
+															)
+														}
+														disabled={
+															!journey.selectedSuburb
+														}
+														className="cursor-pointer rounded-full border border-minuri-silver bg-minuri-white px-2 py-1 text-[0.68rem] font-semibold text-minuri-ocean transition-colors hover:border-minuri-teal/45 hover:text-minuri-teal disabled:cursor-not-allowed disabled:opacity-60"
+													>
+														Choose
+													</button>
+												</div>
 												<div className="mt-2 flex items-center gap-2 text-xs">
 													<Link
 														href={moment.guideHref}
 														onClick={() =>
-															saveLifeMoment(
+															chooseLifeMoment(
 																moment.id,
 															)
 														}
@@ -703,7 +908,7 @@ export function LandingHubSidebar({
 													<Link
 														href={moment.nearMeHref}
 														onClick={() =>
-															saveLifeMoment(
+															chooseLifeMoment(
 																moment.id,
 															)
 														}
@@ -721,6 +926,17 @@ export function LandingHubSidebar({
 									</div>
 								</section>
 
+								<section className="rounded-minuri border border-minuri-teal/40 bg-minuri-teal/8 p-3">
+									<p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+										Starter recommendation
+									</p>
+									<p className="mt-1 text-sm leading-relaxed text-minuri-ocean">
+										{journey.lifeMoment
+											? `Start with ${findLifeMoment(journey.lifeMoment)?.title ?? sentenceCaseMoment(journey.lifeMoment)} in Guides for a quick first step.`
+											: "Choose a life moment above and we will suggest your best first guide."}
+									</p>
+								</section>
+
 								<section className="rounded-minuri border border-minuri-silver/50 bg-minuri-white p-3 text-[0.68rem] text-minuri-slate">
 									<p>
 										Your journey stays on this device.
@@ -732,6 +948,38 @@ export function LandingHubSidebar({
 					</div>
 				</div>
 			</aside>
+
+			{showReceiptPreview ? (
+				<div
+					className="fixed inset-0 z-50 grid place-items-center bg-minuri-ocean/40 p-4"
+					role="presentation"
+					onClick={() => setShowReceiptPreview(false)}
+				>
+					<div
+						className="max-h-[92dvh] w-full max-w-3xl overflow-y-auto rounded-[1.35rem] border border-minuri-silver/70 bg-minuri-fog p-3 md:p-4"
+						role="dialog"
+						aria-modal="true"
+						aria-label="Journey receipt preview"
+						onClick={(event) => event.stopPropagation()}
+					>
+						<div className="mb-3 flex items-center justify-end">
+							<button
+								type="button"
+								onClick={() => setShowReceiptPreview(false)}
+								className="inline-flex size-8 items-center justify-center rounded-full border border-minuri-silver/70 bg-minuri-white text-minuri-ocean transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
+								aria-label="Close receipt preview"
+							>
+								<X className="size-4" aria-hidden />
+							</button>
+						</div>
+						<LandingJourneyReceipt
+							journey={journey}
+							receiptId={lastReceiptMeta?.id ?? "LOCAL-ONLY"}
+							issuedAt={lastReceiptMeta?.issuedAt ?? "Not exported yet"}
+						/>
+					</div>
+				</div>
+			) : null}
 		</>
 	);
 }

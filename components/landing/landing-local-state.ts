@@ -34,6 +34,33 @@ export type LandingJourneyState = {
 	arcProgress: ArcProgress;
 };
 
+type JourneyReceiptShape = {
+	kind: "minuri-journey-receipt";
+	version: 1;
+	receiptId: string;
+	issuedAt: string;
+	createdBy: "minuri-web";
+	summary: {
+		suburb: string | null;
+		lifeMoment: string | null;
+		lastTopic: string | null;
+		savedLocationsCount: number;
+		readGuidesCount: number;
+	};
+	journey: LandingJourneyState;
+	checksum: string;
+};
+
+export type JourneyImportResult =
+	| {
+			ok: true;
+			source: "receipt" | "legacy-json";
+			receiptId: string | null;
+			issuedAt: string | null;
+			state: LandingJourneyState;
+	  }
+	| { ok: false; error: string };
+
 function parseJson(raw: string | null): unknown {
 	if (!raw) return null;
 	try {
@@ -63,6 +90,133 @@ function readUnknownArray(key: string): unknown[] {
 function clampToCount(value: number) {
 	if (!Number.isFinite(value) || value < 0) return 0;
 	return Math.min(5, Math.round(value));
+}
+
+function clampToNonNegativeInteger(value: number) {
+	if (!Number.isFinite(value) || value < 0) return 0;
+	return Math.round(value);
+}
+
+function normalizeString(value: unknown): string | null {
+	if (typeof value !== "string") return null;
+	const trimmed = value.trim();
+	return trimmed.length > 0 ? trimmed : null;
+}
+
+function normalizeStringArray(value: unknown): string[] {
+	if (!Array.isArray(value)) return [];
+	return value
+		.filter((item): item is string => typeof item === "string")
+		.map((item) => item.trim())
+		.filter(Boolean);
+}
+
+function normalizeUnknownArray(value: unknown): unknown[] {
+	return Array.isArray(value) ? value : [];
+}
+
+function normalizeArcProgress(value: unknown, readGuidesCount: number): ArcProgress {
+	const fallback = clampToCount(readGuidesCount);
+	if (!value || typeof value !== "object") {
+		return { week1: fallback, month1: 0, month3: 0 };
+	}
+
+	const record = value as Record<string, unknown>;
+	return {
+		week1: clampToCount(Number(record.week1 ?? record["week-1"] ?? fallback)),
+		month1: clampToCount(Number(record.month1 ?? record["month-1"] ?? 0)),
+		month3: clampToCount(Number(record.month3 ?? record["month-3"] ?? 0)),
+	};
+}
+
+function normalizeJourneyState(payload: unknown): LandingJourneyState {
+	const input =
+		payload && typeof payload === "object"
+			? (payload as Record<string, unknown>)
+			: {};
+	const readGuides = [...new Set(normalizeStringArray(input.readGuides))];
+	const savedLocations = normalizeUnknownArray(input.savedLocations);
+	const version = Number(input.version);
+	return {
+		version: Number.isFinite(version) ? Math.max(1, Math.round(version)) : 1,
+		lastGuideSlug: normalizeString(input.lastGuideSlug),
+		activeArc: normalizeString(input.activeArc),
+		selectedSuburb: normalizeString(input.selectedSuburb),
+		lastTopic: normalizeString(input.lastTopic),
+		lifeMoment: normalizeString(input.lifeMoment),
+		savedLocationsCount: savedLocations.length,
+		savedLocations,
+		topicHistory: [...new Set(normalizeStringArray(input.topicHistory))],
+		readGuides,
+		arcProgress: normalizeArcProgress(input.arcProgress, readGuides.length),
+	};
+}
+
+function writeString(key: string, value: string | null) {
+	if (value) {
+		window.localStorage.setItem(key, value);
+		return;
+	}
+	window.localStorage.removeItem(key);
+}
+
+function writeJson(key: string, value: unknown) {
+	window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+function persistLandingJourneyState(state: LandingJourneyState) {
+	writeString(LANDING_KEYS.lastGuideSlug, state.lastGuideSlug);
+	writeString(LANDING_KEYS.activeArc, state.activeArc);
+	writeString(LANDING_KEYS.selectedSuburb, state.selectedSuburb);
+	writeString(LANDING_KEYS.lastTopic, state.lastTopic);
+	writeString(LANDING_KEYS.lifeMoment, state.lifeMoment);
+	writeJson(LANDING_KEYS.savedLocations, state.savedLocations);
+	writeJson(LANDING_KEYS.topicHistory, state.topicHistory);
+	writeJson(LANDING_KEYS.readGuides, state.readGuides);
+	writeJson(BOOKMARKS_KEY, state.readGuides);
+	writeJson(LANDING_KEYS.arcProgress, state.arcProgress);
+	window.localStorage.setItem(
+		LANDING_KEYS.stateVersion,
+		String(Math.max(1, clampToNonNegativeInteger(state.version))),
+	);
+}
+
+function computeChecksum(input: string) {
+	let hash = 2166136261;
+	for (let index = 0; index < input.length; index += 1) {
+		hash ^= input.charCodeAt(index);
+		hash +=
+			(hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+	}
+	return (hash >>> 0).toString(16).padStart(8, "0");
+}
+
+function makeReceiptCore(journey: LandingJourneyState) {
+	const receiptId =
+		typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+			? crypto.randomUUID()
+			: `receipt-${Date.now()}`;
+	return {
+		kind: "minuri-journey-receipt" as const,
+		version: 1 as const,
+		receiptId,
+		issuedAt: new Date().toISOString(),
+		createdBy: "minuri-web" as const,
+		summary: {
+			suburb: journey.selectedSuburb,
+			lifeMoment: journey.lifeMoment,
+			lastTopic: journey.lastTopic,
+			savedLocationsCount: journey.savedLocationsCount,
+			readGuidesCount: journey.readGuides.length,
+		},
+		journey,
+	};
+}
+
+function makeReceipt(journey: LandingJourneyState): JourneyReceiptShape {
+	const core = makeReceiptCore(journey);
+	const checksum = computeChecksum(JSON.stringify(core));
+	return { ...core, checksum };
 }
 
 function readArcProgress(readGuidesCount: number): ArcProgress {
@@ -143,13 +297,80 @@ export function saveLifeMoment(lifeMoment: string) {
 export function exportJourneyState() {
 	if (typeof window === "undefined") return;
 	const journey = readLandingJourneyState();
-	const file = new Blob([JSON.stringify(journey, null, 2)], {
+	const receipt = makeReceipt(journey);
+	const file = new Blob([JSON.stringify(receipt, null, 2)], {
 		type: "application/json",
 	});
 	const href = URL.createObjectURL(file);
 	const anchor = document.createElement("a");
 	anchor.href = href;
-	anchor.download = `minuri-journey-${Date.now()}.json`;
+	anchor.download = `minuri-receipt-${Date.now()}.json`;
 	anchor.click();
 	URL.revokeObjectURL(href);
+}
+
+export function exportJourneyReceipt() {
+	exportJourneyState();
+}
+
+export async function importJourneyReceipt(
+	file: File,
+): Promise<JourneyImportResult> {
+	if (typeof window === "undefined") {
+		return { ok: false, error: "Receipt import is only available in browser." };
+	}
+
+	try {
+		const raw = await file.text();
+		const parsed = JSON.parse(raw) as unknown;
+
+		if (parsed && typeof parsed === "object") {
+			const payload = parsed as Record<string, unknown>;
+			if (payload.kind === "minuri-journey-receipt") {
+				const checksum = normalizeString(payload.checksum);
+				const core = {
+					kind: payload.kind,
+					version: payload.version,
+					receiptId: payload.receiptId,
+					issuedAt: payload.issuedAt,
+					createdBy: payload.createdBy,
+					summary: payload.summary,
+					journey: payload.journey,
+				};
+				const expectedChecksum = computeChecksum(JSON.stringify(core));
+				if (!checksum || checksum !== expectedChecksum) {
+					return {
+						ok: false,
+						error: "Receipt checksum mismatch. File may be corrupted.",
+					};
+				}
+
+				const normalized = normalizeJourneyState(payload.journey);
+				persistLandingJourneyState(normalized);
+				return {
+					ok: true,
+					source: "receipt",
+					receiptId: normalizeString(payload.receiptId),
+					issuedAt: normalizeString(payload.issuedAt),
+					state: normalized,
+				};
+			}
+		}
+
+		// Backward-compatible path for old plain JSON exports.
+		const normalized = normalizeJourneyState(parsed);
+		persistLandingJourneyState(normalized);
+		return {
+			ok: true,
+			source: "legacy-json",
+			receiptId: null,
+			issuedAt: null,
+			state: normalized,
+		};
+	} catch {
+		return {
+			ok: false,
+			error: "Could not read this file. Use a valid Minuri receipt JSON.",
+		};
+	}
 }

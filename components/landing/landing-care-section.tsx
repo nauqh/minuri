@@ -139,10 +139,10 @@ export function LandingCareSection() {
 							Our core support areas
 						</p>
 						<h2 className="landing-section-heading">
-							Who it's for
+							How we help
 						</h2>
 						<p className="landing-section-subheading">
-							The more you scroll, the more topics appear
+							Our core support areas
 						</p>
 					</div>
 

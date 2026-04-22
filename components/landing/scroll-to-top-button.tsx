@@ -2,18 +2,44 @@
 
 import { ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { easeOut } from "@/components/landing/home-constants";
 import { cn } from "@/lib/utils";
 
 const SHOW_AFTER_PX = 360;
+const TRACKED_SECTION_IDS = ["service", "care", "contact"] as const;
 
 export function ScrollToTopButton() {
 	const [visible, setVisible] = useState(false);
+	const previousScrollYRef = useRef(0);
 
 	useEffect(() => {
-		const onScroll = () => setVisible(window.scrollY > SHOW_AFTER_PX);
+		const isInTrackedSection = () => {
+			const viewportCenterY = window.innerHeight * 0.5;
+
+			return TRACKED_SECTION_IDS.some((id) => {
+				const section = document.getElementById(id);
+				if (!section) return false;
+
+				const rect = section.getBoundingClientRect();
+				return rect.top <= viewportCenterY && rect.bottom >= viewportCenterY;
+			});
+		};
+
+		const onScroll = () => {
+			const currentScrollY = window.scrollY;
+			const scrollingUp = currentScrollY < previousScrollYRef.current;
+			const shouldShow =
+				currentScrollY > SHOW_AFTER_PX &&
+				scrollingUp &&
+				isInTrackedSection();
+
+			setVisible(shouldShow);
+			previousScrollYRef.current = currentScrollY;
+		};
+
+		previousScrollYRef.current = window.scrollY;
 		onScroll();
 		window.addEventListener("scroll", onScroll, { passive: true });
 		return () => window.removeEventListener("scroll", onScroll);
