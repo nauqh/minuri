@@ -1,6 +1,11 @@
 import { type SuburbRecord } from "@/lib/suburbs";
 
-const MINURI_SERVER_BASE = "https://minuri-server-production.up.railway.app";
+const MINURI_SERVER_BASE = process.env.NEXT_PUBLIC_MINURI_SERVER_BASE_URL;
+
+function buildMinuriServerUrl(pathname: string, params?: URLSearchParams) {
+	const normalizedBase = MINURI_SERVER_BASE?.replace(/\/+$/, "");
+	return `${normalizedBase}${pathname}${params?.size ? `?${params.toString()}` : ""}`;
+}
 export type NearbyInterestRecord = {
 	title: string;
 	rating?: number | null;
@@ -32,7 +37,7 @@ export async function fetchSuburbs({
 	}
 
 	const response = await fetch(
-		`${MINURI_SERVER_BASE}/suburb${params.size ? `?${params.toString()}` : ""}`,
+		buildMinuriServerUrl("/suburb", params),
 		{
 			cache: "no-store",
 		},
@@ -53,7 +58,7 @@ export async function fetchPopulation({
 }) {
 	const params = new URLSearchParams({ location });
 	const response = await fetch(
-		`${MINURI_SERVER_BASE}/api/population?${params.toString()}`,
+		buildMinuriServerUrl("/api/population", params),
 		{
 			cache: "no-store",
 		},
@@ -84,7 +89,7 @@ export async function fetchNearbyInterest({
 	const normalizedSuburb = suburb.trim().replace(/\+/g, " ").replace(/\s+/g, " ");
 	const params = new URLSearchParams({ suburb: normalizedSuburb });
 	const response = await fetch(
-		`${MINURI_SERVER_BASE}/api/nearby-interest?${params.toString()}`,
+		buildMinuriServerUrl("/api/nearby-interest", params),
 		{
 			cache: "no-store",
 		},

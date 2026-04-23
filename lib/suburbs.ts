@@ -46,6 +46,11 @@ export function rankAndFilterSuburbs(
 	const normalizedQuery = normalizeSuburbName(query).toLowerCase();
 	const hasQuery = normalizedQuery.length > 0;
 	const tokens = normalizedQuery.split(" ").filter(Boolean);
+	const matchesToken = (field: string, token: string) => {
+		if (field.startsWith(token)) return true;
+		const words = field.split(" ").filter(Boolean);
+		return words.some((word) => word.startsWith(token));
+	};
 
 	const filtered = hasQuery
 		? options.filter((option) => {
@@ -56,10 +61,10 @@ export function rankAndFilterSuburbs(
 
 				return tokens.every(
 					(token) =>
-						locality.startsWith(token) ||
-						postcode.startsWith(token) ||
-						state.startsWith(token) ||
-						region.startsWith(token),
+						matchesToken(locality, token) ||
+						matchesToken(postcode, token) ||
+						matchesToken(state, token) ||
+						matchesToken(region, token),
 				);
 		  })
 		: options;

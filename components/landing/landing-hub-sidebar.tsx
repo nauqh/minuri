@@ -1,41 +1,39 @@
 "use client";
 
-import Link from "next/link";
-import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
 	ArrowUpRight,
+	CheckCircle2,
 	ChevronsLeft,
-	Download,
-	FileText,
-	Upload,
+	Loader2,
+	MapPin,
+	Search,
 	X,
 } from "lucide-react";
 
 import {
 	LANDING_KEYS,
-	exportJourneyState,
-	importJourneyReceipt,
 	readLandingJourneyState,
 	saveLifeMoment,
 	type LandingJourneyState,
 } from "@/components/landing/landing-local-state";
-import { LandingJourneyReceipt } from "@/components/landing/landing-journey-receipt";
+import {
+	normalizeSuburbName,
+	rankAndFilterSuburbs,
+	type SuburbOption,
+} from "@/lib/suburbs";
 import { cn } from "@/lib/utils";
 
 type LifeMoment = {
 	id: string;
 	title: string;
 	entryArc: "Week 1" | "Month 1" | "Month 3";
-	guideHref: string;
-	nearMeHref: string;
 };
 
-type TopicEntry = {
+type FocusTopic = {
+	id: string;
 	label: string;
-	description: string;
-	guideHref: string;
-	nearMeHref: string;
-	color: string;
 };
 
 const LIFE_MOMENTS: LifeMoment[] = [
@@ -43,23 +41,25 @@ const LIFE_MOMENTS: LifeMoment[] = [
 		id: "i-just-arrived",
 		title: "I just arrived",
 		entryArc: "Week 1",
-		guideHref: "/guides?category=survive",
-		nearMeHref: "/near-me?category=health",
 	},
 	{
 		id: "im-getting-set-up",
 		title: "I'm getting set up",
 		entryArc: "Month 1",
-		guideHref: "/guides?category=setup",
-		nearMeHref: "/near-me?category=get-around",
 	},
 	{
 		id: "im-looking-for-my-people",
 		title: "I'm looking for my people",
 		entryArc: "Month 3",
-		guideHref: "/guides?category=connect",
-		nearMeHref: "/near-me?category=connect",
 	},
+];
+
+const FOCUS_TOPICS: FocusTopic[] = [
+	{ id: "food-and-eating", label: "Food & Eating" },
+	{ id: "getting-around", label: "Getting Around" },
+	{ id: "health-and-wellbeing", label: "Health & Wellbeing" },
+	{ id: "home-and-admin", label: "Home & Admin" },
+	{ id: "social-and-belonging", label: "Social & Belonging" },
 ];
 
 const LEGACY_MOMENT_ID_MAP: Record<string, string> = {
@@ -68,60 +68,6 @@ const LEGACY_MOMENT_ID_MAP: Record<string, string> = {
 	"first-job-melbourne": "im-getting-set-up",
 	"between-homes": "im-getting-set-up",
 };
-
-const TOPICS: TopicEntry[] = [
-	{
-		label: "Food & Eating",
-		description: "Groceries, cheap meals, and everyday food decisions.",
-		guideHref: "/guides?category=survive",
-		nearMeHref: "/near-me?category=survive",
-		color: "#00f5d4",
-	},
-	{
-		label: "Getting Around",
-		description: "Transport, routes, and daily movement through Melbourne.",
-		guideHref: "/guides?category=get-around",
-		nearMeHref: "/near-me?category=get-around",
-		color: "#7fdcff",
-	},
-	{
-		label: "Health & Wellbeing",
-		description:
-			"GPs, Medicare pathways, pharmacies, and mental health support.",
-		guideHref: "/guides?category=health",
-		nearMeHref: "/near-me?category=health",
-		color: "#fff14a",
-	},
-	{
-		label: "Home & Admin",
-		description:
-			"Renting, utilities, paperwork, and practical setup tasks.",
-		guideHref: "/guides?category=setup",
-		nearMeHref: "/near-me?category=setup",
-		color: "#ff7ecb",
-	},
-	{
-		label: "Social & Belonging",
-		description:
-			"Friendships, community, loneliness, and finding your place.",
-		guideHref: "/guides?category=connect",
-		nearMeHref: "/near-me?category=connect",
-		color: "var(--minuri-mist)",
-	},
-];
-
-const ARC_OVERVIEW = [
-	{ id: "week1", label: "Week 1" },
-	{ id: "month1", label: "Month 1" },
-	{ id: "month3", label: "Month 3" },
-] as const;
-
-const MOOD_OPTIONS = [
-	{ id: "settled", label: "settled", emoji: "🙂" },
-	{ id: "figuring-it-out", label: "figuring it out", emoji: "🤔" },
-	{ id: "overwhelmed", label: "overwhelmed", emoji: "😵" },
-	{ id: "lonely", label: "lonely", emoji: "💙" },
-] as const;
 
 const EMPTY_STATE: LandingJourneyState = {
 	version: 1,
@@ -154,19 +100,6 @@ function findLifeMoment(value: string | null) {
 	return LIFE_MOMENTS.find((moment) => moment.id === resolved) ?? null;
 }
 
-function sentenceCaseSlug(value: string) {
-	return value
-		.replace(/-/g, " ")
-		.replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
-type LiveStat = {
-	status: "loading" | "ready" | "empty" | "error";
-	location: string;
-	population: number | null;
-	year: string | null;
-};
-
 export type LandingHubSidebarProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -176,32 +109,90 @@ export function LandingHubSidebar({
 	open: isOpen,
 	onOpenChange,
 }: LandingHubSidebarProps) {
+	const router = useRouter();
 	const [journey, setJourney] = useState<LandingJourneyState>(EMPTY_STATE);
 	const [suburbInput, setSuburbInput] = useState("");
-	const [selectedMood, setSelectedMood] = useState<string | null>(null);
-	const [showTopics, setShowTopics] = useState(true);
-	const [showReceiptPreview, setShowReceiptPreview] = useState(false);
-	const [receiptFeedback, setReceiptFeedback] = useState<{
-		tone: "success" | "error";
-		message: string;
-	} | null>(null);
-	const [lastReceiptMeta, setLastReceiptMeta] = useState<{
-		id: string;
-		issuedAt: string;
-	} | null>(null);
-	const receiptInputRef = useRef<HTMLInputElement | null>(null);
-	const [liveStat, setLiveStat] = useState<LiveStat>({
-		status: "loading",
-		location: "Melbourne",
-		population: null,
-		year: null,
-	});
+	const [suburbOptions, setSuburbOptions] = useState<SuburbOption[]>([]);
+	const [selectedSuburb, setSelectedSuburb] = useState<SuburbOption | null>(
+		null,
+	);
+	const [activeSuburbIndex, setActiveSuburbIndex] = useState(-1);
+	const [suburbLoading, setSuburbLoading] = useState(false);
+	const [suburbError, setSuburbError] = useState("");
+	const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+	const [debouncedSuburbQuery, setDebouncedSuburbQuery] = useState("");
+	const skipNextSuburbSearchRef = useRef(false);
+	const suburbListboxId = useId();
 
 	useEffect(() => {
 		const next = readLandingJourneyState();
 		setJourney(next);
 		setSuburbInput(next.selectedSuburb ?? "");
+		setSelectedTopics(next.topicHistory.slice(0, 5));
 	}, []);
+
+	useEffect(() => {
+		const timer = window.setTimeout(() => {
+			setDebouncedSuburbQuery(suburbInput);
+		}, 250);
+		return () => {
+			window.clearTimeout(timer);
+		};
+	}, [suburbInput]);
+
+	useEffect(() => {
+		let cancelled = false;
+		const normalizedQuery = normalizeSuburbName(debouncedSuburbQuery);
+
+		if (skipNextSuburbSearchRef.current) {
+			skipNextSuburbSearchRef.current = false;
+			setSuburbLoading(false);
+			setSuburbError("");
+			return;
+		}
+
+		if (!normalizedQuery || normalizedQuery.length < 3) {
+			setSuburbOptions([]);
+			setSuburbLoading(false);
+			setSuburbError("");
+			return;
+		}
+
+		async function loadSuburbs() {
+			setSuburbLoading(true);
+			setSuburbError("");
+			try {
+				const suburbsParams = new URLSearchParams({
+					q: normalizedQuery,
+				});
+				const suburbsResponse = await fetch(
+					`/api/suburbs?${suburbsParams.toString()}`,
+				);
+				if (!suburbsResponse.ok) {
+					throw new Error("Failed to fetch suburb data");
+				}
+				const suburbsPayload = (await suburbsResponse.json()) as {
+					suburbs?: SuburbOption[];
+				};
+				if (!cancelled) {
+					setSuburbOptions(suburbsPayload.suburbs ?? []);
+				}
+			} catch {
+				if (!cancelled) {
+					setSuburbError("Could not load suburbs right now.");
+				}
+			} finally {
+				if (!cancelled) {
+					setSuburbLoading(false);
+				}
+			}
+		}
+
+		void loadSuburbs();
+		return () => {
+			cancelled = true;
+		};
+	}, [debouncedSuburbQuery]);
 
 	useEffect(() => {
 		const resolved = resolveMomentId(journey.lifeMoment);
@@ -223,94 +214,7 @@ export function LandingHubSidebar({
 		};
 	}, [isOpen, onOpenChange]);
 
-	useEffect(() => {
-		const location = (journey.selectedSuburb || "Melbourne").trim();
-		let isSubscribed = true;
-
-		async function loadPopulation() {
-			setLiveStat({
-				status: "loading",
-				location,
-				population: null,
-				year: null,
-			});
-
-			try {
-				const response = await fetch(
-					`/api/population?location=${encodeURIComponent(location)}`,
-					{
-						cache: "no-store",
-					},
-				);
-				if (!response.ok) {
-					throw new Error("Population request failed");
-				}
-
-				const payload = (await response.json()) as {
-					population?: number;
-					location?: string;
-					year?: string | null;
-				};
-
-				if (!isSubscribed) return;
-				if (!Number.isFinite(payload.population)) {
-					setLiveStat({
-						status: "empty",
-						location: payload.location || location,
-						population: null,
-						year: payload.year ?? null,
-					});
-					return;
-				}
-
-				setLiveStat({
-					status: "ready",
-					location: payload.location || location,
-					population: payload.population ?? null,
-					year: payload.year ?? null,
-				});
-			} catch {
-				if (!isSubscribed) return;
-				setLiveStat({
-					status: "error",
-					location,
-					population: null,
-					year: null,
-				});
-			}
-		}
-
-		void loadPopulation();
-		return () => {
-			isSubscribed = false;
-		};
-	}, [journey.selectedSuburb]);
-
-	const isReturningUser = useMemo(() => {
-		const totalArcReads =
-			journey.arcProgress.week1 +
-			journey.arcProgress.month1 +
-			journey.arcProgress.month3;
-
-		// Suburb alone is not enough to mark setup complete.
-		// Keep users in onboarding flow until they pick a life moment.
-		const hasOnboardingCompleted = Boolean(journey.lifeMoment);
-		const hasJourneySignals = Boolean(
-			journey.lastGuideSlug ||
-				journey.activeArc ||
-				journey.lastTopic ||
-				journey.savedLocationsCount > 0 ||
-				journey.topicHistory.length > 0 ||
-				journey.readGuides.length > 0 ||
-				totalArcReads > 0,
-		);
-
-		return hasOnboardingCompleted || hasJourneySignals;
-	}, [journey]);
-
 	const reflection = useMemo(() => {
-		if (!isReturningUser) return null;
-
 		const suburb = journey.selectedSuburb || "Melbourne";
 		const totalReads =
 			journey.arcProgress.week1 +
@@ -320,57 +224,98 @@ export function LandingHubSidebar({
 		const momentText = selectedMoment
 			? selectedMoment.title
 			: "your current chapter";
-		const topic =
-			journey.lastTopic ||
-			(journey.topicHistory.length > 0 ? journey.topicHistory[0] : null);
-		const moodNudge =
-			selectedMood === "overwhelmed"
-				? "We'll keep the next step short and practical."
-				: selectedMood === "lonely"
-					? "You are not doing this alone, and support is close by."
-					: selectedMood === "figuring-it-out"
-						? "You're learning your rhythm one step at a time."
-						: "You are building steady momentum.";
+		const chosenTopics = selectedTopics;
+		const topicsSummary =
+			chosenTopics.length > 0
+				? ` · ${chosenTopics.length} topic${chosenTopics.length === 1 ? "" : "s"} selected (${chosenTopics.join(", ")})`
+				: " · no topics selected yet";
+		return `${suburb} · ${momentText} · ${totalReads} guides completed${topicsSummary}.`;
+	}, [journey, selectedTopics]);
 
-		return `You're settling into ${suburb}. You've completed ${totalReads} guides across your arcs, and your journey is centred on ${momentText}${topic ? ` with extra focus on ${topic}` : ""}. ${moodNudge}`;
-	}, [isReturningUser, journey, selectedMood]);
-
-	const activeMoment = useMemo(() => {
-		return findLifeMoment(journey.lifeMoment) ?? LIFE_MOMENTS[0];
-	}, [journey.lifeMoment]);
-
-	const continueGuideTitle = useMemo(() => {
-		if (journey.lastGuideSlug) {
-			return sentenceCaseSlug(journey.lastGuideSlug);
-		}
-		if (journey.activeArc) {
-			return `${sentenceCaseSlug(journey.activeArc)} essentials`;
-		}
-		return "Crisis lines you can actually call";
-	}, [journey.activeArc, journey.lastGuideSlug]);
-
-	const populationLabel = useMemo(() => {
-		if (liveStat.status !== "ready") return null;
-		return new Intl.NumberFormat("en-AU").format(liveStat.population ?? 0);
-	}, [liveStat]);
+	const isIntroComplete = Boolean(
+		journey.selectedSuburb &&
+		journey.lifeMoment &&
+		selectedTopics.length > 0,
+	);
 
 	function refreshJourneyFromStorage() {
 		const next = readLandingJourneyState();
 		setJourney(next);
 		setSuburbInput(next.selectedSuburb ?? "");
+		setActiveSuburbIndex(-1);
+		setSelectedTopics(next.topicHistory.slice(0, 5));
 	}
 
-	function persistSuburb() {
-		const nextSuburb = suburbInput.trim();
+	function applySuburbSelection(nextSuburbRaw: string) {
+		const nextSuburb = normalizeSuburbName(nextSuburbRaw);
 		if (!nextSuburb || typeof window === "undefined") return;
 		window.localStorage.setItem(LANDING_KEYS.selectedSuburb, nextSuburb);
 		window.localStorage.setItem(LANDING_KEYS.stateVersion, "1");
 		refreshJourneyFromStorage();
 	}
 
+	function resetSuburbSelection() {
+		if (typeof window === "undefined") return;
+		window.localStorage.removeItem(LANDING_KEYS.selectedSuburb);
+		window.localStorage.setItem(LANDING_KEYS.stateVersion, "1");
+		setSelectedSuburb(null);
+		setSuburbInput("");
+		setSuburbOptions([]);
+		setActiveSuburbIndex(-1);
+		refreshJourneyFromStorage();
+	}
+
+	const suburbSuggestions = useMemo(
+		() => rankAndFilterSuburbs(suburbOptions, suburbInput),
+		[suburbOptions, suburbInput],
+	);
+	const normalizedSuburbQuery = normalizeSuburbName(suburbInput);
+	const hasConfirmedSuburbSelection =
+		selectedSuburb !== null &&
+		normalizeSuburbName(selectedSuburb.locality).toLowerCase() ===
+			normalizedSuburbQuery.toLowerCase();
+	const hasSavedSuburb = Boolean(journey.selectedSuburb);
+	const shouldShowSuburbSuggestionsPanel =
+		suburbLoading ||
+		Boolean(suburbError) ||
+		(normalizedSuburbQuery.length > 0 && !hasConfirmedSuburbSelection);
+	const activeSuburbOption =
+		activeSuburbIndex >= 0 && activeSuburbIndex < suburbSuggestions.length
+			? suburbSuggestions[activeSuburbIndex]
+			: null;
+
 	function chooseLifeMoment(momentId: string) {
 		saveLifeMoment(momentId);
 		refreshJourneyFromStorage();
+	}
+
+	function toggleFocusTopic(topicLabel: string) {
+		const exists = selectedTopics.includes(topicLabel);
+		const nextTopics = exists
+			? selectedTopics.filter((topic) => topic !== topicLabel)
+			: selectedTopics.length >= 5
+				? [...selectedTopics.slice(1), topicLabel]
+				: [...selectedTopics, topicLabel];
+		setSelectedTopics(nextTopics);
+		if (typeof window === "undefined") return;
+		const latestTopic =
+			nextTopics.length > 0 ? nextTopics[nextTopics.length - 1] : null;
+		window.localStorage.setItem(
+			LANDING_KEYS.topicHistory,
+			JSON.stringify(nextTopics),
+		);
+		if (latestTopic) {
+			window.localStorage.setItem(LANDING_KEYS.lastTopic, latestTopic);
+		} else {
+			window.localStorage.removeItem(LANDING_KEYS.lastTopic);
+		}
+		window.localStorage.setItem(LANDING_KEYS.stateVersion, "1");
+		refreshJourneyFromStorage();
+	}
+
+	function goToUserPage() {
+		onOpenChange(false);
+		router.push("/user");
 	}
 
 	function clearJourney() {
@@ -379,35 +324,9 @@ export function LandingHubSidebar({
 			window.localStorage.removeItem(key);
 		});
 		window.localStorage.removeItem("minuri:guide-bookmarks:v1");
-		setSelectedMood(null);
-		setShowTopics(false);
 		setJourney(EMPTY_STATE);
 		setSuburbInput("");
-	}
-
-	async function handleReceiptImport(event: ChangeEvent<HTMLInputElement>) {
-		const file = event.target.files?.[0];
-		event.target.value = "";
-		if (!file) return;
-
-		const result = await importJourneyReceipt(file);
-		if (!result.ok) {
-			setReceiptFeedback({ tone: "error", message: result.error });
-			return;
-		}
-
-		refreshJourneyFromStorage();
-		setReceiptFeedback({
-			tone: "success",
-			message:
-				result.source === "receipt"
-					? "Receipt imported. Your journey has been restored."
-					: "Legacy backup imported. Your journey has been restored.",
-		});
-		setLastReceiptMeta({
-			id: result.receiptId ?? "LOCAL-ONLY",
-			issuedAt: result.issuedAt ?? new Date().toISOString(),
-		});
+		setSelectedTopics([]);
 	}
 
 	return (
@@ -474,512 +393,397 @@ export function LandingHubSidebar({
 					</div>
 
 					<div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
-						{isReturningUser ? (
-							<>
-								{reflection ? (
-									<section className="rounded-minuri border border-minuri-silver/65 bg-minuri-fog/45 p-3">
-										<p className="text-[0.66rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
-											Welcome back
-										</p>
-										<p className="text-sm leading-relaxed text-minuri-ocean">
-											{reflection}
-										</p>
-									</section>
-								) : null}
+						<>
+							<section className="border-b border-minuri-silver/55 pb-3">
+								<p className="text-[0.66rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+									Step 1 of 3
+								</p>
+								<p className="text-sm leading-relaxed text-minuri-ocean">
+									Welcome to Minuri. Let&apos;s get you set
+									up.
+								</p>
+								<p className="mt-1 text-[0.72rem] text-minuri-slate">
+									Start with your suburb so we can shape your
+									local Wellnest.
+								</p>
+							</section>
 
-								<section className="rounded-minuri border border-minuri-silver/60 bg-minuri-white p-3">
-									<p className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-minuri-slate">
-										How&apos;s this week?
-									</p>
-									<div className="mt-2 flex flex-wrap gap-1.5">
-										{MOOD_OPTIONS.map((mood) => (
-											<button
-												key={mood.id}
-												type="button"
-												onClick={() =>
-													setSelectedMood(mood.id)
-												}
-												className={cn(
-													"cursor-pointer transform-none rounded-full border px-2.5 py-1 text-[0.72rem] font-semibold transition-colors hover:scale-100",
-													selectedMood === mood.id
-														? "border-minuri-teal bg-minuri-teal/10 text-minuri-teal"
-														: "border-minuri-silver/70 bg-minuri-white text-minuri-ocean hover:border-minuri-teal/45",
-												)}
-											>
-												<span className="mr-1">
-													{mood.emoji}
-												</span>
-												{mood.label}
-											</button>
-										))}
-									</div>
-								</section>
-
-								<section className="rounded-minuri border border-minuri-teal/45 bg-minuri-teal p-4 text-minuri-white shadow-[0_18px_35px_-22px_color-mix(in_oklch,var(--minuri-teal)_65%,transparent)]">
-									<p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-white/85">
-										Continue reading
-									</p>
-									<h3 className="mt-1 text-base font-black leading-snug">
-										Moment: {activeMoment.title}
-									</h3>
-									<p className="mt-1 text-sm text-minuri-white/95">
-										&quot;{continueGuideTitle}&quot; · 3 min
-										read
-									</p>
-									<Link
-										href={activeMoment.guideHref}
-										className="mt-3 inline-flex cursor-pointer items-center gap-1 rounded-full bg-minuri-white px-3 py-1.5 text-xs font-semibold text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
-									>
-										Continue
-										<ArrowUpRight
-											className="size-3.5"
-											aria-hidden
-										/>
-									</Link>
-								</section>
-
-								<section className="rounded-minuri border border-minuri-silver/60 p-3">
-									<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-slate">
-										Your journey
-									</h3>
-									<p className="mt-1 text-[0.68rem] leading-relaxed text-minuri-slate">
-										Track your progress and continue at your
-										own pace.
-									</p>
-									<div className="mt-2 grid grid-cols-3 gap-2">
-										{ARC_OVERVIEW.map((arc) => {
-											const completed =
-												journey.arcProgress[
-													arc.id as keyof typeof journey.arcProgress
-												];
-											const progress = Math.min(
-												100,
-												(completed / 5) * 100,
-											);
-
-											return (
-												<Link
-													key={arc.id}
-													href="/guides"
-													className="cursor-pointer transform-none rounded-md bg-minuri-fog/65 px-2 py-2 text-center text-minuri-ocean transition-colors hover:scale-100 hover:bg-minuri-fog/90"
-												>
-													<div
-														className="mx-auto grid size-11 place-items-center rounded-full"
-														style={{
-															background: `conic-gradient(var(--minuri-teal) ${progress}%, color-mix(in oklch, var(--minuri-mid) 20%, white) 0)`,
-														}}
-													>
-														<div className="grid size-8 place-items-center rounded-full bg-minuri-white text-[0.63rem] font-bold">
-															{completed}/5
-														</div>
-													</div>
-													<p className="mt-1 text-[0.66rem] font-semibold">
-														{arc.label}
-													</p>
-												</Link>
-											);
-										})}
-									</div>
-								</section>
-
-								<section className="rounded-minuri border border-minuri-silver/60 p-3">
-									<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-slate">
-										Your suburb
-									</h3>
-									<div className="mt-2 flex items-center gap-2">
-										<input
-											value={suburbInput}
-											onChange={(event) =>
-												setSuburbInput(
-													event.target.value,
-												)
-											}
-											placeholder="Update suburb"
-											className="min-w-0 flex-1 rounded-full border border-minuri-silver bg-minuri-white px-3 py-1.5 text-xs text-minuri-ocean outline-none transition focus:border-minuri-teal"
-										/>
-										<button
-											type="button"
-											onClick={persistSuburb}
-											className="cursor-pointer rounded-full border border-minuri-silver bg-minuri-fog px-3 py-1.5 text-xs font-semibold text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
-										>
-											Save
-										</button>
-									</div>
-									<div className="mt-2 rounded-md bg-minuri-fog/55 px-2.5 py-2 text-[0.7rem] text-minuri-ocean">
-										{liveStat.status === "loading" ? (
-											<p>Loading local context...</p>
-										) : null}
-										{liveStat.status === "error" ? (
-											<p>
-												Local data is unavailable right
-												now.
-											</p>
-										) : null}
-										{liveStat.status === "empty" ? (
-											<p>
-												No current data for{" "}
-												{liveStat.location}.
-											</p>
-										) : null}
-										{liveStat.status === "ready" ? (
-											<p>
-												About{" "}
-												<strong>
-													{populationLabel}
-												</strong>{" "}
-												people live in{" "}
-												{liveStat.location}
-												{liveStat.year
-													? ` (${liveStat.year})`
-													: ""}
-												.
-											</p>
-										) : null}
-									</div>
-									{journey.savedLocationsCount > 0 ? (
-										<div className="mt-2 flex flex-wrap gap-1.5">
-											{journey.savedLocations
-												.slice(0, 3)
-												.map((location, index) => (
-													<span
-														key={`${index}-${String(location)}`}
-														className="rounded-full border border-minuri-silver/70 bg-minuri-white px-2 py-1 text-[0.66rem] text-minuri-ocean"
-													>
-														{typeof location ===
-														"string"
-															? location
-															: `Saved place ${index + 1}`}
-													</span>
-												))}
-											<Link
-												href="/near-me"
-												className="cursor-pointer transform-none rounded-full border border-minuri-silver/70 bg-minuri-fog px-2 py-1 text-[0.66rem] font-semibold text-minuri-teal transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/80"
-											>
-												See all
-											</Link>
-										</div>
-									) : null}
-								</section>
-
-								<section className="rounded-minuri border border-minuri-silver/60 p-3">
-									<button
-										type="button"
-										onClick={() =>
-											setShowTopics((current) => !current)
-										}
-										className="flex w-full cursor-pointer transform-none items-center justify-between text-left transition-colors hover:scale-100 hover:text-minuri-teal"
-									>
-										<span className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-slate">
-											Jump to a topic
-										</span>
-										<span className="text-xs font-semibold text-minuri-teal">
-											{showTopics ? "Hide" : "Show"}
-										</span>
-									</button>
-									{showTopics ? (
-										<div className="mt-2 space-y-1.5">
-											{TOPICS.map((topic) => (
-												<Link
-													key={topic.label}
-													href={topic.guideHref}
-													className="block cursor-pointer transform-none rounded-md border px-2.5 py-2 text-xs text-minuri-ocean transition-opacity hover:scale-100 hover:opacity-90"
-													style={{
-														backgroundColor:
-															topic.color,
-														borderColor:
-															topic.color,
-													}}
-												>
-													<p className="font-semibold">
-														{topic.label}
-													</p>
-													<p className="mt-0.5 text-[0.68rem] leading-relaxed text-minuri-slate">
-														{topic.description}
-													</p>
-												</Link>
-											))}
-										</div>
-									) : null}
-								</section>
-
-								<section className="rounded-minuri border border-minuri-silver/50 bg-minuri-white p-3 text-[0.68rem] text-minuri-slate">
-									<p>
-										Your journey stays on this device. Export
-										a receipt, then import it the next time
-										you visit.
-									</p>
+							<section className="pt-1">
+								<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+									Where are you living right now?
+								</h3>
+								<div className="relative mt-2">
+									<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-minuri-silver" />
 									<input
-										ref={receiptInputRef}
-										type="file"
-										accept="application/json,.json"
-										className="hidden"
-										onChange={handleReceiptImport}
-									/>
-									<div className="mt-2 flex flex-wrap items-center gap-2">
-										<button
-											type="button"
-											onClick={() => {
-												exportJourneyState();
-												setReceiptFeedback({
-													tone: "success",
-													message:
-														"Receipt exported to your downloads folder.",
+										value={suburbInput}
+										disabled={hasSavedSuburb}
+										onChange={(event) => {
+											setSuburbInput(event.target.value);
+											setSelectedSuburb(null);
+											setActiveSuburbIndex(-1);
+										}}
+										onKeyDown={(event) => {
+											if (event.key === "ArrowDown") {
+												event.preventDefault();
+												setActiveSuburbIndex((prev) => {
+													if (
+														suburbSuggestions.length ===
+														0
+													)
+														return -1;
+													return Math.min(
+														prev + 1,
+														suburbSuggestions.length -
+															1,
+													);
 												});
-												setLastReceiptMeta({
-													id: "LOCAL-ONLY",
-													issuedAt: new Date().toISOString(),
-												});
-											}}
-											className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-fog px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/80"
-										>
-											<Download
-												className="size-3.5"
-												aria-hidden
-											/>
-											Export receipt
-										</button>
-										<button
-											type="button"
-											onClick={() =>
-												receiptInputRef.current?.click()
+												return;
 											}
-											className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-white px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/45"
-										>
-											<Upload
+											if (event.key === "ArrowUp") {
+												event.preventDefault();
+												setActiveSuburbIndex((prev) =>
+													Math.max(prev - 1, 0),
+												);
+												return;
+											}
+											if (event.key === "Escape") {
+												event.preventDefault();
+												setActiveSuburbIndex(-1);
+												return;
+											}
+											if (
+												event.key === "Enter" &&
+												activeSuburbOption
+											) {
+												event.preventDefault();
+												setSelectedSuburb(
+													activeSuburbOption,
+												);
+												skipNextSuburbSearchRef.current = true;
+												setSuburbInput(
+													activeSuburbOption.locality,
+												);
+												setActiveSuburbIndex(-1);
+												applySuburbSelection(
+													activeSuburbOption.locality,
+												);
+											}
+										}}
+										placeholder="Type your suburb or postcode"
+										role="combobox"
+										aria-autocomplete="list"
+										aria-expanded={
+											!hasSavedSuburb &&
+											!suburbLoading &&
+											!suburbError &&
+											suburbSuggestions.length > 0
+										}
+										aria-controls={suburbListboxId}
+										aria-activedescendant={
+											activeSuburbOption
+												? `landing-suburb-option-${activeSuburbOption.id}`
+												: undefined
+										}
+										className={cn(
+											"min-w-0 w-full rounded-full border pl-10 pr-3 py-2 text-sm text-minuri-ocean outline-none transition",
+											hasSavedSuburb
+												? "cursor-not-allowed border-minuri-teal/70 bg-minuri-teal/5 focus:border-minuri-teal"
+												: "border-minuri-silver bg-minuri-white focus:border-minuri-teal",
+										)}
+									/>
+								</div>
+								{hasSavedSuburb ? (
+									<div className="mt-2 flex items-center justify-between gap-2">
+										<span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold text-minuri-teal">
+											<CheckCircle2
 												className="size-3.5"
 												aria-hidden
 											/>
-											Import receipt
-										</button>
+											Suburb set to{" "}
+											{journey.selectedSuburb}
+										</span>
 										<button
 											type="button"
-											onClick={() => {
-												if (!lastReceiptMeta) {
-													setLastReceiptMeta({
-														id: "LOCAL-ONLY",
-														issuedAt: new Date().toISOString(),
-													});
-												}
-												setShowReceiptPreview(true);
-											}}
-											className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-white px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/45"
+											onClick={resetSuburbSelection}
+											className="rounded-full border border-minuri-silver/80 bg-minuri-white px-2.5 py-1 text-[0.68rem] font-semibold text-minuri-slate transition-colors hover:border-minuri-teal/45 hover:text-minuri-teal"
 										>
-											<FileText
-												className="size-3.5"
-												aria-hidden
-											/>
-											Preview receipt
-										</button>
-										<button
-											type="button"
-											onClick={clearJourney}
-											className="cursor-pointer transform-none rounded-full border border-minuri-silver bg-minuri-white px-2.5 py-1 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/45"
-										>
-											Clear local data
+											Reset
 										</button>
 									</div>
-									{receiptFeedback ? (
-										<p
+								) : null}
+								{shouldShowSuburbSuggestionsPanel && (
+									<div
+										id={suburbListboxId}
+										role="listbox"
+										className="mt-2 max-h-40 overflow-y-auto rounded-xl border border-minuri-silver/50 bg-minuri-white"
+									>
+										{suburbLoading ? (
+											<div className="flex items-center gap-2 px-3 py-2.5 text-xs text-minuri-slate">
+												<Loader2 className="size-3.5 animate-spin" />
+												Loading suburbs...
+											</div>
+										) : null}
+										{!suburbLoading && suburbError ? (
+											<div className="px-3 py-2.5 text-xs text-rose-700">
+												{suburbError}
+											</div>
+										) : null}
+										{!suburbLoading &&
+										!suburbError &&
+										suburbSuggestions.length === 0 ? (
+											<div className="px-3 py-2.5 text-xs text-minuri-slate">
+												{normalizedSuburbQuery.length >
+													0 &&
+												normalizedSuburbQuery.length < 3
+													? "Keep typing to search suburbs."
+													: "No matching suburb yet."}
+											</div>
+										) : null}
+										{!suburbLoading &&
+											!suburbError &&
+											suburbSuggestions.map((option) => (
+												<button
+													key={option.id}
+													type="button"
+													role="option"
+													id={`landing-suburb-option-${option.id}`}
+													aria-selected={
+														selectedSuburb?.id ===
+															option.id ||
+														activeSuburbOption?.id ===
+															option.id
+													}
+													onMouseDown={(event) => {
+														event.preventDefault();
+													}}
+													onClick={() => {
+														setSelectedSuburb(
+															option,
+														);
+														skipNextSuburbSearchRef.current = true;
+														setSuburbInput(
+															option.locality,
+														);
+														setActiveSuburbIndex(
+															-1,
+														);
+														applySuburbSelection(
+															option.locality,
+														);
+													}}
+													className={cn(
+														"flex w-full items-start gap-2 px-3 py-2 text-left text-xs transition hover:bg-minuri-fog",
+														selectedSuburb?.id ===
+															option.id ||
+															activeSuburbOption?.id ===
+																option.id
+															? "bg-minuri-teal/10"
+															: "bg-transparent",
+													)}
+												>
+													<MapPin className="mt-0.5 size-3.5 shrink-0 text-minuri-teal" />
+													<span>
+														<span className="font-semibold text-minuri-mid">
+															{option.locality}
+														</span>
+														<span className="ml-1 text-minuri-slate">
+															{option.state}{" "}
+															{option.postcode}
+														</span>
+													</span>
+												</button>
+											))}
+									</div>
+								)}
+							</section>
+
+							<section
+								className={cn(
+									"border-t border-minuri-silver/55 pt-3",
+									journey.selectedSuburb
+										? "opacity-100"
+										: "opacity-70",
+								)}
+							>
+								<div className="flex items-start justify-between gap-2">
+									<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+										Step 2 of 3: Pick a moment
+									</h3>
+									{journey.lifeMoment ? (
+										<span className="rounded-full bg-minuri-teal/10 px-2 py-0.5 text-[0.62rem] font-semibold text-minuri-teal">
+											Selected
+										</span>
+									) : null}
+								</div>
+								{!journey.selectedSuburb ? (
+									<p className="mt-2 text-[0.72rem] text-minuri-slate">
+										Set your suburb first to unlock your
+										starting moment.
+									</p>
+								) : null}
+								<div className="mt-2.5 space-y-2">
+									{LIFE_MOMENTS.map((moment) => (
+										<div
+											key={moment.id}
 											className={cn(
-												"mt-2 text-[0.66rem]",
-												receiptFeedback.tone === "success"
-													? "text-minuri-teal"
-													: "text-minuri-coral",
+												"rounded-minuri border p-2.5",
+												journey.lifeMoment === moment.id
+													? "border-minuri-teal/50 bg-minuri-teal/6"
+													: "border-minuri-silver/55",
 											)}
 										>
-											{receiptFeedback.message}
-										</p>
-									) : null}
-								</section>
-							</>
-						) : (
-							<>
-								<section className="rounded-minuri border border-minuri-silver/65 bg-minuri-fog/60 p-3">
-									<p className="text-[0.66rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
-										Step 1 of 2
-									</p>
-									<p className="text-sm leading-relaxed text-minuri-ocean">
-										Welcome to Minuri. Let&apos;s get you
-										set up.
-									</p>
-									<p className="mt-1 text-[0.72rem] text-minuri-slate">
-										Start with your suburb so we can shape
-										your local Wellnest.
-									</p>
-								</section>
+											<div className="flex items-center justify-between gap-2">
+												<p className="text-sm font-semibold text-minuri-ocean">
+													{moment.title}
+												</p>
+												<button
+													type="button"
+													onClick={() =>
+														chooseLifeMoment(
+															moment.id,
+														)
+													}
+													disabled={
+														!journey.selectedSuburb
+													}
+													className="cursor-pointer rounded-full border border-minuri-silver bg-minuri-white px-2 py-1 text-[0.68rem] font-semibold text-minuri-ocean transition-colors hover:border-minuri-teal/45 hover:text-minuri-teal disabled:cursor-not-allowed disabled:opacity-60"
+												>
+													Choose
+												</button>
+											</div>
+										</div>
+									))}
+								</div>
+							</section>
 
-								<section className="rounded-minuri border border-minuri-teal/40 bg-minuri-white p-3">
+							<section
+								className={cn(
+									"border-t border-minuri-silver/55 pt-3",
+									journey.lifeMoment
+										? "opacity-100"
+										: "opacity-70",
+								)}
+							>
+								<div className="flex items-start justify-between gap-2">
 									<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
-										Where are you living right now?
+										Step 3 of 3: Focus topics
 									</h3>
-									<div className="mt-2 flex items-center gap-2">
-										<input
-											value={suburbInput}
-											onChange={(event) =>
-												setSuburbInput(
-													event.target.value,
-												)
-											}
-											placeholder="Enter your suburb"
-											className="min-w-0 flex-1 rounded-full border border-minuri-silver bg-minuri-white px-3 py-2 text-sm text-minuri-ocean outline-none transition focus:border-minuri-teal"
-										/>
-										<button
-											type="button"
-											onClick={persistSuburb}
-											disabled={!suburbInput.trim()}
-											className="cursor-pointer transform-none rounded-full bg-minuri-teal px-3.5 py-2 text-xs font-semibold text-primary-foreground transition-opacity hover:scale-100 hover:opacity-90"
-										>
-											Set suburb
-										</button>
-									</div>
-								</section>
-
-								<section
-									className={cn(
-										"rounded-minuri border p-3",
-										journey.selectedSuburb
-											? "border-minuri-silver/65 opacity-100"
-											: "border-minuri-silver/45 bg-minuri-fog/35 opacity-70",
-									)}
-								>
-									<div className="flex items-start justify-between gap-2">
-										<h3 className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
-											Step 2 of 2: Pick a moment
-										</h3>
-										{journey.lifeMoment ? (
-											<span className="rounded-full bg-minuri-teal/10 px-2 py-0.5 text-[0.62rem] font-semibold text-minuri-teal">
-												Selected
-											</span>
-										) : null}
-									</div>
-									{!journey.selectedSuburb ? (
-										<p className="mt-2 text-[0.72rem] text-minuri-slate">
-											Set your suburb first to unlock your
-											starting moment.
-										</p>
+									{selectedTopics.length > 0 ? (
+										<span className="rounded-full bg-minuri-teal/10 px-2 py-0.5 text-[0.62rem] font-semibold text-minuri-teal">
+											{selectedTopics.length}/5
+										</span>
 									) : null}
-									<div className="mt-2.5 space-y-2">
-										{LIFE_MOMENTS.map((moment) => (
-											<div
-												key={moment.id}
+								</div>
+								{!journey.lifeMoment ? (
+									<p className="mt-2 text-[0.72rem] text-minuri-slate">
+										Pick your life moment first, then choose
+										up to 5 areas to focus on.
+									</p>
+								) : (
+									<p className="mt-2 text-[0.72rem] text-minuri-slate">
+										Choose up to 5 topics so we can tailor
+										your page.
+									</p>
+								)}
+								<div className="mt-2.5 flex flex-wrap gap-1.5">
+									{FOCUS_TOPICS.map((topic) => {
+										const isSelected =
+											selectedTopics.includes(
+												topic.label,
+											);
+										const isDisabled =
+											!isSelected &&
+											selectedTopics.length >= 5;
+										return (
+											<button
+												key={topic.id}
+												type="button"
+												onClick={() =>
+													toggleFocusTopic(
+														topic.label,
+													)
+												}
+												disabled={
+													!journey.lifeMoment ||
+													isDisabled
+												}
 												className={cn(
-													"rounded-minuri border p-2.5",
-													journey.lifeMoment ===
-														moment.id
-														? "border-minuri-teal/50 bg-minuri-teal/6"
-														: "border-minuri-silver/55 bg-minuri-fog/40",
+													"cursor-pointer rounded-full border px-2.5 py-1 text-[0.7rem] font-semibold transition-colors",
+													isSelected
+														? "border-minuri-teal bg-minuri-teal/10 text-minuri-teal"
+														: "border-minuri-silver/70 bg-minuri-white text-minuri-ocean hover:border-minuri-teal/45",
+													(!journey.lifeMoment ||
+														isDisabled) &&
+														"cursor-not-allowed opacity-55",
 												)}
 											>
-												<div className="flex items-center justify-between gap-2">
-													<p className="text-sm font-semibold text-minuri-ocean">
-														{moment.title}
-													</p>
-													<button
-														type="button"
-														onClick={() =>
-															chooseLifeMoment(
-																moment.id,
-															)
-														}
-														disabled={
-															!journey.selectedSuburb
-														}
-														className="cursor-pointer rounded-full border border-minuri-silver bg-minuri-white px-2 py-1 text-[0.68rem] font-semibold text-minuri-ocean transition-colors hover:border-minuri-teal/45 hover:text-minuri-teal disabled:cursor-not-allowed disabled:opacity-60"
-													>
-														Choose
-													</button>
-												</div>
-												<div className="mt-2 flex items-center gap-2 text-xs">
-													<Link
-														href={moment.guideHref}
-														onClick={() =>
-															chooseLifeMoment(
-																moment.id,
-															)
-														}
-														className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full bg-minuri-teal px-3 py-1.5 font-semibold text-primary-foreground transition-opacity hover:scale-100 hover:opacity-90"
-													>
-														Start with guides
-														<ArrowUpRight
-															className="size-3.5"
-															aria-hidden
-														/>
-													</Link>
-													<Link
-														href={moment.nearMeHref}
-														onClick={() =>
-															chooseLifeMoment(
-																moment.id,
-															)
-														}
-														className="inline-flex cursor-pointer transform-none items-center gap-1 rounded-full border border-minuri-silver bg-minuri-white px-3 py-1.5 font-semibold text-minuri-ocean transition-colors hover:scale-100 hover:border-minuri-teal/45 hover:bg-minuri-fog/45"
-													>
-														Near Me
-														<ArrowUpRight
-															className="size-3.5"
-															aria-hidden
-														/>
-													</Link>
-												</div>
-											</div>
-										))}
-									</div>
-								</section>
+												{topic.label}
+											</button>
+										);
+									})}
+								</div>
+							</section>
 
-								<section className="rounded-minuri border border-minuri-teal/40 bg-minuri-teal/8 p-3">
-									<p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
-										Starter recommendation
-									</p>
-									<p className="mt-1 text-sm leading-relaxed text-minuri-ocean">
-										{journey.lifeMoment
-											? `Start with ${findLifeMoment(journey.lifeMoment)?.title ?? sentenceCaseMoment(journey.lifeMoment)} in Guides for a quick first step.`
-											: "Choose a life moment above and we will suggest your best first guide."}
-									</p>
-								</section>
+							<section className="border-t border-minuri-silver/55 pt-3">
+								<p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+									Starter recommendation
+								</p>
+								<p className="mt-1 text-sm leading-relaxed text-minuri-ocean">
+									{journey.lifeMoment
+										? `Start with ${findLifeMoment(journey.lifeMoment)?.title ?? sentenceCaseMoment(journey.lifeMoment)} in Guides for a quick first step.`
+										: "Choose a life moment above and we will suggest your best first guide."}
+								</p>
+							</section>
 
-								<section className="rounded-minuri border border-minuri-silver/50 bg-minuri-white p-3 text-[0.68rem] text-minuri-slate">
-									<p>
-										Your journey stays on this device.
-										Minuri never sees it.
+							<section className="pt-1 text-[0.68rem] text-minuri-slate">
+								<p>
+									Your journey stays on this device. Minuri
+									never sees it.
+								</p>
+							</section>
+							<section className="border-t border-minuri-silver/55 pt-3">
+								{isIntroComplete ? (
+									<>
+										<p className="text-sm leading-relaxed text-minuri-ocean">
+											You&apos;re all set. We have enough
+											context to personalize your page.
+										</p>
+										<p className="mt-1 text-[0.75rem] leading-relaxed text-minuri-slate">
+											{reflection}
+										</p>
+									</>
+								) : (
+									<p className="text-[0.75rem] leading-relaxed text-minuri-slate">
+										Complete all 3 steps to continue to your
+										personalized page.
 									</p>
-								</section>
-							</>
-						)}
+								)}
+							</section>
+							<div className="flex flex-wrap items-center gap-2">
+								<button
+									type="button"
+									onClick={goToUserPage}
+									disabled={!isIntroComplete}
+									className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-minuri-teal px-3.5 py-2 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-55"
+								>
+									Continue to your page
+									<ArrowUpRight
+										className="size-3.5"
+										aria-hidden
+									/>
+								</button>
+								<button
+									type="button"
+									onClick={clearJourney}
+									className="inline-flex cursor-pointer rounded-full border border-minuri-silver bg-minuri-white px-3 py-1.5 text-xs font-semibold text-minuri-ocean transition-colors hover:border-minuri-teal/45"
+								>
+									Restart setup
+								</button>
+							</div>
+						</>
 					</div>
 				</div>
 			</aside>
-
-			{showReceiptPreview ? (
-				<div
-					className="fixed inset-0 z-50 grid place-items-center bg-minuri-ocean/40 p-4"
-					role="presentation"
-					onClick={() => setShowReceiptPreview(false)}
-				>
-					<div
-						className="max-h-[92dvh] w-full max-w-3xl overflow-y-auto rounded-[1.35rem] border border-minuri-silver/70 bg-minuri-fog p-3 md:p-4"
-						role="dialog"
-						aria-modal="true"
-						aria-label="Journey receipt preview"
-						onClick={(event) => event.stopPropagation()}
-					>
-						<div className="mb-3 flex items-center justify-end">
-							<button
-								type="button"
-								onClick={() => setShowReceiptPreview(false)}
-								className="inline-flex size-8 items-center justify-center rounded-full border border-minuri-silver/70 bg-minuri-white text-minuri-ocean transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
-								aria-label="Close receipt preview"
-							>
-								<X className="size-4" aria-hidden />
-							</button>
-						</div>
-						<LandingJourneyReceipt
-							journey={journey}
-							receiptId={lastReceiptMeta?.id ?? "LOCAL-ONLY"}
-							issuedAt={lastReceiptMeta?.issuedAt ?? "Not exported yet"}
-						/>
-					</div>
-				</div>
-			) : null}
 		</>
 	);
 }
