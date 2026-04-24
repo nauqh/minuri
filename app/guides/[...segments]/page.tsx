@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { notFound, redirect } from "next/navigation";
 
 import { GUIDE_ARCS, GUIDES } from "@/content/guides";
@@ -52,7 +53,9 @@ export default async function GuidesSegmentsPage({
         if (arcMatch) {
             return (
                 <>
-                    <GuidesLibraryView mode="library" initialArc={arcMatch.slug} />
+                    <Suspense fallback={null}>
+                        <GuidesLibraryView mode="library" initialArc={arcMatch.slug} />
+                    </Suspense>
                     <ScrollToTopButton trackedSectionIds={[]} />
                 </>
             );
