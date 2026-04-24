@@ -243,11 +243,36 @@
 a.minuri-link-underline:hover::after,
 a.minuri-link-underline:focus-visible::after,
 a:hover .minuri-link-underline::after,
-a:focus-visible .minuri-link-underline::after {
+a:focus-visible .minuri-link-underline::after,
+.minuri-link-underline-trigger:hover .minuri-link-underline::after,
+.minuri-link-underline-trigger:focus-within .minuri-link-underline::after {
 	transform: scaleX(1);
 }
+
+/* Multiline-safe underline: each wrapped line draws left-to-right */
+.minuri-link-underline-multiline {
+	display: inline;
+	text-decoration: none;
+	background-image: linear-gradient(currentColor, currentColor);
+	background-repeat: no-repeat;
+	background-position: 0 100%;
+	background-size: 0% 2px;
+	padding-bottom: 1px;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
+	transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.minuri-link-underline-trigger:hover .minuri-link-underline-multiline,
+.minuri-link-underline-trigger:focus-within .minuri-link-underline-multiline {
+	background-size: 100% 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.minuri-link-underline::after {
+		transition-duration: 0.01ms;
+	}
+	.minuri-link-underline-multiline {
 		transition-duration: 0.01ms;
 	}
 }

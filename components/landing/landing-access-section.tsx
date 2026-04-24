@@ -17,12 +17,12 @@ export function LandingAccessSection() {
 				</FadeUp>
 				<FadeUp delay={0.06}>
 					<h2 className="landing-section-heading md:text-5xl">
-						Stop adulting alone.
+						Stop adulting alone
 					</h2>
 				</FadeUp>
 				<FadeUp delay={0.12}>
-					<p className="landing-section-subheading mt-4 max-w-xl md:text-base">
-						What&apos;s stuck? We&apos;ll email clear next steps.
+					<p className="landing-section-subheading">
+						Reach out - wherever you are, we&apos;re happy to help.
 					</p>
 				</FadeUp>
 				<FadeUp

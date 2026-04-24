@@ -4,41 +4,53 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import type { Guide } from "@/content/guides";
-import type { GuideFilter, GuideOrigin } from "@/lib/guides";
+import type {
+    GuideArcFilter,
+    GuideOrigin,
+    GuideTopicFilter,
+} from "@/lib/guides";
 import { Button } from "@/components/ui/button";
 import { GuidesShell } from "@/components/guides/guides-shell";
-import { GuideWidget } from "@/components/guides/guide-widget";
 import { RelatedGuides } from "@/components/guides/related-guides";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
-import {
-    getCategoryMeta,
-    getRelatedGuides,
-} from "@/lib/guides";
+import { getArcMeta, getNextGuide, getTopicMeta } from "@/lib/guides";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 
 type GuideDetailViewProps = {
     guide: Guide;
     backHref: string;
-    filter: GuideFilter;
+    arcFilter: GuideArcFilter;
+    topicFilter: GuideTopicFilter;
     query: string;
     from: GuideOrigin;
 };
 
+const SECTION_STYLE_MAP = {
+    moment: "",
+    feeling: "",
+    reveal: "rounded-[1.25rem] border border-minuri-teal/30 bg-minuri-mist p-5",
+    "how-it-works": "",
+    bridge: "rounded-[1.25rem] border border-minuri-silver/50 bg-minuri-fog p-5",
+    "next-chapter": "",
+} as const;
+
 export function GuideDetailView({
     guide,
     backHref,
-    filter,
+    arcFilter,
+    topicFilter,
     query,
     from,
 }: GuideDetailViewProps) {
     const { bookmarks, isBookmarked, toggleBookmark } = useGuideBookmarks();
-    const relatedGuides = getRelatedGuides(guide.slug, 2);
-    const categoryMeta = getCategoryMeta(guide.category);
+    const arcMeta = getArcMeta(guide.arc);
+    const topicMeta = getTopicMeta(guide.topic);
+    const nextGuide = getNextGuide(guide);
 
     return (
         <GuidesShell
-            title="Read and act on one problem at a time"
-            description="Step-by-step guides to help you handle real-life problems with confidence."
+            title="Read one chapter, take one action"
+            description="Narrative guides designed for your first months of independent living."
         >
             <article className="rounded-[2rem] bg-minuri-white p-6 shadow-sm ring-1 ring-minuri-silver/40 md:p-8">
                 <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
@@ -53,10 +65,13 @@ export function GuideDetailView({
 
                         <div className="mt-5 flex flex-wrap items-center gap-3">
                             <span className="rounded-full bg-minuri-mist px-3 py-2 text-xs font-medium text-minuri-mid">
-                                {categoryMeta?.label ?? guide.category}
+                                {arcMeta?.timeframeLabel} · {arcMeta?.name}
                             </span>
                             <span className="rounded-full bg-minuri-fog px-3 py-2 text-xs text-minuri-slate">
-                                {guide.readMinutes} min read
+                                {topicMeta?.name}
+                            </span>
+                            <span className="rounded-full bg-minuri-fog px-3 py-2 text-xs text-minuri-slate">
+                                {guide.readingTimeMin} min read
                             </span>
                         </div>
 
@@ -75,87 +90,92 @@ export function GuideDetailView({
                     />
                 </div>
 
-                <div className="mt-10 space-y-10">
+                <div className="mt-10 space-y-8">
                     {guide.sections.map((section) => (
-                        <section key={section.heading}>
+                        <section
+                            key={section.sectionKey}
+                            className={SECTION_STYLE_MAP[section.sectionKey]}
+                        >
                             <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
-                                {section.heading}
+                                {section.title}
                             </h2>
-
                             <div className="mt-4 space-y-4">
-                                {section.body.map((paragraph) => (
+                                {section.body.map((paragraph, index) => (
                                     <p
                                         key={paragraph}
                                         className="text-sm leading-6 text-minuri-slate"
                                     >
-                                        {paragraph}
+                                        {section.sectionKey === "moment" && index === 0 ? (
+                                            <span>
+                                                <span className="mr-1 inline-block align-top font-hero-serif text-4xl leading-none text-minuri-ocean">
+                                                    {paragraph.charAt(0)}
+                                                </span>
+                                                {paragraph.slice(1)}
+                                            </span>
+                                        ) : (
+                                            paragraph
+                                        )}
                                     </p>
                                 ))}
                             </div>
 
-                            {section.checklist ? (
-                                <ul className="mt-5 space-y-3 rounded-[1.5rem] bg-minuri-fog p-5 text-sm leading-6 text-minuri-slate">
-                                    {section.checklist.map((item) => (
-                                        <li key={item} className="flex gap-3">
-                                            <span
-                                                className="mt-2 size-2 rounded-full bg-minuri-teal"
-                                                aria-hidden="true"
-                                            />
-                                            <span>{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                            {section.sectionKey === "bridge" ? (
+                                <div className="mt-5">
+                                    <Button asChild className="rounded-full px-5 text-xs">
+                                        <Link href={guide.nearMeDeeplink}>
+                                            Explore Near Me for this topic
+                                        </Link>
+                                    </Button>
+                                </div>
                             ) : null}
                         </section>
                     ))}
                 </div>
 
-                {guide.widget ? (
-                    <div className="mt-12">
-                        <GuideWidget widget={guide.widget} />
-                    </div>
-                ) : null}
-
-                {guide.cta ? (
+                {nextGuide ? (
                     <section className="mt-12 rounded-[2rem] bg-minuri-mist p-6 md:p-8">
                         <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
-                            Ready for the next step?
+                            Up next in this arc
                         </h2>
                         <p className="mt-3 max-w-2xl text-sm leading-6 text-minuri-slate">
-                            Small steps lead to big changes. Start with one today.
+                            {nextGuide.title}
                         </p>
-
                         <div className="mt-5">
                             <Button asChild className="rounded-full px-5 text-xs">
-                                <Link href={guide.cta.href}>{guide.cta.label}</Link>
+                                <Link href={`/guides/${nextGuide.arc}/${nextGuide.slug}`}>
+                                    Read next chapter
+                                </Link>
                             </Button>
                         </div>
                     </section>
                 ) : null}
 
-                <section className="mt-12">
-                    <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
-                        Further reading
-                    </h2>
-                    <div className="mt-5 grid gap-3">
-                        {guide.sourceLinks.map((link) => (
-                            <a
-                                key={link.href}
-                                href={link.href}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-2 rounded-[1.25rem] bg-minuri-fog px-4 py-3 text-xs font-medium text-minuri-mid hover:bg-minuri-ice"
-                            >
-                                {link.label}
-                                <ExternalLink className="size-4" aria-hidden="true" />
-                            </a>
-                        ))}
-                    </div>
-                </section>
+                {guide.sourceLinks.length > 0 ? (
+                    <section className="mt-12">
+                        <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
+                            Further reading
+                        </h2>
+                        <div className="mt-5 grid gap-3">
+                            {guide.sourceLinks.map((link) => (
+                                <a
+                                    key={link.href}
+                                    href={link.href}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center gap-2 rounded-[1.25rem] bg-minuri-fog px-4 py-3 text-xs font-medium text-minuri-mid hover:bg-minuri-ice"
+                                >
+                                    {link.label}
+                                    <ExternalLink className="size-4" aria-hidden="true" />
+                                </a>
+                            ))}
+                        </div>
+                    </section>
+                ) : null}
 
                 <RelatedGuides
-                    guides={relatedGuides}
-                    filter={filter}
+                    guide={guide}
+                    arcFilter={arcFilter}
+                    topicFilter={topicFilter}
                     query={query}
                     from={from}
                     bookmarkedSlugs={bookmarks}

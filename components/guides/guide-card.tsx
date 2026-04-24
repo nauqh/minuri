@@ -3,89 +3,99 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-    ArrowRight,
-    FileText,
-    HeartPulse,
-    Map,
-    Wallet,
-    Users,
-    type LucideIcon,
+	Compass,
+	HeartPulse,
+	Home,
+	Sandwich,
+	Users,
+	type LucideIcon,
 } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 
-import type { Guide, GuideCategory } from "@/content/guides";
-import { Button } from "@/components/ui/button";
-import { getCategoryMeta } from "@/lib/guides";
+import type { Guide, GuideTopicSlug } from "@/content/guides";
+import { getArcMeta, getTopicMeta } from "@/lib/guides";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 
-const CATEGORY_ICONS: Record<GuideCategory, LucideIcon> = {
-    setup: FileText,
-    survive: Wallet,
-    "get-around": Map,
-    health: HeartPulse,
-    connect: Users,
+const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
+	"food-eating": Sandwich,
+	"getting-around": Compass,
+	"health-wellbeing": HeartPulse,
+	"home-admin": Home,
+	"social-belonging": Users,
 };
 
 type GuideCardProps = {
-    guide: Guide;
-    href: string;
-    bookmarked: boolean;
-    onToggleBookmark: (slug: string) => void;
+	guide: Guide;
+	href: string;
+	bookmarked: boolean;
+	onToggleBookmark: (slug: string) => void;
+	animationDelay?: number;
 };
 
 export function GuideCard({
-    guide,
-    href,
-    bookmarked,
-    onToggleBookmark,
+	guide,
+	href,
+	bookmarked,
+	onToggleBookmark,
+	animationDelay = 0,
 }: GuideCardProps) {
-    const categoryMeta = getCategoryMeta(guide.category);
-    const Icon = CATEGORY_ICONS[guide.category];
+	const topicMeta = getTopicMeta(guide.topic);
+	const arcMeta = getArcMeta(guide.arc);
+	const Icon = TOPIC_ICONS[guide.topic];
+	const prefersReducedMotion = useReducedMotion();
+	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-    return (
-        <article className="flex h-full flex-col rounded-[2rem] bg-minuri-white p-5 shadow-sm ring-1 ring-minuri-silver/40 md:p-6">
-            <div className="relative mb-5 aspect-video overflow-hidden rounded-[1.5rem] bg-minuri-mist">
-                <Image
-                    src={guide.thumbnail.src}
-                    alt={guide.thumbnail.alt}
-                    fill
-                    sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-                    className="object-cover"
-                />
-            </div>
-            <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-2 rounded-full bg-minuri-mist px-3 py-2 text-xs font-medium text-minuri-mid">
-                    <Icon className="size-4" aria-hidden="true" />
-                    <span>{categoryMeta?.label ?? guide.category}</span>
-                </div>
+	return (
+		<motion.article
+			className="minuri-link-underline-trigger group relative flex h-full cursor-pointer flex-col pt-4"
+			initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 18 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, amount: 0.2 }}
+			transition={{
+				duration: prefersReducedMotion ? 0.01 : 0.5,
+				delay: prefersReducedMotion ? 0 : animationDelay,
+				ease: entranceEase,
+			}}
+		>
+			<Link
+				href={href}
+				aria-label={`Read guide: ${guide.title}`}
+				className="absolute inset-0 z-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60"
+			/>
+			<div className="relative mb-5 h-52 cursor-pointer overflow-hidden rounded-sm bg-minuri-fog md:h-56">
+				<Image
+					src={guide.thumbnailUrl}
+					alt={`${guide.title} thumbnail`}
+					fill
+					sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+					className="object-cover"
+				/>
+			</div>
+			<div className="relative z-10 flex cursor-pointer items-start justify-between gap-4">
+				<div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-minuri-mid">
+					<Icon className="size-4" aria-hidden="true" />
+					<span>{topicMeta?.name ?? guide.topic}</span>
+				</div>
 
-                <BookmarkButton
-                    active={bookmarked}
-                    onToggle={() => onToggleBookmark(guide.slug)}
-                />
-            </div>
+				<BookmarkButton
+					active={bookmarked}
+					onToggle={() => onToggleBookmark(guide.slug)}
+				/>
+			</div>
 
-            <h2 className="mt-5 text-xl font-semibold tracking-tight text-minuri-ocean">
-                {guide.title}
-            </h2>
+			<h2 className="relative z-10 w-fit cursor-pointer pb-1 font-hero-serif text-xl leading-tight text-minuri-ocean">
+				<span className="minuri-link-underline-multiline">{guide.title}</span>
+			</h2>
 
-            <div className="mt-3 flex items-center gap-2 text-xs text-minuri-slate">
-                <span className="rounded-full bg-minuri-fog px-3 py-1">
-                    {guide.readMinutes} min read
-                </span>
-            </div>
+			<div className="relative z-10 mt-3 flex cursor-pointer items-center gap-2 text-xs text-minuri-slate">
+				<span>{guide.readingTimeMin} min read</span>
+				<span aria-hidden="true">·</span>
+				<span>{arcMeta?.timeframeLabel ?? guide.arc}</span>
+			</div>
 
-            <p className="mt-4 flex-1 text-sm leading-6 text-minuri-slate">
-                {guide.summary}
-            </p>
-
-            <div className="mt-6">
-                <Button asChild className="rounded-full px-5 text-xs">
-                    <Link href={href}>
-                        Read guide
-                        <ArrowRight className="size-4" aria-hidden="true" />
-                    </Link>
-                </Button>
-            </div>
-        </article>
-    );
+			<p className="relative z-10 mt-4 flex-1 cursor-pointer text-base leading-7">
+				{guide.summary}
+			</p>
+		</motion.article>
+	);
 }

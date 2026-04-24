@@ -21,7 +21,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-	title: "Living independently - Minuri",
+	title: "Your guides for living independently | Minuri",
 	description:
 		"Proactive wellbeing for young adults living independently: reminders, guides, habits, and Care Circle.",
 	icons: {
@@ -37,6 +37,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
+			data-scroll-behavior="smooth"
 			className={cn(
 				"h-full",
 				"antialiased",

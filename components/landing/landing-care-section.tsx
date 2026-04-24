@@ -138,9 +138,7 @@ export function LandingCareSection() {
 						<p className="landing-section-kicker">
 							Our core support areas
 						</p>
-						<h2 className="landing-section-heading">
-							How we help
-						</h2>
+						<h2 className="landing-section-heading">How we help</h2>
 						<p className="landing-section-subheading">
 							Our core support areas
 						</p>

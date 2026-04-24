@@ -2,13 +2,29 @@
 
 import { useState } from "react";
 
-import type { Guide } from "@/content/guides";
-import { getWidgetData } from "@/lib/guides";
 import { cn } from "@/lib/utils";
 
-type GuideWidgetProps = {
-    widget: NonNullable<Guide["widget"]>;
+type GuideWidgetItem = {
+    id: string;
+    name: string;
+    area: string;
+    group: string;
+    detail: string;
+    note: string;
 };
+
+type GuideWidgetProps = {
+    widget: {
+        key: string;
+        title: string;
+        description: string;
+    };
+};
+
+function getWidgetData(key: string): GuideWidgetItem[] | undefined {
+    void key;
+    return undefined;
+}
 
 export function GuideWidget({ widget }: GuideWidgetProps) {
     const items = getWidgetData(widget.key);

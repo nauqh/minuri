@@ -35,7 +35,7 @@ export function LandingFooter() {
 									/>
 								</span>
 							</h2>
-							<p className="mt-3 text-sm text-minuri-slate md:text-base">
+							<p className="mt-3 text-[0.95rem] font-medium leading-relaxed text-minuri-ocean/70 md:text-base">
 								Reach out — wherever you are, we&apos;re happy
 								to help.
 							</p>
@@ -44,34 +44,34 @@ export function LandingFooter() {
 				</div>
 			</div>
 
-			<div className="relative z-20 border-t border-minuri-silver/90">
-				<div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-xs text-minuri-slate md:flex-row md:items-center md:justify-between md:px-8 md:py-9 md:text-sm">
-					<p>
+			<div className="relative z-20 border-t border-minuri-silver/70">
+				<div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-[0.78rem] tracking-[0.01em] text-minuri-ocean/70 md:flex-row md:items-center md:justify-between md:px-8 md:py-9 md:text-[0.84rem]">
+					<p className="font-medium">
 						© {new Date().getFullYear()} Minuri · Melbourne,
 						Australia
 					</p>
 					<div className="flex items-center gap-5">
 						<Link
 							href="mailto:hello@minuri.app"
-							className="minuri-link-underline transition-colors hover:text-minuri-teal"
+							className="minuri-link-underline font-semibold text-minuri-ocean/80 transition-colors hover:text-minuri-teal"
 						>
 							Email
 						</Link>
 						<Link
 							href="#"
-							className="minuri-link-underline transition-colors hover:text-minuri-teal"
+							className="minuri-link-underline font-semibold text-minuri-ocean/80 transition-colors hover:text-minuri-teal"
 						>
 							LinkedIn
 						</Link>
 						<Link
 							href="#"
-							className="minuri-link-underline transition-colors hover:text-minuri-teal"
+							className="minuri-link-underline font-semibold text-minuri-ocean/80 transition-colors hover:text-minuri-teal"
 						>
 							Instagram
 						</Link>
 						<Link
 							href="#contact"
-							className="minuri-link-underline transition-colors hover:text-minuri-teal"
+							className="minuri-link-underline font-semibold text-minuri-ocean/80 transition-colors hover:text-minuri-teal"
 						>
 							Contact
 						</Link>

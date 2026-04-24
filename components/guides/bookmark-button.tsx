@@ -24,8 +24,8 @@ export function BookmarkButton({
             aria-pressed={active}
             aria-label={active ? "Remove bookmark" : "Save guide"}
             className={cn(
-                "size-11 rounded-full border border-minuri-silver/80 bg-minuri-white text-minuri-slate hover:bg-minuri-mist",
-                active && "border-minuri-teal/50 text-minuri-teal",
+                "size-9 rounded-full border border-minuri-silver/70 bg-transparent text-minuri-slate hover:bg-minuri-fog",
+                active && "border-minuri-teal/40 text-minuri-teal",
                 className,
             )}
             onClick={(event) => {

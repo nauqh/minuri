@@ -7,93 +7,94 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 type GuidesShellProps = {
-    title: string;
-    description: string;
-    children: ReactNode;
+	title: string;
+	description: string;
+	children: ReactNode;
 };
 
 export function GuidesShell({
-    title,
-    description,
-    children,
+	title,
+	description,
+	children,
 }: GuidesShellProps) {
-    const pathname = usePathname();
+	const pathname = usePathname();
 
-    const links = [
-        {
-            href: "/",
-            label: "Home",
-            active: pathname === "/",
-        },
-        {
-            href: "/guides",
-            label: "Guides",
-            active:
-                pathname === "/guides" ||
-                (pathname.startsWith("/guides/") &&
-                    pathname !== "/guides/bookmarks"),
-        },
-        {
-            href: "/guides/bookmarks",
-            label: "My Bookmarks",
-            active: pathname === "/guides/bookmarks",
-        },
-        {
-            href: "/near-me",
-            label: "Near Me",
-            active: pathname === "/near-me",
-        },
-    ] as const;
+	const links = [
+		{
+			href: "/",
+			label: "Home",
+			active: pathname === "/",
+		},
+		{
+			href: "/guides",
+			label: "Guides",
+			active:
+				pathname === "/guides" ||
+				(pathname.startsWith("/guides/") &&
+					pathname !== "/guides/bookmarks"),
+		},
+		{
+			href: "/guides/bookmarks",
+			label: "My Bookmarks",
+			active: pathname === "/guides/bookmarks",
+		},
+		{
+			href: "/near-me",
+			label: "Near Me",
+			active: pathname === "/near-me",
+		},
+	] as const;
 
-    return (
-        <div className="min-h-screen bg-minuri-fog text-foreground">
-            <header className="z-40 border-b border-minuri-silver/70 bg-minuri-white/90 backdrop-blur">
-                <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 md:px-8 md:py-5">
-                    <div className="flex items-center justify-between gap-4">
-                        <Link
-                            href="/"
-                            className="text-xl font-semibold tracking-tight text-minuri-ocean"
-                        >
-                            Minuri
-                        </Link>
-                        <nav
-                            aria-label="Guides navigation"
-                            className="flex flex-wrap justify-end gap-2"
-                        >
-                            {links.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={cn(
-                                        "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                                        link.active
-                                            ? "bg-minuri-teal text-primary-foreground"
-                                            : "bg-minuri-mist text-minuri-slate hover:bg-minuri-ice",
-                                    )}
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </nav>
-                    </div>
+	return (
+		<div className="min-h-screen bg-minuri-white text-foreground">
+			<header className="relative z-40 bg-minuri-white">
+				<div className="relative mx-auto max-w-7xl px-4 pb-10 pt-4 md:px-8">
+					<div className="mx-auto flex h-12 w-full items-center justify-between bg-minuri-white md:h-14 md:rounded-full">
+						<Link
+							href="/"
+							className="z-10 flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean"
+						>
+							<span className="uppercase">Minuri</span>
+						</Link>
+						<nav
+							aria-label="Guides navigation"
+							className="z-10 ml-10 hidden items-center gap-9 text-sm font-medium text-minuri-ocean md:flex"
+						>
+							{links.map((link) => (
+								<Link
+									key={link.href}
+									href={link.href}
+									className={cn(
+										"minuri-link-underline inline-flex h-10 items-center whitespace-nowrap",
+										link.active
+											? "text-minuri-ocean"
+											: "text-minuri-ocean/70 transition-colors duration-200 hover:text-minuri-ocean",
+									)}
+								>
+									{link.label}
+								</Link>
+							))}
+						</nav>
+					</div>
+					<div className="mx-auto max-w-7xl px-0 pb-1 pt-7 md:pt-9">
+						<div className="pt-8 text-center md:pt-10">
+							<p className="landing-section-kicker">
+								First-time guides
+							</p>
+							<h1 className="landing-section-heading md:text-6xl">
+								{title}
+							</h1>
+							<p className="landing-section-subheading">
+								{description}
+							</p>
+						</div>
+					</div>
+				</div>
+			</header>
 
-                    <div className="rounded-[2rem] bg-minuri-white p-6 shadow-sm ring-1 ring-minuri-silver/40 md:p-8">
-                        <p className="text-xs font-medium uppercase tracking-[0.18em] text-minuri-teal">
-                            Knowledge is Power · Your First-time Guides
-                        </p>
-                        <h1 className="mt-3 text-2xl font-semibold tracking-tight text-minuri-ocean md:text-4xl">
-                            {title}
-                        </h1>
-                        <p className="mt-4 max-w-3xl text-sm leading-6 text-minuri-slate md:text-base">
-                            {description}
-                        </p>
-                    </div>
-                </div>
-            </header>
-
-            <main className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-10">
-                {children}
-            </main>
-        </div>
-    );
+			<main className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
+				{children}
+			</main>
+		</div>
+	);
 }

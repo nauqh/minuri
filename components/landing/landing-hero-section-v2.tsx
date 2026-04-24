@@ -336,7 +336,7 @@ export function LandingHeroSectionV2({
 					<div className="mt-0 grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex flex-col md:h-full">
 							<motion.p
-								className="mt-4 text-2xl font-black uppercase tracking-tight text-minuri-ocean md:text-3xl"
+								className="mt-4 text-2xl font-semibold uppercase tracking-[0.12em] text-minuri-ocean"
 								variants={{
 									hidden: {
 										opacity: 0,
