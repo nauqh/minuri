@@ -1,5 +1,7 @@
 "use client";
 
+import { GUIDES, GUIDE_ARCS } from "@/content/guides";
+
 export const LANDING_STATE_VERSION = 1;
 const BOOKMARKS_KEY = "minuri:guide-bookmarks:v1";
 
@@ -16,9 +18,24 @@ export const LANDING_KEYS = {
 	stateVersion: "minuri.landingStateVersion",
 } as const;
 
-type ArcName = "week1" | "month1" | "month3";
+type ArcName = "day1" | "week1" | "month1";
 
 export type ArcProgress = Record<ArcName, number>;
+
+function maxGuidesInAnyArc(): number {
+	let max = 1;
+	for (const arc of GUIDE_ARCS) {
+		const n = GUIDES.filter((g) => g.arc === arc.slug).length;
+		if (n > max) max = n;
+	}
+	return max;
+}
+
+function clampArcSlotValue(value: number): number {
+	const cap = maxGuidesInAnyArc();
+	if (!Number.isFinite(value) || value < 0) return 0;
+	return Math.min(cap, Math.round(value));
+}
 
 export type LandingJourneyState = {
 	version: number;
@@ -87,11 +104,6 @@ function readUnknownArray(key: string): unknown[] {
 	return Array.isArray(parsed) ? parsed : [];
 }
 
-function clampToCount(value: number) {
-	if (!Number.isFinite(value) || value < 0) return 0;
-	return Math.min(5, Math.round(value));
-}
-
 function clampToNonNegativeInteger(value: number) {
 	if (!Number.isFinite(value) || value < 0) return 0;
 	return Math.round(value);
@@ -115,17 +127,25 @@ function normalizeUnknownArray(value: unknown): unknown[] {
 	return Array.isArray(value) ? value : [];
 }
 
-function normalizeArcProgress(value: unknown, readGuidesCount: number): ArcProgress {
-	const fallback = clampToCount(readGuidesCount);
+function normalizeArcProgress(value: unknown, _readGuidesCount: number): ArcProgress {
 	if (!value || typeof value !== "object") {
-		return { week1: fallback, month1: 0, month3: 0 };
+		return { day1: 0, week1: 0, month1: 0 };
 	}
 
 	const record = value as Record<string, unknown>;
+	if (record.day1 !== undefined || "day1" in record) {
+		return {
+			day1: clampArcSlotValue(Number(record.day1 ?? 0)),
+			week1: clampArcSlotValue(Number(record.week1 ?? 0)),
+			month1: clampArcSlotValue(Number(record.month1 ?? 0)),
+		};
+	}
+
+	// Legacy keys: old week-1 / month-1 / month-3 arcs
 	return {
-		week1: clampToCount(Number(record.week1 ?? record["week-1"] ?? fallback)),
-		month1: clampToCount(Number(record.month1 ?? record["month-1"] ?? 0)),
-		month3: clampToCount(Number(record.month3 ?? record["month-3"] ?? 0)),
+		day1: clampArcSlotValue(Number(record.week1 ?? record["week-1"] ?? 0)),
+		week1: clampArcSlotValue(Number(record.month1 ?? record["month-1"] ?? 0)),
+		month1: clampArcSlotValue(Number(record.month3 ?? record["month-3"] ?? 0)),
 	};
 }
 
@@ -222,22 +242,16 @@ function makeReceipt(journey: LandingJourneyState): JourneyReceiptShape {
 function readArcProgress(readGuidesCount: number): ArcProgress {
 	const parsed = parseJson(window.localStorage.getItem(LANDING_KEYS.arcProgress));
 	const defaults: ArcProgress = {
+		day1: 0,
 		week1: 0,
 		month1: 0,
-		month3: 0,
 	};
 
 	if (!parsed || typeof parsed !== "object") {
-		const fallback = clampToCount(readGuidesCount);
-		return { ...defaults, week1: fallback };
+		return normalizeArcProgress(null, readGuidesCount);
 	}
 
-	const record = parsed as Record<string, unknown>;
-	return {
-		week1: clampToCount(Number(record.week1 ?? record["week-1"] ?? 0)),
-		month1: clampToCount(Number(record.month1 ?? record["month-1"] ?? 0)),
-		month3: clampToCount(Number(record.month3 ?? record["month-3"] ?? 0)),
-	};
+	return normalizeArcProgress(parsed, readGuidesCount);
 }
 
 export function readLandingJourneyState(): LandingJourneyState {
@@ -253,7 +267,7 @@ export function readLandingJourneyState(): LandingJourneyState {
 			savedLocations: [],
 			topicHistory: [],
 			readGuides: [],
-			arcProgress: { week1: 0, month1: 0, month3: 0 },
+			arcProgress: { day1: 0, week1: 0, month1: 0 },
 		};
 	}
 

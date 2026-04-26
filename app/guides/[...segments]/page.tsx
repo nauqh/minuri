@@ -73,8 +73,12 @@ export default async function GuidesSegmentsPage({
         const [arc, slug] = segments;
         const guide = getGuideBySlug(slug);
 
-        if (!guide || guide.arc !== arc) {
+        if (!guide) {
             notFound();
+        }
+
+        if (guide.arc !== arc) {
+            redirect(`/guides/${guide.arc}/${slug}`);
         }
 
         const incomingSearchParams = await searchParams;

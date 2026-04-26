@@ -3,14 +3,14 @@
   "slug": "your-first-grocery-run",
   "title": "Your First Grocery Run",
   "summary": "Build a low-stress first-week food system without overspending.",
-  "arc": "week-1",
+  "arc": "day-1",
   "arcOrder": 1,
   "topic": "food-eating",
   "readingTimeMin": 4,
   "isPublished": true,
   "isFeatured": true,
   "markdownPath": "/guides-content/food-eating/your-first-grocery-run.json",
-  "nextGuideSlug": "cheap-eats-when-broke",
+  "nextGuideSlug": "getting-myki-and-surviving-ptv",
   "searchTerms": [
     "grocery",
     "budget",
@@ -50,7 +50,7 @@
     {
       "sectionKey": "next-chapter",
       "title": "Next Chapter",
-      "value": "Next: Cheap Eats When You're Broke - for nights when cooking is not realistic."
+      "value": "Next: Getting a Myki and surviving PTV — so you can move without guessing."
     }
   ]
 }

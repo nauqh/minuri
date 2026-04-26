@@ -5,7 +5,7 @@ export default function NotFound() {
 		<main className="flex min-h-full flex-1 flex-col items-center justify-center bg-minuri-fog px-6 py-20 text-center md:py-28">
 			<span className="sr-only">404 — Page not found</span>
 			<p
-				className="font-mono text-[clamp(4.5rem,18vw,10rem)] font-medium leading-none tracking-tight text-minuri-slate/25"
+				className="text-[clamp(4.5rem,18vw,10rem)] font-medium leading-none tracking-tight text-minuri-slate/25"
 				aria-hidden
 			>
 				404

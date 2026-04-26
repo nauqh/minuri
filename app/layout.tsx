@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
 import {
 	Fraunces,
-	Geist_Mono,
 	Inter,
 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
 
 const fraunces = Fraunces({
 	subsets: ["latin"],
@@ -40,7 +34,6 @@ export default function RootLayout({
 			className={cn(
 				"h-full",
 				"antialiased",
-				geistMono.variable,
 				fraunces.variable,
 				"font-sans",
 				inter.variable,

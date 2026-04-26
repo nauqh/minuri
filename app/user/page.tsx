@@ -19,7 +19,7 @@ const EMPTY_STATE: LandingJourneyState = {
 	savedLocations: [],
 	topicHistory: [],
 	readGuides: [],
-	arcProgress: { week1: 0, month1: 0, month3: 0 },
+	arcProgress: { day1: 0, week1: 0, month1: 0 },
 };
 
 function sentenceCase(value: string | null) {

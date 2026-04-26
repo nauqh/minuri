@@ -1,8 +1,11 @@
+import findingYourWayWeekOneGuide from "@/public/guides-content/getting-around/finding-your-way-around-melbourne-in-week-one.json";
 import buildingALocalRoutineGuide from "@/public/guides-content/getting-around/building-a-local-routine.json";
+import yourFirst48HoursGuide from "@/public/guides-content/home-admin/your-first-48-hours-checklist.json";
 import budgetingGuide from "@/public/guides-content/home-admin/budgeting-on-what-you-actually-earn.json";
 import cheapEatsGuide from "@/public/guides-content/food-eating/cheap-eats-when-broke.json";
 import cookingMealsGuide from "@/public/guides-content/food-eating/cooking-5-meals-youll-actually-eat.json";
 import crisisLinesGuide from "@/public/guides-content/health-wellbeing/crisis-lines-you-can-actually-call.json";
+import whenYouDontKnowAnyoneGuide from "@/public/guides-content/social-belonging/when-you-dont-know-anyone-yet.json";
 import findingCommunityGuide from "@/public/guides-content/social-belonging/finding-your-community.json";
 import findingGpGuide from "@/public/guides-content/health-wellbeing/finding-a-gp-before-you-need-one.json";
 import mykiGuide from "@/public/guides-content/getting-around/getting-myki-and-surviving-ptv.json";
@@ -23,7 +26,7 @@ export type GuideTopicSlug =
     | "home-admin"
     | "social-belonging";
 
-export type GuideArcSlug = "week-1" | "month-1" | "month-3";
+export type GuideArcSlug = "day-1" | "week-1" | "month-1";
 
 export type NarrativeSectionKey =
     | "moment"
@@ -92,29 +95,32 @@ export const GUIDE_TOPICS: GuideTopic[] = [
 
 export const GUIDE_ARCS: GuideArc[] = [
     {
-        slug: "week-1",
-        name: "You Just Moved In",
-        timeframeLabel: "Week 1",
+        slug: "day-1",
+        name: "Your first day",
+        timeframeLabel: "Day 1",
         sortOrder: 1,
     },
     {
-        slug: "month-1",
-        name: "Getting Set Up",
-        timeframeLabel: "Month 1",
+        slug: "week-1",
+        name: "Your first week",
+        timeframeLabel: "Week 1",
         sortOrder: 2,
     },
     {
-        slug: "month-3",
-        name: "Finding Your Rhythm",
-        timeframeLabel: "Month 3",
+        slug: "month-1",
+        name: "Your first month",
+        timeframeLabel: "Month 1",
         sortOrder: 3,
     },
 ];
 
 const GUIDE_FILES: GuideJson[] = [
     firstGroceryGuide as GuideJson,
-    cheapEatsGuide as GuideJson,
+    yourFirst48HoursGuide as GuideJson,
+    whenYouDontKnowAnyoneGuide as GuideJson,
     mykiGuide as GuideJson,
+    findingYourWayWeekOneGuide as GuideJson,
+    cheapEatsGuide as GuideJson,
     findingGpGuide as GuideJson,
     crisisLinesGuide as GuideJson,
     rentingGuide as GuideJson,

@@ -1,6 +1,7 @@
 "use client";
 
 import type { LandingJourneyState } from "@/components/landing/landing-local-state";
+import { getArcGuideTotal } from "@/lib/guides";
 
 function toLabel(value: string | null, fallback: string) {
 	if (!value) return fallback;
@@ -50,15 +51,18 @@ export function LandingJourneyReceipt({
 	const profileTopic = toLabel(journey.lastTopic, "No topic yet");
 	const readCount = String(journey.readGuides.length);
 	const savedCount = String(journey.savedLocationsCount);
+	const day1 = String(journey.arcProgress.day1);
 	const week1 = String(journey.arcProgress.week1);
-	const month1 = String(journey.arcProgress.month1);
-	const month3 = String(journey.arcProgress.month3);
+	const month1Arc = String(journey.arcProgress.month1);
+	const totalDay1 = getArcGuideTotal("day-1");
+	const totalWeek1 = getArcGuideTotal("week-1");
+	const totalMonth1 = getArcGuideTotal("month-1");
 
 	return (
 		<div className="mx-auto w-full max-w-2xl px-3 pb-6 pt-2">
 			<div className="relative rounded-[1.2rem] border border-minuri-slate/25 bg-minuri-white px-5 pb-7 pt-7 shadow-[0_22px_50px_-30px_color-mix(in_oklch,var(--minuri-ocean)_55%,transparent)] md:px-8">
 				<div
-					className="absolute right-0 top-0 h-0 w-0 border-b-[34px] border-l-[34px] border-b-minuri-mist border-l-transparent"
+					className="absolute right-0 top-0 h-0 w-0 border-b-34 border-l-34 border-b-minuri-mist border-l-transparent"
 					aria-hidden
 				/>
 
@@ -72,9 +76,15 @@ export function LandingJourneyReceipt({
 						</p>
 					</div>
 					<div className="space-y-1 text-xs uppercase tracking-[0.1em] text-minuri-ocean">
-						<p className="font-black">Your Journey, Saved Locally</p>
-						<p className="text-minuri-slate">Receipt #{receiptId}</p>
-						<p className="text-minuri-slate">{toDateLabel(issuedAt)}</p>
+						<p className="font-black">
+							Your Journey, Saved Locally
+						</p>
+						<p className="text-minuri-slate">
+							Receipt #{receiptId}
+						</p>
+						<p className="text-minuri-slate">
+							{toDateLabel(issuedAt)}
+						</p>
 					</div>
 				</div>
 
@@ -105,9 +115,18 @@ export function LandingJourneyReceipt({
 					<h4 className="text-2xl font-black uppercase tracking-tight text-minuri-ocean">
 						Arc Progress
 					</h4>
-					<ReceiptRow label="Week 1 Guides" value={`${week1} / 5`} />
-					<ReceiptRow label="Month 1 Guides" value={`${month1} / 5`} />
-					<ReceiptRow label="Month 3 Guides" value={`${month3} / 5`} />
+					<ReceiptRow
+						label="Day 1 guides"
+						value={`${day1} / ${totalDay1}`}
+					/>
+					<ReceiptRow
+						label="Week 1 guides"
+						value={`${week1} / ${totalWeek1}`}
+					/>
+					<ReceiptRow
+						label="Month 1 guides"
+						value={`${month1Arc} / ${totalMonth1}`}
+					/>
 					<ReceiptRow label="Total Reads" value={readCount} />
 				</div>
 

@@ -33,7 +33,10 @@ export function ScrollToTopButton({
 				if (!section) return false;
 
 				const rect = section.getBoundingClientRect();
-				return rect.top <= viewportCenterY && rect.bottom >= viewportCenterY;
+				return (
+					rect.top <= viewportCenterY &&
+					rect.bottom >= viewportCenterY
+				);
 			});
 		};
 
@@ -82,7 +85,7 @@ export function ScrollToTopButton({
 						type="button"
 						onClick={scrollToTop}
 						className={cn(
-							"flex size-11 cursor-pointer items-center justify-center rounded-full border border-minuri-silver/40 bg-minuri-white/95 text-minuri-slate shadow-[0_8px_28px_-8px_color-mix(in_oklch,var(--minuri-ocean)_28%,transparent)] backdrop-blur-sm transition-transform duration-200 ease-out hover:scale-105 hover:border-minuri-teal/35 hover:text-minuri-teal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/40 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
+							"minuri-button-motion flex size-11 cursor-pointer items-center justify-center rounded-full border border-minuri-teal/70 bg-minuri-teal text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-115 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
 						)}
 						aria-label="Back to top"
 					>

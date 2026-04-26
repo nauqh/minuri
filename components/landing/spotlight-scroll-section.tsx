@@ -30,11 +30,11 @@ const cards: HowItWorksCard[] = [
 			},
 			{
 				title: "I'm getting set up",
-				description: "Month 1: home admin and getting around.",
+				description: "Week 1: home admin, health basics, and orientation.",
 			},
 			{
 				title: "I'm looking for my people",
-				description: "Month 3: connection and belonging.",
+				description: "Month 1: rhythm, connection, and sustaining habits.",
 			},
 		],
 	},

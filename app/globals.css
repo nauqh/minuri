@@ -7,7 +7,6 @@
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--font-sans: var(--font-sans);
-	--font-mono: var(--font-geist-mono);
 	--font-heading: var(--font-sans);
 	--color-sidebar-ring: var(--sidebar-ring);
 	--color-sidebar-border: var(--sidebar-border);
@@ -278,6 +277,10 @@ a:focus-visible .minuri-link-underline::after,
 }
 
 @layer components {
+	.minuri-button-motion {
+		@apply transition-transform duration-200 ease-out;
+	}
+
 	.landing-section-kicker {
 		@apply mx-auto inline-block rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-[#0b2b2b];
 	}

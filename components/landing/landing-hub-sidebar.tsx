@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 type LifeMoment = {
 	id: string;
 	title: string;
-	entryArc: "Week 1" | "Month 1" | "Month 3";
+	entryArc: "Day 1" | "Week 1" | "Month 1";
 };
 
 type FocusTopic = {
@@ -40,17 +40,17 @@ const LIFE_MOMENTS: LifeMoment[] = [
 	{
 		id: "i-just-arrived",
 		title: "I just arrived",
-		entryArc: "Week 1",
+		entryArc: "Day 1",
 	},
 	{
 		id: "im-getting-set-up",
 		title: "I'm getting set up",
-		entryArc: "Month 1",
+		entryArc: "Week 1",
 	},
 	{
 		id: "im-looking-for-my-people",
 		title: "I'm looking for my people",
-		entryArc: "Month 3",
+		entryArc: "Month 1",
 	},
 ];
 
@@ -80,7 +80,7 @@ const EMPTY_STATE: LandingJourneyState = {
 	savedLocations: [],
 	topicHistory: [],
 	readGuides: [],
-	arcProgress: { week1: 0, month1: 0, month3: 0 },
+	arcProgress: { day1: 0, week1: 0, month1: 0 },
 };
 
 function sentenceCaseMoment(value: string) {
@@ -217,9 +217,9 @@ export function LandingHubSidebar({
 	const reflection = useMemo(() => {
 		const suburb = journey.selectedSuburb || "Melbourne";
 		const totalReads =
+			journey.arcProgress.day1 +
 			journey.arcProgress.week1 +
-			journey.arcProgress.month1 +
-			journey.arcProgress.month3;
+			journey.arcProgress.month1;
 		const selectedMoment = findLifeMoment(journey.lifeMoment);
 		const momentText = selectedMoment
 			? selectedMoment.title

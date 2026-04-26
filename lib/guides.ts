@@ -113,6 +113,10 @@ function getArcGuides(arc: GuideArcSlug) {
     );
 }
 
+export function getArcGuideTotal(arc: GuideArcSlug): number {
+    return getArcGuides(arc).length;
+}
+
 export function getArcProgress(arc: GuideArcSlug, bookmarkedSlugs: string[]) {
     const arcGuides = getArcGuides(arc);
     const readCount = arcGuides.filter((guide) =>
