@@ -8,10 +8,11 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { ListFilter, Search, X } from "lucide-react";
+import { CircleHelp, ListFilter, Search, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { usePathname, useSearchParams } from "next/navigation";
 
+import { ArcStoryOverlay } from "@/components/guides/arc-story-overlay";
 import { easeOut } from "@/components/landing/home-constants";
 import { GUIDE_ARCS, GUIDE_TOPICS, GUIDES } from "@/content/guides";
 import { GuideCard } from "@/components/guides/guide-card";
@@ -53,7 +54,9 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const effectiveArcFilter = parseGuideArcFilter(searchParams.get("arc"));
 
 	const libraryWideProgress = useMemo(() => {
-		const readCount = GUIDES.filter((g) => bookmarks.includes(g.slug)).length;
+		const readCount = GUIDES.filter((g) =>
+			bookmarks.includes(g.slug),
+		).length;
 		const total = GUIDES.length;
 		const completionPercent =
 			total === 0 ? 0 : Math.round((readCount / total) * 100);
@@ -111,20 +114,29 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const mobileFiltersPanelId = useId();
 	const [mobileLibraryFiltersOpen, setMobileLibraryFiltersOpen] =
 		useState(false);
+	const [arcHelpOpen, setArcHelpOpen] = useState(false);
+	const [selectedArcHelpSlug, setSelectedArcHelpSlug] = useState(
+		GUIDE_ARCS[0]?.slug ?? "day-1",
+	);
 
 	useEffect(() => {
-		if (!mobileLibraryFiltersOpen) return;
+		const shouldLockBody = mobileLibraryFiltersOpen || arcHelpOpen;
+		if (!shouldLockBody) return;
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
 		return () => {
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [mobileLibraryFiltersOpen]);
+	}, [arcHelpOpen, mobileLibraryFiltersOpen]);
 
 	useEffect(() => {
-		if (!mobileLibraryFiltersOpen) return;
+		if (!mobileLibraryFiltersOpen && !arcHelpOpen) return;
 		function onKeyDown(event: KeyboardEvent) {
 			if (event.key === "Escape") {
+				if (arcHelpOpen) {
+					setArcHelpOpen(false);
+					return;
+				}
 				setMobileLibraryFiltersOpen(false);
 			}
 		}
@@ -132,7 +144,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		return () => {
 			document.removeEventListener("keydown", onKeyDown);
 		};
-	}, [mobileLibraryFiltersOpen]);
+	}, [arcHelpOpen, mobileLibraryFiltersOpen]);
 
 	function renderLibraryFilters(onSelect?: () => void) {
 		const afterSelect = () => {
@@ -142,9 +154,26 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		return (
 			<>
 				<div>
-					<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-						Arc progress
-					</h2>
+					<div className="flex items-center justify-between gap-3">
+						<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
+							Arc progress
+						</h2>
+						<button
+							type="button"
+							className="inline-flex h-8 items-center gap-1.5 rounded-full border border-minuri-silver/70 bg-minuri-white px-3 text-[11px] font-medium uppercase tracking-widest text-minuri-mid transition-colors hover:bg-minuri-fog"
+							onClick={() => {
+								setSelectedArcHelpSlug(
+									effectiveArcFilter === "all"
+										? GUIDE_ARCS[0].slug
+										: effectiveArcFilter,
+								);
+								setArcHelpOpen(true);
+							}}
+						>
+							<CircleHelp className="size-3.5" aria-hidden />
+							Arc help
+						</button>
+					</div>
 					<p className="mt-1 text-sm leading-snug text-minuri-slate">
 						Browse everything or focus on one timeline.
 					</p>
@@ -200,8 +229,8 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 									{arc.name}
 								</p>
 								<p className="mt-2 text-xs text-minuri-slate">
-									{progress.readCount}/{progress.total} saved ·{" "}
-									{progress.completionPercent}%
+									{progress.readCount}/{progress.total} saved
+									· {progress.completionPercent}%
 								</p>
 							</button>
 						))}
@@ -464,7 +493,11 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 				setMobileLibraryFiltersOpen(true);
 			}}
 		>
-			<ListFilter className="size-[1.15rem] shrink-0" strokeWidth={2} aria-hidden />
+			<ListFilter
+				className="size-[1.15rem] shrink-0"
+				strokeWidth={2}
+				aria-hidden
+			/>
 		</button>
 	) : null;
 
@@ -476,6 +509,15 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		>
 			{!isBookmarksMode ? (
 				<>
+					<ArcStoryOverlay
+						isOpen={arcHelpOpen}
+						onClose={() => {
+							setArcHelpOpen(false);
+						}}
+						selectedArcSlug={selectedArcHelpSlug}
+						onSelectArc={setSelectedArcHelpSlug}
+						prefersReducedMotion={Boolean(prefersReducedMotion)}
+					/>
 					{mobileLibraryFiltersPortal}
 					<div className="grid items-start gap-x-10 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-x-14">
 						{librarySidebar}

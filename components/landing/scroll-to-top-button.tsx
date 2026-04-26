@@ -1,6 +1,5 @@
 "use client";
 
-import { ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -75,7 +74,7 @@ export function ScrollToTopButton({
 		<AnimatePresence>
 			{visible ? (
 				<motion.div
-					className="fixed right-4 bottom-6 z-60 md:right-8 md:bottom-8"
+					className="fixed bottom-6 left-1/2 z-60 -translate-x-1/2 md:bottom-8"
 					initial={{ opacity: 0, y: 12, scale: 0.92 }}
 					animate={{ opacity: 1, y: 0, scale: 1 }}
 					exit={{ opacity: 0, y: 12, scale: 0.92 }}
@@ -85,11 +84,11 @@ export function ScrollToTopButton({
 						type="button"
 						onClick={scrollToTop}
 						className={cn(
-							"minuri-button-motion flex size-11 cursor-pointer items-center justify-center rounded-full border border-minuri-teal/70 bg-minuri-teal text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-115 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
+							"minuri-button-motion flex cursor-pointer items-center justify-center rounded-full border border-minuri-teal/70 bg-minuri-teal px-4 py-2 text-sm font-medium text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
 						)}
 						aria-label="Back to top"
 					>
-						<ChevronUp className="size-5" aria-hidden />
+						Back to top
 					</button>
 				</motion.div>
 			) : null}

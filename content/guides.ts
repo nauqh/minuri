@@ -47,6 +47,9 @@ export type GuideArc = {
     name: string;
     timeframeLabel: string;
     sortOrder: number;
+    byline: string;
+    story: string;
+    outcome: string;
 };
 
 export type GuideSection = {
@@ -99,18 +102,33 @@ export const GUIDE_ARCS: GuideArc[] = [
         name: "Your first day",
         timeframeLabel: "Day 1",
         sortOrder: 1,
+        byline: "Get through the first day with clarity, not panic.",
+        story:
+            "You have just arrived and even simple choices feel unfamiliar. This arc helps you stabilize the first 24 to 48 hours so you can orient quickly and move with more confidence.",
+        outcome:
+            "By the end of Day 1, you know where to start and feel safer making your next move.",
     },
     {
         slug: "week-1",
         name: "Your first week",
         timeframeLabel: "Week 1",
         sortOrder: 2,
+        byline: "Build systems that make life feel manageable.",
+        story:
+            "The initial rush settles and real life begins: transport, admin, money, appointments, and people. This arc turns reactive survival into repeatable routines you can rely on.",
+        outcome:
+            "By the end of Week 1, you are making decisions with a practical rhythm instead of reacting under pressure.",
     },
     {
         slug: "month-1",
         name: "Your first month",
         timeframeLabel: "Month 1",
         sortOrder: 3,
+        byline: "Create routines and connections that make this city yours.",
+        story:
+            "Now the challenge is not just coping, but staying well and feeling grounded. This arc focuses on sustainable habits, support, and belonging so your life starts to feel like your own.",
+        outcome:
+            "By the end of Month 1, you have anchors that help this place feel more like home.",
     },
 ];
 

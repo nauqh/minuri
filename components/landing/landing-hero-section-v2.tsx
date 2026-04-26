@@ -72,10 +72,10 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative mx-auto max-w-screen-2xl px-4 pb-10 pt-4 md:px-8">
+			<div className="relative mx-auto max-w-screen-2xl px-6 pb-10 pt-0 md:px-10">
 				<div className="relative">
 					<motion.header
-						className="mx-auto flex w-full items-center justify-between bg-minuri-white md:rounded-full"
+						className="mx-auto flex w-full items-center justify-between bg-minuri-white md:min-h-21 md:rounded-full"
 						initial={{
 							opacity: 0,
 							y: prefersReducedMotion ? 0 : -18,
@@ -108,27 +108,27 @@ export function LandingHeroSectionV2({
 						>
 							<Link
 								href="/"
-								className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean"
+								className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem]"
 							>
 								<span className="uppercase">Minuri</span>
 							</Link>
 
-							<nav className="hidden items-center gap-9 text-sm font-medium text-minuri-ocean md:flex">
+							<nav className="hidden items-center gap-10 text-base font-medium text-minuri-ocean md:flex">
 								<Link
 									href="#service"
-									className="minuri-link-underline inline-flex h-10 items-center whitespace-nowrap"
+									className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
 								>
 									How it works
 								</Link>
 								<Link
 									href="#care"
-									className="minuri-link-underline inline-flex h-10 items-center whitespace-nowrap"
+									className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
 								>
 									Topics
 								</Link>
 								<Link
 									href="#contact"
-									className="minuri-link-underline inline-flex h-10 items-center whitespace-nowrap"
+									className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
 								>
 									Resources
 								</Link>
@@ -136,7 +136,7 @@ export function LandingHeroSectionV2({
 						</motion.div>
 
 						<motion.div
-							className="ml-auto flex items-center gap-2.5 md:gap-3"
+							className="ml-auto flex items-center gap-2.5 md:gap-3.5"
 							initial={{
 								opacity: 0,
 								x: prefersReducedMotion ? 0 : 12,
@@ -150,7 +150,7 @@ export function LandingHeroSectionV2({
 						>
 							<Link
 								href="/guides"
-								className="group hidden h-10 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-5 text-sm font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
+								className="group hidden h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-6 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 							>
 								First-time guides
 								<ChevronRight
@@ -161,7 +161,7 @@ export function LandingHeroSectionV2({
 							</Link>
 							<Link
 								href="/near-me"
-								className="group hidden h-10 items-center gap-1.5 rounded-full bg-minuri-teal px-5 text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
+								className="group hidden h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 							>
 								Near me
 								<ChevronRight
@@ -403,7 +403,7 @@ export function LandingHeroSectionV2({
 								>
 									<Link
 										href="/near-me"
-										className="group inline-flex items-center gap-1.5 rounded-full bg-minuri-teal px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+										className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 									>
 										Near me
 										<ChevronRight
@@ -413,7 +413,7 @@ export function LandingHeroSectionV2({
 									</Link>
 									<Link
 										href="/guides"
-										className="group inline-flex items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-5 py-2.5 text-sm font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
+										className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-6 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
 									>
 										First-time guides
 										<ChevronRight

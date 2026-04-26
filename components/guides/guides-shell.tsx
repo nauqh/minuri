@@ -51,25 +51,25 @@ export function GuidesShell({
 	return (
 		<div className="min-h-screen bg-minuri-white text-foreground">
 			<header className="relative z-40 bg-minuri-white">
-				<div className="relative mx-auto max-w-screen-2xl px-4 pb-10 pt-4 md:px-8">
-					<div className="mx-auto flex w-full items-center justify-between gap-3 bg-minuri-white md:rounded-full">
+				<div className="relative mx-auto max-w-screen-2xl px-6 pb-10 pt-0 md:px-10">
+					<div className="mx-auto flex w-full items-center justify-between gap-3 bg-minuri-white md:min-h-21 md:rounded-full">
 						<Link
 							href="/"
-							className="z-10 flex shrink-0 items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean"
+							className="z-10 flex shrink-0 items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem]"
 						>
 							<span className="uppercase">Minuri</span>
 						</Link>
 						<div className="z-10 flex min-w-0 flex-1 items-center justify-end gap-2 md:justify-between md:gap-4">
 							<nav
 								aria-label="Guides navigation"
-								className="ml-10 hidden items-center gap-9 text-sm font-medium text-minuri-ocean md:flex"
+								className="ml-10 hidden items-center gap-10 text-base font-medium text-minuri-ocean md:flex"
 							>
 								{links.map((link) => (
 									<Link
 										key={link.href}
 										href={link.href}
 										className={cn(
-											"minuri-link-underline inline-flex h-10 items-center whitespace-nowrap",
+											"minuri-link-underline inline-flex h-12 items-center whitespace-nowrap",
 											link.active
 												? "text-minuri-ocean"
 												: "text-minuri-ocean/70 transition-colors duration-200 hover:text-minuri-ocean",
@@ -102,7 +102,7 @@ export function GuidesShell({
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-screen-2xl px-4 py-8 md:px-8 md:py-10">
+			<main className="mx-auto max-w-screen-2xl px-6 py-8 md:px-10 md:py-10">
 				{children}
 			</main>
 		</div>
