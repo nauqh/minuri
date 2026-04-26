@@ -84,7 +84,7 @@ export function ScrollToTopButton({
 						type="button"
 						onClick={scrollToTop}
 						className={cn(
-							"minuri-button-motion flex cursor-pointer items-center justify-center rounded-full border border-minuri-teal/70 bg-minuri-teal px-4 py-2 text-sm font-medium text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
+							"minuri-button-motion flex h-15 cursor-pointer items-center justify-center rounded-full bg-minuri-teal px-8 text-sm font-medium text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
 						)}
 						aria-label="Back to top"
 					>
