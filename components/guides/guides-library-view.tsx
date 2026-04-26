@@ -1,15 +1,19 @@
 "use client";
 
-import { startTransition, useDeferredValue, useMemo } from "react";
-import { Search, X } from "lucide-react";
+import {
+	startTransition,
+	useDeferredValue,
+	useEffect,
+	useId,
+	useMemo,
+	useState,
+} from "react";
+import { ListFilter, Search, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import {
-	GUIDE_ARCS,
-	GUIDE_TOPICS,
-	GUIDES,
-	type GuideArcSlug,
-} from "@/content/guides";
+import { easeOut } from "@/components/landing/home-constants";
+import { GUIDE_ARCS, GUIDE_TOPICS, GUIDES } from "@/content/guides";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuidesShell } from "@/components/guides/guides-shell";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
@@ -28,29 +32,33 @@ import { cn } from "@/lib/utils";
 
 type GuidesLibraryViewProps = {
 	mode: GuideOrigin;
-	initialArc?: string;
 };
 
-export function GuidesLibraryView({
-	mode,
-	initialArc,
-}: GuidesLibraryViewProps) {
+export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+	const prefersReducedMotion = useReducedMotion();
 	const { bookmarks, hasHydrated, isBookmarked, toggleBookmark } =
 		useGuideBookmarks();
 
-	const defaultArcFilter: GuideArcFilter = useMemo(() => {
-		if (!initialArc) return "all";
-		return GUIDE_ARCS.some((arc) => arc.slug === initialArc)
-			? (initialArc as GuideArcSlug)
-			: "all";
-	}, [initialArc]);
+	const drawerTransition = {
+		duration: prefersReducedMotion ? 0.01 : 0.36,
+		ease: easeOut,
+	};
+	const backdropTransition = {
+		duration: prefersReducedMotion ? 0.01 : 0.28,
+		ease: easeOut,
+	};
 
-	const activeArcFilter =
-		parseGuideArcFilter(searchParams.get("arc")) ?? defaultArcFilter;
-	const effectiveArcFilter =
-		activeArcFilter === "all" ? defaultArcFilter : activeArcFilter;
+	const effectiveArcFilter = parseGuideArcFilter(searchParams.get("arc"));
+
+	const libraryWideProgress = useMemo(() => {
+		const readCount = GUIDES.filter((g) => bookmarks.includes(g.slug)).length;
+		const total = GUIDES.length;
+		const completionPercent =
+			total === 0 ? 0 : Math.round((readCount / total) * 100);
+		return { readCount, total, completionPercent };
+	}, [bookmarks]);
 	const activeTopicFilter = parseGuideTopicFilter(searchParams.get("topic"));
 	const rawQuery = searchParams.get("q") ?? "";
 	const deferredQuery = useDeferredValue(rawQuery);
@@ -100,81 +108,221 @@ export function GuidesLibraryView({
 		topicOptions.find((t) => t.slug === activeTopicFilter)?.name ??
 		"All topics";
 
-	const librarySidebar = !isBookmarksMode ? (
-		<aside
-			className="lg:sticky lg:top-28 lg:col-start-2 lg:row-start-1 lg:self-start"
-			aria-label="Arc progress and topics"
-		>
-			<div>
-				<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-					Arc progress
-				</h2>
-				<p className="mt-1 text-sm leading-snug text-minuri-slate">
-					Your three beats—tap one to filter the library.
-				</p>
-				<div className="mt-5 flex flex-col gap-3">
-					{arcProgress.map(({ arc, progress }) => (
+	const mobileFiltersPanelId = useId();
+	const [mobileLibraryFiltersOpen, setMobileLibraryFiltersOpen] =
+		useState(false);
+
+	useEffect(() => {
+		if (!mobileLibraryFiltersOpen) return;
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+		return () => {
+			document.body.style.overflow = previousOverflow;
+		};
+	}, [mobileLibraryFiltersOpen]);
+
+	useEffect(() => {
+		if (!mobileLibraryFiltersOpen) return;
+		function onKeyDown(event: KeyboardEvent) {
+			if (event.key === "Escape") {
+				setMobileLibraryFiltersOpen(false);
+			}
+		}
+		document.addEventListener("keydown", onKeyDown);
+		return () => {
+			document.removeEventListener("keydown", onKeyDown);
+		};
+	}, [mobileLibraryFiltersOpen]);
+
+	function renderLibraryFilters(onSelect?: () => void) {
+		const afterSelect = () => {
+			onSelect?.();
+		};
+
+		return (
+			<>
+				<div>
+					<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
+						Arc progress
+					</h2>
+					<p className="mt-1 text-sm leading-snug text-minuri-slate">
+						Browse everything or focus on one timeline.
+					</p>
+					<div className="mt-5 flex flex-col gap-3">
 						<button
-							key={arc.slug}
 							type="button"
 							className={cn(
 								"rounded-[0.85rem] border px-4 py-3.5 text-left transition-colors",
-								effectiveArcFilter === arc.slug
+								effectiveArcFilter === "all"
 									? "border-minuri-teal/70 bg-minuri-mist shadow-sm shadow-minuri-teal/10"
 									: "border-minuri-silver/70 bg-minuri-white hover:bg-minuri-fog",
 							)}
-							onClick={() =>
+							onClick={() => {
 								updateParams((params) => {
-									params.set("arc", arc.slug);
-								})
-							}
+									params.delete("arc");
+								});
+								afterSelect();
+							}}
 						>
 							<p className="text-[11px] font-medium uppercase tracking-[0.16em] text-minuri-mid">
-								{arc.timeframeLabel}
+								First day to first month
 							</p>
 							<p className="mt-1 text-[15px] font-semibold leading-snug text-minuri-ocean">
-								{arc.name}
+								Give me everything I need
 							</p>
 							<p className="mt-2 text-xs text-minuri-slate">
-								{progress.readCount}/{progress.total} saved ·{" "}
-								{progress.completionPercent}%
+								{libraryWideProgress.readCount}/
+								{libraryWideProgress.total} saved ·{" "}
+								{libraryWideProgress.completionPercent}%
 							</p>
 						</button>
-					))}
+						{arcProgress.map(({ arc, progress }) => (
+							<button
+								key={arc.slug}
+								type="button"
+								className={cn(
+									"rounded-[0.85rem] border px-4 py-3.5 text-left transition-colors",
+									effectiveArcFilter === arc.slug
+										? "border-minuri-teal/70 bg-minuri-mist shadow-sm shadow-minuri-teal/10"
+										: "border-minuri-silver/70 bg-minuri-white hover:bg-minuri-fog",
+								)}
+								onClick={() => {
+									updateParams((params) => {
+										params.set("arc", arc.slug);
+									});
+									afterSelect();
+								}}
+							>
+								<p className="text-[11px] font-medium uppercase tracking-[0.16em] text-minuri-mid">
+									{arc.timeframeLabel}
+								</p>
+								<p className="mt-1 text-[15px] font-semibold leading-snug text-minuri-ocean">
+									{arc.name}
+								</p>
+								<p className="mt-2 text-xs text-minuri-slate">
+									{progress.readCount}/{progress.total} saved ·{" "}
+									{progress.completionPercent}%
+								</p>
+							</button>
+						))}
+					</div>
 				</div>
-			</div>
 
-			<div className="mt-10">
-				<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-					Topics
-				</h2>
-				<div className="mt-4 flex flex-wrap gap-2">
-					{topicOptions.map((topic) => (
-						<button
-							key={topic.slug}
-							type="button"
-							className={cn(
-								"rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
-								activeTopicFilter === topic.slug
-									? "bg-minuri-teal text-primary-foreground"
-									: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
-							)}
-							onClick={() =>
-								updateParams((params) => {
-									if (topic.slug === "all") {
-										params.delete("topic");
-									} else {
-										params.set("topic", topic.slug);
-									}
-								})
-							}
-						>
-							{topic.name}
-						</button>
-					))}
+				<div className="mt-10">
+					<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
+						Topics
+					</h2>
+					<div className="mt-4 flex flex-wrap gap-2">
+						{topicOptions.map((topic) => (
+							<button
+								key={topic.slug}
+								type="button"
+								className={cn(
+									"rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
+									activeTopicFilter === topic.slug
+										? "bg-minuri-teal text-primary-foreground"
+										: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
+								)}
+								onClick={() => {
+									updateParams((params) => {
+										if (topic.slug === "all") {
+											params.delete("topic");
+										} else {
+											params.set("topic", topic.slug);
+										}
+									});
+									afterSelect();
+								}}
+							>
+								{topic.name}
+							</button>
+						))}
+					</div>
 				</div>
-			</div>
-		</aside>
+			</>
+		);
+	}
+
+	const librarySidebar = !isBookmarksMode ? (
+		<motion.aside
+			className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-8 lg:self-start"
+			aria-label="Arc progress and topics"
+			initial={{
+				opacity: 0,
+				x: prefersReducedMotion ? 0 : 18,
+			}}
+			animate={{ opacity: 1, x: 0 }}
+			transition={{
+				duration: prefersReducedMotion ? 0.01 : 0.5,
+				delay: prefersReducedMotion ? 0 : 0.06,
+				ease: easeOut,
+			}}
+		>
+			{renderLibraryFilters()}
+		</motion.aside>
+	) : null;
+
+	const mobileLibraryFiltersPortal = !isBookmarksMode ? (
+		<AnimatePresence>
+			{mobileLibraryFiltersOpen ? (
+				<motion.div
+					key="guides-library-filters-sheet"
+					className="fixed inset-0 z-60 flex justify-end lg:hidden"
+					role="presentation"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={backdropTransition}
+				>
+					<button
+						type="button"
+						className="absolute inset-0 bg-minuri-ocean/40 backdrop-blur-[2px]"
+						aria-label="Close filters"
+						onClick={() => {
+							setMobileLibraryFiltersOpen(false);
+						}}
+					/>
+					<motion.div
+						id={mobileFiltersPanelId}
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby={`${mobileFiltersPanelId}-title`}
+						className="relative z-10 flex h-full w-[min(100%,22rem)] flex-col border-l border-minuri-silver/70 bg-minuri-white shadow-[-12px_0_40px_-20px_color-mix(in_oklch,var(--minuri-ocean)_45%,transparent)]"
+						initial={{ x: "100%" }}
+						animate={{ x: 0 }}
+						exit={{ x: "100%" }}
+						transition={drawerTransition}
+						onClick={(event) => {
+							event.stopPropagation();
+						}}
+					>
+						<div className="flex shrink-0 items-center justify-between gap-3 border-b border-minuri-silver/70 px-4 py-3">
+							<h2
+								id={`${mobileFiltersPanelId}-title`}
+								className="text-base font-semibold tracking-tight text-minuri-ocean"
+							>
+								Arcs &amp; topics
+							</h2>
+							<button
+								type="button"
+								className="flex size-9 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate transition-colors hover:bg-minuri-mist"
+								aria-label="Close side panel"
+								onClick={() => {
+									setMobileLibraryFiltersOpen(false);
+								}}
+							>
+								<X className="size-4" aria-hidden="true" />
+							</button>
+						</div>
+						<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5">
+							{renderLibraryFilters(() => {
+								setMobileLibraryFiltersOpen(false);
+							})}
+						</div>
+					</motion.div>
+				</motion.div>
+			) : null}
+		</AnimatePresence>
 	) : null;
 
 	const bookmarksSearchAndFilters = (
@@ -270,7 +418,7 @@ export function GuidesLibraryView({
 						</p>
 					</div>
 				) : null}
-				<div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+				<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
 					{visibleGuides.map((guide, index) => (
 						<GuideCard
 							key={guide.slug}
@@ -283,7 +431,7 @@ export function GuidesLibraryView({
 							})}
 							bookmarked={isBookmarked(guide.slug)}
 							onToggleBookmark={toggleBookmark}
-							animationDelay={(index % 4) * 0.06}
+							animationDelay={(index % 3) * 0.06}
 						/>
 					))}
 				</div>
@@ -301,15 +449,41 @@ export function GuidesLibraryView({
 			</section>
 		);
 
+	const libraryHeaderFiltersButton = !isBookmarksMode ? (
+		<button
+			type="button"
+			className="relative z-50 flex size-10 items-center justify-center rounded-full border border-minuri-silver/70 bg-minuri-white text-minuri-ocean shadow-[0_1px_2px_color-mix(in_oklch,var(--minuri-ocean)_12%,transparent)] transition-colors hover:bg-minuri-fog focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white lg:hidden"
+			aria-expanded={mobileLibraryFiltersOpen}
+			aria-controls={mobileFiltersPanelId}
+			aria-label={
+				mobileLibraryFiltersOpen
+					? "Arcs and topics filters open"
+					: "Open arcs and topics filters"
+			}
+			onClick={() => {
+				setMobileLibraryFiltersOpen(true);
+			}}
+		>
+			<ListFilter className="size-[1.15rem] shrink-0" strokeWidth={2} aria-hidden />
+		</button>
+	) : null;
+
 	return (
-		<GuidesShell title={title} description={description}>
+		<GuidesShell
+			title={title}
+			description={description}
+			headerEnd={libraryHeaderFiltersButton}
+		>
 			{!isBookmarksMode ? (
-				<div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-14">
-					{librarySidebar}
-					<div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1">
-						{guidesListBody}
+				<>
+					{mobileLibraryFiltersPortal}
+					<div className="grid items-start gap-x-10 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-x-14">
+						{librarySidebar}
+						<div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1">
+							{guidesListBody}
+						</div>
 					</div>
-				</div>
+				</>
 			) : (
 				<div className="space-y-8">
 					{bookmarksSearchAndFilters}

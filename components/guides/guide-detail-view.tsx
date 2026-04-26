@@ -295,7 +295,7 @@ export function GuideDetailView({
 				/>
 			</div>
 			<header className="sticky top-[2px] z-40 bg-minuri-white backdrop-blur">
-				<div className="mx-auto max-w-7xl px-4 md:px-8">
+				<div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 					<div className="mx-auto flex h-14 w-full items-center justify-between bg-minuri-white">
 						<Link
 							href="/"
@@ -331,7 +331,7 @@ export function GuideDetailView({
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
+			<main className="mx-auto max-w-screen-2xl px-4 py-8 md:px-8 md:py-10">
 				<article ref={articleRef} className="mx-auto max-w-5xl">
 					<div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
 						<Link

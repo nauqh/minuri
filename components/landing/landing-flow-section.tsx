@@ -13,7 +13,7 @@ export function LandingFlowSection() {
 			id="service"
 			className="flex min-h-[88dvh] flex-col justify-center bg-minuri-ocean py-20 md:py-28"
 		>
-			<div className="mx-auto w-full max-w-6xl px-5 md:px-8">
+			<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">
 				<div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
 					<div className="space-y-8">
 						<div className="-mt-4 mx-auto max-w-2xl text-center">

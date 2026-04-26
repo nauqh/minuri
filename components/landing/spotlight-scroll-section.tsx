@@ -90,7 +90,7 @@ export function SpotlightScrollSection({
 			className="scroll-mt-24 bg-minuri-white py-18 md:scroll-mt-28 md:py-22"
 			aria-labelledby="how-it-works-heading"
 		>
-			<div className="mx-auto w-full max-w-3xl px-5 md:px-8">
+			<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">
 				<div className="mb-8 text-center md:mb-10">
 					<p className="landing-section-kicker">How Minuri works</p>
 					<h2

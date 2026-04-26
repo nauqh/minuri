@@ -72,7 +72,7 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative mx-auto max-w-7xl px-4 pb-10 pt-4 md:px-8">
+			<div className="relative mx-auto max-w-screen-2xl px-4 pb-10 pt-4 md:px-8">
 				<div className="relative">
 					<motion.header
 						className="mx-auto flex w-full items-center justify-between bg-minuri-white md:rounded-full"

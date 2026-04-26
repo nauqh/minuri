@@ -133,7 +133,7 @@ export function LandingCareSection() {
 			className="relative bg-minuri-white py-16 text-minuri-ink md:min-h-[620vh] md:py-0"
 		>
 			<div className="md:sticky md:top-0 md:flex md:h-screen md:items-start md:pt-[12vh]">
-				<div className="mx-auto w-full max-w-6xl px-5 md:px-8">
+				<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">
 					<div className="text-center">
 						<p className="landing-section-kicker">
 							Our core support areas
@@ -168,7 +168,7 @@ export function LandingCareSection() {
 						))}
 					</div>
 
-					<div className="relative mx-auto mt-14 hidden h-100 w-full max-w-6xl overflow-visible md:mt-16 md:block md:h-120">
+					<div className="relative mx-auto mt-14 hidden h-100 w-full max-w-screen-2xl overflow-visible md:mt-16 md:block md:h-120">
 						{TOPIC_CARDS.map((card, index) => (
 							<ScrollyTopicCard
 								key={card.title}

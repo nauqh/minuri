@@ -364,7 +364,7 @@ export function LandingHeroSection({
 
 			<div className="relative bg-minuri-white">
 				<div className="absolute inset-x-0 top-0 z-20 flex -translate-y-[32%] justify-center px-4 max-md:max-w-[100vw] md:-translate-y-1/2 md:px-8">
-					<div className="pointer-events-none mx-auto w-full max-w-6xl">
+					<div className="pointer-events-none mx-auto w-full max-w-screen-2xl">
 						<motion.div
 							className="pointer-events-auto rounded-minuri border border-minuri-silver/25 bg-minuri-white px-4 py-6 md:px-6 md:py-8"
 							initial={false}

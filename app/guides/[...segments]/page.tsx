@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 
 import { GUIDE_ARCS, GUIDES } from "@/content/guides";
 import { GuideDetailView } from "@/components/guides/guide-detail-view";
-import { GuidesLibraryView } from "@/components/guides/guides-library-view";
 import { ScrollToTopButton } from "@/components/landing/scroll-to-top-button";
 import {
     buildBackHref,
@@ -51,14 +50,7 @@ export default async function GuidesSegmentsPage({
         const arcMatch = GUIDE_ARCS.find((arc) => arc.slug === single);
 
         if (arcMatch) {
-            return (
-                <>
-                    <Suspense fallback={null}>
-                        <GuidesLibraryView mode="library" initialArc={arcMatch.slug} />
-                    </Suspense>
-                    <ScrollToTopButton trackedSectionIds={[]} />
-                </>
-            );
+            redirect(`/guides?arc=${encodeURIComponent(arcMatch.slug)}`);
         }
 
         const legacyGuide = getGuideBySlug(single);

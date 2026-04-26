@@ -11,7 +11,7 @@ export function LandingFooter() {
 	return (
 		<footer className="relative z-10 min-h-[50vh] bg-minuri-mist text-minuri-ocean">
 			<LandingFooterCurve />
-			<div className="relative z-20 mx-auto max-w-6xl px-5 pb-16 pt-14 md:px-8 md:pb-20 md:pt-16">
+			<div className="relative z-20 mx-auto max-w-screen-2xl px-5 pb-16 pt-14 md:px-8 md:pb-20 md:pt-16">
 				<div className="flex flex-col items-start gap-5">
 					<Link
 						href="#contact"
@@ -45,7 +45,7 @@ export function LandingFooter() {
 			</div>
 
 			<div className="relative z-20 border-t border-minuri-silver/70">
-				<div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-[0.78rem] tracking-[0.01em] text-minuri-ocean/70 md:flex-row md:items-center md:justify-between md:px-8 md:py-9 md:text-[0.84rem]">
+				<div className="mx-auto flex max-w-screen-2xl flex-col gap-3 px-5 py-8 text-[0.78rem] tracking-[0.01em] text-minuri-ocean/70 md:flex-row md:items-center md:justify-between md:px-8 md:py-9 md:text-[0.84rem]">
 					<p className="font-medium">
 						© {new Date().getFullYear()} Minuri · Melbourne,
 						Australia
