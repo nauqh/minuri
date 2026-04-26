@@ -58,7 +58,6 @@ function getSearchableGuideText(guide: Guide) {
         guide.title,
         guide.summary,
         ...guide.searchTerms,
-        ...guide.sections.flatMap((section) => section.body),
     ]
         .join(" ")
         .toLowerCase();
@@ -108,7 +107,7 @@ export function getNextGuide(currentGuide: Guide) {
     return getGuideBySlug(currentGuide.nextGuideSlug) ?? null;
 }
 
-export function getArcGuides(arc: GuideArcSlug) {
+function getArcGuides(arc: GuideArcSlug) {
     return GUIDES.filter((guide) => guide.arc === arc).sort(
         (a, b) => a.arcOrder - b.arcOrder,
     );

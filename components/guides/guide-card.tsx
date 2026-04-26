@@ -60,9 +60,9 @@ export function GuideCard({
 			<Link
 				href={href}
 				aria-label={`Read guide: ${guide.title}`}
-				className="absolute inset-0 z-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60"
+				className="absolute inset-0 z-10 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60"
 			/>
-			<div className="relative mb-5 h-52 cursor-pointer overflow-hidden rounded-sm bg-minuri-fog md:h-56">
+			<div className="relative mb-5 h-52 overflow-hidden rounded-sm bg-minuri-fog md:h-56">
 				<Image
 					src={guide.thumbnailUrl}
 					alt={`${guide.title} thumbnail`}
@@ -71,29 +71,31 @@ export function GuideCard({
 					className="object-cover"
 				/>
 			</div>
-			<div className="relative z-10 flex cursor-pointer items-start justify-between gap-4">
+			<div className="flex items-start justify-between gap-4">
 				<div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-minuri-mid">
 					<Icon className="size-4" aria-hidden="true" />
 					<span>{topicMeta?.name ?? guide.topic}</span>
 				</div>
 
-				<BookmarkButton
-					active={bookmarked}
-					onToggle={() => onToggleBookmark(guide.slug)}
-				/>
+				<div className="relative z-20">
+					<BookmarkButton
+						active={bookmarked}
+						onToggle={() => onToggleBookmark(guide.slug)}
+					/>
+				</div>
 			</div>
 
-			<h2 className="relative z-10 w-fit cursor-pointer pb-1 font-hero-serif text-xl leading-tight text-minuri-ocean">
+			<h2 className="w-fit pb-1 font-hero-serif text-xl leading-tight text-minuri-ocean">
 				<span className="minuri-link-underline-multiline">{guide.title}</span>
 			</h2>
 
-			<div className="relative z-10 mt-3 flex cursor-pointer items-center gap-2 text-xs text-minuri-slate">
+			<div className="mt-3 flex items-center gap-2 text-xs text-minuri-slate">
 				<span>{guide.readingTimeMin} min read</span>
 				<span aria-hidden="true">·</span>
 				<span>{arcMeta?.timeframeLabel ?? guide.arc}</span>
 			</div>
 
-			<p className="relative z-10 mt-4 flex-1 cursor-pointer text-base leading-7">
+			<p className="mt-4 flex-1 text-base leading-7">
 				{guide.summary}
 			</p>
 		</motion.article>

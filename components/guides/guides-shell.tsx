@@ -49,7 +49,7 @@ export function GuidesShell({
 		<div className="min-h-screen bg-minuri-white text-foreground">
 			<header className="relative z-40 bg-minuri-white">
 				<div className="relative mx-auto max-w-7xl px-4 pb-10 pt-4 md:px-8">
-					<div className="mx-auto flex h-12 w-full items-center justify-between bg-minuri-white md:h-14 md:rounded-full">
+					<div className="mx-auto flex w-full items-center justify-between bg-minuri-white md:rounded-full">
 						<Link
 							href="/"
 							className="z-10 flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean"
