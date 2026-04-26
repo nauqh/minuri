@@ -336,7 +336,7 @@ export function LandingHeroSectionV2({
 					<div className="mt-0 grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex flex-col md:h-full">
 							<motion.p
-								className="mt-4 text-2xl font-semibold uppercase tracking-[0.12em] text-minuri-ocean"
+								className="mt-4 text-2xl font-bold uppercase text-minuri-ocean"
 								variants={{
 									hidden: {
 										opacity: 0,
@@ -375,9 +375,9 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<p className="max-w-2xl text-base leading-relaxed text-minuri-ocean/82 md:text-lg">
-									We help young adults feel confident living
-									independently for the first time.
+								<p className="max-w-xl leading-relaxed text-minuri-ocean font-medium md:text-lg">
+									Your playbook for building confidence with
+									meals, money, and everyday routines.
 								</p>
 								<motion.div
 									className="my-6 flex flex-wrap items-center gap-3"
