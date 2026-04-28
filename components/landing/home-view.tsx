@@ -30,27 +30,25 @@ export function HomeView() {
 
 	return (
 		<div className="relative min-h-screen bg-minuri-fog text-foreground">
-			<div
-				className={
-					isUnlocked ? "" : "pointer-events-none blur-sm select-none"
-				}
-			>
-				<LandingHubSidebar open={hubOpen} onOpenChange={setHubOpen} />
-				<LandingHeroSectionV2
-					headerVisible={headerVisible}
-					onHeroReveal={() => setHeaderVisible(true)}
-				/>
-
-				<main>
-					<SpotlightScrollSection
-						onOpenMinuriHub={() => setHubOpen(true)}
+			{isUnlocked ? (
+				<>
+					<LandingHubSidebar open={hubOpen} onOpenChange={setHubOpen} />
+					<LandingHeroSectionV2
+						headerVisible={headerVisible}
+						onHeroReveal={() => setHeaderVisible(true)}
 					/>
-					<LandingCareSection />
-					<LandingAccessSection />
-				</main>
-				<LandingFooter />
-				<ScrollToTopButton />
-			</div>
+
+					<main>
+						<SpotlightScrollSection
+							onOpenMinuriHub={() => setHubOpen(true)}
+						/>
+						<LandingCareSection />
+						<LandingAccessSection />
+					</main>
+					<LandingFooter />
+					<ScrollToTopButton />
+				</>
+			) : null}
 
 			{!isUnlocked ? (
 				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm p-6">
