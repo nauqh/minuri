@@ -8,9 +8,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
 const heroHighlights = [
-	"WE SPEAK YOUR LANGUAGE",
-	"PROACTIVE AND PERSONABLE",
-	"YOU KEEP MORE IN YOUR POCKET",
+	"REAL-LIFE GUIDES, NOT FLUFF",
+	"LOCAL SUPPORT THAT IS ACTUALLY NEARBY",
+	"CLEAR NEXT STEPS YOU CAN DO TODAY",
 ];
 
 const heroImages = [
@@ -115,6 +115,12 @@ export function LandingHeroSectionV2({
 
 							<nav className="hidden items-center gap-10 text-base font-medium text-minuri-ocean md:flex">
 								<Link
+									href="#services"
+									className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
+								>
+									Services
+								</Link>
+								<Link
 									href="#service"
 									className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
 								>
@@ -130,7 +136,7 @@ export function LandingHeroSectionV2({
 									href="#contact"
 									className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
 								>
-									Resources
+									Get support
 								</Link>
 							</nav>
 						</motion.div>
@@ -152,7 +158,7 @@ export function LandingHeroSectionV2({
 								href="/guides"
 								className="group hidden h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-6 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 							>
-								First-time guides
+								Start with guides
 								<ChevronRight
 									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 									strokeWidth={2.25}
@@ -163,7 +169,7 @@ export function LandingHeroSectionV2({
 								href="/near-me"
 								className="group hidden h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 							>
-								Near me
+								Find nearby support
 								<ChevronRight
 									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 									strokeWidth={2.25}
@@ -211,6 +217,17 @@ export function LandingHeroSectionV2({
 						<div className="flex h-full flex-col px-4 pt-3">
 							<nav>
 								<Link
+									href="#services"
+									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
+									onClick={() => setMobileMenuOpen(false)}
+								>
+									<span>Services</span>
+									<ChevronRight
+										className="size-6"
+										aria-hidden
+									/>
+								</Link>
+								<Link
 									href="#service"
 									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
 									onClick={() => setMobileMenuOpen(false)}
@@ -237,7 +254,7 @@ export function LandingHeroSectionV2({
 									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
 									onClick={() => setMobileMenuOpen(false)}
 								>
-									<span>Resources</span>
+									<span>Get support</span>
 									<ChevronRight
 										className="size-6"
 										aria-hidden
@@ -255,14 +272,14 @@ export function LandingHeroSectionV2({
 										className="inline-flex w-full items-center justify-center rounded-full border border-minuri-ocean bg-minuri-white px-5 py-2 text-sm font-medium text-minuri-ocean"
 										onClick={() => setMobileMenuOpen(false)}
 									>
-										First-time guides
+										Start with guides
 									</Link>
 									<Link
 										href="/near-me"
 										className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-minuri-ocean px-5 py-2 text-sm font-semibold text-minuri-white"
 										onClick={() => setMobileMenuOpen(false)}
 									>
-										Near me
+										Find nearby support
 										<ChevronRight
 											className="size-4"
 											aria-hidden
@@ -354,7 +371,7 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								Practical support that never quits
+								Your everyday support system
 							</motion.p>
 							<motion.div
 								className="mt-7 md:mt-auto md:mb-4"
@@ -376,8 +393,9 @@ export function LandingHeroSectionV2({
 								}}
 							>
 								<p className="max-w-xl leading-relaxed text-minuri-ocean font-medium md:text-lg">
-									Your playbook for building confidence with
-									meals, money, and everyday routines.
+									Get plain-language guides, find nearby
+									services, and follow clear next steps for
+									day-to-day independent life.
 								</p>
 								<motion.div
 									className="my-6 flex flex-wrap items-center gap-3"
@@ -405,7 +423,7 @@ export function LandingHeroSectionV2({
 										href="/near-me"
 										className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 									>
-										Near me
+										Find nearby support
 										<ChevronRight
 											aria-hidden
 											className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
@@ -415,7 +433,7 @@ export function LandingHeroSectionV2({
 										href="/guides"
 										className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-6 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
 									>
-										First-time guides
+										Start with guides
 										<ChevronRight
 											aria-hidden
 											className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"

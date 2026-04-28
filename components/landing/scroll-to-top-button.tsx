@@ -7,6 +7,8 @@ import { easeOut } from "@/components/landing/home-constants";
 import { cn } from "@/lib/utils";
 
 const SHOW_AFTER_PX = 360;
+const SCROLL_UP_INTENT_PX = 10;
+const SCROLL_DOWN_HIDE_PX = 10;
 const TRACKED_SECTION_IDS = ["service", "care", "contact"] as const;
 
 type ScrollToTopButtonProps = {
@@ -41,13 +43,18 @@ export function ScrollToTopButton({
 
 		const onScroll = () => {
 			const currentScrollY = window.scrollY;
-			const scrollingUp = currentScrollY < previousScrollYRef.current;
-			const shouldShow =
-				currentScrollY > SHOW_AFTER_PX &&
-				scrollingUp &&
-				isInTrackedSection();
+			const scrollDelta = previousScrollYRef.current - currentScrollY;
+			const scrollingUp = scrollDelta > SCROLL_UP_INTENT_PX;
+			const scrollingDown = scrollDelta < -SCROLL_DOWN_HIDE_PX;
+			const canShow =
+				currentScrollY > SHOW_AFTER_PX && isInTrackedSection();
 
-			setVisible(shouldShow);
+			setVisible((previousVisible) => {
+				if (!canShow) return false;
+				if (scrollingUp) return true;
+				if (scrollingDown) return false;
+				return previousVisible;
+			});
 			previousScrollYRef.current = currentScrollY;
 		};
 
@@ -74,21 +81,21 @@ export function ScrollToTopButton({
 		<AnimatePresence>
 			{visible ? (
 				<motion.div
-					className="fixed bottom-6 left-1/2 z-60 -translate-x-1/2 md:bottom-8"
-					initial={{ opacity: 0, y: 12, scale: 0.92 }}
+					className="fixed top-5 left-1/2 z-60 -translate-x-1/2 md:top-6"
+					initial={{ opacity: 0, y: -12, scale: 0.92 }}
 					animate={{ opacity: 1, y: 0, scale: 1 }}
-					exit={{ opacity: 0, y: 12, scale: 0.92 }}
+					exit={{ opacity: 0, y: -12, scale: 0.92 }}
 					transition={{ duration: 0.25, ease: easeOut }}
 				>
 					<button
 						type="button"
 						onClick={scrollToTop}
 						className={cn(
-							"minuri-button-motion flex h-15 cursor-pointer items-center justify-center rounded-full bg-minuri-teal px-8 text-sm font-medium text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
+							"minuri-button-motion flex size-11 cursor-pointer items-center justify-center rounded-full bg-minuri-teal text-xl leading-none font-semibold text-minuri-white shadow-[0_10px_30px_-10px_color-mix(in_oklch,var(--minuri-ocean)_58%,transparent)] backdrop-blur-sm hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog active:scale-95",
 						)}
 						aria-label="Back to top"
 					>
-						Back to top
+						<span aria-hidden="true">↑</span>
 					</button>
 				</motion.div>
 			) : null}

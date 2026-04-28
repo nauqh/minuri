@@ -19,8 +19,8 @@ type HowItWorksCard = {
 const cards: HowItWorksCard[] = [
 	{
 		step: "Step one",
-		title: "Pick a moment that sounds like your life right now",
-		body: "Start from a real moment, not a generic category. Minuri opens the right first step based on where you actually are.",
+		title: "Start with what is happening this week",
+		body: "Choose the moment that matches your life right now so you can skip generic advice and begin with the right first move.",
 		color: "#00f5d4",
 		optionLabel: "Moment",
 		options: [
@@ -30,18 +30,20 @@ const cards: HowItWorksCard[] = [
 			},
 			{
 				title: "I'm getting set up",
-				description: "Week 1: home admin, health basics, and orientation.",
+				description:
+					"Week 1: home admin, health basics, and orientation.",
 			},
 			{
 				title: "I'm looking for my people",
-				description: "Month 1: rhythm, connection, and sustaining habits.",
+				description:
+					"Month 1: rhythm, connection, and sustaining habits.",
 			},
 		],
 	},
 	{
 		step: "Step two",
-		title: "Navigate with five everyday topics",
-		body: "One shared language across guides and Near Me keeps things easy to follow and less overwhelming.",
+		title: "Follow one simple structure",
+		body: "Use the same five topics across the app, so each guide and local result feels familiar and easy to act on.",
 		color: "#7fdcff",
 		optionLabel: "Topic",
 		options: [
@@ -54,8 +56,8 @@ const cards: HowItWorksCard[] = [
 	},
 	{
 		step: "Step three",
-		title: "Finish with real places near you",
-		body: "When you are ready to act, Minuri takes you to real local places in your suburb instead of making you search from scratch.",
+		title: "Take action with nearby options",
+		body: "When you are ready, switch from planning to doing with practical places and services near your suburb.",
 		color: "#fff14a",
 		optionLabel: "Near me",
 		options: [
@@ -97,11 +99,11 @@ export function SpotlightScrollSection({
 						id="how-it-works-heading"
 						className="landing-section-heading"
 					>
-						The three steps.
+						From confusion to clear action
 					</h2>
 					<p className="landing-section-subheading mt-4">
-						Path from your current moment to action you can take
-						today.
+						A fast path from where you are now to the next thing you
+						can do today.
 					</p>
 				</div>
 

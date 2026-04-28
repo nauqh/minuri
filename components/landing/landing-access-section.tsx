@@ -13,21 +13,22 @@ export function LandingAccessSection() {
 		>
 			<div className="mx-auto w-full px-5 text-center md:px-8">
 				<FadeUp>
-					<p className="landing-section-kicker">Ask Minuri</p>
+					<p className="landing-section-kicker">Get support</p>
 				</FadeUp>
 				<FadeUp delay={0.06}>
 					<h2 className="landing-section-heading md:text-5xl">
-						Stop adulting alone
+						Get your next practical steps
 					</h2>
 				</FadeUp>
 				<FadeUp delay={0.12}>
 					<p className="landing-section-subheading">
-						Reach out - wherever you are, we&apos;re happy to help.
+						Tell us where you are stuck and we will send a focused
+						starting plan.
 					</p>
 				</FadeUp>
 				<FadeUp
 					delay={0.18}
-					className="mx-auto mt-10 flex max-w-md flex-col gap-3 sm:flex-row sm:items-stretch"
+					className="mx-auto mt-10 flex w-full max-w-3xl flex-col gap-3 sm:flex-row sm:items-stretch sm:gap-4"
 				>
 					<label htmlFor="email-landing" className="sr-only">
 						Email
@@ -38,15 +39,15 @@ export function LandingAccessSection() {
 						name="email"
 						placeholder="you@example.com"
 						autoComplete="email"
-						className="min-h-11 flex-1 rounded-minuri border border-minuri-silver bg-minuri-fog/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-minuri-teal focus:outline-none"
+						className="min-h-13 w-full flex-1 rounded-minuri border border-minuri-silver bg-minuri-fog/60 px-5 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm transition focus:border-minuri-teal focus:outline-none focus:ring-2 focus:ring-minuri-teal/20 sm:min-w-[25rem]"
 					/>
 					<motion.button
 						type="button"
-						className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-minuri bg-minuri-teal px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-minuri-seafoam"
+						className="group inline-flex min-h-13 w-full shrink-0 items-center justify-center gap-2 rounded-minuri bg-minuri-teal px-8 py-3.5 text-base font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-minuri-seafoam sm:w-auto sm:min-w-[16rem]"
 						whileHover={{ scale: 1.02 }}
 						whileTap={{ scale: 0.97 }}
 					>
-						Get next steps
+						Send me my next steps
 						<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 					</motion.button>
 				</FadeUp>

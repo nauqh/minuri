@@ -24,7 +24,7 @@ export function LandingFooter() {
 							transition={{ duration: 0.5, ease: easeOut }}
 						>
 							<h2 className="minuri-link-underline w-fit pb-1 text-[clamp(2.4rem,7vw,5.2rem)] font-bold leading-[1.03] tracking-tight text-minuri-teal">
-								Let's get started
+								Start where you are
 								<span
 									className="inline-block translate-y-px transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
 									aria-hidden
@@ -36,8 +36,8 @@ export function LandingFooter() {
 								</span>
 							</h2>
 							<p className="mt-3 text-[0.95rem] font-medium leading-relaxed text-minuri-ocean/70 md:text-base">
-								Reach out — wherever you are, we&apos;re happy
-								to help.
+								Choose guides, find nearby support, or ask for
+								your next best step.
 							</p>
 						</motion.div>
 					</Link>
