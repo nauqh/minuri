@@ -19,7 +19,7 @@ export function HomeView() {
 
 	const handleUnlock = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		if (passwordInput === "weareincredible") {
+		if (passwordInput === "minuri") {
 			setIsUnlocked(true);
 			setPasswordError("");
 			return;
