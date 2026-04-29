@@ -72,10 +72,10 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative mx-auto max-w-screen-2xl px-6 pb-10 pt-0 md:px-10">
+			<div className="relative mx-auto max-w-screen-2xl px-6 pb-10 pt-4 md:px-10 md:pt-0">
 				<div className="relative">
 					<motion.header
-						className="mx-auto flex w-full items-center justify-between bg-minuri-white md:min-h-21 md:rounded-full"
+						className="mx-auto flex w-full items-center justify-between bg-minuri-white py-2 md:min-h-21 md:rounded-full md:py-0"
 						initial={{
 							opacity: 0,
 							y: prefersReducedMotion ? 0 : -18,
@@ -353,7 +353,7 @@ export function LandingHeroSectionV2({
 					<div className="mt-0 grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex flex-col md:h-full">
 							<motion.p
-								className="mt-4 text-2xl font-bold uppercase text-minuri-ocean"
+								className="mt-4 text-2xl font-bold text-minuri-ocean"
 								variants={{
 									hidden: {
 										opacity: 0,

@@ -36,7 +36,7 @@ export function RelatedGuides({
     return (
         <section className="mt-12">
             <h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
-                More in this arc
+                More in this moment
             </h2>
             <p className="mt-3 text-sm leading-6 text-minuri-slate">
                 Keep going with related chapters in the same stage of your journey.

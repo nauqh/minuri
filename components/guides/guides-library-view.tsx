@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	FormEvent,
 	startTransition,
 	useDeferredValue,
 	useEffect,
@@ -10,7 +11,7 @@ import {
 } from "react";
 import { CircleHelp, ListFilter, Search, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { ArcStoryOverlay } from "@/components/guides/arc-story-overlay";
 import { easeOut } from "@/components/landing/home-constants";
@@ -35,7 +36,27 @@ type GuidesLibraryViewProps = {
 	mode: GuideOrigin;
 };
 
+const STORY_BEATS = [
+	{
+		label: "Step 01",
+		title: "Tell us your moment",
+		body: "Share what happened recently so we can shape a practical path forward.",
+	},
+	{
+		label: "Step 02",
+		title: "Name what you need right now",
+		body: "Pick the themes that feel urgent and we will bring the right guides first.",
+	},
+	{
+		label: "Step 03",
+		title: "Start your guide journey",
+		body: "We open your guide library with your story context in place.",
+	},
+] as const;
+const STORY_MIN_CHARS = 16;
+
 export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
+	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const prefersReducedMotion = useReducedMotion();
@@ -64,19 +85,48 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	}, [bookmarks]);
 	const activeTopicFilter = parseGuideTopicFilter(searchParams.get("topic"));
 	const rawQuery = searchParams.get("q") ?? "";
+	const storyMoment = searchParams.get("moments")?.trim() ?? "";
+	const storyNeeds =
+		searchParams
+			.get("needs")
+			?.split(",")
+			.map((value) => value.trim())
+			.filter(Boolean) ?? [];
+	const storyNeedsSet = new Set(storyNeeds);
 	const deferredQuery = useDeferredValue(rawQuery);
 	const isBookmarksMode = mode === "bookmarks";
+	const isStoryReady = searchParams.get("story") === "ready";
+	const showStoryOverlay = !isBookmarksMode && !isStoryReady;
 	const filterQuery = isBookmarksMode ? deferredQuery : "";
+	const [storyMomentDraft, setStoryMomentDraft] = useState(storyMoment);
+	const [storyNeedsDraft, setStoryNeedsDraft] =
+		useState<string[]>(storyNeeds);
+	const storyMomentLength = storyMomentDraft.trim().length;
+	const remainingStoryChars = Math.max(
+		0,
+		STORY_MIN_CHARS - storyMomentLength,
+	);
+	const canContinueStory =
+		storyMomentLength >= STORY_MIN_CHARS && storyNeedsDraft.length > 0;
 
 	const sourceGuides =
 		mode === "bookmarks" ? getGuidesFromSlugs(bookmarks) : GUIDES;
+	const shouldApplyStoryNeedsFilter =
+		!isBookmarksMode &&
+		isStoryReady &&
+		activeTopicFilter === "all" &&
+		storyNeedsSet.size > 0;
+	const storyScopedGuides = shouldApplyStoryNeedsFilter
+		? sourceGuides.filter((guide) => storyNeedsSet.has(guide.topic))
+		: sourceGuides;
 
-	const visibleGuides = filterGuides(
-		sourceGuides,
+	const baseVisibleGuides = filterGuides(
+		storyScopedGuides,
 		effectiveArcFilter,
 		activeTopicFilter,
 		filterQuery,
 	);
+	const visibleGuides = baseVisibleGuides;
 
 	function updateParams(updater: (params: URLSearchParams) => void) {
 		startTransition(() => {
@@ -91,7 +141,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 
 	const title = isBookmarksMode ? "My Bookmarks" : "Your Guides Journey";
 	const description = isBookmarksMode
-		? "Saved chapters from every arc, all in one place."
+		? "Saved chapters from every moment, all in one place."
 		: "Day 1 through your first month — every topic has a first step.";
 
 	const arcProgress = GUIDE_ARCS.map((arc) => ({
@@ -107,9 +157,17 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		})),
 	];
 
-	const activeTopicLabel =
-		topicOptions.find((t) => t.slug === activeTopicFilter)?.name ??
-		"All topics";
+	const storyNeedsLabels = storyNeeds
+		.map((slug) => GUIDE_TOPICS.find((topic) => topic.slug === slug)?.name)
+		.filter((value): value is string => Boolean(value));
+	const activeTopicLabel = shouldApplyStoryNeedsFilter
+		? `Story topics: ${storyNeedsLabels.join(" + ")}`
+		: (topicOptions.find((t) => t.slug === activeTopicFilter)?.name ??
+			"All topics");
+	const isStoryTopicChipActive = (topicSlug: GuideTopicFilter) =>
+		shouldApplyStoryNeedsFilter
+			? topicSlug !== "all" && storyNeedsSet.has(topicSlug)
+			: activeTopicFilter === topicSlug;
 
 	const mobileFiltersPanelId = useId();
 	const [mobileLibraryFiltersOpen, setMobileLibraryFiltersOpen] =
@@ -120,14 +178,15 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	);
 
 	useEffect(() => {
-		const shouldLockBody = mobileLibraryFiltersOpen || arcHelpOpen;
+		const shouldLockBody =
+			mobileLibraryFiltersOpen || arcHelpOpen || showStoryOverlay;
 		if (!shouldLockBody) return;
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
 		return () => {
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [arcHelpOpen, mobileLibraryFiltersOpen]);
+	}, [arcHelpOpen, mobileLibraryFiltersOpen, showStoryOverlay]);
 
 	useEffect(() => {
 		if (!mobileLibraryFiltersOpen && !arcHelpOpen) return;
@@ -146,6 +205,26 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		};
 	}, [arcHelpOpen, mobileLibraryFiltersOpen]);
 
+	function onToggleStoryNeed(topicSlug: string) {
+		setStoryNeedsDraft((current) =>
+			current.includes(topicSlug)
+				? current.filter((value) => value !== topicSlug)
+				: [...current, topicSlug],
+		);
+	}
+
+	function onSubmitStory(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (!canContinueStory) return;
+
+		const nextParams = new URLSearchParams(searchParams.toString());
+		nextParams.set("story", "ready");
+		nextParams.set("moments", storyMomentDraft.trim());
+		nextParams.set("needs", storyNeedsDraft.join(","));
+		nextParams.delete("topic");
+		router.replace(`${pathname}?${nextParams.toString()}`);
+	}
+
 	function renderLibraryFilters(onSelect?: () => void) {
 		const afterSelect = () => {
 			onSelect?.();
@@ -156,7 +235,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 				<div>
 					<div className="flex items-center justify-between gap-3">
 						<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-							Arc progress
+							Moment progress
 						</h2>
 						<button
 							type="button"
@@ -171,7 +250,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 							}}
 						>
 							<CircleHelp className="size-3.5" aria-hidden />
-							Arc help
+							Moment help
 						</button>
 					</div>
 					<p className="mt-1 text-sm leading-snug text-minuri-slate">
@@ -248,7 +327,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 								type="button"
 								className={cn(
 									"rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
-									activeTopicFilter === topic.slug
+									isStoryTopicChipActive(topic.slug)
 										? "bg-minuri-teal text-primary-foreground"
 										: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
 								)}
@@ -275,7 +354,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const librarySidebar = !isBookmarksMode ? (
 		<motion.aside
 			className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-8 lg:self-start"
-			aria-label="Arc progress and topics"
+			aria-label="Moment progress and topics"
 			initial={{
 				opacity: 0,
 				x: prefersReducedMotion ? 0 : 18,
@@ -330,7 +409,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 								id={`${mobileFiltersPanelId}-title`}
 								className="text-base font-semibold tracking-tight text-minuri-ocean"
 							>
-								Arcs &amp; topics
+								Moments &amp; topics
 							</h2>
 							<button
 								type="button"
@@ -351,6 +430,122 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 					</motion.div>
 				</motion.div>
 			) : null}
+		</AnimatePresence>
+	) : null;
+
+	const storyOverlay = showStoryOverlay ? (
+		<AnimatePresence>
+			<motion.div
+				key="guides-story-intake-overlay"
+				className="fixed inset-0 z-70 overflow-y-auto bg-minuri-ocean/45 px-4 py-6 backdrop-blur-[2px] md:px-6 md:py-10"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				transition={backdropTransition}
+			>
+				<motion.form
+					onSubmit={onSubmitStory}
+					className="mx-auto grid w-full max-w-5xl gap-6 rounded-[1.7rem] border border-minuri-silver/70 bg-minuri-white p-6 md:grid-cols-[minmax(0,1fr)_20rem] md:p-8"
+					initial={{ y: 18, opacity: 0 }}
+					animate={{ y: 0, opacity: 1 }}
+					exit={{ y: 12, opacity: 0 }}
+					transition={drawerTransition}
+				>
+					<div>
+						<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-minuri-mid">
+							Your next chapter starts here
+						</p>
+						<h2 className="mt-3 text-2xl font-semibold tracking-tight text-minuri-ocean md:text-[2rem]">
+							Before we begin, tell us your moment
+						</h2>
+						<p className="mt-3 max-w-3xl text-sm leading-6 text-minuri-slate">
+							This is a story-led start, not a questionnaire. We
+							use your words to shape what you see first.
+						</p>
+						<label className="mt-6 block text-sm font-medium text-minuri-ocean">
+							Your moment
+							<textarea
+								value={storyMomentDraft}
+								onChange={(event) =>
+									setStoryMomentDraft(event.target.value)
+								}
+								placeholder="Example: I arrived this week, still figuring out transport, and I am worried about affordable food and settling in."
+								className="mt-3 h-36 w-full resize-none overflow-y-auto rounded-[1rem] border border-minuri-silver/80 bg-minuri-white p-4 text-sm leading-6 text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate/65 focus:border-minuri-teal"
+							/>
+							<p className="mt-2 text-xs font-normal text-minuri-slate">
+								{remainingStoryChars > 0
+									? `Add ${remainingStoryChars} more character${
+											remainingStoryChars === 1 ? "" : "s"
+										} to continue.`
+									: "Great, your moment is long enough."}
+							</p>
+						</label>
+						<div className="mt-7">
+							<p className="text-sm font-medium text-minuri-ocean">
+								What do you need most right now?
+							</p>
+							<p className="mt-2 text-xs text-minuri-slate">
+								Choose one or more areas so we can prioritize
+								your guide path.
+							</p>
+							<div className="mt-4 flex flex-wrap gap-2">
+								{GUIDE_TOPICS.map((topic) => {
+									const selected = storyNeedsDraft.includes(
+										topic.slug,
+									);
+									return (
+										<button
+											key={topic.slug}
+											type="button"
+											onClick={() =>
+												onToggleStoryNeed(topic.slug)
+											}
+											className={cn(
+												"min-h-10 rounded-full px-4 py-2 text-xs font-medium transition-colors",
+												selected
+													? "bg-minuri-teal text-primary-foreground"
+													: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
+											)}
+										>
+											{topic.name}
+										</button>
+									);
+								})}
+							</div>
+						</div>
+						<button
+							type="submit"
+							disabled={!canContinueStory}
+							className="mt-8 inline-flex min-h-11 items-center justify-center rounded-full bg-minuri-teal px-6 text-sm font-semibold text-primary-foreground transition-opacity disabled:cursor-not-allowed disabled:opacity-45"
+						>
+							Continue to my guide journey
+						</button>
+					</div>
+					<aside className="border-l border-minuri-silver/70 pl-5">
+						<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-minuri-mid">
+							How this works
+						</p>
+						<ul className="mt-4 space-y-4">
+							{STORY_BEATS.map((beat) => (
+								<li
+									key={beat.label}
+									className="border-b border-minuri-silver/60 pb-3 last:border-b-0"
+								>
+									<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
+										{beat.label}
+									</p>
+									<h3 className="mt-2 text-sm font-semibold text-minuri-ocean">
+										{beat.title}
+									</h3>
+									<p className="mt-2 text-xs leading-5 text-minuri-slate">
+										{beat.body}
+									</p>
+								</li>
+							))}
+						</ul>
+					</aside>
+				</motion.form>
+			</motion.div>
 		</AnimatePresence>
 	) : null;
 
@@ -473,10 +668,29 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 				<p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-minuri-slate">
 					{isBookmarksMode
 						? "Try another topic or a different search."
-						: "Try another arc or topic."}
+						: "Try another moment or topic."}
 				</p>
 			</section>
 		);
+
+	const storyContextBanner =
+		!isBookmarksMode && (storyMoment || storyNeedsLabels.length > 0) ? (
+			<section className="border-l-4 border-minuri-teal/60 px-4 py-2 md:px-5">
+				<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-minuri-mid">
+					Your story-guided path
+				</p>
+				{storyMoment ? (
+					<p className="mt-2 text-sm leading-6 text-minuri-slate">
+						{storyMoment}
+					</p>
+				) : null}
+				{storyNeedsLabels.length > 0 ? (
+					<p className="mt-3 text-xs text-minuri-slate">
+						Prioritizing: {storyNeedsLabels.join(" • ")}
+					</p>
+				) : null}
+			</section>
+		) : null;
 
 	const libraryHeaderFiltersButton = !isBookmarksMode ? (
 		<button
@@ -486,8 +700,8 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			aria-controls={mobileFiltersPanelId}
 			aria-label={
 				mobileLibraryFiltersOpen
-					? "Arcs and topics filters open"
-					: "Open arcs and topics filters"
+					? "Moments and topics filters open"
+					: "Open moments and topics filters"
 			}
 			onClick={() => {
 				setMobileLibraryFiltersOpen(true);
@@ -509,6 +723,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		>
 			{!isBookmarksMode ? (
 				<>
+					{storyOverlay}
 					<ArcStoryOverlay
 						isOpen={arcHelpOpen}
 						onClose={() => {
@@ -522,6 +737,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 					<div className="grid items-start gap-x-10 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-x-14">
 						{librarySidebar}
 						<div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1">
+							{storyContextBanner}
 							{guidesListBody}
 						</div>
 					</div>

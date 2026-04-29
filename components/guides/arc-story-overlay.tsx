@@ -51,7 +51,7 @@ export function ArcStoryOverlay({
 					<button
 						type="button"
 						className="absolute inset-0 bg-minuri-ocean/45 backdrop-blur-[3px]"
-						aria-label="Close arc help"
+						aria-label="Close moment help"
 						onClick={onClose}
 					/>
 					<motion.div
@@ -76,17 +76,17 @@ export function ArcStoryOverlay({
 							<div className="relative flex items-start justify-between gap-4">
 								<div className="space-y-2">
 									<p className="text-[11px] font-medium uppercase tracking-[0.12em] text-minuri-mid">
-										Arc story guide
+										Moment guide
 									</p>
 									<h2
 										id="arc-help-title"
 										className="text-2xl font-semibold tracking-tight text-minuri-ocean md:text-[2.25rem]"
 									>
-										Choose the arc that matches where you
+										Choose the moment that matches where you
 										are
 									</h2>
 									<p className="max-w-2xl text-sm leading-6 text-minuri-slate">
-										Each arc is a chapter of your
+										Each moment is a chapter in your
 										first-month journey. Pick the one that
 										feels closest to your current moment.
 									</p>
@@ -94,7 +94,7 @@ export function ArcStoryOverlay({
 								<button
 									type="button"
 									className="flex size-10 shrink-0 items-center justify-center rounded-full bg-minuri-white/90 text-minuri-slate transition-colors hover:bg-minuri-fog"
-									aria-label="Close arc help"
+									aria-label="Close moment help"
 									onClick={onClose}
 								>
 									<X className="size-4" aria-hidden />
