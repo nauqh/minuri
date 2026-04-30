@@ -1,0 +1,74 @@
+{
+  "id": 29,
+  "slug": "tenant-rights-when-things-go-wrong",
+  "title": "Tenant Rights When Things Go Wrong",
+  "summary": "Mould, broken locks, dodgy bond claims, surprise inspections — Victoria's tenancy laws are stronger than most renters realise, but only if you use them.",
+  "arc": "month-1",
+  "arcOrder": 4,
+  "topic": "home-admin",
+  "readingTimeMin": 6,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/home-admin/tenant-rights-when-things-go-wrong.json",
+  "nextGuideSlug": "building-a-local-routine",
+  "searchTerms": [
+    "tenant rights",
+    "vcat",
+    "repairs",
+    "tenants victoria",
+    "consumer affairs",
+    "renting"
+  ],
+  "sourceLinks": [
+    {
+      "label": "Study Melbourne — Your rights when renting",
+      "href": "https://studymelbourne.vic.gov.au/living-here/accommodation/your-rights-when-renting"
+    },
+    {
+      "label": "Youth Central — Know your tenant rights",
+      "href": "https://www.youthcentral.vic.gov.au/housing/renting-and-sharehousing/when-things-go-wrong/know-your-tenant-rights"
+    },
+    {
+      "label": "Victoria Legal Aid — Renting",
+      "href": "https://www.legalaid.vic.gov.au/renting"
+    },
+    {
+      "label": "Tenants Victoria — Share houses: your rights",
+      "href": "https://tenantsvic.org.au/explore-topics/situations-while-renting/share-houses/"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/tenant-rights-when-things-go-wrong.jpg",
+  "nearMeDeeplink": "/near-me?topic=home-admin&from=tenant-rights-when-things-go-wrong",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "There's mould creeping along the bathroom ceiling. You first noticed it three weeks ago. You messaged the agent twice. The first reply was a thumbs up. The second was *\"we'll get someone out\"*. It's been thirteen days. The whole bathroom now smells like a wet towel that lived in a car. And the agent has just emailed about a routine inspection on Friday."
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "The power dynamic of renting in Australia tilts in a way that's invisible right up to the moment you push back. The agent has the email tone, the lease, the relationship with the landlord, the sense that they're \"just following process\". You have a problem, a phone, and a creeping suspicion that complaining will make you the difficult tenant.\n\nYou won't be the difficult tenant. You'll be a tenant who knows their rights, which is something agents respond to far faster than most renters realise."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**Victoria's tenancy laws were rewritten in 2021 and 2024 in renters' favour. Most agents are still operating on the older, more renter-hostile assumptions, and most renters are letting them.**\n\nUrgent repairs (broken hot water, no heat in winter, broken locks, gas leaks, unsafe wiring) must be done **immediately**, and you can authorise them yourself up to a capped amount if the rental provider doesn't act. Non-urgent repairs (mould, broken appliances, cosmetic damage) follow a written-request process with a 14-day response window. Inspections need 7 days' notice. Rent can only be increased once every 12 months, with 60 days' written notice. Bond can only be claimed against you for things outside fair wear and tear.\n\nNone of this is gracious. It's law. The free legal services that enforce it for you are funded for exactly this situation."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**1. Everything goes in writing.** Phone calls and verbal promises are worthless when things escalate. Email or text the agent — never just call. \"As discussed on the phone, this is to confirm…\" is a sentence that has saved hundreds of bonds.\n\n**2. For repairs, follow the formal process.**\n- **Urgent repairs** (defined in the *Residential Tenancies Act* — broken hot water, blocked toilet, dangerous electrical, gas leak, broken external lock, flooding, etc.): notify the rental provider in writing immediately. If they don't act *immediately*, you can authorise the repair yourself up to **$2,500** and claim it back. Keep the receipt.\n- **Non-urgent repairs** (mould, broken appliance, fence, ventilation): submit a written request. The rental provider has **14 days** to act. If they don't, you can apply to VCAT for a repair order — for free.\n\n**3. Know the inspection rules.** The rental provider can only enter the property:\n- For a routine inspection — **once every 6 months**, with **at least 7 days' written notice**.\n- For repairs — at a reasonable time, with at least 24 hours' notice.\n- For inspections during a sale or re-let — with proper notice.\n\nThey **cannot** show up unannounced. They cannot demand access to specific rooms. They cannot bring photographers without your consent.\n\n**4. Know the bond rules at the end.** When you move out, the rental provider can only claim against your bond for actual damages **outside fair wear and tear**. Faded paint, a worn carpet, a mark on the wall from a couch — all fair wear and tear, and not deductible. **You don't have to agree to a bond claim.** If the agent files one you disagree with, you contest it through RTBA, then if needed through VCAT. The hearing is informal and free.\n\n**5. Know who to call when you're stuck.**\n- **Tenants Victoria** — free advice line and tenancy advocates. Their website has template letters for every common situation, which is exactly what you need at 9pm when you're trying to write *\"as per s.72 of the Residential Tenancies Act…\"* without crying.\n- **Consumer Affairs Victoria** — the regulator. They handle complaints and run dispute-resolution.\n- **Victoria Legal Aid** — for renters facing eviction or serious disputes.\n- **Your local community legal centre** — free, walk-in, can write letters on your behalf.\n\n### The bit nobody mentions\n\nThe agent who has been ignoring your maintenance request for three weeks will reply within 24 hours of receiving an email that mentions \"VCAT\" politely and correctly. This isn't a trick — it's how the system is supposed to work. Your willingness to use the formal process is the only thing that makes the formal process matter.\n\nThe goal isn't to fight. It's to make clear, in writing, that you know what's required and you'll use the channels available. Most disputes never escalate past that point because they don't need to."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ Find a free tenancy advice service or community legal centre near you (opens Near Me, filtered to Home & Admin → Tenancy advice, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Building a Local Routine — once the home is sorted and stable, the next month becomes about making the surrounding streets feel like yours."
+    }
+  ]
+}

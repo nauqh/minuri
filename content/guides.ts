@@ -18,6 +18,18 @@ import settingUtilitiesGuide from "@/public/guides-content/home-admin/setting-up
 import sustainingGuide from "@/public/guides-content/health-wellbeing/sustaining-yourself-sleep-movement-and-disconnecting.json";
 import psychGuide from "@/public/guides-content/health-wellbeing/when-to-see-a-psych-counsellor-or-friend.json";
 import firstGroceryGuide from "@/public/guides-content/food-eating/your-first-grocery-run.json";
+import mealPreppingGuide from "@/public/guides-content/food-eating/meal-prepping-on-a-tight-budget.json";
+import freeCommunityMealsGuide from "@/public/guides-content/food-eating/finding-free-community-meals.json";
+import nightTransportGuide from "@/public/guides-content/getting-around/night-transport-and-getting-home-safe.json";
+import cyclingMelbourneGuide from "@/public/guides-content/getting-around/cycling-melbourne-without-fear.json";
+import emergencyVsUrgentCareGuide from "@/public/guides-content/health-wellbeing/emergency-vs-urgent-care-in-melbourne.json";
+import pharmacistFirstStopGuide from "@/public/guides-content/health-wellbeing/your-pharmacist-is-the-cheapest-first-stop.json";
+import bondDayOneGuide from "@/public/guides-content/home-admin/your-bond-starts-on-day-one.json";
+import superFirstPaycheckGuide from "@/public/guides-content/home-admin/super-and-your-first-paycheck.json";
+import tenantRightsGuide from "@/public/guides-content/home-admin/tenant-rights-when-things-go-wrong.json";
+import survivingFirstWeekendGuide from "@/public/guides-content/social-belonging/surviving-the-first-weekend-alone.json";
+import freeThingsThisWeekGuide from "@/public/guides-content/social-belonging/free-things-to-do-this-week.json";
+import volunteeringWayInGuide from "@/public/guides-content/social-belonging/volunteering-as-a-way-in.json";
 
 export type GuideTopicSlug =
     | "food-eating"
@@ -153,6 +165,18 @@ const GUIDE_FILES: GuideJson[] = [
     psychGuide as GuideJson,
     sustainingGuide as GuideJson,
     buildingALocalRoutineGuide as GuideJson,
+    mealPreppingGuide as GuideJson,
+    freeCommunityMealsGuide as GuideJson,
+    nightTransportGuide as GuideJson,
+    cyclingMelbourneGuide as GuideJson,
+    emergencyVsUrgentCareGuide as GuideJson,
+    pharmacistFirstStopGuide as GuideJson,
+    bondDayOneGuide as GuideJson,
+    superFirstPaycheckGuide as GuideJson,
+    tenantRightsGuide as GuideJson,
+    survivingFirstWeekendGuide as GuideJson,
+    freeThingsThisWeekGuide as GuideJson,
+    volunteeringWayInGuide as GuideJson,
 ];
 
 function fromGuideJson(guide: GuideJson): Guide {

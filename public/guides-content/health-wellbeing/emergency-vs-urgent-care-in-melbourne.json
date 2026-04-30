@@ -1,0 +1,78 @@
+{
+  "id": 25,
+  "slug": "emergency-vs-urgent-care-in-melbourne",
+  "title": "Emergency vs Urgent Care in Melbourne",
+  "summary": "Most after-hours health problems aren't an emergency, and the ED isn't the right place for them — Melbourne has a quieter system most newcomers don't know exists.",
+  "arc": "day-1",
+  "arcOrder": 5,
+  "topic": "health-wellbeing",
+  "readingTimeMin": 5,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/health-wellbeing/emergency-vs-urgent-care-in-melbourne.json",
+  "nextGuideSlug": "crisis-lines-you-can-actually-call",
+  "searchTerms": [
+    "emergency",
+    "urgent care",
+    "after hours",
+    "ED",
+    "nurse on call",
+    "healthdirect"
+  ],
+  "sourceLinks": [
+    {
+      "label": "Medidoc — Emergency vs GP: When to Go to the ED",
+      "href": "https://medidoc.com.au/blog/emergency-vs-gp-when-to-go-australia"
+    },
+    {
+      "label": "Medicine.com.au — Emergency vs Urgent Care in Australia",
+      "href": "https://www.medicine.com.au/emergency-vs-urgent-care-in-australia-how-to-choose-the-right-one/"
+    },
+    {
+      "label": "Royal Melbourne Hospital — Where to go instead of Emergency",
+      "href": "https://www.thermh.org.au/services/emergency/about-emergency/should-i-go-to-emergency/where-to-go-instead-of-emergency"
+    },
+    {
+      "label": "Better Health VIC — Urgent Care Services",
+      "href": "https://www.betterhealth.vic.gov.au/urgent-care-services"
+    },
+    {
+      "label": "Better Health VIC — After-hours healthcare options",
+      "href": "https://www.betterhealth.vic.gov.au/health/servicesandsupport/after-hours-healthcare-options"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/emergency-vs-urgent-care-in-melbourne.jpg",
+  "nearMeDeeplink": "/near-me?topic=health-wellbeing&from=emergency-vs-urgent-care-in-melbourne",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "It's 9:40pm on a Sunday. You sliced your finger making dinner. The bleeding has slowed but the cut is deeper than you thought, and you can see the white edge of something that probably needs a stitch. Your GP closed at 5pm. The hospital is twenty minutes away. You sit on the bathroom floor with a wad of paper towel and try to figure out if this is a 000 situation, an Uber-to-the-ED situation, or a problem-til-Monday situation."
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "Australia has an underused middle layer between \"GP appointment in three days\" and \"emergency room\". Most newcomers don't know it exists, so they default to one of two extremes — either the ED (a six-hour wait for something not actually urgent) or nothing (and a problem that should have been seen tonight festers until Tuesday).\n\nThe middle layer is where most after-hours health problems actually belong. Once you know it, the calculation gets simpler."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**Victoria has a network of free **Priority Primary Care Centres** and bulk-billing **after-hours clinics** designed for exactly this situation — the things that can't wait until Monday but aren't life-threatening.**\n\nA cut needing stitches. A child's high fever. An ear infection. A urinary tract infection. A sprained ankle that might be broken. A migraine you can't shake.\n\nThese clinics are staffed by GPs and nurses, run extended hours (some until midnight, some 24/7), and bulk-bill — meaning you pay nothing if you have a Medicare card. They're the part of the system the ED is *not* designed for, and they exist precisely so you don't go to the ED."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**The simplest decision tree:**\n\n**Call 000 immediately if:**\n- Chest pain, difficulty breathing, or any sudden severe pain.\n- Loss of consciousness, severe head injury, or stroke signs (face droop, arm weakness, slurred speech).\n- Heavy uncontrolled bleeding.\n- Severe allergic reaction.\n- Suicidal crisis with means and intent (also see the next guide).\n\n**Go to a hospital Emergency Department if:**\n- Suspected broken bones (especially leg, hip, spine).\n- Deep cuts that may have damaged tendons or won't stop bleeding.\n- Severe burns.\n- Signs of severe infection (high fever with confusion, stiff neck, rash that doesn't fade with pressure).\n- Mental-health crisis where you don't feel safe.\n\n**Go to an Urgent Care / Priority Primary Care Centre if:**\n- Cuts that need stitches but aren't deep.\n- Sprains, minor breaks, simple fractures.\n- Fevers, infections, asthma flare-ups.\n- UTIs, ear infections, eye infections.\n- Anything that can't wait until your GP opens but isn't dangerous tonight.\n\n**Call Nurse-on-Call (1300 60 60 24) if:**\n- You're not sure which category you're in. A registered nurse is on the phone 24/7, free, and will tell you. This is the single most useful number to put in your phone today.\n\n**Use Healthdirect's symptom checker (healthdirect.gov.au) if:**\n- You'd rather check online first. It walks you through symptoms and recommends a level of care.\n\n### The bit nobody mentions\n\nED waiting times in Melbourne for non-urgent cases routinely run 4–8 hours. Triage works on severity, not arrival order — the chest-pain patient who walked in after you will be seen first, and they should be. If you're not the most urgent person in the room, you wait.\n\nThe Priority Primary Care Centre 200 metres from your house, by contrast, will see you in under an hour for the cut on your finger. Same outcome. A quarter of the time. Free.\n\nKnowing this on day one is one of those facts that pays itself back the first time you need it, and the second, and the tenth."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ Find your closest Urgent Care / Priority Primary Care Centre and after-hours clinic (opens Near Me, filtered to Health & Wellbeing → After-hours, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Crisis Lines You Can Actually Call — for the moments where the problem isn't physical, and the answer isn't a clinic."
+    }
+  ]
+}

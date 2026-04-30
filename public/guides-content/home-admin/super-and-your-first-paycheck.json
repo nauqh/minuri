@@ -1,0 +1,74 @@
+{
+  "id": 28,
+  "slug": "super-and-your-first-paycheck",
+  "title": "Super and Your First Paycheck",
+  "summary": "Twenty minutes on your first day at a new job stops you accidentally opening four super accounts in three years and losing thousands in fees.",
+  "arc": "week-1",
+  "arcOrder": 5,
+  "topic": "home-admin",
+  "readingTimeMin": 6,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/home-admin/super-and-your-first-paycheck.json",
+  "nextGuideSlug": "medicare-bulk-billing-and-mental-health-care-plans",
+  "searchTerms": [
+    "super",
+    "superannuation",
+    "first job",
+    "ato",
+    "mygov",
+    "payslip"
+  ],
+  "sourceLinks": [
+    {
+      "label": "SuperGuide — Super for beginners",
+      "href": "https://www.superguide.com.au/how-super-works/beginners-guide"
+    },
+    {
+      "label": "ANZ — First job? Beginner's guide to super",
+      "href": "https://www.exclusives.anz.com.au/personal/superannuation/super-guides/first-job-a-beginners-guide-to-super/"
+    },
+    {
+      "label": "UniSuper — Super for under 18s and young Aussies",
+      "href": "https://www.unisuper.com.au/articles/2024/10/superannuation-for-under-18s-and-young-aussies"
+    },
+    {
+      "label": "Professional Super — What you need to know as a young professional",
+      "href": "https://www.professionalsuper.com.au/learning-hub/superannuation-what-you-need-to-know-as-a-young-professional/"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/super-and-your-first-paycheck.jpg",
+  "nearMeDeeplink": "/near-me?topic=home-admin&from=super-and-your-first-paycheck",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "First payslip from your first proper job. You scroll past *gross* and *net* and *tax withheld* and right at the bottom there's a number labelled *Super Guarantee* — a few hundred dollars going somewhere on your behalf, into a fund whose name you don't recognise, that you don't remember choosing. *I'll figure that out later*, you think. Three years and three jobs later, that thought is the reason you have four different super accounts charging you four sets of fees."
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "Super feels like a problem for forty-year-olds. The whole point of compounding interest is that you don't see it doing anything for a long time, so it feels safe to ignore.\n\nBut the actual money loss for young Australians isn't \"I didn't put extra in\" — it's \"my employer auto-enrolled me in their default fund every time I started a new casual job, and now I'm paying admin fees on five accounts holding $800 each\". Fixing that takes one afternoon. Not fixing it costs you genuinely a lot of money over the next decade."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**Super is your money. You can pick the fund. And you only need one.**\n\nWhen you start a new job, your employer is legally required to ask you which super fund to pay into. If you don't tell them, they'll put it in their default. The default might be fine. Or it might be expensive. Either way: by **filling in one form once and giving every future employer the same fund details**, you skip the entire problem of multiple accounts.\n\nMost twenty-somethings don't know this. They assume each employer comes with its own super, the way each employer comes with its own payroll system. It doesn't. The fund follows you, not the job."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**1. Understand what super actually is.** Your employer pays a percentage of your wage on top of your salary into a retirement fund. This is the *Super Guarantee* and it's mandatory. The current rate is set by the federal government and increases over time — your latest payslip will show what's being contributed. You don't choose to do this; it's automatic. What you *do* choose is **which fund the money goes into**.\n\n**2. The form you fill in is called a Standard Choice Form.** Your employer must give you one when you start. You write your fund name, ABN, USI, and member number — and from then on, every contribution from that employer goes there.\n\n**3. Pick a fund once. Stick with it.** When choosing a first fund, the things that matter most for someone starting out are:\n- **Fees.** Even half a percent in fees compounds into tens of thousands less at retirement. Lower is better.\n- **Insurance.** Most super funds bundle in default life and disability insurance. For a young person on casual work, this can be a useful default — or it can be eating $300/year of your contributions for cover you don't need. Check.\n- **Investment option.** Most funds default to a \"balanced\" mix. For someone in their 20s with 40+ years until retirement, a higher-growth option historically returns more — but with more short-term ups and downs.\n- **Performance.** APRA publishes annual fund performance data. Avoid funds flagged as underperforming.\n\nThe ATO's YourSuper comparison tool (via myGov) ranks funds by fee and net return.\n\n**4. Consolidate accounts you already have.** Open myGov, link the ATO, and look at *Super > Manage > Transfer super*. You'll see every account you've ever had — including ones you forgot existed from a six-month casual job in 2022. **You can roll them all into one in about ten minutes**, and it costs nothing. This is the single highest-impact super action a young person can take.\n\n**5. Make sure your TFN is on the account.** Without your TFN, your fund pays a much higher tax rate on your contributions. Check this in the fund's app or website.\n\n**6. Set up beneficiaries.** Super doesn't automatically go through your will. You nominate who receives it directly with the fund. Important even at 22.\n\n### The bit nobody mentions\n\nThe single best financial decision an Australian in their early twenties can make is to choose one super fund, give those details to every employer for the rest of their working life, and check in on it once a year. Not investment strategy. Not stock picking. Not crypto. Just: one account, low fees, your TFN attached, growing for forty years.\n\nIt's the most boring advice you'll get this decade. It's also the most valuable."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ Find a free financial counsellor or community super-help service (opens Near Me, filtered to Home & Admin → Money help, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Medicare, Bulk Billing, and Mental Health Care Plans — the other side of the paycheck: making sure healthcare doesn't quietly drain it."
+    }
+  ]
+}

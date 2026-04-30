@@ -1,0 +1,78 @@
+{
+  "id": 21,
+  "slug": "meal-prepping-on-a-tight-budget",
+  "title": "Meal Prepping on a Tight Budget",
+  "summary": "Two hours on Sunday saves you nine $18 lunches and the daily decision-fatigue of figuring out what to eat broke.",
+  "arc": "week-1",
+  "arcOrder": 2,
+  "topic": "food-eating",
+  "readingTimeMin": 5,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/food-eating/meal-prepping-on-a-tight-budget.json",
+  "nextGuideSlug": "setting-up-utilities-without-overpaying",
+  "searchTerms": [
+    "meal prep",
+    "budget cooking",
+    "batch cooking",
+    "cheap recipes",
+    "students",
+    "groceries"
+  ],
+  "sourceLinks": [
+    {
+      "label": "Woolworths — 21 meal prep ideas",
+      "href": "https://www.woolworths.com.au/shop/articles/meal-prep-ideas-to-enjoy-later"
+    },
+    {
+      "label": "Frugal & Thriving — Once-a-week budget meal prep",
+      "href": "https://www.frugalandthriving.com.au/meal-prepping-guide/"
+    },
+    {
+      "label": "ANU — 8 cheap and easy recipes for uni students",
+      "href": "https://study.anu.edu.au/stories/8-cheap-and-easy-recipes-uni-students"
+    },
+    {
+      "label": "Refinery29 AU — Cheap meal prep ideas",
+      "href": "https://www.refinery29.com/en-au/cheap-meal-prep-ideas"
+    },
+    {
+      "label": "myfoodbook — Easy budget one-pot recipes",
+      "href": "https://myfoodbook.com.au/collections/easy-budget-one-pot-recipes"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/meal-prepping-on-a-tight-budget.jpg",
+  "nearMeDeeplink": "/near-me?topic=food-eating&from=meal-prepping-on-a-tight-budget",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "It's Wednesday, 12:40pm, and you're standing in the food court between the library and your next tute. The sushi place is $14 for two rolls. The dumpling place is $16. The salad place is $18 and the lettuce somehow looks tired. You do the maths in your head: this is the fourth lunch like this in five days, and the maths gets worse every time you do it."
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "There's a particular kind of broke that comes from a thousand small decisions that each felt fine in the moment. The $14 here, the $9 coffee there. None of them are extravagant. Together they're the reason your account balance ends every fortnight in a place that surprises you.\n\nMeal prep gets pitched as either an Instagram aesthetic (twelve identical glass containers, perfectly arranged) or a martyr's punishment (cold rice and steamed broccoli all week). It's neither. It's a way of making one decision once instead of fourteen decisions tired."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**You don't have to prep meals. You have to prep one base.**\n\nThe trap of \"meal prep\" is the word *meal* — the assumption you have to plan twelve complete dinners. You don't. The version that actually works for broke twenty-somethings is: cook one large pot of one thing on Sunday. Eat it across the week with rotating cheap add-ons.\n\nOne pot of mince and tomato sauce becomes spaghetti, becomes nachos, becomes a jacket potato, becomes a wrap. One pot of curry becomes rice-and-curry, becomes curry-and-roti, becomes curry-baked-potato. One tray of roasted veg goes into anything.\n\nThe word for this isn't meal prep. It's *base prep*. And it's the difference between something you'll keep doing in week three and something you'll abandon by Wednesday."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**1. Pick one base, not seven meals.** A pot of bolognese. A pot of dahl. A pot of chicken-and-rice. A tray of roasted veg. Anything that gives you 5–6 servings out of one cook.\n\n**2. Shop for the base, not for the week.** A typical bolognese base is mince, onion, garlic, tinned tomatoes, dried herbs — under $15 at ALDI for the whole pot. Dahl is even cheaper: a kilo of red lentils, an onion, a tin of tomatoes, a few spices.\n\n**3. Cook it once. On a Sunday afternoon. While doing something else.** The pot doesn't need you. Put it on, put on a podcast, fold laundry. Forty minutes later you have the week.\n\n**4. Portion it cold.** Five containers, fridge. The two you won't eat by Thursday go in the freezer — labeled, because by Friday you'll have forgotten what's in there.\n\n**5. Buy *cheap rotating add-ons* for the variety.** A bag of rice ($3). A loaf of bread ($3). A bag of frozen veg ($4). A block of cheese ($6). A bag of tortillas ($4). The base is the same; the add-on is what changes.\n\n### The bit nobody mentions\n\nThe goal isn't *cooking*. It's removing decisions. By Tuesday lunchtime, the value of your Sunday cook isn't the $80 you saved — it's that you didn't have to *think* about lunch. Decision fatigue is what makes broke people spend money. Take the decision off the table once and a lot of the spending stops on its own.\n\nIf the prep itself feels like a chore, halve the ambition. One pot. One Sunday. Five lunches. That's it. Scale only when it stops feeling like work."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ Find your closest ALDI, Coles or Woolworths to do this week's base shop (opens Near Me, filtered to Food & Eating → Groceries, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Setting Up Utilities Without Overpaying — because the second-biggest leak in your fortnight isn't food, it's the energy plan you got auto-enrolled into when you signed the lease."
+    }
+  ]
+}

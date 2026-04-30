@@ -1,0 +1,70 @@
+{
+  "id": 27,
+  "slug": "your-bond-starts-on-day-one",
+  "title": "Your Bond Starts on Day One",
+  "summary": "The single biggest predictor of getting your full bond back is what you do in the first 72 hours of moving in — before you've even unpacked.",
+  "arc": "day-1",
+  "arcOrder": 7,
+  "topic": "home-admin",
+  "readingTimeMin": 6,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/home-admin/your-bond-starts-on-day-one.json",
+  "nextGuideSlug": "your-first-48-hours-checklist",
+  "searchTerms": [
+    "bond",
+    "condition report",
+    "rta",
+    "rental",
+    "evidence",
+    "photos"
+  ],
+  "sourceLinks": [
+    {
+      "label": "Tenants Victoria — Bonds in private rental",
+      "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/bonds/private-rental/"
+    },
+    {
+      "label": "Tenants Victoria — Condition reports",
+      "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/condition-reports/"
+    },
+    {
+      "label": "HomeMove — Getting your bond back in Victoria",
+      "href": "https://homemove.com.au/blog/getting-your-bond-back-in-victoria-the-complete-guide/"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/your-bond-starts-on-day-one.jpg",
+  "nearMeDeeplink": "/near-me?topic=home-admin&from=your-bond-starts-on-day-one",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "You just got the keys. The agent walks you through the place at speed, says something cheerful about \"just give the condition report a once-over and send it back when you can — no rush\", hands you the paperwork in a folder, and leaves. You stand in the empty lounge surrounded by your own boxes, holding a stapled document you haven't read, and a small voice says: *I'll do that tomorrow.*"
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "The condition report is the most boring document of your move and the most expensive one to ignore. Six months from now — when the agent claims you scuffed the wall, scratched the floor, broke the toilet seat that was already broken when you got there — this document is the only thing that decides whether you get your bond back or not.\n\nAnd because it's boring, and because you're tired, and because the agent said \"no rush\", most renters get this wrong. Then learn the lesson by losing $1,200 they couldn't afford to lose."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**The condition report isn't a formality. It's the legal document that decides who's right when there's a dispute. And you have a fixed window to fill it in properly — typically five business days from move-in.**\n\nThe agent's copy will say everything is in \"good condition\". It is your job, on day one, to find every scuff, mark, stain, crack, sticky cupboard, weak tap and dodgy power point, write each one in the *renter's* column, and **photograph it with a timestamp**.\n\nIf it's not on your condition report, the law assumes it didn't exist when you moved in. The bond at the end of the lease is decided largely on this document and the photos that back it up."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**1. Find out the bond is lodged with the RTBA.** In Victoria, your rental provider must lodge your bond with the **Residential Tenancies Bond Authority** within 10 business days of receiving it. You'll get an SMS / email from RTBA confirming it's been lodged in your name. **If you don't get that confirmation in two weeks, chase it.** A bond not lodged with RTBA is a bond you may not get back.\n\n**2. Do the walkthrough on day one — alone, with your phone.** Walk every room. Open every cupboard. Run every tap. Test the stove, oven, smoke alarm, every power point, every light. Look at every wall at eye level *and* low to the ground (where most existing damage hides).\n\n**3. Document everything in writing on the condition report.**\n- Use the official Consumer Affairs Victoria template — your rental provider must use this for any tenancy starting after March 2021.\n- Write specifics, not generalities: *\"3cm scratch on hardwood floor by north window, lounge\"* — not *\"floor damaged\"*.\n- Common things people forget: blinds (cords, slats), insect screens, oven racks, range hood filters, shower head pressure, mould around windows.\n\n**4. Photograph everything in parallel.** Open the camera, turn timestamps on, and photograph every defect you write up — plus a wide shot of every room as it was when you moved in. Don't post-process. Don't crop. Save the originals to cloud storage that day. These photos are evidence VCAT will accept.\n\n**5. Return the report on time.** **You have 5 business days from the move-in date** to return your signed copy with your comments. Late = you've waived your right to dispute things later.\n\n**6. Keep your own complete copy forever.** Photo the signed pages. Email them to yourself. The original goes to the agent; your copies are what protect you.\n\n### The bit nobody mentions\n\nThe single most common bond dispute isn't \"the renter trashed the place\". It's \"the existing damage wasn't documented and the agent claimed it was new\". Almost every dispute renters lose is decided on the absence of a photo from move-in day.\n\nAn hour on day one — walking around with your phone, ticking boxes, taking shots — is the cheapest insurance policy you'll ever pay for. You'll never know how much it saved you, because the dispute won't happen. That's the point."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ Find your closest Tenants Victoria office or community legal centre for free advice (opens Near Me, filtered to Home & Admin → Tenancy advice, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Your First 48 Hours Checklist — the rest of the day-one admin, in the order it actually has to happen."
+    }
+  ]
+}

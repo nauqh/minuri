@@ -1,0 +1,78 @@
+{
+  "id": 24,
+  "slug": "cycling-melbourne-without-fear",
+  "title": "Cycling Melbourne Without Fear",
+  "summary": "A second-hand bike, a cheap helmet, and one of the city's protected trails will reshape what your suburb feels like.",
+  "arc": "month-1",
+  "arcOrder": 6,
+  "topic": "getting-around",
+  "readingTimeMin": 6,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/getting-around/cycling-melbourne-without-fear.json",
+  "nextGuideSlug": "finding-your-community",
+  "searchTerms": [
+    "cycling",
+    "bikes",
+    "bike paths",
+    "commute",
+    "capital city trail",
+    "yarra"
+  ],
+  "sourceLinks": [
+    {
+      "label": "RACV — Melbourne cycling survival guide",
+      "href": "https://www.racv.com.au/royalauto/transport/cycling/melbourne-cycling-survival-guide.html"
+    },
+    {
+      "label": "RACV — Bike rules for beginner cyclists in Victoria",
+      "href": "https://www.racv.com.au/royalauto/transport/cycling/bike-rules-beginner-cyclists.html"
+    },
+    {
+      "label": "RACV — Victorian road rules for cyclists",
+      "href": "https://www.racv.com.au/royalauto/transport/cycling/cycling-road-rules-victoria.html"
+    },
+    {
+      "label": "City of Melbourne — Bike routes for beginners",
+      "href": "https://www.melbourne.vic.gov.au/news/bike-routes-beginners-commuting-your-neighbourhood"
+    },
+    {
+      "label": "Study Melbourne — Cycling and scooters",
+      "href": "https://studymelbourne.vic.gov.au/living-here/transport/cycling-and-scooters"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/cycling-melbourne-without-fear.jpg",
+  "nearMeDeeplink": "/near-me?topic=getting-around&from=cycling-melbourne-without-fear",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "It's the start of week five. You've worked out the trams. You've worked out the train. You've stopped getting off at the wrong stop. And on a Saturday morning you're standing on the bridge over the Yarra near Federation Square watching what looks like a hundred people glide past on bikes — kids, retirees, people in suits, people in tracksuits — and you think: *that is a piece of this city I haven't joined yet*."
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "Cycling in a new city has a learning-curve cliff that feels steeper from the outside than it actually is. The road rules feel unfamiliar. The traffic looks aggressive. The lycra people on $4,000 bikes don't help — they make it look like a sport you have to qualify for.\n\nIt isn't. It's a way of getting around that, in inner Melbourne, is often genuinely faster than a tram and free after the first $200 you spend."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**Most of inner Melbourne is connected by protected, off-road bike paths — and once you know which ones, you barely have to ride on a road at all.**\n\nThe **Capital City Trail** is a 30km loop that links Docklands, the CBD, Carlton, the Yarra, Richmond, and back. The **Main Yarra Trail** runs from the city out to Templestowe along the river. The **Merri Creek Trail** runs north through Brunswick, Northcote, and into Coburg. There are protected lanes on St Kilda Rd, Albert St, Wellington Pde, Princes Bridge.\n\nYou don't need to be brave. You need a map. Most newcomers picture cycling here as a fight for space against trucks on Lygon Street. The actual experience, on the right routes, is closer to a long, flat park."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**1. The bike.** Don't buy new. Facebook Marketplace, Gumtree, and the Brunswick / Coburg / Footscray bike co-ops all sell serviced second-hand commuters for $150–$300. A flat-bar hybrid is the friendliest first bike — not a road bike, not a mountain bike. It just has to roll, brake, and shift.\n\n**2. The legal kit.**\n- A helmet — **legally required in Victoria, every ride.** A $40 Kmart helmet is fine.\n- A working bell — **legally required.**\n- A white front light and a red rear light — **legally required at night and in low visibility.**\n- A rear reflector.\n\n**3. The unspoken kit.** A decent lock (a $60 D-lock, not a $15 cable). A puncture repair kit you'll learn to use the day you need it. Lights you charge weekly even though you tell yourself you'll remember.\n\n**4. The road rules that catch newcomers out.**\n- You can ride on footpaths in Victoria **only if you're under 13, or accompanying a child, or have a medical exemption**. Otherwise you're on the road or a shared path.\n- You must obey traffic lights, including bike-specific signals.\n- You can ride two abreast but not three.\n- You **must give way to pedestrians on shared paths**, and pass on the right with a bell warning.\n- Drink-driving laws apply to cyclists.\n\n**5. The first three rides that build confidence.**\n- **Capital City Trail loop** — the whole thing in one Saturday morning. It's flat, mostly off-road, signposted. By the end you've ridden 30km without realising it.\n- **Yarra Trail to Abbotsford Convent** — a brunch destination at the end gives the ride a point.\n- **Your suburb's quietest local route to your nearest train station** — the boring one. The one that becomes your actual commute. Practise it on a Sunday before you need it on a Monday.\n\n### The bit nobody mentions\n\nThe single biggest predictor of whether someone keeps cycling in their first month is whether their first ride was on a protected path or on the road. People who do their first ride on Sydney Road in peak hour mostly never ride again. People who do their first ride on the Yarra path on a Sunday morning are still riding a year later.\n\nPick the easy one first. There's no prize for starting hard."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ Find your closest bike shop, repair co-op or trailhead (opens Near Me, filtered to Getting Around → Bike, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Finding Your Community — because once you can move through the city under your own power, the next question is who you're moving toward."
+    }
+  ]
+}

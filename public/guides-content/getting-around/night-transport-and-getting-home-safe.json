@@ -1,0 +1,70 @@
+{
+  "id": 23,
+  "slug": "night-transport-and-getting-home-safe",
+  "title": "Night Transport and Getting Home Safe",
+  "summary": "Melbourne runs all-night public transport on Friday and Saturday nights — once you know the routes, late-night travel stops being a $40 Uber problem.",
+  "arc": "day-1",
+  "arcOrder": 3,
+  "topic": "getting-around",
+  "readingTimeMin": 5,
+  "isPublished": true,
+  "isFeatured": false,
+  "markdownPath": "/guides-content/getting-around/night-transport-and-getting-home-safe.json",
+  "nextGuideSlug": "finding-a-gp-before-you-need-one",
+  "searchTerms": [
+    "night network",
+    "late night transport",
+    "weekend trains",
+    "night bus",
+    "safety",
+    "ptv"
+  ],
+  "sourceLinks": [
+    {
+      "label": "Transport VIC — Late-night public transport in Melbourne",
+      "href": "https://transport.vic.gov.au/plan-a-journey/public-transport-tools-and-resources/travel-tips-and-resources/late-night-public-transport"
+    },
+    {
+      "label": "Melbourne Now — PTV Night Network",
+      "href": "https://www.melbournenow.com.au/plan/useful-info/ptv-night-network"
+    },
+    {
+      "label": "New Life in AUS — Safe late night public transport in Australia",
+      "href": "https://newlifeinaus.com.au/safe-late-night-public-transport-australia-guide/"
+    }
+  ],
+  "thumbnailUrl": "/guides/thumbnails/night-transport-and-getting-home-safe.jpg",
+  "nearMeDeeplink": "/near-me?topic=getting-around&from=night-transport-and-getting-home-safe",
+  "sections": [
+    {
+      "sectionKey": "moment",
+      "title": "The Moment",
+      "value": "It's 1:14am. You're on Brunswick Street and the place you were at has just closed. Your phone says 18%. The Uber app says $43 to your suburb. You stand on the corner doing the calculation everyone does at this exact moment: spend a third of your day's pay to get home, or wait for a tram you're not sure is even running, or start walking and hope something works out."
+    },
+    {
+      "sectionKey": "feeling",
+      "title": "The Feeling",
+      "value": "Late-night transport is one of those things that feels obvious once you know it and impossible the first time. Nobody briefs you on it. There's no \"welcome to Melbourne, here's the Night Network\" handout. You either grew up here and absorbed it, or you didn't, and you spent your first six months thinking your only options after midnight were Uber or walking."
+    },
+    {
+      "sectionKey": "reveal",
+      "title": "What nobody told you",
+      "value": "**Melbourne has free or near-free all-night public transport on Friday and Saturday nights.**\n\nIt's called the **Night Network**. Trains run hourly through the night on most lines. Trams run every half hour on the six biggest CBD routes. Twenty-one Night Bus routes cover the suburbs the trains and trams don't.\n\nIf you live anywhere in inner or middle Melbourne and you're heading home on a Friday or Saturday after midnight, the Night Network is almost certainly the cheapest, safest, fastest option you have. Most newcomers don't know it exists for a year."
+    },
+    {
+      "sectionKey": "how-it-works",
+      "title": "How it actually works",
+      "value": "**1. It runs Friday and Saturday nights only.** All night, both nights — through to morning. On Sunday–Thursday nights, services stop around midnight–1am and resume at first train.\n\n**2. The six all-night tram routes are 19, 67, 75, 86, 96 and 109.** Between them they cover Sydney Rd, St Kilda Rd, Burwood, Bundoora, East Brunswick / Acland St, and the city loop. If you live near one of those routes, you basically already have a way home.\n\n**3. Trains run hourly through the night** on most lines (Stony Point and Flemington Racecourse are the exceptions). Hourly is less convenient than the daytime 10-minute frequency, but it's still a train.\n\n**4. Twenty-one Night Bus routes fill the gaps.** They run roughly every 30–60 minutes and cover the suburbs the rail/tram network doesn't reach.\n\n**5. Use the PTV app or PTV Journey Planner to plan it.** Just search your route after midnight on a Saturday morning — it'll show the Night Network options as part of the normal plan.\n\n**6. Same Myki, same fares.** Touch on like any other day. There's no separate Night Network ticket. Free tram zone still applies in the CBD.\n\n### Safety, plainly\n\nNight Network trains and trams have **PSOs (Protective Services Officers)** at every metropolitan train station from 6pm until last service, every night. Stations are well-lit. Carriages have help points and CCTV.\n\nThe practical advice that holds up:\n- Sit near the driver's end of the tram or in a carriage with other people.\n- If a station feels off, get on the next train and get off at a busier one.\n- Tell someone — a friend, a flatmate, a group chat — when you're leaving and roughly when to expect you home. Not because something will go wrong, but because the message itself is the loop closing.\n- If your phone is dying, *Melbourne Train Trip* and *PTV* both work briefly with cached data, but the safer move is leaving with 30%+.\n\nIf something does go wrong, the emergency number on every train and tram is 000. Yarra Trams' service number for a non-emergency tram issue is 1800 800 007."
+    },
+    {
+      "sectionKey": "bridge",
+      "title": "When you're ready",
+      "value": "→ See the Night Network stops near you and the routes that go to your suburb (opens Near Me, filtered to Getting Around → Stops, suburb pre-filled)"
+    },
+    {
+      "sectionKey": "next-chapter",
+      "title": "Up next",
+      "value": "Finding a GP Before You Need One — because the second thing you'll be glad you sorted on day one is healthcare, and the system isn't what it looks like from the outside."
+    }
+  ]
+}
