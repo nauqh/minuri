@@ -1,16 +1,9 @@
 // ── Topics ──
-// Aligned with Epic 2 guide categories so the product feels like one surface.
-// Guides explain *what to do*; Near Me shows *where to go*.
+// Unified with GuideTopicSlug so Near Me and Guides share one vocabulary.
 
-export const NEAR_ME_TOPICS = [
-	"setup",
-	"survive",
-	"get-around",
-	"health",
-	"connect",
-] as const;
+import { type GuideTopicSlug, GUIDE_TOPICS } from "@/content/guides";
 
-export type NearMeTopic = (typeof NEAR_ME_TOPICS)[number];
+export type NearMeTopic = GuideTopicSlug;
 
 export type TopicLayout = "list-focus" | "card-grid" | "map-focus";
 
@@ -30,20 +23,8 @@ export type TopicMeta = {
 };
 
 const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
-	setup: {
-		label: "Setup",
-		tagline: "I don't understand the paperwork",
-		icon: "📋",
-		subtypes: [
-			{ slug: "services", label: "Services & info" },
-			{ slug: "libraries", label: "Libraries" },
-		],
-		layout: "list-focus",
-		heading: "Services & support near {suburb}",
-		emptyPrompt: "No services found here yet — try a nearby suburb.",
-	},
-	survive: {
-		label: "Survive",
+	"food-eating": {
+		label: "Food & Eating",
 		tagline: "I'm running out of money",
 		icon: "💰",
 		subtypes: [
@@ -54,20 +35,20 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		heading: "Cheap eats & groceries near {suburb}",
 		emptyPrompt: "Nothing matched — try broadening your search.",
 	},
-	"get-around": {
-		label: "Get around",
+	"getting-around": {
+		label: "Getting Around",
 		tagline: "I don't know how to get around",
 		icon: "🚊",
 		subtypes: [
-			{ slug: "trains-trams", label: "Trains & trams" },
-			{ slug: "bikes-buses", label: "Bikes & buses" },
+			{ slug: "public-transit", label: "Trains & trams" },
+			{ slug: "cycling", label: "Bikes & walking" },
 		],
 		layout: "map-focus",
 		heading: "Getting around {suburb}",
 		emptyPrompt: "No stops found — try a different suburb.",
 	},
-	health: {
-		label: "Health",
+	"health-wellbeing": {
+		label: "Health & Wellbeing",
 		tagline: "Something feels off",
 		icon: "🩺",
 		subtypes: [
@@ -78,13 +59,25 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		heading: "Clinics & GPs near {suburb}",
 		emptyPrompt: "No clinics found here — try a neighbouring suburb.",
 	},
-	connect: {
-		label: "Connect",
+	"home-admin": {
+		label: "Home & Admin",
+		tagline: "I don't understand the paperwork",
+		icon: "📋",
+		subtypes: [
+			{ slug: "services", label: "Services & info" },
+			{ slug: "libraries", label: "Libraries" },
+		],
+		layout: "list-focus",
+		heading: "Services & support near {suburb}",
+		emptyPrompt: "No services found here yet — try a nearby suburb.",
+	},
+	"social-belonging": {
+		label: "Social & Belonging",
 		tagline: "I feel alone",
 		icon: "💬",
 		subtypes: [
-			{ slug: "parks-free", label: "Parks & free" },
-			{ slug: "bars-social", label: "Bars & social" },
+			{ slug: "community-spaces", label: "Parks & free" },
+			{ slug: "social-venues", label: "Bars & social" },
 		],
 		layout: "map-focus",
 		heading: "Places to hang out near {suburb}",
@@ -112,6 +105,7 @@ export type NearMePlace = {
 	tags?: string[];
 	openNow?: boolean;
 	thumbnail?: string;
+	photos?: string[];
 	website?: string;
 	serviceOptions?: string[];
 };
@@ -135,20 +129,22 @@ export function getTopicMeta(topic: NearMeTopic) {
 }
 
 export function getAllTopicsMeta() {
-	return NEAR_ME_TOPICS.map((slug) => ({ slug, ...TOPIC_META[slug] }));
+	return GUIDE_TOPICS.map(({ slug }) => ({ slug, ...TOPIC_META[slug] }));
 }
 
 export function getContextHeading(topic: NearMeTopic, suburb: string) {
 	return TOPIC_META[topic].heading.replace("{suburb}", suburb);
 }
 
+const NEAR_ME_TOPIC_SLUGS = Object.keys(TOPIC_META) as NearMeTopic[];
+
 export function parseTopic(input: string | undefined | null): NearMeTopic {
-	if (!input) return "survive";
+	if (!input) return "food-eating";
 	const normalized = input.toLowerCase().trim();
-	if (NEAR_ME_TOPICS.includes(normalized as NearMeTopic)) {
+	if (NEAR_ME_TOPIC_SLUGS.includes(normalized as NearMeTopic)) {
 		return normalized as NearMeTopic;
 	}
-	return "survive";
+	return "food-eating";
 }
 
 export function getSuburbDisplayName(rawSuburb: string) {
@@ -159,4 +155,38 @@ export function getSuburbDisplayName(rawSuburb: string) {
 
 export function formatNumber(value: number) {
 	return new Intl.NumberFormat("en-AU").format(value);
+}
+
+export function haversineKm(
+	lat1: number,
+	lng1: number,
+	lat2: number,
+	lng2: number,
+): number {
+	const R = 6371;
+	const toRad = (d: number) => (d * Math.PI) / 180;
+	const dLat = toRad(lat2 - lat1);
+	const dLng = toRad(lng2 - lng1);
+	const a =
+		Math.sin(dLat / 2) ** 2 +
+		Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+	return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+export function parseOpenState(raw: string | undefined): {
+	isOpen: boolean;
+	label: string;
+} {
+	if (!raw) return { isOpen: false, label: "" };
+	if (/temporarily closed/i.test(raw))
+		return { isOpen: false, label: "temporarily closed" };
+	if (/24 hours/i.test(raw)) return { isOpen: true, label: "24 hours" };
+	// SerpAPI uses "⋅" (U+22C5) as separator
+	const closesMatch = raw.match(/closes?\s+(.+?)(?:\s*[·⋅•]|$)/i);
+	const opensMatch = raw.match(/opens?\s+(.+?)(?:\s*[·⋅•]|$)/i);
+	if (/open/i.test(raw) && closesMatch)
+		return { isOpen: true, label: `until ${closesMatch[1].trim()}` };
+	if (/closed/i.test(raw) && opensMatch)
+		return { isOpen: false, label: `opens ${opensMatch[1].trim()}` };
+	return { isOpen: /open/i.test(raw), label: "" };
 }

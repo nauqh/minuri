@@ -1,0 +1,214 @@
+[
+  {
+    "category": "ui-unification",
+    "description": "Extract the three inline list components (DetailList, CardGridList, CompactList) into a single PlaceCard component that adapts via a cardLayout prop",
+    "steps": [
+      "Create components/near-me/place-card.tsx with a PlaceCard component that accepts: place, index, cardLayout ('grid' | 'list' | 'compact'), topic, selected, hovered, saved, onSelect, onHoverPlace, onToggleSave",
+      "Move all list rendering out of near-me-view.tsx into PlaceCard; near-me-view.tsx should only map over places and render <PlaceCard> per item inside a wrapper div",
+      "The 'grid' cardLayout is a vertical card (photo on top, info below) — used by food-eating and social-belonging",
+      "The 'list' cardLayout is a horizontal card (photo left, info right, action column right) — used by health-wellbeing and home-admin",
+      "The 'compact' cardLayout is a slim row with a transit icon circle instead of a photo — used only by getting-around",
+      "Derive cardLayout from topicMeta.layout: 'card-grid' → 'grid', 'list-focus' → 'list', 'map-focus' → 'compact' (except getting-around which stays compact and social-belonging which switches to 'grid')",
+      "Verify all 5 topic tabs render the correct layout after the extraction",
+      "Verify selected/hover border highlight and row scroll-into-view still work correctly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui-photo",
+    "description": "All cards lead with a photo — hero image for grid cards, thumbnail for list cards, transit icon for compact rows",
+    "steps": [
+      "In PlaceCard grid layout: render a full-width hero image at h-44 using object-cover; overlay the place number badge (bottom-left, dark pill) and heart button (top-right) directly on the photo",
+      "In PlaceCard list layout: render an 80×80 rounded-lg thumbnail on the left; if no thumbnail, render a square tile with the topic icon centered on a topic-tinted background (food: amber/10, health: green/10, home: teal/10)",
+      "In PlaceCard compact layout: render a 40×40 circle with the transit mode emoji centered on bg-blue-100; do not show a photo at all for getting-around",
+      "For grid and list layouts, when place.thumbnail is absent, show a gray fog tile with a centered MapPin icon (size-6 text-minuri-silver)",
+      "Verify hero photos load with Next.js Image fill + sizes='(max-width: 768px) 100vw, 50vw'",
+      "Verify the number overlay badge is visible against both light and dark photos (dark semi-transparent background)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui-yelp",
+    "description": "Yelp-style rating row: yellow star + rating number + review count in muted text, replacing the dark pill badge",
+    "steps": [
+      "Define a RatingRow component: renders ⭐ (yellow star emoji) + rating in font-semibold text-sm + '(' + reviewCount formatted with k suffix + ')' in text-xs text-minuri-slate/70",
+      "Format review count: >= 1000 → '{n}k' (e.g. '1.2k'), < 1000 → exact number",
+      "Replace all existing dark bg-minuri-mid rating pill badges with RatingRow across PlaceCard grid, list, and popup card in near-me-map.tsx",
+      "Suppress RatingRow for topic === 'social-belonging' (belonging is not ranked)",
+      "Verify RatingRow renders inline with the place name in grid cards and in its own line under the name in list cards",
+      "Verify no rating badge appears on any social-belonging card"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui-yelp",
+    "description": "Open/closed status shows specific closing or next-open time parsed from open_state for all topics, not just health-wellbeing",
+    "steps": [
+      "In lib/near-me.ts, add a parseOpenState(raw: string | undefined): { isOpen: boolean; label: string } helper that extracts the time substring: 'Open ⋅ Closes 10 pm' → { isOpen: true, label: 'until 10 pm' }, 'Closed ⋅ Opens Mon 8 am' → { isOpen: false, label: 'opens Mon 8 am' }, fallback to { isOpen: /open/i.test(raw), label: '' }",
+      "In PlaceCard, render an OpenBadge using parseOpenState(place.hours): when isOpen → green dot + 'Open' + label in text-green-700; when closed → red dot + 'Closed' + label in text-red-600",
+      "Display the OpenBadge on all topic cards: in grid layout it sits below the place name on its own line; in list layout it appears in the right-hand status column; in compact layout it is omitted (transit stops have no meaningful open hours)",
+      "Remove the topic === 'health-wellbeing' condition that previously gated the open/closed badge",
+      "Verify 'Open until 10 pm' renders in green on an open food-eating card",
+      "Verify 'Closed · opens Mon 8 am' renders in red on a closed health-wellbeing card"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui-yelp",
+    "description": "Price range displayed inline next to type as a single muted meta row, not as a separate tag chip",
+    "steps": [
+      "In PlaceCard, compose a single meta line: '{type} · {price} · {distance}' where each segment is omitted when absent",
+      "Style: text-xs text-minuri-slate/80; price portion shown as text-minuri-slate font-medium ($ $$ $$$ stand out slightly)",
+      "Remove price from the tags/chips rendering — price is no longer displayed as a chip",
+      "Retain service_options chips (Dine-in, Takeaway, Delivery) separately below the meta line for food-eating topic only",
+      "Verify the meta line reads e.g. 'Restaurant · $$ · 1.2 km' on a food-eating card with location active",
+      "Verify the meta line reads e.g. 'GP clinic · 0.5 km' on a health-wellbeing card (no price shown)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui-yelp",
+    "description": "Distance shown as a '📍 0.8 km' pill badge near the address when user location is active",
+    "steps": [
+      "Remove distanceKm from the inline address text ('123 Main St · 0.8 km')",
+      "Instead render a separate pill badge: '📍 0.8 km' with bg-green-50 text-green-700 text-[10px] rounded-full px-2 py-0.5 positioned to the right of the address line",
+      "Only render the badge when place.distanceKm is defined (location active)",
+      "In compact layout, show distanceKm as plain text to the right of the stop name (no pill — space is too tight)",
+      "Verify the distance badge appears when usingLocation is true and disappears otherwise"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui-yelp",
+    "description": "Unified action strip at the bottom of every PlaceCard with a topic-aware primary CTA and consistent secondary buttons",
+    "steps": [
+      "Define a unified action row for PlaceCard with: primary button (rounded-full, bg-minuri-teal text-white, full-width on mobile), then secondary buttons (outlined rounded-full, border-minuri-silver/60)",
+      "Primary CTA per topic: food-eating → '↗ Directions'; getting-around (public-transit subtype) → 'Plan journey'; getting-around (cycling) → '↗ Directions'; health-wellbeing → '📞 Call to book' (when phone exists) or '↗ Directions'; home-admin → '🌐 Visit website' (when website exists) or '↗ Directions'; social-belonging → '↗ Directions'",
+      "Secondary buttons: phone button when topic is not getting-around and place.phone exists; website button when topic is home-admin and both phone and website exist; all buttons use e.stopPropagation()",
+      "Heart button (HeartButton component) moves into the photo overlay (top-right corner) for grid cards; stays in the action row for list and compact cards",
+      "Verify primary CTA fills full width on mobile; secondary buttons wrap below on small screens",
+      "Verify Call button opens tel: link and Directions opens Google Maps in a new tab without navigating away from Near Me"
+    ],
+    "passes": false
+  },
+  {
+    "category": "food-eating-layout",
+    "description": "Food & Eating tab renders a 2-column card grid on desktop (1 column on mobile) with photo-dominant cards",
+    "steps": [
+      "In near-me-view.tsx, the results wrapper for topic === 'food-eating' renders: <div className='grid grid-cols-1 md:grid-cols-2 gap-0 divide-y divide-minuri-silver/30 md:divide-y-0 md:gap-3 md:p-3'>",
+      "Each PlaceCard in grid layout shows: hero photo h-44, number badge overlay bottom-left, heart overlay top-right, then below: name (font-semibold text-base), RatingRow, meta line (type · price · distance), OpenBadge, service_options chips (up to 3), snippet (2 lines max, italic text-xs), action row [Directions] + [Call]",
+      "Service option chips use bg-amber-50 text-amber-700 text-[10px] rounded-full px-2 py-0.5 to distinguish from the teal subtype chips",
+      "Snippet is capped at 2 lines using line-clamp-2 to keep cards uniform height",
+      "Verify cards render in 2 columns on desktop and stack to 1 column on mobile",
+      "Verify heart overlay is clickable independently of the card click (stopPropagation)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "getting-around-layout",
+    "description": "Getting Around tab renders slim transit rows with a transit mode icon circle, no photo hero",
+    "steps": [
+      "In near-me-view.tsx, the results wrapper for topic === 'getting-around' renders: <div className='divide-y divide-minuri-silver/30'>",
+      "Each compact PlaceCard shows: [40×40 circle with transit emoji centered on bg-blue-100] [main content: stop name (font-medium text-sm), short address (first segment), distance badge] [right: Plan journey button or Directions]",
+      "The transit emoji in the circle is derived from getTransitBadge(place.type): 🚂 Train / 🚊 Tram / 🚌 Bus / 🚲 Bike / 🗺 Transit",
+      "The action button for public-transit subtype links to https://www.ptv.vic.gov.au/journey in a new tab; for cycling subtype it links to Google Maps Directions",
+      "Do not render a snippet, tags, or service options for getting-around — keep rows minimal so the map takes visual priority",
+      "Verify the list panel stays narrow (map-focus width) and the map fills the right two-thirds"
+    ],
+    "passes": false
+  },
+  {
+    "category": "health-wellbeing-layout",
+    "description": "Health & Wellbeing tab renders a 3-zone horizontal list card: photo | info | status+CTA column",
+    "steps": [
+      "In near-me-view.tsx, the results wrapper for topic === 'health-wellbeing' renders: <div className='divide-y divide-minuri-silver/30'>",
+      "Each list PlaceCard shows three horizontal zones in a flex row: left (80×80 thumbnail or green-tinted icon tile), center (flex-1: name bold, type + bulk-billing nudge tag, address + distance, snippet 1 line italic), right (shrink-0 w-28: OpenBadge stacked above primary CTA)",
+      "Right column primary CTA: '📞 Call to book' button (full-width, teal fill) when place.phone exists; '↗ Directions' otherwise",
+      "Bulk-billing nudge renders as a small amber tag (bg-amber-50 text-amber-700 border border-amber-200 text-[10px]) directly below the type text, only for health-wellbeing topic",
+      "A secondary action row spans full card width at the bottom: [Directions] outlined + [Website] outlined — only rendered if phone was used as primary CTA",
+      "Verify the 3-zone layout does not overflow on mobile — collapse to 2-zone (no right column) on screens < 640px, stacking the OpenBadge and CTA below the center info"
+    ],
+    "passes": false
+  },
+  {
+    "category": "home-admin-layout",
+    "description": "Home & Admin tab renders a single-column list with website as the primary prominent action",
+    "steps": [
+      "In near-me-view.tsx, the results wrapper for topic === 'home-admin' renders: <div className='divide-y divide-minuri-silver/30'>",
+      "Each list PlaceCard shows: [80×80 thumbnail OR icon tile — 📋 for services subtype / 📚 for libraries subtype on bg-teal-50] [center: name, type, address + distance, snippet] [no right column]",
+      "Below the center info, render a dedicated action row that spans full width: '🌐 Visit website' as a full-width teal-fill button (when place.website exists), then '↗ Directions' as a full-width outlined button below it",
+      "When no website is available, '↗ Directions' becomes the full-width primary button",
+      "Phone button rendered as a small inline link (not a full button) below the website button when place.phone exists",
+      "Verify the website button is the most visually prominent element for home-admin cards",
+      "Verify the icon tile (📋 or 📚) renders correctly when no SerpAPI thumbnail is returned for government services"
+    ],
+    "passes": false
+  },
+  {
+    "category": "social-belonging-layout",
+    "description": "Social & Belonging tab renders a 2-column discovery grid matching food-eating grid but without rating",
+    "steps": [
+      "In near-me-view.tsx, the results wrapper for topic === 'social-belonging' renders: <div className='grid grid-cols-1 md:grid-cols-2 gap-0 divide-y divide-minuri-silver/30 md:divide-y-0 md:gap-3 md:p-3'>",
+      "Each grid PlaceCard shows: hero photo h-44, heart overlay top-right (no number badge for social-belonging — discovery mode feels less ranked), then: name (font-semibold), meta line (type · price · distance, no rating), OpenBadge",
+      "community-spaces subtype: render '📅 Check venue for events' amber chip below the meta line",
+      "social-venues subtype: render price level chips ($ $$ $$$) from place.tags in teal/10 below the meta line",
+      "Action row: [↗ Directions] outlined as the sole action (community events are about going there, not calling)",
+      "Verify no rating appears on any social-belonging card",
+      "Verify the discovery grid feel — no numbered badges, discovery-first photo emphasis"
+    ],
+    "passes": false
+  },
+  {
+    "category": "data",
+    "description": "Add parseOpenState() helper that extracts closing/opening time from the open_state string for Yelp-style status display",
+    "steps": [
+      "In lib/near-me.ts, add: export function parseOpenState(raw: string | undefined): { isOpen: boolean; label: string }",
+      "Parse patterns: 'Open ⋅ Closes 10 pm' → { isOpen: true, label: 'until 10 pm' }; 'Closed ⋅ Opens Mon 8 am' → { isOpen: false, label: 'opens Mon 8 am' }; 'Open 24 hours' → { isOpen: true, label: '24 hours' }",
+      "When raw is undefined or empty return { isOpen: false, label: '' }",
+      "When no time pattern is found, fall back to isOpen: /open/i.test(raw) and label: ''",
+      "Use parseOpenState everywhere the open/closed status is rendered — PlaceCard and near-me-map.tsx popup",
+      "Verify 'until 10 pm' appears in the open badge when SerpAPI returns 'Open ⋅ Closes 10 pm'"
+    ],
+    "passes": false
+  },
+  {
+    "category": "data",
+    "description": "Add photos?: string[] to NearMePlace and map from API response for a photo strip on list-layout cards",
+    "steps": [
+      "In lib/near-me.ts, add photos?: string[] to the NearMePlace type",
+      "In near-me-view.tsx fetchPlaces(), map place.photos (once backend sends it) to NearMePlace.photos — slice to 3 max",
+      "In PlaceCard list layout (health-wellbeing, home-admin), when place.photos has 2 or more entries, render a horizontal strip of h-14 w-20 rounded thumbnails below the center info zone and above the action row",
+      "Use Next.js Image with fill in a relative container; strip scrolls horizontally on overflow",
+      "Fallback gracefully — when photos is empty or undefined, render nothing; do not leave an empty strip container",
+      "Verify photo strip appears on a health-wellbeing card that has multiple SerpAPI photos"
+    ],
+    "passes": false
+  },
+  {
+    "category": "backend",
+    "description": "[BACKEND FIX REQUIRED] Add phone, website, service_options, and photos to NearbyInterestItemResponse and extract them in _normalize_place()",
+    "steps": [
+      "In app/schemas/near_me.py, add to NearbyInterestItemResponse: phone: str | None = None, website: str | None = None, service_options: list[str] | None = None, photos: list[str] | None = None",
+      "In app/services/near_me.py _normalize_place(), add to the returned dict: 'phone': place.get('phone'), 'website': place.get('website'), 'service_options': place.get('service_options'), and photos logic below",
+      "For photos: collect [place.get('thumbnail')] + [img.get('thumbnail') or img.get('original') for img in place.get('photos', [])]; filter None values; deduplicate; slice to first 3",
+      "Verify that a test call to search_near_me(suburb='Richmond', topic='food-eating', subtype='food-dining') returns results with phone and website populated for most places",
+      "Verify service_options returns a list like ['Dine-in', 'Takeaway', 'Delivery'] for restaurants",
+      "Verify photos returns a list of at most 3 URLs (thumbnail counted as first photo)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "backend",
+    "description": "[BACKEND FIX REQUIRED] Switch SerpAPI engine from 'google' to 'google_maps' for local_results with richer fields including hours, phone, and website",
+    "steps": [
+      "In app/services/near_me.py search_near_me(), change the engine parameter from 'google' to 'google_maps'",
+      "For google_maps engine, update the search params: replace 'q' with 'q', keep 'location', add 'type': 'search'; remove 'gl', 'google_domain', 'hl' (google_maps uses different params)",
+      "The google_maps engine returns local_results as a list directly (not nested under 'places'); verify _extract_places() handles both formats — it currently does",
+      "Google Maps results include: 'phone', 'website', 'hours' (as a list of day objects), 'service_options', 'thumbnail', 'photos' — verify extraction in _normalize_place()",
+      "For hours extraction: the google_maps engine returns hours as a list [{'day': 'Monday', 'hours': '8 am–10 pm'}, ...]; flatten to a single open_state string from the current day or the first day",
+      "Verify the switch does not break the suburb + query search pattern",
+      "NOTE: If google_maps engine returns fewer results than 'google', consider falling back to 'google' for topics where map coverage is thin (getting-around)"
+    ],
+    "passes": false
+  }
+]

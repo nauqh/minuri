@@ -10,11 +10,11 @@ import type { NearMePlace, NearMeTopic } from "@/lib/near-me";
 // ── Topic colours ──
 
 const TOPIC_COLORS: Record<NearMeTopic, string> = {
-	survive: "#e07b39",
-	health: "#3a8a5a",
-	"get-around": "#3a6aaa",
-	setup: "#2a8a7a",
-	connect: "#7a6aaa",
+	"food-eating": "#e07b39",
+	"health-wellbeing": "#3a8a5a",
+	"getting-around": "#3a6aaa",
+	"home-admin": "#2a8a7a",
+	"social-belonging": "#7a6aaa",
 };
 
 function darkenColor(hex: string): string {

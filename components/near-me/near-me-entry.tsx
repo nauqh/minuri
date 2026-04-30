@@ -122,7 +122,7 @@ export function NearMeEntry() {
 		if (!normalized) return;
 		const params = new URLSearchParams({
 			suburb: normalized,
-			category: "survive",
+			category: "food-eating",
 		});
 		router.push(`/near-me?${params.toString()}`);
 	}

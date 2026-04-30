@@ -6,11 +6,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
 	ChevronDown,
-	Clock,
 	ExternalLink,
-	Heart,
 	House,
-	Info,
 	List,
 	LocateFixed,
 	Map,
@@ -25,7 +22,8 @@ import { cn } from "@/lib/utils";
 import { rankAndFilterSuburbs, type SuburbOption } from "@/lib/suburbs";
 import {
 	CRISIS_LINES,
-	NEAR_ME_TOPICS,
+	haversineKm,
+	parseOpenState,
 	type NearMeTopic,
 	type NearMePlace,
 	type Subtype,
@@ -43,6 +41,7 @@ import {
 	savePlaceToHub,
 	unsavePlaceFromHub,
 } from "@/components/landing/landing-local-state";
+import { PlaceCard, type CardLayout } from "@/components/near-me/place-card";
 
 const NearMeMap = dynamic(
 	() =>
@@ -67,17 +66,16 @@ type NearMeViewProps = {
 
 type LoadState = "idle" | "loading" | "success" | "empty" | "error";
 
-type ListProps = {
-	places: NearMePlace[];
-	selectedId: string | null;
-	onSelect: (id: string) => void;
-	rowRefs: React.RefObject<Record<string, HTMLDivElement | null>>;
-	showPhone?: boolean;
-	topic?: NearMeTopic;
-	hoveredId?: string | null;
-	onHoverPlace?: (id: string | null) => void;
-	savedPlaceIds?: Set<string>;
-	onToggleSave?: (place: NearMePlace) => void;
+// ── Empty state suggestions per topic ──
+
+const EMPTY_SUGGESTIONS: Partial<Record<NearMeTopic, string>> = {
+	"home-admin":
+		"Try Dandenong or Footscray — both have large settlement support hubs.",
+	"getting-around": "Try the CBD or inner suburbs for the best transit coverage.",
+	"health-wellbeing":
+		"Try a neighbouring suburb, or use the crisis line numbers above to find support now.",
+	"social-belonging":
+		"Try Fitzroy, Footscray, or Sunshine for active multicultural community spaces.",
 };
 
 // ── Main component ──
@@ -89,7 +87,17 @@ export function NearMeView({
 }: NearMeViewProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const enabledTopics = useMemo(() => new Set<NearMeTopic>(["survive"]), []);
+	const enabledTopics = useMemo(
+		() =>
+			new Set<NearMeTopic>([
+				"food-eating",
+				"getting-around",
+				"health-wellbeing",
+				"home-admin",
+				"social-belonging",
+			]),
+		[],
+	);
 
 	// Location context
 	const [suburb, setSuburb] = useState(initialSuburb || "Melbourne");
@@ -110,7 +118,7 @@ export function NearMeView({
 
 	// Browsing state
 	const [topic, setTopic] = useState<NearMeTopic>(
-		enabledTopics.has(initialTopic) ? initialTopic : "survive",
+		enabledTopics.has(initialTopic) ? initialTopic : "food-eating",
 	);
 	const [activeSubtype, setActiveSubtype] = useState<string | null>(null);
 	const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
@@ -130,7 +138,12 @@ export function NearMeView({
 	const allTopics = getAllTopicsMeta();
 	const subtypes: Subtype[] = topicMeta.subtypes;
 	const layout: TopicLayout = topicMeta.layout;
-	const heading = getContextHeading(topic, displaySuburb);
+	const cardLayout: CardLayout =
+		layout === "card-grid" ? "grid" : layout === "map-focus" ? "compact" : "list";
+	const heading =
+		topic === "health-wellbeing" && activeSubtype === "mental-health"
+			? `Mental health services near ${displaySuburb}`
+			: getContextHeading(topic, displaySuburb);
 	const suggestions = useMemo(
 		() => rankAndFilterSuburbs(suburbOptions, locationQuery),
 		[locationQuery, suburbOptions],
@@ -185,7 +198,9 @@ export function NearMeView({
 			}
 		}
 		void loadSuburbs();
-		return () => { cancelled = true; };
+		return () => {
+			cancelled = true;
+		};
 	}, []);
 
 	// Auto-fetch on context changes
@@ -216,9 +231,14 @@ export function NearMeView({
 				if (!cancelled) setYoungAdultPopulation(null);
 			}
 		}
-		if (!displaySuburb) { setYoungAdultPopulation(null); return; }
+		if (!displaySuburb) {
+			setYoungAdultPopulation(null);
+			return;
+		}
 		void loadPopulation();
-		return () => { cancelled = true; };
+		return () => {
+			cancelled = true;
+		};
 	}, [displaySuburb]);
 
 	// Sync mobile map card with selectedPlaceId
@@ -298,54 +318,64 @@ export function NearMeView({
 		if (!displaySuburb) return;
 		setStatus("loading");
 		setMessage("");
-		const params = new URLSearchParams({ suburb: displaySuburb });
+		const params = new URLSearchParams({ suburb: displaySuburb, topic });
+		if (activeSubtype) params.set("subtype", activeSubtype);
+		const capturedCoords = userCoords;
 		void fetch(`/api/nearby-interest?${params.toString()}`)
 			.then(async (res) => {
 				if (!res.ok) throw new Error("Failed");
 				const payload = (await res.json()) as NearbyInterestRecord[];
 				const mapped = (Array.isArray(payload) ? payload : []).map(
 					(place, index): NearMePlace => {
-						const openState = place.open_state ?? "";
-						const isOpen = /open/i.test(openState);
+						const { isOpen, label: hoursLabel } = parseOpenState(
+							place.open_state ?? undefined,
+						);
 						const rawTags: string[] = place.price ? [place.price] : [];
 						const tags =
-							topic === "health" && rawTags.length === 0
+							topic === "health-wellbeing" && rawTags.length === 0
 								? ["Bulk-billing: call to confirm"]
 								: rawTags.length > 0
 									? rawTags
 									: undefined;
+						const placeLat = place.gps_coordinates?.latitude ?? -37.8136;
+						const placeLng = place.gps_coordinates?.longitude ?? 144.9631;
 						return {
 							id:
 								place.place_id ||
 								`${topic}-${index}-${place.title.replace(/\s+/g, "-").toLowerCase()}`,
 							name: place.title,
 							address: place.address ?? displaySuburb,
-							lat: place.gps_coordinates?.latitude ?? -37.8136,
-							lng: place.gps_coordinates?.longitude ?? 144.9631,
+							lat: placeLat,
+							lng: placeLng,
 							topic,
 							subtype: activeSubtype ?? "general",
 							phone: place.phone ?? undefined,
 							website: place.website ?? undefined,
 							serviceOptions: place.service_options ?? undefined,
 							rating:
-								typeof place.rating === "number"
-									? place.rating
-									: undefined,
+								typeof place.rating === "number" ? place.rating : undefined,
 							reviewCount:
-								typeof place.reviews === "number"
-									? place.reviews
-									: undefined,
+								typeof place.reviews === "number" ? place.reviews : undefined,
 							type: place.type ?? undefined,
-							hours: openState || undefined,
+							hours: hoursLabel || undefined,
 							openNow: isOpen,
 							snippet: place.description
 								? place.description.replace(/^"|"$/g, "")
 								: undefined,
 							thumbnail: place.thumbnail ?? undefined,
+							photos: place.photos ?? undefined,
 							tags,
-							distanceKm: usingLocation
-								? Number((0.4 + index * 0.7).toFixed(1))
-								: undefined,
+							distanceKm:
+								usingLocation && capturedCoords
+									? Number(
+											haversineKm(
+												capturedCoords.lat,
+												capturedCoords.lng,
+												placeLat,
+												placeLng,
+											).toFixed(1),
+										)
+									: undefined,
 						};
 					},
 				);
@@ -358,6 +388,11 @@ export function NearMeView({
 					return;
 				}
 
+				if (usingLocation && capturedCoords) {
+					mapped.sort(
+						(a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999),
+					);
+				}
 				setPlaces(mapped);
 				setSelectedPlaceId(mapped[0]?.id ?? null);
 				setStatus("success");
@@ -388,7 +423,9 @@ export function NearMeView({
 						lng: pos.coords.longitude,
 					});
 				},
-				() => { /* ignore */ },
+				() => {
+					/* ignore */
+				},
 			);
 		}
 	}
@@ -651,7 +688,7 @@ export function NearMeView({
 					{/* Scrollable results */}
 					<div className="min-h-0 flex-1 overflow-y-auto">
 						{/* Crisis lines banner — Health topic only, sticky */}
-						{topic === "health" && (
+						{topic === "health-wellbeing" && (
 							<div className="sticky top-0 z-10 border-b border-amber-100 bg-amber-50/95 px-4 py-2.5 backdrop-blur">
 								<p className="mb-1.5 text-[10px] font-black uppercase tracking-wide text-amber-700">
 									Crisis support
@@ -707,66 +744,51 @@ export function NearMeView({
 						{status === "empty" && (
 							<div className="p-8 text-center">
 								<p className="text-sm text-minuri-slate">{message}</p>
+								{EMPTY_SUGGESTIONS[topic] && (
+									<p className="mt-1 text-sm italic text-minuri-slate/70">
+										{EMPTY_SUGGESTIONS[topic]}
+									</p>
+								)}
 								<div className="mt-4 flex flex-wrap justify-center gap-2">
-									{NEAR_ME_TOPICS.filter((t) => t !== topic).map((t) => {
-										const meta = getTopicMeta(t);
-										return (
+									{allTopics
+										.filter((t) => t.slug !== topic)
+										.map((t) => (
 											<button
-												key={t}
+												key={t.slug}
 												type="button"
-												onClick={() => switchTopic(t)}
+												onClick={() => switchTopic(t.slug)}
 												className="cursor-pointer rounded-full bg-minuri-fog px-3 py-1.5 text-xs text-minuri-slate hover:bg-minuri-mist"
 											>
-												{meta.icon} {meta.label}
+												{t.icon} {t.label}
 											</button>
-										);
-									})}
+										))}
 								</div>
 							</div>
 						)}
 
 						{/* Results */}
 						{status === "success" && (
-							<>
-								{layout === "card-grid" ? (
-									<CardGridList
-										places={places}
-										selectedId={selectedPlaceId}
-										onSelect={onSelectPlace}
-										rowRefs={rowRefs}
+							<div className="divide-y divide-minuri-silver/30">
+								{places.map((place, i) => (
+									<PlaceCard
+										key={place.id}
+										place={place}
+										index={i}
+										layout={cardLayout}
+										selected={selectedPlaceId === place.id}
+										hovered={hoveredPlaceId === place.id}
+										saved={savedPlaceIds.has(place.id)}
 										topic={topic}
-										hoveredId={hoveredPlaceId}
-										onHoverPlace={onHoverPlace}
-										savedPlaceIds={savedPlaceIds}
-										onToggleSave={handleToggleSave}
+										onSelect={() => onSelectPlace(place.id)}
+										onHoverEnter={() => onHoverPlace(place.id)}
+										onHoverLeave={() => onHoverPlace(null)}
+										onToggleSave={() => handleToggleSave(place)}
+										cardRef={(node) => {
+											rowRefs.current[place.id] = node;
+										}}
 									/>
-								) : layout === "map-focus" ? (
-									<CompactList
-										places={places}
-										selectedId={selectedPlaceId}
-										onSelect={onSelectPlace}
-										rowRefs={rowRefs}
-										topic={topic}
-										hoveredId={hoveredPlaceId}
-										onHoverPlace={onHoverPlace}
-										savedPlaceIds={savedPlaceIds}
-										onToggleSave={handleToggleSave}
-									/>
-								) : (
-									<DetailList
-										places={places}
-										selectedId={selectedPlaceId}
-										onSelect={onSelectPlace}
-										rowRefs={rowRefs}
-										showPhone
-										topic={topic}
-										hoveredId={hoveredPlaceId}
-										onHoverPlace={onHoverPlace}
-										savedPlaceIds={savedPlaceIds}
-										onToggleSave={handleToggleSave}
-									/>
-								)}
-							</>
+								))}
+							</div>
 						)}
 					</div>
 				</div>
@@ -884,531 +906,4 @@ function getGoogleDirectionsUrl(place: NearMePlace) {
 		return `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
 	}
 	return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.address)}`;
-}
-
-function getHostname(url: string): string {
-	try {
-		return new URL(url).hostname.replace(/^www\./, "");
-	} catch {
-		return url;
-	}
-}
-
-function PlaceThumbnail({
-	place,
-	className = "h-14 w-14",
-}: {
-	place: NearMePlace;
-	className?: string;
-}) {
-	if (!place.thumbnail) {
-		return (
-			<div
-				className={cn(
-					"flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-minuri-fog",
-					className,
-				)}
-			>
-				<MapPin className="size-4 text-minuri-silver" />
-			</div>
-		);
-	}
-	return (
-		<div
-			className={cn(
-				"relative shrink-0 overflow-hidden rounded-lg bg-minuri-fog",
-				className,
-			)}
-		>
-			<Image
-				src={place.thumbnail}
-				alt={`${place.name} thumbnail`}
-				fill
-				sizes="(max-width: 1024px) 100px, 140px"
-				className="object-cover"
-			/>
-		</div>
-	);
-}
-
-function HeartButton({
-	saved,
-	onToggle,
-}: {
-	saved: boolean;
-	onToggle: () => void;
-}) {
-	const [pulsing, setPulsing] = useState(false);
-
-	function handleClick(e: React.MouseEvent) {
-		e.stopPropagation();
-		e.preventDefault();
-		setPulsing(true);
-		setTimeout(() => setPulsing(false), 200);
-		onToggle();
-	}
-
-	return (
-		<button
-			type="button"
-			onClick={handleClick}
-			aria-label={saved ? "Unsave place" : "Save place"}
-			style={{
-				transform: pulsing ? "scale(1.3)" : "scale(1)",
-				transition: "transform 0.1s ease-out",
-			}}
-			className="cursor-pointer rounded-full p-1 transition hover:text-rose-500"
-		>
-			<Heart
-				className={cn(
-					"size-3.5 transition",
-					saved ? "fill-rose-500 text-rose-500" : "text-minuri-silver",
-				)}
-			/>
-		</button>
-	);
-}
-
-// ── DetailList: Health / Setup — phone-forward, practical ──
-
-function DetailList({
-	places,
-	selectedId,
-	onSelect,
-	rowRefs,
-	showPhone,
-	topic,
-	hoveredId,
-	onHoverPlace,
-	savedPlaceIds = new Set(),
-	onToggleSave,
-}: ListProps) {
-	return (
-		<div className="divide-y divide-minuri-silver/30">
-			{places.map((place, i) => {
-				const selected = selectedId === place.id;
-				const hovered = hoveredId === place.id;
-				return (
-					<div
-						key={place.id}
-						ref={(node) => { rowRefs.current[place.id] = node; }}
-						role="button"
-						tabIndex={0}
-						onClick={() => onSelect(place.id)}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") onSelect(place.id);
-						}}
-						onMouseEnter={() => onHoverPlace?.(place.id)}
-						onMouseLeave={() => onHoverPlace?.(null)}
-						className={cn(
-							"cursor-pointer border-l-2 px-5 py-4 transition",
-							selected
-								? "border-l-minuri-teal bg-minuri-teal/5"
-								: hovered
-									? "border-l-transparent bg-minuri-teal/8"
-									: "border-l-transparent hover:bg-minuri-fog/50",
-						)}
-					>
-						<div className="flex gap-4">
-							<PlaceThumbnail place={place} className="h-20 w-20" />
-
-							<div className="min-w-0 flex-1">
-								<div className="flex items-start justify-between gap-2">
-									<h3 className="text-sm font-semibold text-minuri-mid">
-										{i + 1}. {place.name}
-									</h3>
-									<div className="flex shrink-0 items-center gap-1">
-										{place.rating && (
-											<span className="inline-flex shrink-0 items-center gap-0.5 rounded bg-minuri-mid px-1.5 py-0.5 text-xs font-bold text-minuri-white">
-												<Star className="size-2.5 fill-current" />
-												{place.rating}
-												{place.reviewCount && (
-													<span className="ml-0.5 font-normal opacity-80">
-														({place.reviewCount})
-													</span>
-												)}
-											</span>
-										)}
-										{onToggleSave && (
-											<HeartButton
-												saved={savedPlaceIds.has(place.id)}
-												onToggle={() => onToggleSave(place)}
-											/>
-										)}
-									</div>
-								</div>
-
-								<p className="mt-0.5 text-xs text-minuri-slate">
-									{[place.type, place.hours].filter(Boolean).join(" · ")}
-									{place.openNow && (
-										<span className="ml-1.5 font-medium text-emerald-600">
-											Open now
-										</span>
-									)}
-								</p>
-
-								<p className="mt-1 flex items-center gap-1 text-xs text-minuri-slate">
-									<MapPin className="size-3 shrink-0 text-minuri-teal" />
-									{place.address}
-									{place.distanceKm !== undefined &&
-										` · ${place.distanceKm} km`}
-								</p>
-
-								{place.snippet && (
-									<p className="mt-1.5 text-xs italic leading-relaxed text-minuri-slate/80">
-										&ldquo;{place.snippet}&rdquo;
-									</p>
-								)}
-
-								{place.tags && place.tags.length > 0 && (
-									<div className="mt-2 flex flex-wrap gap-1.5">
-										{place.tags.map((tag) => {
-											const isBulkBilling =
-												tag === "Bulk-billing: call to confirm";
-											return (
-												<span
-													key={tag}
-													className={cn(
-														"inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-medium",
-														isBulkBilling
-															? "border border-amber-200 bg-amber-50 text-amber-700"
-															: "bg-minuri-fog text-minuri-slate",
-													)}
-												>
-													{tag}
-													{isBulkBilling && (
-														<span title="We cannot verify bulk-billing from this source. Always call the clinic to confirm.">
-															<Info className="size-3 text-amber-500" />
-														</span>
-													)}
-												</span>
-											);
-										})}
-									</div>
-								)}
-
-								{/* Actions */}
-								<div className="mt-2.5 flex flex-wrap items-center gap-2">
-									{showPhone && place.phone && (
-										<a
-											href={`tel:${place.phone.replace(/\s+/g, "")}`}
-											onClick={(e) => e.stopPropagation()}
-											className="inline-flex items-center gap-1 rounded-full border border-minuri-teal/30 bg-minuri-teal/5 px-2.5 py-1 text-[11px] font-medium text-minuri-teal transition hover:bg-minuri-teal/10"
-										>
-											<Phone className="size-3" />
-											{place.phone}
-										</a>
-									)}
-									<a
-										href={getGoogleDirectionsUrl(place)}
-										target="_blank"
-										rel="noreferrer"
-										onClick={(e) => e.stopPropagation()}
-										className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2.5 py-1 text-[11px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
-									>
-										<ExternalLink className="size-3" />
-										Directions
-									</a>
-									{place.website && (
-										<a
-											href={place.website}
-											target="_blank"
-											rel="noreferrer"
-											onClick={(e) => e.stopPropagation()}
-											className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2.5 py-1 text-[11px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
-										>
-											<ExternalLink className="size-3" />
-											{getHostname(place.website)}
-										</a>
-									)}
-								</div>
-							</div>
-						</div>
-					</div>
-				);
-			})}
-		</div>
-	);
-}
-
-// ── CardGridList: Survive / Food — rating-forward, snippet visible ──
-
-function CardGridList({
-	places,
-	selectedId,
-	onSelect,
-	rowRefs,
-	topic,
-	hoveredId,
-	onHoverPlace,
-	savedPlaceIds = new Set(),
-	onToggleSave,
-}: ListProps) {
-	return (
-		<div className="divide-y divide-minuri-silver/30">
-			{places.map((place, i) => {
-				const selected = selectedId === place.id;
-				const hovered = hoveredId === place.id;
-				return (
-					<div
-						key={place.id}
-						ref={(node) => { rowRefs.current[place.id] = node; }}
-						role="button"
-						tabIndex={0}
-						onClick={() => onSelect(place.id)}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") onSelect(place.id);
-						}}
-						onMouseEnter={() => onHoverPlace?.(place.id)}
-						onMouseLeave={() => onHoverPlace?.(null)}
-						className={cn(
-							"cursor-pointer border-l-2 px-5 py-4 transition",
-							selected
-								? "border-l-minuri-teal bg-minuri-teal/5"
-								: hovered
-									? "border-l-transparent bg-minuri-teal/8"
-									: "border-l-transparent hover:bg-minuri-fog/50",
-						)}
-					>
-						<div className="flex gap-4">
-							<PlaceThumbnail place={place} className="h-24 w-36" />
-							<div className="min-w-0 flex-1">
-								<div className="flex items-start justify-between gap-2">
-									<h3 className="text-sm font-semibold text-minuri-mid">
-										{i + 1}. {place.name}
-									</h3>
-									<div className="flex shrink-0 items-center gap-1">
-										{place.rating && (
-											<span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-minuri-mid px-2 py-0.5 text-xs font-bold text-minuri-white">
-												<Star className="size-3 fill-current" />
-												{place.rating}
-												{place.reviewCount && (
-													<span className="font-normal opacity-90">
-														({place.reviewCount.toLocaleString()})
-													</span>
-												)}
-											</span>
-										)}
-										{onToggleSave && (
-											<HeartButton
-												saved={savedPlaceIds.has(place.id)}
-												onToggle={() => onToggleSave(place)}
-											/>
-										)}
-									</div>
-								</div>
-
-								<div className="mt-1 flex items-center gap-2">
-									{place.type && (
-										<span className="text-xs text-minuri-slate">{place.type}</span>
-									)}
-								</div>
-
-								<div className="mt-1 flex items-center gap-3 text-xs text-minuri-slate">
-									<span className="flex items-center gap-1">
-										<MapPin className="size-3 text-minuri-teal" />
-										{place.address.split(",")[0]}
-									</span>
-									{place.openNow && (
-										<span className="flex items-center gap-1 font-medium text-emerald-600">
-											<Clock className="size-3" />
-											Open now
-										</span>
-									)}
-								</div>
-
-								{place.snippet && (
-									<p className="mt-1.5 text-xs leading-relaxed text-minuri-slate/80">
-										&ldquo;{place.snippet}&rdquo;
-									</p>
-								)}
-
-								{/* Tags */}
-								{place.tags && place.tags.length > 0 && (
-									<div className="mt-2 flex flex-wrap gap-1.5">
-										{place.tags.map((tag) => (
-											<span
-												key={tag}
-												className="rounded-full bg-minuri-fog px-2 py-0.5 text-[10px] font-medium text-minuri-slate"
-											>
-												{tag}
-											</span>
-										))}
-									</div>
-								)}
-
-								{/* Service options — Survive topic only */}
-								{topic === "survive" &&
-									place.serviceOptions &&
-									place.serviceOptions.length > 0 && (
-										<div className="mt-2 flex flex-wrap gap-1">
-											{place.serviceOptions.slice(0, 3).map((option) => (
-												<span
-													key={option}
-													className="rounded-full bg-minuri-teal/10 px-2 py-0.5 text-[10px] font-medium text-minuri-teal"
-												>
-													{option}
-												</span>
-											))}
-										</div>
-									)}
-
-								<div className="mt-2.5 flex flex-wrap gap-2">
-									<a
-										href={getGoogleDirectionsUrl(place)}
-										target="_blank"
-										rel="noreferrer"
-										onClick={(e) => e.stopPropagation()}
-										className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2.5 py-1 text-[11px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
-									>
-										<ExternalLink className="size-3" />
-										Directions
-									</a>
-									{place.phone && (
-										<a
-											href={`tel:${place.phone.replace(/\s+/g, "")}`}
-											onClick={(e) => e.stopPropagation()}
-											className="inline-flex items-center gap-1 rounded-full border border-minuri-teal/30 bg-minuri-teal/5 px-2.5 py-1 text-[11px] font-medium text-minuri-teal transition hover:bg-minuri-teal/10"
-										>
-											<Phone className="size-3" />
-											Call
-										</a>
-									)}
-									{place.website && (
-										<a
-											href={place.website}
-											target="_blank"
-											rel="noreferrer"
-											onClick={(e) => e.stopPropagation()}
-											className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2.5 py-1 text-[11px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
-										>
-											<ExternalLink className="size-3" />
-											{getHostname(place.website)}
-										</a>
-									)}
-								</div>
-							</div>
-						</div>
-					</div>
-				);
-			})}
-		</div>
-	);
-}
-
-// ── CompactList: Get around / Connect — minimal, map takes priority ──
-
-function CompactList({
-	places,
-	selectedId,
-	onSelect,
-	rowRefs,
-	topic,
-	hoveredId,
-	onHoverPlace,
-	savedPlaceIds = new Set(),
-	onToggleSave,
-}: ListProps) {
-	return (
-		<div className="divide-y divide-minuri-silver/30">
-			{places.map((place, i) => {
-				const selected = selectedId === place.id;
-				const hovered = hoveredId === place.id;
-				return (
-					<div
-						key={place.id}
-						ref={(node) => { rowRefs.current[place.id] = node; }}
-						role="button"
-						tabIndex={0}
-						onClick={() => onSelect(place.id)}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") onSelect(place.id);
-						}}
-						onMouseEnter={() => onHoverPlace?.(place.id)}
-						onMouseLeave={() => onHoverPlace?.(null)}
-						className={cn(
-							"cursor-pointer border-l-2 px-4 py-3 transition",
-							selected
-								? "border-l-minuri-teal bg-minuri-teal/5"
-								: hovered
-									? "border-l-transparent bg-minuri-teal/8"
-									: "border-l-transparent hover:bg-minuri-fog/50",
-						)}
-					>
-						<div className="flex items-center gap-3">
-							<PlaceThumbnail place={place} />
-							<div
-								className={cn(
-									"flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold",
-									selected
-										? "bg-minuri-mid text-minuri-white"
-										: "bg-minuri-teal text-minuri-white",
-								)}
-							>
-								{i + 1}
-							</div>
-
-							<div className="min-w-0 flex-1">
-								<div className="flex items-center justify-between gap-2">
-									<h3 className="truncate text-sm font-medium text-minuri-mid">
-										{place.name}
-									</h3>
-									<div className="flex shrink-0 items-center gap-1.5">
-										{/* Hide rating on Connect topic — belonging is not ranked */}
-										{topic !== "connect" && place.rating && (
-											<span className="rounded bg-minuri-fog px-1.5 py-0.5 text-[10px] font-semibold text-minuri-slate">
-												★ {place.rating}
-											</span>
-										)}
-										{place.type && (
-											<span className="rounded bg-minuri-fog px-1.5 py-0.5 text-[10px] text-minuri-slate">
-												{place.type}
-											</span>
-										)}
-										{onToggleSave && (
-											<HeartButton
-												saved={savedPlaceIds.has(place.id)}
-												onToggle={() => onToggleSave(place)}
-											/>
-										)}
-									</div>
-								</div>
-								<div className="mt-0.5 flex items-center gap-2 text-[11px] text-minuri-slate">
-									<span className="truncate">
-										{place.address.split(",")[0]}
-									</span>
-									{place.tags &&
-										place.tags.slice(0, 2).map((tag) => (
-											<span
-												key={tag}
-												className="shrink-0 rounded-full bg-minuri-teal/10 px-1.5 py-0.5 text-[10px] font-medium text-minuri-teal"
-											>
-												{tag}
-											</span>
-										))}
-								</div>
-								{place.snippet && (
-									<p className="mt-1 text-[11px] leading-relaxed text-minuri-slate/70">
-										{place.snippet}
-									</p>
-								)}
-								<div className="mt-1.5">
-									<a
-										href={getGoogleDirectionsUrl(place)}
-										target="_blank"
-										rel="noreferrer"
-										onClick={(e) => e.stopPropagation()}
-										className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2 py-0.5 text-[10px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
-									>
-										<ExternalLink className="size-3" />
-										Directions
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				);
-			})}
-		</div>
-	);
 }

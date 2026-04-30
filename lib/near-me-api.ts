@@ -16,6 +16,7 @@ export type NearbyInterestRecord = {
 	open_state?: string | null;
 	description?: string | null;
 	thumbnail?: string | null;
+	photos?: string[] | null;
 	place_id?: string | null;
 	phone?: string | null;
 	website?: string | null;
@@ -86,11 +87,17 @@ export async function fetchPopulation({
 
 export async function fetchNearbyInterest({
 	suburb,
+	topic,
+	subtype,
 }: {
 	suburb: string;
+	topic?: string;
+	subtype?: string;
 }) {
 	const normalizedSuburb = suburb.trim().replace(/\+/g, " ").replace(/\s+/g, " ");
 	const params = new URLSearchParams({ suburb: normalizedSuburb });
+	if (topic) params.set("topic", topic);
+	if (subtype) params.set("subtype", subtype);
 	const response = await fetch(
 		buildMinuriServerUrl("/api/nearby-interest", params),
 		{

@@ -1,0 +1,189 @@
+[
+  {
+    "category": "type-unification",
+    "description": "Replace the separate NearMeTopic type with GuideTopicSlug so both guide and near-me features share one topic vocabulary",
+    "steps": [
+      "In lib/near-me.ts, delete the NEAR_ME_TOPICS constant and NearMeTopic type",
+      "Import GuideTopicSlug from content/guides.ts and re-export it as NearMeTopic: export type NearMeTopic = GuideTopicSlug",
+      "Update every TOPIC_META key from the old slugs to the guide slugs: 'setup' → 'home-admin', 'survive' → 'food-eating', 'get-around' → 'getting-around', 'health' → 'health-wellbeing', 'connect' → 'social-belonging'",
+      "Update the label field in each TOPIC_META entry to match the guide topic name exactly: 'Food & Eating', 'Getting Around', 'Health & Wellbeing', 'Home & Admin', 'Social & Belonging'",
+      "Update parseTopic() default return value from 'survive' to 'food-eating' and ensure it validates against GuideTopicSlug values",
+      "Delete LEGACY_CATEGORY_TO_TOPIC from content/guides.ts — it is now redundant",
+      "Verify no TypeScript errors across the codebase after the rename",
+      "Verify the Near Me page still loads correctly with the unified type"
+    ],
+    "passes": true
+  },
+  {
+    "category": "type-unification",
+    "description": "Update TOPIC_COLORS in near-me-map.tsx and all topic conditional logic in near-me-view.tsx to use guide slugs",
+    "steps": [
+      "In components/near-me/near-me-map.tsx, update TOPIC_COLORS keys from old slugs to guide slugs: 'food-eating' → '#e07b39', 'getting-around' → '#3a6aaa', 'health-wellbeing' → '#3a8a5a', 'home-admin' → '#2a8a7a', 'social-belonging' → '#7a6aaa'",
+      "In near-me-view.tsx, find every instance of topic === 'survive' and replace with topic === 'food-eating'; same for 'health' → 'health-wellbeing', 'connect' → 'social-belonging', 'setup' → 'home-admin', 'get-around' → 'getting-around'",
+      "Update the enabledTopics set from ['survive'] to all five guide slugs: ['food-eating', 'getting-around', 'health-wellbeing', 'home-admin', 'social-belonging']",
+      "Update subtypes in TOPIC_META: social-belonging subtypes rename to { slug: 'community-spaces', label: 'Parks & free' } and { slug: 'social-venues', label: 'Bars & social' }; getting-around subtypes rename to { slug: 'public-transit', label: 'Trains & trams' } and { slug: 'cycling', label: 'Bikes & walking' }",
+      "Update any ?topic= URL params generated internally to use guide slugs (check LandingHubSidebar saved-place links and guide nearMeDeeplink values — guide deeplinks already use guide slugs so they will now work correctly without the legacy fallback)",
+      "Verify topic tab switching works correctly for all 5 tabs after the rename",
+      "Verify the map marker color for each topic is unchanged visually — only the key names changed, not the hex values"
+    ],
+    "passes": true
+  },
+  {
+    "category": "api",
+    "description": "Thread topic and subtype parameters from fetchPlaces() through the Next.js route to the Python backend",
+    "steps": [
+      "In near-me-view.tsx fetchPlaces() (approx. lines 300–360), append &topic={activeTopic} to the fetch URL always, and &subtype={activeSubtype} only when activeSubtype is not 'all'",
+      "In app/api/nearby-interest/route.ts, read topic and subtype from searchParams alongside suburb; validate topic against GuideTopicSlug values (reject unknown values with 400); pass both to fetchNearbyInterest()",
+      "In lib/near-me-api.ts, extend fetchNearbyInterest() to accept topic?: string and subtype?: string and add them to the URLSearchParams sent upstream when non-null",
+      "Verify /api/nearby-interest?suburb=Richmond&topic=health-wellbeing&subtype=gp-clinics returns clinic results, not restaurant results",
+      "Verify switching topic tabs triggers a new fetch with the updated topic param",
+      "Verify switching subtype chips triggers a new fetch with the updated subtype param"
+    ],
+    "passes": true
+  },
+  {
+    "category": "backend",
+    "description": "[BACKEND FIX REQUIRED] Python server must map topic and subtype to appropriate SerpAPI query strings",
+    "steps": [
+      "In the Python backend /api/nearby-interest handler, read topic and subtype query params",
+      "Define a QUERY_MAP dict mapping (topic, subtype) tuples to SerpAPI 'q' strings using the guide slugs:",
+      "  ('food-eating', 'food-dining')        → 'cheap restaurants cafes food'",
+      "  ('food-eating', 'groceries')          → 'supermarkets grocery stores'",
+      "  ('getting-around', 'public-transit')  → 'train station tram stop'",
+      "  ('getting-around', 'cycling')         → 'bus stop bicycle hire station'",
+      "  ('health-wellbeing', 'gp-clinics')    → 'GP medical centre bulk billing clinic'",
+      "  ('health-wellbeing', 'mental-health') → 'psychologist counsellor mental health service'",
+      "  ('home-admin', 'services')            → 'government services community centre settlement support'",
+      "  ('home-admin', 'libraries')           → 'public library'",
+      "  ('social-belonging', 'community-spaces') → 'park community centre multicultural centre free'",
+      "  ('social-belonging', 'social-venues')    → 'bar pub social club'",
+      "When subtype is absent or 'all', use a broader per-topic query covering all subtypes",
+      "Fall back to the food-eating/food-dining query when both topic and subtype are absent",
+      "Verify each (topic, subtype) combination returns meaningfully different SerpAPI result sets"
+    ],
+    "passes": false
+  },
+  {
+    "category": "topic-unlock",
+    "description": "Add an 'All' first-position subtype chip per topic so users can browse unfiltered results",
+    "steps": [
+      "In lib/near-me.ts, prepend { slug: 'all', label: 'All' } as the first entry in every topic's subtypes array",
+      "In near-me-view.tsx, initialise activeSubtype to 'all' when a topic is first selected or the page loads",
+      "Omit the subtype param from the fetch URL when activeSubtype === 'all'",
+      "Render the 'All' chip with the same pill style as other subtype chips; highlight it when selected",
+      "Selecting a specific subtype deselects 'All'; selecting 'All' deselects the active subtype",
+      "Switching topics resets activeSubtype to 'all'",
+      "Verify all 5 topic tabs show the 'All' chip as the first option in the subtype row"
+    ],
+    "passes": true
+  },
+  {
+    "category": "food-eating-topic",
+    "description": "food-eating (formerly survive) tab renders correctly with updated slug and continues to use CardGridList",
+    "steps": [
+      "Confirm topic === 'food-eating' still resolves to layout === 'card-grid' after the slug rename",
+      "Verify service options chips (dine-in, takeaway, delivery) still render on food-eating cards — the existing condition was topic === 'survive', update it to topic === 'food-eating'",
+      "Verify price tags ('$', '$$', '$$$') still render as tag chips on food-eating cards",
+      "Verify the map heading reads 'Cheap eats & groceries near {suburb}' on the food-eating tab",
+      "Verify orange map markers (#e07b39) appear on the food-eating tab"
+    ],
+    "passes": true
+  },
+  {
+    "category": "getting-around-topic",
+    "description": "getting-around tab opens with CompactList and shows transit mode badges inferred from the place type field",
+    "steps": [
+      "Confirm topic === 'getting-around' resolves to layout === 'map-focus' and renders CompactList",
+      "In CompactList, define a TRANSIT_BADGE lookup: 'train' → '🚂 Train', 'tram' → '🚊 Tram', 'bus' → '🚌 Bus', 'bicycle' or 'bike' → '🚲 Bike'",
+      "Match place.type (case-insensitive substring) against the lookup keys; render the first matching badge as a small rounded pill using text-[11px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full",
+      "When no type matches, render a generic '🗺 Transit' badge with the same styling",
+      "Suppress the Call button for all getting-around places — transit stops have no bookable phone line",
+      "Replace the Google Maps Directions anchor with a 'Plan journey' link to https://www.ptv.vic.gov.au/journey (new tab, rel=noreferrer) for the public-transit subtype; keep Directions for the cycling subtype",
+      "Verify blue map markers (#3a6aaa) appear on the getting-around tab",
+      "Verify Train / Tram / Bus / Bike badges render on rows with matching type values"
+    ],
+    "passes": true
+  },
+  {
+    "category": "health-wellbeing-topic",
+    "description": "health-wellbeing tab opens with DetailList and preserves all health-specific UX: crisis banner, bulk-billing nudge, open-status emphasis",
+    "steps": [
+      "Confirm topic === 'health-wellbeing' resolves to layout === 'list-focus' and renders DetailList",
+      "Update the bulk-billing synthetic tag injection condition from topic === 'health' to topic === 'health-wellbeing'",
+      "Update the CrisisLineBanner render condition from topic === 'health' to topic === 'health-wellbeing'",
+      "Update the rating-suppression condition in the map popup card from topic === 'connect' to topic === 'social-belonging' (see social-belonging item) and verify health-wellbeing still shows ratings",
+      "In DetailList for topic === 'health-wellbeing', render the open/closed badge as the first element below the place name; style open as bg-green-100 text-green-700 and closed as bg-red-100 text-red-700",
+      "When activeSubtype === 'mental-health', display heading 'Mental health services near {suburb}' instead of the default 'Clinics & GPs near {suburb}'",
+      "Ensure CrisisLineBanner remains visible even when places.length === 0 on the health-wellbeing tab",
+      "Verify green map markers (#3a8a5a) appear on the health-wellbeing tab"
+    ],
+    "passes": true
+  },
+  {
+    "category": "home-admin-topic",
+    "description": "home-admin tab opens with DetailList and renders government services and libraries with appropriate actions",
+    "steps": [
+      "Confirm topic === 'home-admin' resolves to layout === 'list-focus' and renders DetailList",
+      "In DetailList for topic === 'home-admin', render the 'Visit website' button prominently — government services typically have websites but not always a direct call line",
+      "Suppress the Call button for home-admin places where place.phone is absent rather than rendering an empty tel: link",
+      "Do NOT inject the 'Bulk-billing: call to confirm' tag for home-admin — this nudge is health-wellbeing only",
+      "Verify the heading 'Services & support near {suburb}' renders correctly above the DetailList",
+      "Verify switching between 'Services & info' and 'Libraries' subtype chips triggers a new fetch and returns distinct place categories",
+      "Verify teal map markers (#2a8a7a) appear on the home-admin tab"
+    ],
+    "passes": true
+  },
+  {
+    "category": "social-belonging-topic",
+    "description": "social-belonging tab opens with CompactList and suppresses ratings; adds contextual nudges per subtype",
+    "steps": [
+      "Confirm topic === 'social-belonging' resolves to layout === 'map-focus' and renders CompactList",
+      "Update the rating-suppression condition from topic === 'connect' to topic === 'social-belonging' in CompactList and in the map popup card",
+      "For topic === 'social-belonging' and subtype === 'community-spaces', render a small informational chip on each row: '📅 Check for events' styled as bg-amber-50 text-amber-700 border border-amber-200 text-[10px] rounded-full px-2 py-0.5",
+      "For topic === 'social-belonging' and subtype === 'social-venues', render price tag chips from place.tags ('$', '$$', '$$$') to the right of the place name as bg-minuri-teal/10 text-minuri-teal rounded px-1.5 text-[11px]",
+      "Verify purple map markers (#7a6aaa) appear on the social-belonging tab",
+      "Verify no rating badge renders on any social-belonging place card",
+      "Verify the event nudge chip appears only on community-spaces subtype rows"
+    ],
+    "passes": true
+  },
+  {
+    "category": "data",
+    "description": "Replace synthetic distance estimate with real Haversine distance calculated from user GPS coordinates",
+    "steps": [
+      "In near-me-view.tsx, find the distanceKm assignment inside fetchPlaces() (approx. line 347): distanceKm: 0.4 + index * 0.7",
+      "Add a haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number helper in lib/near-me.ts using the spherical law of cosines (R = 6371 km)",
+      "When userCoords is non-null, compute distanceKm = haversineKm(userCoords.lat, userCoords.lng, place.lat, place.lng) for each mapped place",
+      "When userCoords is null, set distanceKm to undefined so no distance label renders on any card",
+      "After mapping, when usingLocation === true, sort places ascending by distanceKm before calling setPlaces()",
+      "Verify that with location enabled, the closest place appears first in the list",
+      "Verify that without location, no distance label renders on any place row"
+    ],
+    "passes": true
+  },
+  {
+    "category": "data",
+    "description": "Topic-aware empty state shows actionable suburb suggestions matched to the topic context",
+    "steps": [
+      "In near-me-view.tsx, when places.length === 0 and status === 'success', render a supplementary suggestion line below the emptyPrompt",
+      "Define EMPTY_SUGGESTIONS per guide topic slug: 'home-admin' → 'Try Dandenong or Footscray — both have large settlement support hubs', 'getting-around' → 'Try the CBD or inner suburbs for the best transit coverage', 'health-wellbeing' → 'Try a neighbouring suburb, or use the crisis line numbers above to find support now', 'social-belonging' → 'Try Fitzroy, Footscray, or Sunshine for active multicultural community spaces', 'food-eating' → keep existing emptyPrompt only",
+      "Style the suggestion as text-muted-foreground text-sm italic mt-1 — not an error state",
+      "Verify each topic shows its correct suggestion when a search returns zero results",
+      "Verify food-eating shows no additional suggestion line"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration",
+    "description": "Guide nearMeDeeplink params now route correctly without the legacy category mapping",
+    "steps": [
+      "In app/near-me/page.tsx, confirm the ?topic= param is read and passed to NearMeView as-is",
+      "Verify parseTopic() in lib/near-me.ts now accepts 'food-eating', 'getting-around', 'health-wellbeing', 'home-admin', 'social-belonging' and returns them directly without a legacy lookup",
+      "Verify clicking the Bridge CTA on a food-eating guide (e.g. cheap-eats-when-broke, nearMeDeeplink contains ?topic=food-eating) opens Near Me with the food-eating tab pre-selected",
+      "Verify clicking the Bridge CTA on a health-wellbeing guide opens Near Me with the health-wellbeing tab pre-selected",
+      "Verify the 'came from guide' context banner still renders correctly with the new topic routing",
+      "Verify saved places in LandingHubSidebar that link to /near-me?category={topic} use the guide slug and land on the correct tab"
+    ],
+    "passes": true
+  }
+]

@@ -55,7 +55,7 @@ export function JourneyNearbyPanel({ suburb }: Props) {
                         address: r.address ?? "",
                         lat: r.gps_coordinates!.latitude!,
                         lng: r.gps_coordinates!.longitude!,
-                        topic: "setup" as const,
+                        topic: "home-admin" as const,
                         subtype: "services",
                         rating: r.rating ?? undefined,
                     }));
@@ -123,7 +123,7 @@ export function JourneyNearbyPanel({ suburb }: Props) {
                             places={places}
                             selectedPlaceId={selectedId}
                             onSelectPlace={handleSelectPlace}
-                            topic="survive"
+                            topic="home-admin"
                             hoveredPlaceId={null}
                             onHoverPlace={() => undefined}
                         />

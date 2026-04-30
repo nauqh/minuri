@@ -198,10 +198,3 @@ function fromGuideJson(guide: GuideJson): Guide {
 
 export const GUIDES: Guide[] = GUIDE_FILES.map(fromGuideJson);
 
-export const LEGACY_CATEGORY_TO_TOPIC: Record<string, GuideTopicSlug> = {
-    setup: "home-admin",
-    survive: "food-eating",
-    "get-around": "getting-around",
-    health: "health-wellbeing",
-    connect: "social-belonging",
-};

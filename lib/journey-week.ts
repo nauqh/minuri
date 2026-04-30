@@ -11,11 +11,11 @@ export type DayPlan = {
 };
 
 export const TOPIC_NEAR_ME: Record<GuideTopicSlug, NearMeTopic> = {
-    "food-eating": "survive",
-    "getting-around": "get-around",
-    "health-wellbeing": "health",
-    "home-admin": "setup",
-    "social-belonging": "connect",
+    "food-eating": "food-eating",
+    "getting-around": "getting-around",
+    "health-wellbeing": "health-wellbeing",
+    "home-admin": "home-admin",
+    "social-belonging": "social-belonging",
 };
 
 const TOPIC_SHORT: Record<GuideTopicSlug, string> = {
