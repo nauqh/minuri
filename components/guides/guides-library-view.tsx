@@ -9,11 +9,10 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { CircleHelp, ListFilter, Search, X } from "lucide-react";
+import { ListFilter, Search, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { ArcStoryOverlay } from "@/components/guides/arc-story-overlay";
 import { easeOut } from "@/components/landing/home-constants";
 import { GUIDE_ARCS, GUIDE_TOPICS, GUIDES } from "@/content/guides";
 import { GuideCard } from "@/components/guides/guide-card";
@@ -96,7 +95,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const deferredQuery = useDeferredValue(rawQuery);
 	const isBookmarksMode = mode === "bookmarks";
 	const isStoryReady = searchParams.get("story") === "ready";
-	const showStoryOverlay = !isBookmarksMode && !isStoryReady;
+	const showStoryOverlay = false;
 	const filterQuery = isBookmarksMode ? deferredQuery : "";
 	const [storyMomentDraft, setStoryMomentDraft] = useState(storyMoment);
 	const [storyNeedsDraft, setStoryNeedsDraft] =
@@ -172,30 +171,21 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const mobileFiltersPanelId = useId();
 	const [mobileLibraryFiltersOpen, setMobileLibraryFiltersOpen] =
 		useState(false);
-	const [arcHelpOpen, setArcHelpOpen] = useState(false);
-	const [selectedArcHelpSlug, setSelectedArcHelpSlug] = useState(
-		GUIDE_ARCS[0]?.slug ?? "day-1",
-	);
 
 	useEffect(() => {
-		const shouldLockBody =
-			mobileLibraryFiltersOpen || arcHelpOpen || showStoryOverlay;
+		const shouldLockBody = mobileLibraryFiltersOpen || showStoryOverlay;
 		if (!shouldLockBody) return;
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
 		return () => {
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [arcHelpOpen, mobileLibraryFiltersOpen, showStoryOverlay]);
+	}, [mobileLibraryFiltersOpen, showStoryOverlay]);
 
 	useEffect(() => {
-		if (!mobileLibraryFiltersOpen && !arcHelpOpen) return;
+		if (!mobileLibraryFiltersOpen) return;
 		function onKeyDown(event: KeyboardEvent) {
 			if (event.key === "Escape") {
-				if (arcHelpOpen) {
-					setArcHelpOpen(false);
-					return;
-				}
 				setMobileLibraryFiltersOpen(false);
 			}
 		}
@@ -203,7 +193,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		return () => {
 			document.removeEventListener("keydown", onKeyDown);
 		};
-	}, [arcHelpOpen, mobileLibraryFiltersOpen]);
+	}, [mobileLibraryFiltersOpen]);
 
 	function onToggleStoryNeed(topicSlug: string) {
 		setStoryNeedsDraft((current) =>
@@ -237,21 +227,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 						<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
 							Moment progress
 						</h2>
-						<button
-							type="button"
-							className="inline-flex h-8 items-center gap-1.5 rounded-full border border-minuri-silver/70 bg-minuri-white px-3 text-[11px] font-medium uppercase tracking-widest text-minuri-mid transition-colors hover:bg-minuri-fog"
-							onClick={() => {
-								setSelectedArcHelpSlug(
-									effectiveArcFilter === "all"
-										? GUIDE_ARCS[0].slug
-										: effectiveArcFilter,
-								);
-								setArcHelpOpen(true);
-							}}
-						>
-							<CircleHelp className="size-3.5" aria-hidden />
-							Moment help
-						</button>
 					</div>
 					<p className="mt-1 text-sm leading-snug text-minuri-slate">
 						Browse everything or focus on one timeline.
@@ -724,15 +699,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			{!isBookmarksMode ? (
 				<>
 					{storyOverlay}
-					<ArcStoryOverlay
-						isOpen={arcHelpOpen}
-						onClose={() => {
-							setArcHelpOpen(false);
-						}}
-						selectedArcSlug={selectedArcHelpSlug}
-						onSelectArc={setSelectedArcHelpSlug}
-						prefersReducedMotion={Boolean(prefersReducedMotion)}
-					/>
 					{mobileLibraryFiltersPortal}
 					<div className="grid items-start gap-x-10 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-x-14">
 						{librarySidebar}

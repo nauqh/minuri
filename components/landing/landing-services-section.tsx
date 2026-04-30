@@ -45,17 +45,17 @@ export function LandingServicesSection() {
 	return (
 		<section
 			id="services"
-			className="scroll-mt-24 flex min-h-screen items-center bg-minuri-ocean py-24 text-minuri-white md:scroll-mt-28 md:py-32"
+			className="scroll-mt-24 flex min-h-[115vh] items-center bg-minuri-ocean py-24 text-minuri-white md:min-h-[120vh] md:scroll-mt-28 md:py-32"
 			aria-labelledby="services-heading"
 		>
 			<div className="mx-auto my-auto w-full max-w-screen px-5 md:px-8">
-				<div className="mx-auto max-w-7xl text-center">
+				<div className="mx-auto max-w-7xl space-y-6 text-center md:space-y-7">
 					<p className="mx-auto inline-flex rounded-lg bg-minuri-white/90 px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-minuri-ocean">
 						What Minuri provides
 					</p>
 					<motion.h2
 						id="services-heading"
-						className="landing-section-heading mt-6 text-4xl text-minuri-white md:text-5xl"
+						className="landing-section-heading text-4xl text-minuri-white md:text-5xl"
 						initial={{ opacity: 0, y: 16 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true, amount: 0.7 }}
@@ -66,10 +66,10 @@ export function LandingServicesSection() {
 					>
 						Practical support you can use today
 					</motion.h2>
-					<p className="landing-section-subheading mt-4 text-xs text-minuri-mint md:text-sm">
+					<p className="landing-section-subheading text-xs text-minuri-mint md:text-sm">
 						Tools and steps for independent life.
 					</p>
-					<div className="mt-8">
+					<div>
 						<Link
 							href="/journey"
 							className="group inline-flex h-11 items-center gap-1.5 rounded-full border border-minuri-white/70 px-5 text-sm font-medium text-minuri-white transition-colors duration-200 hover:bg-minuri-white hover:text-minuri-ocean"
@@ -83,7 +83,7 @@ export function LandingServicesSection() {
 					</div>
 				</div>
 
-				<div className="mt-14">
+				<div className="mt-16 md:mt-20">
 					<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
 						{serviceCards.map((card, index) => (
 							<motion.div

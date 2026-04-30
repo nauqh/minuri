@@ -1,8 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle, ChevronRight, Menu, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+	CheckCircle,
+	ChevronRight,
+	Heart,
+	Home,
+	Menu,
+	MapPin,
+	Users,
+	Utensils,
+	X,
+	type LucideIcon,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 const heroHighlights = [
@@ -11,7 +22,16 @@ const heroHighlights = [
 	"CLEAR NEXT STEPS YOU CAN DO TODAY",
 ];
 
-const HERO_TOPIC_CARDS = [
+const HERO_TOPIC_CARDS: {
+	title: string;
+	desc: string;
+	bg: string;
+	rotate: number;
+	floatPhase: number;
+	word: string;
+	wordColor: string;
+	icon: LucideIcon;
+}[] = [
 	{
 		title: "Food & Eating",
 		desc: "Groceries, cheap meals & cooking basics.",
@@ -20,6 +40,7 @@ const HERO_TOPIC_CARDS = [
 		floatPhase: 0,
 		word: "eat",
 		wordColor: "#00957f",
+		icon: Utensils,
 	},
 	{
 		title: "Getting Around",
@@ -29,6 +50,7 @@ const HERO_TOPIC_CARDS = [
 		floatPhase: 1.1,
 		word: "travel",
 		wordColor: "#1a7ab3",
+		icon: MapPin,
 	},
 	{
 		title: "Health & Wellbeing",
@@ -38,6 +60,7 @@ const HERO_TOPIC_CARDS = [
 		floatPhase: 0.5,
 		word: "heal",
 		wordColor: "#9a8000",
+		icon: Heart,
 	},
 	{
 		title: "Home & Admin",
@@ -47,6 +70,7 @@ const HERO_TOPIC_CARDS = [
 		floatPhase: 0.8,
 		word: "settle",
 		wordColor: "#c4246e",
+		icon: Home,
 	},
 	{
 		title: "Social & Belonging",
@@ -56,6 +80,7 @@ const HERO_TOPIC_CARDS = [
 		floatPhase: 1.4,
 		word: "belong",
 		wordColor: "#1a7a54",
+		icon: Users,
 	},
 ];
 
@@ -64,7 +89,6 @@ function HeroTopicCard({
 	index,
 	isActive,
 	onHover,
-	prefersReducedMotion,
 	entranceEase,
 	className = "",
 }: {
@@ -72,7 +96,6 @@ function HeroTopicCard({
 	index: number;
 	isActive: boolean;
 	onHover: () => void;
-	prefersReducedMotion: boolean;
 	entranceEase: [number, number, number, number];
 	className?: string;
 }) {
@@ -83,26 +106,23 @@ function HeroTopicCard({
 			animate={{ opacity: 1, y: 0, scale: isActive ? 1.05 : 1 }}
 			transition={{
 				opacity: {
-					duration: prefersReducedMotion ? 0.01 : 0.6,
-					delay: prefersReducedMotion ? 0 : 0.5 + index * 0.07,
+					duration: 0.6,
+					delay: 0.5 + index * 0.07,
 					ease: entranceEase,
 				},
 				y: {
-					duration: prefersReducedMotion ? 0.01 : 0.6,
-					delay: prefersReducedMotion ? 0 : 0.5 + index * 0.07,
+					duration: 0.6,
+					delay: 0.5 + index * 0.07,
 					ease: entranceEase,
 				},
-				scale: {
-					duration: prefersReducedMotion ? 0.01 : 0.2,
-					ease: "easeOut",
-				},
+				scale: { duration: 0.2, ease: "easeOut" },
 			}}
 			onHoverStart={onHover}
 		>
 			<motion.div
 				style={{ rotate: card.rotate, backgroundColor: card.bg }}
-				className="flex h-32 flex-col justify-between rounded-2xl p-4 shadow-md md:p-5"
-				animate={prefersReducedMotion ? {} : { y: [0, -7, 0] }}
+				className="flex h-full flex-col justify-between rounded-2xl p-4 shadow-md md:p-5"
+				animate={{ y: [0, -7, 0] }}
 				transition={{
 					duration: 3.2 + card.floatPhase * 0.28,
 					ease: "easeInOut",
@@ -110,9 +130,16 @@ function HeroTopicCard({
 					delay: card.floatPhase,
 				}}
 			>
-				<h3 className="text-base font-black uppercase leading-tight tracking-tight text-[#05292a] md:text-[1.05rem]">
-					{card.title}
-				</h3>
+				<div className="flex items-start justify-between gap-2">
+					<h3 className="text-base font-black uppercase leading-tight tracking-tight text-[#05292a] md:text-[1.05rem]">
+						{card.title}
+					</h3>
+					<card.icon
+						aria-hidden
+						className="mt-0.5 size-5 shrink-0 text-[#05292a]/30"
+						strokeWidth={1.5}
+					/>
+				</div>
 				<p className="mt-3 text-[0.75rem] leading-snug text-[#163a3a]/70 md:text-[0.8rem]">
 					{card.desc}
 				</p>
@@ -130,13 +157,21 @@ export function LandingHeroSectionV2({
 }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [activeIndex, setActiveIndex] = useState(0);
+	const [hasStartedWordCycle, setHasStartedWordCycle] = useState(false);
+	const [ctaHighlighted, setCtaHighlighted] = useState(false);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-	const prefersReducedMotion = useReducedMotion();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+	const headlineWord = hasStartedWordCycle
+		? HERO_TOPIC_CARDS[activeIndex].word
+		: "are";
+	const headlineWordColor = hasStartedWordCycle
+		? HERO_TOPIC_CARDS[activeIndex].bg
+		: "#0f766e";
 
 	const restartCycle = () => {
 		if (intervalRef.current) clearInterval(intervalRef.current);
 		intervalRef.current = setInterval(() => {
+			setHasStartedWordCycle(true);
 			setActiveIndex((i) => (i + 1) % HERO_TOPIC_CARDS.length);
 		}, 2500);
 	};
@@ -151,6 +186,15 @@ export function LandingHeroSectionV2({
 			if (intervalRef.current) clearInterval(intervalRef.current);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		const handler = () => {
+			setCtaHighlighted(true);
+			setTimeout(() => setCtaHighlighted(false), 1600);
+		};
+		window.addEventListener("minuri:highlight-cta", handler);
+		return () => window.removeEventListener("minuri:highlight-cta", handler);
 	}, []);
 
 	useEffect(() => {
@@ -176,7 +220,7 @@ export function LandingHeroSectionV2({
 						className="mx-auto flex w-full items-center justify-between bg-minuri-white py-2 md:min-h-21 md:rounded-full md:py-0"
 						initial={{
 							opacity: 0,
-							y: prefersReducedMotion ? 0 : -18,
+							y: -18,
 						}}
 						animate={
 							headerVisible
@@ -184,7 +228,7 @@ export function LandingHeroSectionV2({
 								: { opacity: 0, y: -14 }
 						}
 						transition={{
-							duration: prefersReducedMotion ? 0.01 : 0.55,
+							duration: 0.55,
 							ease: entranceEase,
 						}}
 						onAnimationComplete={() => {
@@ -195,12 +239,12 @@ export function LandingHeroSectionV2({
 							className="flex items-center gap-8 md:gap-12"
 							initial={{
 								opacity: 0,
-								y: prefersReducedMotion ? 0 : 12,
+								y: 12,
 							}}
 							animate={{ opacity: headerVisible ? 1 : 0, y: 0 }}
 							transition={{
-								duration: prefersReducedMotion ? 0.01 : 0.45,
-								delay: prefersReducedMotion ? 0 : 0.12,
+								duration: 0.45,
+								delay: 0.12,
 								ease: entranceEase,
 							}}
 						>
@@ -243,26 +287,42 @@ export function LandingHeroSectionV2({
 							className="ml-auto flex items-center gap-2.5 md:gap-3.5"
 							initial={{
 								opacity: 0,
-								x: prefersReducedMotion ? 0 : 12,
+								x: 12,
 							}}
 							animate={{ opacity: headerVisible ? 1 : 0, x: 0 }}
 							transition={{
-								duration: prefersReducedMotion ? 0.01 : 0.45,
-								delay: prefersReducedMotion ? 0 : 0.2,
+								duration: 0.45,
+								delay: 0.2,
 								ease: entranceEase,
 							}}
 						>
-							<Link
-								href="/journey"
-								className="group hidden h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
+							<motion.div
+								className="hidden md:block"
+								animate={ctaHighlighted ? {
+									scale: [1, 1.13, 0.97, 1.1, 1],
+									boxShadow: [
+										"0 0 0 0px rgba(20,184,166,0)",
+										"0 0 0 12px rgba(20,184,166,0.6)",
+										"0 0 0 4px rgba(20,184,166,0.15)",
+										"0 0 0 12px rgba(20,184,166,0.55)",
+										"0 0 0 0px rgba(20,184,166,0)",
+									],
+								} : { scale: 1, boxShadow: "0 0 0 0px rgba(20,184,166,0)" }}
+								transition={{ duration: 2, ease: "easeInOut", times: [0, 0.25, 0.5, 0.75, 1] }}
+								style={{ borderRadius: 9999 }}
 							>
-								Start your journey
-								<ChevronRight
-									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
-									strokeWidth={2.25}
-									aria-hidden
-								/>
-							</Link>
+								<Link
+									href="/journey"
+									className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+								>
+									Start your journey
+									<ChevronRight
+										className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
+										strokeWidth={2.25}
+										aria-hidden
+									/>
+								</Link>
+							</motion.div>
 							<button
 								type="button"
 								className="inline-flex size-10 items-center justify-center rounded-full text-minuri-ocean transition-colors hover:bg-minuri-ice/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-ocean/35 md:hidden"
@@ -379,8 +439,8 @@ export function LandingHeroSectionV2({
 						hidden: {},
 						visible: {
 							transition: {
-								staggerChildren: prefersReducedMotion ? 0 : 0.1,
-								delayChildren: prefersReducedMotion ? 0 : 0.08,
+								staggerChildren: 0.1,
+								delayChildren: 0.08,
 							},
 						},
 					}}
@@ -391,15 +451,13 @@ export function LandingHeroSectionV2({
 							variants={{
 								hidden: {
 									opacity: 0,
-									y: prefersReducedMotion ? 0 : 8,
+									y: 8,
 								},
 								visible: {
 									opacity: 1,
 									y: 0,
 									transition: {
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.45,
+										duration: 0.45,
 										ease: entranceEase,
 									},
 								},
@@ -412,15 +470,13 @@ export function LandingHeroSectionV2({
 							variants={{
 								hidden: {
 									opacity: 0,
-									y: prefersReducedMotion ? 0 : 22,
+									y: 22,
 								},
 								visible: {
 									opacity: 1,
 									y: 0,
 									transition: {
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.7,
+										duration: 0.7,
 										ease: entranceEase,
 									},
 								},
@@ -430,50 +486,46 @@ export function LandingHeroSectionV2({
 							{" you "}
 							<AnimatePresence mode="wait">
 								<motion.span
-									key={HERO_TOPIC_CARDS[activeIndex].word}
+									key={headlineWord}
 									initial={{
 										opacity: 0,
-										y: prefersReducedMotion ? 0 : 14,
+										y: 0,
 									}}
 									animate={{ opacity: 1, y: 0 }}
 									exit={{
 										opacity: 0,
-										y: prefersReducedMotion ? 0 : -10,
+										y: -10,
 									}}
 									transition={{
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.28,
+										duration: 0.28,
 										ease: entranceEase,
 									}}
 									style={{
-										color: HERO_TOPIC_CARDS[activeIndex].bg,
+										color: headlineWordColor,
 										filter: "brightness(0.85)",
 									}}
 									className="inline-block"
 								>
-									{HERO_TOPIC_CARDS[activeIndex].word}
+									{headlineWord}
 								</motion.span>
 							</AnimatePresence>
 						</motion.h1>
 					</div>
 
 					<div className="mt-0 grid flex-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
-						<div className="flex flex-col md:h-full">
+						<div className="flex h-full flex-col">
 							<motion.p
 								className="mt-4 text-2xl font-bold text-minuri-ocean"
 								variants={{
 									hidden: {
 										opacity: 0,
-										y: prefersReducedMotion ? 0 : 14,
+										y: 14,
 									},
 									visible: {
 										opacity: 1,
 										y: 0,
 										transition: {
-											duration: prefersReducedMotion
-												? 0.01
-												: 0.5,
+											duration: 0.5,
 											ease: entranceEase,
 										},
 									},
@@ -482,19 +534,17 @@ export function LandingHeroSectionV2({
 								Your everyday support system
 							</motion.p>
 							<motion.div
-								className="mt-7 md:mt-auto md:mb-4"
+								className="mt-auto"
 								variants={{
 									hidden: {
 										opacity: 0,
-										y: prefersReducedMotion ? 0 : 14,
+										y: 14,
 									},
 									visible: {
 										opacity: 1,
 										y: 0,
 										transition: {
-											duration: prefersReducedMotion
-												? 0.01
-												: 0.55,
+											duration: 0.55,
 											ease: entranceEase,
 										},
 									},
@@ -510,19 +560,15 @@ export function LandingHeroSectionV2({
 									variants={{
 										hidden: {
 											opacity: 0,
-											y: prefersReducedMotion ? 0 : 10,
+											y: 10,
 										},
 										visible: {
 											opacity: 1,
 											y: 0,
 											transition: {
-												duration: prefersReducedMotion
-													? 0.01
-													: 0.45,
+												duration: 0.45,
 												ease: entranceEase,
-												delay: prefersReducedMotion
-													? 0
-													: 0.05,
+												delay: 0.05,
 											},
 										},
 									}}
@@ -551,8 +597,11 @@ export function LandingHeroSectionV2({
 							</motion.div>
 						</div>
 
-						<div className="flex w-full flex-col justify-end md:pb-4">
-							<div className="grid grid-cols-2 gap-2.5 md:gap-3">
+						<div className="relative z-10 flex h-full w-full flex-col md:pb-4">
+							<div
+								className="grid h-full grid-cols-2 gap-2.5 md:gap-3"
+								style={{ gridAutoRows: "1fr" }}
+							>
 								{HERO_TOPIC_CARDS.slice(0, 4).map((card, i) => (
 									<HeroTopicCard
 										key={card.title}
@@ -560,12 +609,10 @@ export function LandingHeroSectionV2({
 										index={i}
 										isActive={activeIndex === i}
 										onHover={() => {
+											setHasStartedWordCycle(true);
 											setActiveIndex(i);
 											restartCycle();
 										}}
-										prefersReducedMotion={
-											!!prefersReducedMotion
-										}
 										entranceEase={entranceEase}
 										className=""
 									/>
@@ -575,12 +622,10 @@ export function LandingHeroSectionV2({
 									index={4}
 									isActive={activeIndex === 4}
 									onHover={() => {
+										setHasStartedWordCycle(true);
 										setActiveIndex(4);
 										restartCycle();
 									}}
-									prefersReducedMotion={
-										!!prefersReducedMotion
-									}
 									entranceEase={entranceEase}
 									className="col-span-2"
 								/>
@@ -597,10 +642,8 @@ export function LandingHeroSectionV2({
 						hidden: {},
 						visible: {
 							transition: {
-								staggerChildren: prefersReducedMotion
-									? 0
-									: 0.08,
-								delayChildren: prefersReducedMotion ? 0 : 0.55,
+								staggerChildren: 0.08,
+								delayChildren: 0.55,
 							},
 						},
 					}}
@@ -612,15 +655,13 @@ export function LandingHeroSectionV2({
 							variants={{
 								hidden: {
 									opacity: 0,
-									y: prefersReducedMotion ? 0 : 12,
+									y: 12,
 								},
 								visible: {
 									opacity: 1,
 									y: 0,
 									transition: {
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.45,
+										duration: 0.45,
 										ease: entranceEase,
 									},
 								},
