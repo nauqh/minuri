@@ -78,5 +78,23 @@
       "title": "Up next",
       "value": "Renting Without Getting Burned — because the cheapest food in the world won't help if your rent is the part that's actually breaking the budget."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Search 'community meals [your suburb]' on Google",
+      "estimateMin": 5
+    },
+    {
+      "label": "Check your local council website for food relief programs",
+      "estimateMin": 10
+    },
+    {
+      "label": "Find a faith community near you that runs open meals",
+      "estimateMin": 10
+    },
+    {
+      "label": "Save one regular event in your calendar",
+      "estimateMin": 2
+    }
   ]
 }

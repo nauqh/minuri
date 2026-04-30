@@ -52,5 +52,23 @@
       "title": "Next Chapter",
       "value": "Tomorrow, open Week 1 — cooking, utilities, and the rest of settling in."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Message one person from home to let them know you arrived safely",
+      "estimateMin": 3
+    },
+    {
+      "label": "Find a café, park, or library near you that feels comfortable",
+      "estimateMin": 15
+    },
+    {
+      "label": "Join one online group for your area (Facebook, Meetup, or WhatsApp)",
+      "estimateMin": 10
+    },
+    {
+      "label": "Plan one small outing outside your home for tomorrow",
+      "estimateMin": 5
+    }
   ]
 }

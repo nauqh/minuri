@@ -1,88 +1,125 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import { motion } from "motion/react";
 
 type ServiceCard = {
 	title: string;
-	value: string;
-	example: string;
-	accent: string;
+	description: string;
+	rotate: number;
+	floatPhase: number;
 };
 
 const serviceCards: ServiceCard[] = [
 	{
 		title: "First-time guides",
-		value: "Step-by-step help for food, health, transport, home admin, and social life.",
-		example: "Example: what to do in your first 48 hours in a new suburb.",
-		accent: "#00f5d4",
+		description: "We provide simple guides for daily independent life.",
+		rotate: -4,
+		floatPhase: 0,
 	},
 	{
 		title: "Near-me support",
-		value: "Find useful places near your suburb, campus, or daily route.",
-		example: "Example: compare nearby bulk-billing GPs and pharmacies in minutes.",
-		accent: "#7fdcff",
+		description: "We help you find nearby services quickly.",
+		rotate: 3,
+		floatPhase: 0.8,
 	},
 	{
-		title: "Clear next steps",
-		value: "Short action lists so you know what to do first, then next.",
-		example: "Example: set up rent, utilities, and essentials without missing steps.",
-		accent: "#fff14a",
+		title: "Your next steps",
+		description: "We help you know what's the next step to take.",
+		rotate: -2,
+		floatPhase: 1.4,
+	},
+	{
+		title: "Your progress",
+		description:
+			"We help you track your progress and what you have achieved.",
+		rotate: 4,
+		floatPhase: 0.4,
 	},
 ];
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
 export function LandingServicesSection() {
-	const shouldReduceMotion = useReducedMotion();
-
 	return (
 		<section
 			id="services"
-			className="scroll-mt-24 bg-minuri-fog py-16 md:scroll-mt-28 md:py-20"
+			className="scroll-mt-24 flex min-h-screen items-center bg-minuri-ocean py-24 text-minuri-white md:scroll-mt-28 md:py-32"
 			aria-labelledby="services-heading"
 		>
-			<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">
-				<div className="mx-auto max-w-3xl text-center">
-					<p className="landing-section-kicker">What Minuri provides</p>
-					<h2 id="services-heading" className="landing-section-heading">
-						Practical support you can use today
-					</h2>
-					<p className="landing-section-subheading mt-4">
-						Two tools and one clear path to help you handle
-						independent life with less guesswork.
+			<div className="mx-auto my-auto w-full max-w-screen px-5 md:px-8">
+				<div className="mx-auto max-w-7xl text-center">
+					<p className="mx-auto inline-flex rounded-lg bg-minuri-white/90 px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-minuri-ocean">
+						What Minuri provides
 					</p>
-				</div>
-
-				<div className="mt-10 grid gap-4 md:mt-12 md:grid-cols-3 md:gap-6">
-					{serviceCards.map((card, index) => (
-						<motion.article
-							key={card.title}
-							className="rounded-[1.2rem] border border-minuri-silver/65 bg-minuri-white p-6 shadow-[0_18px_34px_-28px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)]"
-							initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, amount: 0.45 }}
-							transition={{
-								duration: shouldReduceMotion ? 0.01 : 0.5,
-								delay: shouldReduceMotion ? 0 : index * 0.06,
-								ease: easeOut,
-							}}
+					<motion.h2
+						id="services-heading"
+						className="landing-section-heading mt-6 text-4xl text-minuri-white md:text-5xl"
+						initial={{ opacity: 0, y: 16 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.7 }}
+						transition={{
+							duration: 1.1,
+							ease: easeOut,
+						}}
+					>
+						Practical support you can use today
+					</motion.h2>
+					<p className="landing-section-subheading mt-4 text-xs text-minuri-mint md:text-sm">
+						Tools and steps for independent life.
+					</p>
+					<div className="mt-8">
+						<Link
+							href="/journey"
+							className="group inline-flex h-11 items-center gap-1.5 rounded-full border border-minuri-white/70 px-5 text-sm font-medium text-minuri-white transition-colors duration-200 hover:bg-minuri-white hover:text-minuri-ocean"
 						>
-							<span
-								className="mb-4 block h-1.5 w-12 rounded-full"
-								style={{ backgroundColor: card.accent }}
+							Start your journey
+							<ChevronRight
+								className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 								aria-hidden
 							/>
-							<h3 className="text-xl font-semibold tracking-tight text-minuri-ocean">
-								{card.title}
-							</h3>
-							<p className="mt-3 text-sm leading-relaxed text-minuri-slate">
-								{card.value}
-							</p>
-							<p className="mt-4 border-t border-minuri-silver/50 pt-4 text-xs leading-relaxed text-minuri-ocean/80">
-								{card.example}
-							</p>
-						</motion.article>
-					))}
+						</Link>
+					</div>
+				</div>
+
+				<div className="mt-14">
+					<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
+						{serviceCards.map((card, index) => (
+							<motion.div
+								key={card.title}
+								initial={{ opacity: 0, y: 18 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.45 }}
+								transition={{
+									duration: 0.5,
+									delay: index * 0.08,
+									ease: easeOut,
+								}}
+							>
+								<motion.article
+									style={{
+										rotate: card.rotate,
+									}}
+									className="relative rounded-2xl border border-minuri-mint/55 bg-minuri-ocean/70 p-5 text-left shadow-[0_16px_32px_-10px_rgba(2,24,25,0.35)] backdrop-blur-[1px] md:p-6"
+									animate={{ y: [0, -8, 0] }}
+									transition={{
+										duration: 3.2 + card.floatPhase * 0.28,
+										ease: "easeInOut",
+										repeat: Infinity,
+										delay: card.floatPhase,
+									}}
+								>
+									<h3 className="text-xl font-black uppercase tracking-tight text-minuri-mint">
+										{card.title}
+									</h3>
+									<p className="mt-2 text-base leading-relaxed text-minuri-white">
+										{card.description}
+									</p>
+								</motion.article>
+							</motion.div>
+						))}
+					</div>
 				</div>
 			</div>
 		</section>

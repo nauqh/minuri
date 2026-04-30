@@ -65,14 +65,14 @@ export function MenuNavLink({
 	);
 }
 
-export function LandingFooterCurve() {
+export function LandingFooterCurve({ color = "text-minuri-mist" }: { color?: string }) {
 	return (
 		<div
 			className="pointer-events-none absolute inset-x-0 top-0 z-10 h-14 w-full -translate-y-[calc(100%-1px)] md:h-20"
 			aria-hidden
 		>
 			<svg
-				className="h-full w-full text-minuri-mist"
+				className={`h-full w-full ${color}`}
 				viewBox="0 0 1440 120"
 				preserveAspectRatio="none"
 				xmlns="http://www.w3.org/2000/svg"

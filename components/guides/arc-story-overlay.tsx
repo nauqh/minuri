@@ -57,7 +57,7 @@ export function ArcStoryOverlay({
 					<motion.div
 						role="dialog"
 						aria-modal="true"
-						aria-labelledby="arc-help-title"
+						aria-label="Moment guide"
 						className="relative z-10 flex h-[min(92vh,54rem)] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] bg-minuri-white shadow-[0_38px_100px_-38px_color-mix(in_oklch,var(--minuri-ocean)_60%,transparent)]"
 						initial={{
 							opacity: 0,
@@ -72,37 +72,18 @@ export function ArcStoryOverlay({
 						}}
 						transition={drawerTransition}
 					>
-						<div className="relative border-b border-minuri-silver/70 bg-minuri-white px-5 pb-5 pt-6 md:px-8 md:pb-7 md:pt-8">
-							<div className="relative flex items-start justify-between gap-4">
-								<div className="space-y-2">
-									<p className="text-[11px] font-medium uppercase tracking-[0.12em] text-minuri-mid">
-										Moment guide
-									</p>
-									<h2
-										id="arc-help-title"
-										className="text-2xl font-semibold tracking-tight text-minuri-ocean md:text-[2.25rem]"
-									>
-										Choose the moment that matches where you
-										are
-									</h2>
-									<p className="max-w-2xl text-sm leading-6 text-minuri-slate">
-										Each moment is a chapter in your
-										first-month journey. Pick the one that
-										feels closest to your current moment.
-									</p>
-								</div>
-								<button
-									type="button"
-									className="flex size-10 shrink-0 items-center justify-center rounded-full bg-minuri-white/90 text-minuri-slate transition-colors hover:bg-minuri-fog"
-									aria-label="Close moment help"
-									onClick={onClose}
-								>
-									<X className="size-4" aria-hidden />
-								</button>
-							</div>
-						</div>
 						<div className="min-h-0 flex-1 overflow-y-auto">
-							<div className="px-4 py-4 md:px-6">
+							<div className="px-4 pb-4 pt-5 md:px-6 md:pb-5 md:pt-6">
+								<div className="mb-3 flex justify-end">
+									<button
+										type="button"
+										className="flex size-10 shrink-0 items-center justify-center rounded-full bg-minuri-white/90 text-minuri-slate transition-colors hover:bg-minuri-fog"
+										aria-label="Close moment help"
+										onClick={onClose}
+									>
+										<X className="size-4" aria-hidden />
+									</button>
+								</div>
 								<div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-minuri-silver/70 bg-minuri-fog/80 p-1">
 									{GUIDE_ARCS.map((arc) => (
 										<button

@@ -16,6 +16,7 @@ import type {
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuideMarkdown } from "@/components/guides/guide-markdown";
+import { JourneyNearbyPanel } from "@/components/journey/journey-nearby-panel";
 import {
 	buildGuideHref,
 	getArcMeta,
@@ -32,6 +33,7 @@ type GuideDetailViewProps = {
 	topicFilter: GuideTopicFilter;
 	query: string;
 	from: GuideOrigin;
+	suburb?: string;
 };
 
 type GuideContentJsonSection = {
@@ -157,6 +159,7 @@ export function GuideDetailView({
 	topicFilter,
 	query,
 	from,
+	suburb,
 }: GuideDetailViewProps) {
 	const { isBookmarked, toggleBookmark } = useGuideBookmarks();
 	const pathname = usePathname();
@@ -647,6 +650,65 @@ export function GuideDetailView({
 										paragraphClassName="text-[1.04rem] leading-8 text-minuri-ink md:text-[1.1rem] md:leading-9"
 									/>
 								</motion.section>
+							) : null}
+
+							{guide.firstSteps && guide.firstSteps.length > 0 ? (
+								<motion.section
+									initial={{
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 10,
+									}}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, amount: 0.2 }}
+									transition={{
+										duration: prefersReducedMotion ? 0.01 : 0.3,
+										ease: SECTION_ENTER_EASE,
+									}}
+									className="rounded-[0.85rem] border border-minuri-silver/70 bg-minuri-fog/50 px-6 py-7 md:px-8 md:py-8"
+								>
+									<h2 className="text-xl font-semibold text-minuri-ocean md:text-2xl">
+										Your first steps
+									</h2>
+									<ol className="mt-5 space-y-3">
+										{guide.firstSteps.map((step, index) => (
+											<li
+												key={index}
+												className="flex items-start gap-4"
+											>
+												<span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-minuri-teal/15 text-xs font-bold text-minuri-teal">
+													{index + 1}
+												</span>
+												<div className="flex min-w-0 flex-1 items-baseline justify-between gap-3">
+													<span className="text-sm leading-relaxed text-minuri-ink">
+														{step.label}
+													</span>
+													{step.estimateMin > 0 && (
+														<span className="shrink-0 rounded-full bg-minuri-silver/40 px-2 py-0.5 text-xs text-minuri-slate">
+															{step.estimateMin} min
+														</span>
+													)}
+												</div>
+											</li>
+										))}
+									</ol>
+								</motion.section>
+							) : null}
+
+							{suburb ? (
+								<motion.div
+									initial={{
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 10,
+									}}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, amount: 0.1 }}
+									transition={{
+										duration: prefersReducedMotion ? 0.01 : 0.3,
+										ease: SECTION_ENTER_EASE,
+									}}
+								>
+									<JourneyNearbyPanel suburb={suburb} />
+								</motion.div>
 							) : null}
 
 							{bridgeSection ? (

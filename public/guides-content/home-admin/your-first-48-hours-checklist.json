@@ -52,5 +52,23 @@
       "title": "Next Chapter",
       "value": "Next: When You Don't Know Anyone Yet — for when the quiet feels louder than the boxes."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Buy 2 days of essentials from the nearest supermarket",
+      "estimateMin": 30
+    },
+    {
+      "label": "Set up your phone SIM or connect to Wi-Fi",
+      "estimateMin": 15
+    },
+    {
+      "label": "Find your nearest pharmacy and 24-hour emergency room",
+      "estimateMin": 10
+    },
+    {
+      "label": "Write down your new address for future forms and deliveries",
+      "estimateMin": 2
+    }
   ]
 }

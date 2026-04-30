@@ -74,5 +74,23 @@
       "title": "Up next",
       "value": "Finding Your Community — because once you can move through the city under your own power, the next question is who you're moving toward."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Download the City of Melbourne cycling map",
+      "estimateMin": 3
+    },
+    {
+      "label": "Plan a safe bike route to your most-visited destination",
+      "estimateMin": 15
+    },
+    {
+      "label": "Check your bike lights and helmet are roadworthy",
+      "estimateMin": 5
+    },
+    {
+      "label": "Do a test ride during low-traffic hours (e.g. Sunday morning)",
+      "estimateMin": 30
+    }
   ]
 }

@@ -74,5 +74,23 @@
       "title": "Up next",
       "value": "Crisis Lines You Can Actually Call — for the moments where the problem isn't physical, and the answer isn't a clinic."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Find your nearest 24-hour emergency department",
+      "estimateMin": 5
+    },
+    {
+      "label": "Find your nearest urgent care clinic for non-emergency situations",
+      "estimateMin": 5
+    },
+    {
+      "label": "Save both addresses and opening hours in your phone",
+      "estimateMin": 3
+    },
+    {
+      "label": "Understand when to call 000 vs urgent care vs a GP appointment",
+      "estimateMin": 5
+    }
   ]
 }

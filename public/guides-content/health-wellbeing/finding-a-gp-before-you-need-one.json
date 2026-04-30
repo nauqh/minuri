@@ -56,5 +56,27 @@
       "title": "Up next",
       "value": "Crisis Lines You Can Actually Call — for the moments when a GP appointment in three days isn't soon enough."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Check your Medicare eligibility on Services Australia",
+      "estimateMin": 10
+    },
+    {
+      "label": "Enrol in Medicare if not already done",
+      "estimateMin": 20
+    },
+    {
+      "label": "Search for bulk-billing GPs near you on Healthdirect",
+      "estimateMin": 5
+    },
+    {
+      "label": "Book a new-patient appointment",
+      "estimateMin": 5
+    },
+    {
+      "label": "Prepare: Medicare card, photo ID, and a list of current medications",
+      "estimateMin": 5
+    }
   ]
 }

@@ -50,5 +50,23 @@
       "title": "Next Chapter",
       "value": "Next: Finding Your Community - turning connection into belonging infrastructure."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Write down what you actually miss — naming it helps more than avoiding it",
+      "estimateMin": 10
+    },
+    {
+      "label": "Schedule one regular call with someone from home (e.g. weekly)",
+      "estimateMin": 5
+    },
+    {
+      "label": "Find one local place that reminds you of home (cuisine, music, a park)",
+      "estimateMin": 20
+    },
+    {
+      "label": "Reach out to one person in your city just to say hi",
+      "estimateMin": 5
+    }
   ]
 }

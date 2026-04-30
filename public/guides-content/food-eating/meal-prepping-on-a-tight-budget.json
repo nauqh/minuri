@@ -74,5 +74,27 @@
       "title": "Up next",
       "value": "Setting Up Utilities Without Overpaying — because the second-biggest leak in your fortnight isn't food, it's the energy plan you got auto-enrolled into when you signed the lease."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Pick one prep day and block it in your calendar",
+      "estimateMin": 2
+    },
+    {
+      "label": "Plan 3–4 meals sharing base ingredients (rice, legumes, veg)",
+      "estimateMin": 15
+    },
+    {
+      "label": "Do one weekly shop from your plan",
+      "estimateMin": 40
+    },
+    {
+      "label": "Batch-cook a grain and a protein source",
+      "estimateMin": 60
+    },
+    {
+      "label": "Portion meals into containers and refrigerate or freeze",
+      "estimateMin": 10
+    }
   ]
 }

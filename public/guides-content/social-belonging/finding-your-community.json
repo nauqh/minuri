@@ -50,5 +50,23 @@
       "title": "Next Chapter",
       "value": "Next: When to See a Psych vs a Counsellor vs a Friend - support matching matters."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Search for community organisations aligned with your culture or interests",
+      "estimateMin": 15
+    },
+    {
+      "label": "Attend one community event this month",
+      "estimateMin": 120
+    },
+    {
+      "label": "Volunteer once to meet people with shared values",
+      "estimateMin": 180
+    },
+    {
+      "label": "Follow up with one person you met and suggest a coffee",
+      "estimateMin": 5
+    }
   ]
 }

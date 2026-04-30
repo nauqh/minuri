@@ -66,5 +66,23 @@
       "title": "Up next",
       "value": "Your First 48 Hours Checklist — the rest of the day-one admin, in the order it actually has to happen."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Take time-stamped photos of every room and all appliances on move-in day",
+      "estimateMin": 30
+    },
+    {
+      "label": "Back up photos to cloud storage immediately",
+      "estimateMin": 5
+    },
+    {
+      "label": "Read your lease and note any specific conditions or obligations",
+      "estimateMin": 20
+    },
+    {
+      "label": "Email the photos to your agent as a formal record",
+      "estimateMin": 5
+    }
   ]
 }

@@ -1,0 +1,211 @@
+[
+    {
+        "feature": "Journey Entry Point",
+        "category": "functional",
+        "description": "Start Journey CTA on landing page routes user to /journey",
+        "steps": [
+            "Navigate to / (landing page)",
+            "Locate the 'Start your journey' CTA button",
+            "Click the button",
+            "Verify browser routes to /journey",
+            "Verify the onboarding overlay is visible on arrival"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Onboarding Overlay — Your Moment Field",
+        "category": "functional",
+        "description": "Free-text 'Your moment' field accepts input and enforces a minimum character threshold",
+        "steps": [
+            "Navigate to /journey",
+            "Locate the 'Your moment' textarea",
+            "Type fewer than the minimum required characters",
+            "Verify a soft prompt appears (e.g. 'Tell us a little more so we can personalise your path')",
+            "Type until the minimum threshold is met",
+            "Verify the prompt disappears and the continue button becomes active"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Onboarding Overlay — Suburb Input",
+        "category": "functional",
+        "description": "Suburb field accepts a Melbourne suburb and stores it for downstream curation and map filtering",
+        "steps": [
+            "Navigate to /journey",
+            "Locate the 'Where are you settling in?' input field",
+            "Type a valid Melbourne suburb (e.g. Clayton)",
+            "Verify the input is accepted without error",
+            "Proceed through onboarding",
+            "Verify the entered suburb is reflected in the personalised plan and map panels"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Onboarding Overlay — Topic Selection",
+        "category": "functional",
+        "description": "User can select one or more topic chips to prioritise their guide path",
+        "steps": [
+            "Navigate to /journey",
+            "Locate the topic chip group: Food & Eating, Getting Around, Health & Wellbeing, Home & Admin, Social & Belonging",
+            "Click at least one chip",
+            "Verify selected chips show a visually distinct selected state",
+            "Click a selected chip again",
+            "Verify it deselects correctly",
+            "Verify at least one chip must remain selected before continuing"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Onboarding Overlay — Form Validation",
+        "category": "functional",
+        "description": "Continue button is disabled until all required fields are complete",
+        "steps": [
+            "Navigate to /journey",
+            "Leave 'Your moment' empty",
+            "Leave suburb empty",
+            "Select no topic chips",
+            "Verify 'Continue to my guide journey' button is disabled or unclickable",
+            "Complete 'Your moment' field only — verify button remains disabled",
+            "Add suburb only — verify button remains disabled",
+            "Select at least one topic — verify button becomes active"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Loading / Curation Transition Screen",
+        "category": "functional",
+        "description": "A loading screen displays while the personalised guide plan is being prepared",
+        "steps": [
+            "Complete the onboarding overlay with valid inputs",
+            "Click 'Continue to my guide journey'",
+            "Verify a loading/transition screen appears",
+            "Verify loading screen displays a contextual message (e.g. 'Putting together your Melbourne starter kit...')",
+            "Verify loading screen does not persist longer than 4 seconds for rule-based curation",
+            "Verify user is automatically routed to /journey/plan after loading completes"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Personalised Plan — Guide Prioritisation",
+        "category": "functional",
+        "description": "Guides on /journey/plan are ordered to reflect the user's selected topics",
+        "steps": [
+            "Complete onboarding selecting 'Health & Wellbeing' and 'Getting Around' only",
+            "Proceed to /journey/plan",
+            "Verify guides from Health & Wellbeing and Getting Around appear first in the list",
+            "Verify guides from unselected topics appear below or are deprioritised",
+            "Repeat with a different topic selection and verify ordering changes accordingly"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Personalised Plan — Guide Cards",
+        "category": "functional",
+        "description": "Each guide card on /journey/plan links correctly to its full guide page",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Verify at least one guide card is visible",
+            "Verify each card displays: title, topic category, and a brief description",
+            "Click a guide card",
+            "Verify browser routes to the correct /guides/[slug] page",
+            "Verify the guide page loads without errors"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Guide Page — Near Me Map Panel",
+        "category": "functional",
+        "description": "Each guide page reached via /journey/plan injects a 'Services near [suburb]' map panel",
+        "steps": [
+            "Complete onboarding with suburb set to 'Clayton'",
+            "Navigate to /journey/plan and click any guide card",
+            "Verify the guide page displays a map panel labelled with the user's suburb (e.g. 'Services near Clayton')",
+            "Verify the map renders without errors",
+            "Verify at least one service marker is visible on the map",
+            "Verify clicking a marker shows a service name or detail popup"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Guide Page — First Steps Action List",
+        "category": "functional",
+        "description": "Each guide page displays a 'Your first steps' action list with 3–5 sequenced tasks",
+        "steps": [
+            "Navigate to any guide page via /journey/plan",
+            "Locate the 'Your first steps' section",
+            "Verify between 3 and 5 tasks are displayed",
+            "Verify each task includes a short label and a time estimate",
+            "Verify tasks are ordered logically (prerequisite actions appear before dependent ones)"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Journey State Persistence",
+        "category": "functional",
+        "description": "User's onboarding inputs persist across page refreshes within the session",
+        "steps": [
+            "Complete the onboarding overlay",
+            "Arrive at /journey/plan",
+            "Refresh the browser",
+            "Verify /journey/plan still renders the personalised plan (not a blank or reset state)",
+            "Verify suburb, topic selections, and guide ordering are unchanged after refresh"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Journey Reset",
+        "category": "functional",
+        "description": "User can restart their journey and re-enter onboarding from scratch",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Locate a 'Start over' or 'Update my preferences' option",
+            "Click it",
+            "Verify user is routed back to /journey with the onboarding overlay visible",
+            "Verify all previous inputs are cleared",
+            "Complete onboarding again with different inputs",
+            "Verify /journey/plan reflects the new selections"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Sidebar — How This Works",
+        "category": "ui",
+        "description": "The /journey onboarding page displays a 3-step explainer sidebar visible on desktop",
+        "steps": [
+            "Navigate to /journey on a desktop viewport (≥1024px)",
+            "Verify a sidebar is visible on the right side of the screen",
+            "Verify it contains exactly 3 labelled steps: 'Tell us your moment', 'Name what you need right now', 'Start your guide journey'",
+            "Verify each step has a title and a short supporting description",
+            "Resize viewport to mobile (<768px)",
+            "Verify the sidebar is hidden or collapsed on mobile"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Accessibility — Onboarding Overlay",
+        "category": "accessibility",
+        "description": "Onboarding overlay is keyboard navigable and screen reader compatible",
+        "steps": [
+            "Navigate to /journey",
+            "Tab through all interactive elements: textarea, suburb input, topic chips, continue button",
+            "Verify focus order is logical and visible",
+            "Verify topic chips can be selected and deselected using Enter or Space",
+            "Verify the continue button is reachable via Tab and activatable via Enter",
+            "Verify all form fields have accessible labels (not placeholder-only)"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Routing — Direct URL Access",
+        "category": "functional",
+        "description": "Accessing /journey/plan directly without completing onboarding redirects to /journey",
+        "steps": [
+            "Clear session storage / cookies to ensure no prior onboarding state",
+            "Navigate directly to /journey/plan via URL bar",
+            "Verify the app redirects to /journey",
+            "Verify the onboarding overlay is shown",
+            "Verify no plan content is rendered before onboarding is complete"
+        ],
+        "passes": false
+    }
+]

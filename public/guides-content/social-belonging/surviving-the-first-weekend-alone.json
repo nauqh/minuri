@@ -66,5 +66,23 @@
       "title": "Up next",
       "value": "When You Don't Know Anyone Yet — what to do in week two, when the question shifts from *getting through* to *finding people*."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Make a loose plan for both days — doesn't need to be social",
+      "estimateMin": 10
+    },
+    {
+      "label": "Find one free event or market near you on Eventbrite or council website",
+      "estimateMin": 5
+    },
+    {
+      "label": "Plan a walk or short trip to a new part of the city",
+      "estimateMin": 5
+    },
+    {
+      "label": "Schedule a call or video chat with someone you love",
+      "estimateMin": 3
+    }
   ]
 }

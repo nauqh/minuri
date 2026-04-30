@@ -52,5 +52,27 @@
       "title": "Next Chapter",
       "value": "Next: Getting a Myki and surviving PTV — so you can move without guessing."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Find your nearest supermarket (Coles, Woolworths, or Aldi)",
+      "estimateMin": 10
+    },
+    {
+      "label": "Write a simple list: staples, a few meals, toiletries",
+      "estimateMin": 5
+    },
+    {
+      "label": "Download the supermarket app for weekly specials",
+      "estimateMin": 3
+    },
+    {
+      "label": "Shop with your list and keep to a $40–60 budget",
+      "estimateMin": 30
+    },
+    {
+      "label": "Keep your receipt to track spending this week",
+      "estimateMin": 2
+    }
   ]
 }

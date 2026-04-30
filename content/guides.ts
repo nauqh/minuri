@@ -70,6 +70,11 @@ export type GuideSection = {
     body: string[];
 };
 
+export type GuideFirstStep = {
+    label: string;
+    estimateMin: number;
+};
+
 export type Guide = {
     id: number;
     slug: string;
@@ -88,6 +93,7 @@ export type Guide = {
     searchTerms: string[];
     sections: GuideSection[];
     sourceLinks: { label: string; href: string }[];
+    firstSteps?: GuideFirstStep[];
 };
 
 type GuideJsonSection = {

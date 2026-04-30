@@ -7,17 +7,14 @@ import { LandingAccessSection } from "@/components/landing/landing-access-sectio
 import { LandingCareSection } from "@/components/landing/landing-care-section";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingHeroSectionV2 } from "./landing-hero-section-v2";
-import { LandingHubSidebar } from "@/components/landing/landing-hub-sidebar";
 import { ScrollToTopButton } from "@/components/landing/scroll-to-top-button";
 import { LandingServicesSection } from "@/components/landing/landing-services-section";
 
 export function HomeView() {
 	const [headerVisible, setHeaderVisible] = useState(false);
-	const [hubOpen, setHubOpen] = useState(false);
 
 	return (
 		<div className="relative min-h-screen bg-minuri-fog text-foreground">
-			<LandingHubSidebar open={hubOpen} onOpenChange={setHubOpen} />
 			<LandingHeroSectionV2
 				headerVisible={headerVisible}
 				onHeroReveal={() => setHeaderVisible(true)}
@@ -25,7 +22,7 @@ export function HomeView() {
 
 			<main>
 				<LandingServicesSection />
-				<SpotlightScrollSection onOpenMinuriHub={() => setHubOpen(true)} />
+				<SpotlightScrollSection />
 				<LandingCareSection />
 				<LandingAccessSection />
 			</main>

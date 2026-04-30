@@ -70,5 +70,23 @@
       "title": "Up next",
       "value": "Medicare, Bulk Billing, and Mental Health Care Plans — the other side of the paycheck: making sure healthcare doesn't quietly drain it."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Check whether your employer has set up superannuation for you",
+      "estimateMin": 5
+    },
+    {
+      "label": "Choose a super fund on MyGov and provide details to your employer",
+      "estimateMin": 15
+    },
+    {
+      "label": "Log in to your super fund portal and verify your balance",
+      "estimateMin": 5
+    },
+    {
+      "label": "Download the ATO app to track your Tax File Number and super",
+      "estimateMin": 5
+    }
   ]
 }

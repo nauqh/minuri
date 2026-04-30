@@ -66,5 +66,23 @@
       "title": "Up next",
       "value": "Finding a GP Before You Need One — because the second thing you'll be glad you sorted on day one is healthcare, and the system isn't what it looks like from the outside."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Download the Night Network map from PTV.vic.gov.au",
+      "estimateMin": 3
+    },
+    {
+      "label": "Check the last train or tram time from your most common late-night stops",
+      "estimateMin": 5
+    },
+    {
+      "label": "Save a rideshare or taxi contact in your phone",
+      "estimateMin": 3
+    },
+    {
+      "label": "Plan your late-night route home from your usual spot",
+      "estimateMin": 10
+    }
   ]
 }

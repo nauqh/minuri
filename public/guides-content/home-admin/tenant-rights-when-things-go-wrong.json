@@ -70,5 +70,23 @@
       "title": "Up next",
       "value": "Building a Local Routine — once the home is sorted and stable, the next month becomes about making the surrounding streets feel like yours."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Read the Residential Tenancies Act summary on Consumer Affairs VIC",
+      "estimateMin": 15
+    },
+    {
+      "label": "Know the notice period required before your landlord can enter",
+      "estimateMin": 5
+    },
+    {
+      "label": "Know how to request urgent repairs from your landlord",
+      "estimateMin": 5
+    },
+    {
+      "label": "Save the VCAT (Victorian Civil and Administrative Tribunal) contact",
+      "estimateMin": 2
+    }
   ]
 }

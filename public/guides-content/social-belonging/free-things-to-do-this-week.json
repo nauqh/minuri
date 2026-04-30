@@ -74,5 +74,23 @@
       "title": "Up next",
       "value": "Making Friends in a City Where Everyone's Busy — because being out and about is step one, but moving from \"there\" to \"with people\" is its own skill."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Search 'free events Melbourne this week' on Eventbrite or Time Out",
+      "estimateMin": 5
+    },
+    {
+      "label": "Visit one public park, garden, or gallery this weekend",
+      "estimateMin": 60
+    },
+    {
+      "label": "Find your local library and see what it offers beyond books",
+      "estimateMin": 15
+    },
+    {
+      "label": "Identify one recurring free activity near you (market, cinema, run club)",
+      "estimateMin": 10
+    }
   ]
 }

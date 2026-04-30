@@ -57,5 +57,23 @@
       "title": "Up next",
       "value": "When to See a Psych, a Counsellor, or a Friend (Arc 3) — if it's mental health medication you're managing, the therapy side of the picture often becomes part of the same conversation."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Bring all existing prescriptions and packaging to your first GP visit",
+      "estimateMin": 5
+    },
+    {
+      "label": "Ask your GP to transfer or re-issue your scripts in Australia",
+      "estimateMin": 10
+    },
+    {
+      "label": "Check if you qualify for a Healthcare Card via Centrelink",
+      "estimateMin": 15
+    },
+    {
+      "label": "Register with a local pharmacy and ask about PBS costs",
+      "estimateMin": 5
+    }
   ]
 }

@@ -62,5 +62,23 @@
       "title": "Up next",
       "value": "Managing Your Prescriptions in a New City — once you're in the system, the next problem is keeping it running smoothly across moves, scripts, and refills."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Find your nearest pharmacy and note its opening hours",
+      "estimateMin": 5
+    },
+    {
+      "label": "Ask the pharmacist about over-the-counter options for your issue",
+      "estimateMin": 5
+    },
+    {
+      "label": "Check if your medication is on the PBS to reduce cost",
+      "estimateMin": 5
+    },
+    {
+      "label": "Sign up for the pharmacy loyalty card for future savings",
+      "estimateMin": 3
+    }
   ]
 }

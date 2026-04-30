@@ -52,5 +52,23 @@
       "title": "Next Chapter",
       "value": "Next: Making Friends in a City Where Everyone's Busy — turning place into people."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Save 5 key locations in Google Maps (home, supermarket, GP, work/study, CBD)",
+      "estimateMin": 10
+    },
+    {
+      "label": "Walk a 15-minute radius from home to get your bearings",
+      "estimateMin": 15
+    },
+    {
+      "label": "Take one tram or train line end-to-end just to learn it",
+      "estimateMin": 60
+    },
+    {
+      "label": "Locate your nearest 24-hour pharmacy",
+      "estimateMin": 5
+    }
   ]
 }

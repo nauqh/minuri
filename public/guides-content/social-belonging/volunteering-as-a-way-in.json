@@ -70,5 +70,23 @@
       "title": "Up next",
       "value": "Homesickness Nobody Warns You About — for the parallel feeling that doesn't go away just because the social calendar starts filling up."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Browse Go Volunteer (govolunteer.com.au) for opportunities near you",
+      "estimateMin": 15
+    },
+    {
+      "label": "Apply to one opportunity matching your skills or interests",
+      "estimateMin": 15
+    },
+    {
+      "label": "Commit to at least 3 sessions before deciding if it's right for you",
+      "estimateMin": 180
+    },
+    {
+      "label": "Share your experience to help others find the same pathway",
+      "estimateMin": 5
+    }
   ]
 }

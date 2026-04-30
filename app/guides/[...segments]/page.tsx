@@ -41,6 +41,7 @@ export default async function GuidesSegmentsPage({
         topic?: string | string[];
         q?: string | string[];
         from?: string | string[];
+        suburb?: string | string[];
     }>;
 }) {
     const { segments } = await params;
@@ -83,6 +84,7 @@ export default async function GuidesSegmentsPage({
         );
         const query = parseSingleParam(incomingSearchParams.q) ?? "";
         const from = parseGuideOrigin(parseSingleParam(incomingSearchParams.from));
+        const suburb = parseSingleParam(incomingSearchParams.suburb);
 
         return (
             <>
@@ -93,6 +95,7 @@ export default async function GuidesSegmentsPage({
                     topicFilter={topicFilter}
                     query={query}
                     from={from}
+                    suburb={suburb}
                 />
                 <ScrollToTopButton trackedSectionIds={[]} />
             </>

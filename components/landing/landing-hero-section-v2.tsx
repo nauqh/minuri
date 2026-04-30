@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import { Caveat } from "next/font/google";
 import Link from "next/link";
 import { CheckCircle, ChevronRight, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const heroHighlights = [
 	"REAL-LIFE GUIDES, NOT FLUFF",
@@ -13,21 +11,115 @@ const heroHighlights = [
 	"CLEAR NEXT STEPS YOU CAN DO TODAY",
 ];
 
-const heroImages = [
+const HERO_TOPIC_CARDS = [
 	{
-		src: "/landing/amico.svg",
-		alt: "Young adult getting support from Minuri",
+		title: "Food & Eating",
+		desc: "Groceries, cheap meals & cooking basics.",
+		bg: "#00f5d4",
+		rotate: -6,
+		floatPhase: 0,
+		word: "eat",
+		wordColor: "#00957f",
 	},
 	{
-		src: "/landing/pana.svg",
-		alt: "Young adult feeling confident at home",
+		title: "Getting Around",
+		desc: "Trams, buses & cycling Melbourne.",
+		bg: "#7fdcff",
+		rotate: 5,
+		floatPhase: 1.1,
+		word: "travel",
+		wordColor: "#1a7ab3",
+	},
+	{
+		title: "Health & Wellbeing",
+		desc: "GPs, Medicare & mental health.",
+		bg: "#fff14a",
+		rotate: -2,
+		floatPhase: 0.5,
+		word: "heal",
+		wordColor: "#9a8000",
+	},
+	{
+		title: "Home & Admin",
+		desc: "Renting, utilities & paperwork.",
+		bg: "#ff7ecb",
+		rotate: 6,
+		floatPhase: 0.8,
+		word: "settle",
+		wordColor: "#c4246e",
+	},
+	{
+		title: "Social & Belonging",
+		desc: "Community, friendships & finding your place.",
+		bg: "#dcf5ee",
+		rotate: -3,
+		floatPhase: 1.4,
+		word: "belong",
+		wordColor: "#1a7a54",
 	},
 ];
 
-const bubbleHandwriting = Caveat({
-	subsets: ["latin"],
-	weight: ["400"],
-});
+function HeroTopicCard({
+	card,
+	index,
+	isActive,
+	onHover,
+	prefersReducedMotion,
+	entranceEase,
+	className = "",
+}: {
+	card: (typeof HERO_TOPIC_CARDS)[0];
+	index: number;
+	isActive: boolean;
+	onHover: () => void;
+	prefersReducedMotion: boolean;
+	entranceEase: [number, number, number, number];
+	className?: string;
+}) {
+	return (
+		<motion.div
+			className={className}
+			initial={{ opacity: 0, y: 32, scale: 0.94 }}
+			animate={{ opacity: 1, y: 0, scale: isActive ? 1.05 : 1 }}
+			transition={{
+				opacity: {
+					duration: prefersReducedMotion ? 0.01 : 0.6,
+					delay: prefersReducedMotion ? 0 : 0.5 + index * 0.07,
+					ease: entranceEase,
+				},
+				y: {
+					duration: prefersReducedMotion ? 0.01 : 0.6,
+					delay: prefersReducedMotion ? 0 : 0.5 + index * 0.07,
+					ease: entranceEase,
+				},
+				scale: {
+					duration: prefersReducedMotion ? 0.01 : 0.2,
+					ease: "easeOut",
+				},
+			}}
+			onHoverStart={onHover}
+		>
+			<motion.div
+				style={{ rotate: card.rotate, backgroundColor: card.bg }}
+				className="flex h-32 flex-col justify-between rounded-2xl p-4 shadow-md md:p-5"
+				animate={prefersReducedMotion ? {} : { y: [0, -7, 0] }}
+				transition={{
+					duration: 3.2 + card.floatPhase * 0.28,
+					ease: "easeInOut",
+					repeat: Infinity,
+					delay: card.floatPhase,
+				}}
+			>
+				<h3 className="text-base font-black uppercase leading-tight tracking-tight text-[#05292a] md:text-[1.05rem]">
+					{card.title}
+				</h3>
+				<p className="mt-3 text-[0.75rem] leading-snug text-[#163a3a]/70 md:text-[0.8rem]">
+					{card.desc}
+				</p>
+			</motion.div>
+		</motion.div>
+	);
+}
 
 export function LandingHeroSectionV2({
 	onHeroReveal,
@@ -37,13 +129,29 @@ export function LandingHeroSectionV2({
 	headerVisible?: boolean;
 }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [heroImageIndex, setHeroImageIndex] = useState(0);
+	const [activeIndex, setActiveIndex] = useState(0);
+	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const prefersReducedMotion = useReducedMotion();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+	const restartCycle = () => {
+		if (intervalRef.current) clearInterval(intervalRef.current);
+		intervalRef.current = setInterval(() => {
+			setActiveIndex((i) => (i + 1) % HERO_TOPIC_CARDS.length);
+		}, 2500);
+	};
 
 	useEffect(() => {
 		onHeroReveal?.();
 	}, [onHeroReveal]);
+
+	useEffect(() => {
+		restartCycle();
+		return () => {
+			if (intervalRef.current) clearInterval(intervalRef.current);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
@@ -60,19 +168,9 @@ export function LandingHeroSectionV2({
 		};
 	}, [mobileMenuOpen]);
 
-	useEffect(() => {
-		const intervalId = window.setInterval(() => {
-			setHeroImageIndex((current) => (current + 1) % heroImages.length);
-		}, 3200);
-
-		return () => {
-			window.clearInterval(intervalId);
-		};
-	}, []);
-
 	return (
-		<section className="relative overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative mx-auto max-w-screen-2xl px-6 pb-10 pt-4 md:px-10 md:pt-0">
+		<section className="relative flex min-h-screen flex-col overflow-hidden bg-minuri-white text-minuri-ink">
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen-2xl px-6 pb-10 pt-4 md:px-10 md:pt-0">
 				<div className="relative">
 					<motion.header
 						className="mx-auto flex w-full items-center justify-between bg-minuri-white py-2 md:min-h-21 md:rounded-full md:py-0"
@@ -155,21 +253,10 @@ export function LandingHeroSectionV2({
 							}}
 						>
 							<Link
-								href="/guides"
-								className="group hidden h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-6 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
-							>
-								Start with guides
-								<ChevronRight
-									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
-									strokeWidth={2.25}
-									aria-hidden
-								/>
-							</Link>
-							<Link
-								href="/near-me"
+								href="/journey"
 								className="group hidden h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:inline-flex"
 							>
-								Find nearby support
+								Start your journey
 								<ChevronRight
 									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 									strokeWidth={2.25}
@@ -266,20 +353,13 @@ export function LandingHeroSectionV2({
 								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-slate">
 									Quick start
 								</p>
-								<div className="mt-3 space-y-2.5">
+								<div className="mt-3">
 									<Link
-										href="/guides"
-										className="inline-flex w-full items-center justify-center rounded-full border border-minuri-ocean bg-minuri-white px-5 py-2 text-sm font-medium text-minuri-ocean"
+										href="/journey"
+										className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-minuri-teal px-5 py-2 text-sm font-semibold text-primary-foreground"
 										onClick={() => setMobileMenuOpen(false)}
 									>
-										Start with guides
-									</Link>
-									<Link
-										href="/near-me"
-										className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-minuri-ocean px-5 py-2 text-sm font-semibold text-minuri-white"
-										onClick={() => setMobileMenuOpen(false)}
-									>
-										Find nearby support
+										Start your journey
 										<ChevronRight
 											className="size-4"
 											aria-hidden
@@ -292,7 +372,7 @@ export function LandingHeroSectionV2({
 				</div>
 
 				<motion.div
-					className="pb-10 pt-10 md:pb-14 md:pt-12"
+					className="flex flex-1 flex-col pb-10 pt-10 md:pb-16 md:pt-12"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -346,11 +426,39 @@ export function LandingHeroSectionV2({
 								},
 							}}
 						>
-							Feeling at home, wherever you are
+							Feeling at home, wherever
+							{" you "}
+							<AnimatePresence mode="wait">
+								<motion.span
+									key={HERO_TOPIC_CARDS[activeIndex].word}
+									initial={{
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 14,
+									}}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : -10,
+									}}
+									transition={{
+										duration: prefersReducedMotion
+											? 0.01
+											: 0.28,
+										ease: entranceEase,
+									}}
+									style={{
+										color: HERO_TOPIC_CARDS[activeIndex].bg,
+										filter: "brightness(0.85)",
+									}}
+									className="inline-block"
+								>
+									{HERO_TOPIC_CARDS[activeIndex].word}
+								</motion.span>
+							</AnimatePresence>
 						</motion.h1>
 					</div>
 
-					<div className="mt-0 grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
+					<div className="mt-0 grid flex-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex flex-col md:h-full">
 							<motion.p
 								className="mt-4 text-2xl font-bold text-minuri-ocean"
@@ -392,7 +500,7 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<p className="max-w-xl leading-relaxed text-minuri-ocean font-medium md:text-lg">
+								<p className="max-w-xl leading-relaxed text-minuri-ocean font-medium">
 									Get plain-language guides, find nearby
 									services, and follow clear next steps for
 									day-to-day independent life.
@@ -443,68 +551,45 @@ export function LandingHeroSectionV2({
 							</motion.div>
 						</div>
 
-						<motion.div
-							className="relative mx-auto w-full max-w-md md:-mt-20"
-							variants={{
-								hidden: {
-									opacity: 0,
-									x: prefersReducedMotion ? 0 : 24,
-									scale: prefersReducedMotion ? 1 : 0.985,
-								},
-								visible: {
-									opacity: 1,
-									x: 0,
-									scale: 1,
-									transition: {
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.75,
-										ease: entranceEase,
-									},
-								},
-							}}
-						>
-							<div className="group relative mx-auto aspect-square w-full">
-								<AnimatePresence mode="sync">
-									<motion.div
-										key={heroImages[heroImageIndex].src}
-										className="absolute inset-0"
-										initial={{ opacity: 0 }}
-										animate={{ opacity: 1 }}
-										exit={{ opacity: 0 }}
-										transition={{
-											duration: 0.7,
-											ease: "easeInOut",
+						<div className="flex w-full flex-col justify-end md:pb-4">
+							<div className="grid grid-cols-2 gap-2.5 md:gap-3">
+								{HERO_TOPIC_CARDS.slice(0, 4).map((card, i) => (
+									<HeroTopicCard
+										key={card.title}
+										card={card}
+										index={i}
+										isActive={activeIndex === i}
+										onHover={() => {
+											setActiveIndex(i);
+											restartCycle();
 										}}
-									>
-										<Image
-											src={heroImages[heroImageIndex].src}
-											alt={heroImages[heroImageIndex].alt}
-											fill
-											sizes="(max-width: 768px) 90vw, 520px"
-											className="h-full w-full object-contain"
-											priority={heroImageIndex === 0}
-										/>
-									</motion.div>
-								</AnimatePresence>
-								<div className="pointer-events-none absolute -top-20 right-0 z-20 max-w-64 translate-y-2 scale-95 rounded-4xl border border-minuri-ocean bg-minuri-white/96 px-5 py-4 text-minuri-ocean opacity-0 backdrop-blur-sm transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100">
-									<p
-										className={`${bubbleHandwriting.className} text-3xl leading-[1.05] text-minuri-ocean/80`}
-									>
-										I can do this. I just need support that
-										fits my day
-									</p>
-									<span
-										aria-hidden
-										className="absolute -bottom-2.5 left-8 h-5 w-5 rotate-45 border-b border-r border-minuri-ocean bg-minuri-white"
+										prefersReducedMotion={
+											!!prefersReducedMotion
+										}
+										entranceEase={entranceEase}
+										className=""
 									/>
-								</div>
+								))}
+								<HeroTopicCard
+									card={HERO_TOPIC_CARDS[4]}
+									index={4}
+									isActive={activeIndex === 4}
+									onHover={() => {
+										setActiveIndex(4);
+										restartCycle();
+									}}
+									prefersReducedMotion={
+										!!prefersReducedMotion
+									}
+									entranceEase={entranceEase}
+									className="col-span-2"
+								/>
 							</div>
-						</motion.div>
+						</div>
 					</div>
 				</motion.div>
 
-				<motion.div
+				{/* <motion.div
 					className="grid gap-4 pb-8 md:grid-cols-3 md:gap-6"
 					initial="hidden"
 					animate="visible"
@@ -551,7 +636,7 @@ export function LandingHeroSectionV2({
 							</p>
 						</motion.div>
 					))}
-				</motion.div>
+				</motion.div> */}
 			</div>
 		</section>
 	);

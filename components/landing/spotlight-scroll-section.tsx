@@ -1,6 +1,16 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
+import { useRef } from "react";
+import { Compass, LayoutGrid, MapPin, type LucideIcon } from "lucide-react";
+import {
+	motion,
+	useReducedMotion,
+	useScroll,
+	useTransform,
+	type MotionValue,
+} from "motion/react";
+import { cn } from "@/lib/utils";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -9,11 +19,8 @@ type HowItWorksCard = {
 	title: string;
 	body: string;
 	color: string;
-	optionLabel: string;
-	options: Array<{
-		title: string;
-		description?: string;
-	}>;
+	icon: LucideIcon;
+	options: Array<{ title: string; description?: string }>;
 };
 
 const cards: HowItWorksCard[] = [
@@ -22,7 +29,7 @@ const cards: HowItWorksCard[] = [
 		title: "Start with what is happening this week",
 		body: "Choose the moment that matches your life right now so you can skip generic advice and begin with the right first move.",
 		color: "#00f5d4",
-		optionLabel: "Moment",
+		icon: Compass,
 		options: [
 			{
 				title: "I just arrived",
@@ -45,7 +52,7 @@ const cards: HowItWorksCard[] = [
 		title: "Follow one simple structure",
 		body: "Use the same five topics across the app, so each guide and local result feels familiar and easy to act on.",
 		color: "#7fdcff",
-		optionLabel: "Topic",
+		icon: LayoutGrid,
 		options: [
 			{ title: "Food & Eating" },
 			{ title: "Getting Around" },
@@ -59,7 +66,7 @@ const cards: HowItWorksCard[] = [
 		title: "Take action with nearby options",
 		body: "When you are ready, switch from planning to doing with practical places and services near your suburb.",
 		color: "#fff14a",
-		optionLabel: "Near me",
+		icon: MapPin,
 		options: [
 			{
 				title: "Suburb-aware results",
@@ -77,146 +84,211 @@ const cards: HowItWorksCard[] = [
 	},
 ];
 
-type SpotlightScrollSectionProps = {
-	onOpenMinuriHub?: () => void;
-};
-
-export function SpotlightScrollSection({
-	onOpenMinuriHub,
-}: SpotlightScrollSectionProps) {
-	const shouldReduceMotion = useReducedMotion();
+/* ─── single card face ─────────────────────────────────────────── */
+function CardFace({
+	card,
+	index,
+	y,
+}: {
+	card: HowItWorksCard;
+	index: number;
+	y: MotionValue<string> | number;
+}) {
+	const visualOnRight = index % 2 === 0;
+	const Icon = card.icon;
 
 	return (
-		<section
-			id="service"
-			className="scroll-mt-24 bg-minuri-white py-18 md:scroll-mt-28 md:py-22"
-			aria-labelledby="how-it-works-heading"
+		<motion.div
+			className="absolute inset-0 flex items-center bg-minuri-white"
+			style={{
+				y,
+				zIndex: index + 1,
+			}}
 		>
-			<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">
-				<div className="mb-8 text-center md:mb-10">
-					<p className="landing-section-kicker">How Minuri works</p>
-					<h2
-						id="how-it-works-heading"
-						className="landing-section-heading"
-					>
-						From confusion to clear action
-					</h2>
-					<p className="landing-section-subheading mt-4">
-						A fast path from where you are now to the next thing you
-						can do today.
-					</p>
-				</div>
+			{/* coloured half panel */}
+			<div
+				aria-hidden
+				className={cn(
+					"pointer-events-none absolute inset-y-0 w-1/2",
+					visualOnRight ? "right-0" : "left-0",
+				)}
+				style={{ background: card.color }}
+			/>
 
+			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-12 px-6 py-20 sm:px-10 md:grid-cols-2 md:px-14 xl:px-16">
+				{/* ── text ── */}
 				<div
-					className="relative mx-auto flex w-full max-w-xl flex-col gap-8 sm:max-w-184 md:gap-12 md:pl-13"
-					role="list"
+					className={cn(
+						"flex flex-col justify-center",
+						!visualOnRight
+							? "md:order-2 md:pl-14 lg:pl-20"
+							: "md:pr-14 lg:pr-20",
+					)}
 				>
-					<div
-						aria-hidden
-						className="absolute bottom-6 left-4 top-6 hidden w-px bg-linear-to-b from-minuri-silver/20 via-minuri-silver/70 to-minuri-silver/20 md:block"
-					/>
-					{cards.map((card, i) => (
-						<motion.article
-							key={card.step}
-							role="listitem"
-							className="relative w-full transform-3d"
-							style={{ perspective: 1200 }}
-							initial={
-								shouldReduceMotion
-									? { opacity: 0, y: 22 }
-									: {
-											opacity: 0,
-											rotateX: -84,
-											y: 46,
-											scale: 0.975,
-										}
-							}
-							whileInView={
-								shouldReduceMotion
-									? { opacity: 1, y: 0 }
-									: {
-											opacity: 1,
-											rotateX: 0,
-											y: 0,
-											scale: 1,
-										}
-							}
-							viewport={{
-								once: true,
-								margin: "0% 0px -10% 0px",
-								amount: 0.45,
-							}}
-							transition={{
-								duration: shouldReduceMotion ? 0.4 : 0.74,
-								delay: i * 0.08,
-								ease: easeOut,
-							}}
-						>
+					<div className="w-full max-w-136 rounded-[1.7rem] border border-minuri-silver/55 bg-minuri-white/85 p-6 shadow-[0_20px_44px_-34px_rgba(4,30,43,0.35)] backdrop-blur-[2px] md:p-8">
+						<div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-minuri-silver/60 bg-minuri-white px-3.5 py-1.5">
 							<span
 								aria-hidden
-								className="absolute -left-11.5 top-10 hidden size-5 rounded-full border-2 border-minuri-white md:block"
-								style={{
-									backgroundColor: card.color,
-									boxShadow: `0 0 0 4px color-mix(in srgb, ${card.color} 35%, transparent)`,
-								}}
+								className="size-2.5 rounded-full"
+								style={{ background: card.color }}
 							/>
-							<div className="flex flex-col rounded-[1.5rem] border border-minuri-silver/55 bg-minuri-white p-6 shadow-[0_18px_36px_-30px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)] md:rounded-[1.75rem] md:p-8">
-								<div className="flex flex-col gap-2.5">
+							<span
+								className="text-[0.68rem] font-bold uppercase tracking-[0.2em]"
+								style={{
+									color: `color-mix(in srgb, ${card.color} 60%, #0c1e2e)`,
+								}}
+							>
+								{card.step}
+							</span>
+						</div>
+
+						<h3 className="text-[2rem] font-bold leading-[1.12] tracking-tight text-minuri-ocean md:text-[2.35rem]">
+							{card.title}
+						</h3>
+
+						<p className="mt-5 text-[1.03rem] leading-relaxed text-minuri-slate md:text-[1.08rem]">
+							{card.body}
+						</p>
+
+						<div className="mt-6 space-y-3.5">
+							{card.options.map((opt, optionIndex) => (
+								<div
+									key={opt.title}
+									className="flex items-start gap-3.5 rounded-xl border border-minuri-silver/55 bg-minuri-white/80 px-3.5 py-3.5 transition-transform duration-300 ease-out hover:-translate-y-0.5"
+								>
 									<span
-										className="inline-flex w-fit rounded-full border px-2.5 py-1 font-serif text-[0.77rem] italic tracking-[0.08em] text-minuri-ocean"
+										aria-hidden
+										className="inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1.5 text-[0.72rem] font-black tabular-nums"
 										style={{
-											backgroundColor: `color-mix(in srgb, ${card.color} 90%, white)`,
-											borderColor: `color-mix(in srgb, ${card.color} 78%, var(--minuri-silver))`,
+											background: `color-mix(in srgb, ${card.color} 34%, white)`,
+											color: "#0c1e2e",
 										}}
 									>
-										{card.step}
+										{String(optionIndex + 1).padStart(
+											2,
+											"0",
+										)}
 									</span>
-									<h3 className="max-w-2xl text-xl font-semibold leading-snug tracking-tight text-minuri-ocean md:text-[1.6rem]">
-										{card.title}
-									</h3>
-								</div>
-								<p className="mt-5 text-sm leading-relaxed text-minuri-slate md:mt-6 md:text-[0.9375rem]">
-									{card.body}
-								</p>
-								<div className="mt-5 grid gap-2.5 sm:grid-cols-2 md:gap-3">
-									{card.options.map((option) => (
-										<div
-											key={option.title}
-											className="relative overflow-hidden rounded-[0.9rem] border bg-minuri-white/82 px-4 py-3 text-minuri-ocean"
-											style={{
-												borderColor: `color-mix(in srgb, ${card.color} 60%, var(--minuri-silver))`,
-												boxShadow:
-													"0 10px 20px -20px color-mix(in oklch, var(--minuri-mid) 55%, transparent)",
-											}}
-										>
-											<span
-												aria-hidden
-												className="absolute inset-y-0 left-0 w-1.5"
-												style={{
-													backgroundColor: `color-mix(in srgb, ${card.color} 76%, white)`,
-												}}
-											/>
-											<p className="text-[0.63rem] font-semibold uppercase tracking-[0.15em] opacity-80">
-												{card.optionLabel}
+									<div>
+										<p className="text-[1rem] font-semibold text-minuri-ocean">
+											{opt.title}
+										</p>
+										{opt.description && (
+											<p className="mt-0.5 text-[0.9rem] leading-relaxed text-minuri-slate">
+												{opt.description}
 											</p>
-											<p className="mt-1 text-[1.08rem] font-semibold leading-snug">
-												{option.title}
-											</p>
-											{option.description ? (
-												<p className="mt-1 text-xs leading-relaxed opacity-85">
-													{option.description}
-												</p>
-											) : null}
-										</div>
-									))}
+										)}
+									</div>
 								</div>
-							</div>
-						</motion.article>
-					))}
+							))}
+						</div>
+					</div>
 				</div>
 
+				{/* ── visual ── */}
+				<div
+					className={cn(
+						"relative flex items-center justify-center py-16 md:min-h-screen md:py-0",
+						!visualOnRight && "md:order-1",
+					)}
+				>
+					<span
+						aria-hidden
+						className="pointer-events-none absolute select-none font-black leading-none tabular-nums text-minuri-ocean/10"
+						style={{ fontSize: "clamp(10rem, 26vw, 20rem)" }}
+					>
+						0{index + 1}
+					</span>
+					<Icon
+						aria-hidden
+						className="relative z-10 text-minuri-ocean/70"
+						style={{
+							width: "clamp(5.5rem, 13vw, 9.5rem)",
+							height: "clamp(5.5rem, 13vw, 9.5rem)",
+							strokeWidth: 1,
+						}}
+					/>
+				</div>
+			</div>
+		</motion.div>
+	);
+}
+
+/* ─── main section ─────────────────────────────────────────────── */
+export function SpotlightScrollSection() {
+	const shouldReduceMotion = useReducedMotion();
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	/*
+	 * Single shared scroll progress over the 700 vh container.
+	 * progress = 0  →  container top at viewport top
+	 * progress = 1  →  container bottom at viewport bottom
+	 *
+	 * 5 equal segments × 120 vh each (600 vh scroll + 100 vh sticky):
+	 *
+	 * Card 0 dwell:       0.00 – 0.20  (120 vh)
+	 * Slide 0→1:          0.20 – 0.40  (120 vh) — card 1 slides up
+	 * Card 1 dwell:       0.40 – 0.60  (120 vh)
+	 * Slide 1→2:          0.60 – 0.80  (120 vh) — card 2 slides up
+	 * Card 2 dwell:       0.80 – 1.00  (120 vh)
+	 */
+	const { scrollYProgress } = useScroll({
+		target: containerRef,
+		offset: ["start start", "end end"],
+	});
+
+	// card 0 stays fixed; cards 1 and 2 each slide up from below
+	const y1 = useTransform(scrollYProgress, [0.2, 0.4], ["100%", "0%"]);
+	const y2 = useTransform(scrollYProgress, [0.6, 0.8], ["100%", "0%"]);
+
+	const yValues: (MotionValue<string> | number)[] = [
+		0,
+		shouldReduceMotion ? 0 : y1,
+		shouldReduceMotion ? 0 : y2,
+	];
+
+	return (
+		<div id="service" className="scroll-mt-24 md:scroll-mt-28">
+			{/* ── heading ── */}
+			<div className="bg-minuri-white py-16 text-center md:py-20">
+				<p className="landing-section-kicker">How Minuri works</p>
+				<h2
+					id="how-it-works-heading"
+					className="landing-section-heading"
+				>
+					From confusion to clear action
+				</h2>
+				<p className="landing-section-subheading mt-4">
+					A fast path from where you are now to the next thing you can
+					do today.
+				</p>
+			</div>
+
+			{/*
+			 * 400 vh container  →  300 vh of scroll space with a 100 vh sticky stage.
+			 * The stage holds all 3 cards stacked; scroll drives the shared flip.
+			 */}
+			<div
+				ref={containerRef}
+				className="relative"
+				style={{ height: "700vh" }}
+			>
+				<div className="sticky top-0 h-screen overflow-hidden bg-minuri-white">
+					{cards.map((card, i) => (
+						<CardFace
+							key={card.step}
+							card={card}
+							index={i}
+							y={yValues[i]}
+						/>
+					))}
+				</div>
+			</div>
+
+			{/* CTA button */}
+			<div className="bg-minuri-white px-6 pb-20 pt-12 sm:px-10 md:pt-16">
 				<motion.div
-					className="mx-auto mt-7 w-full max-w-xl sm:max-w-184 md:mt-9 md:pl-13"
+					className="mx-auto mt-16 w-full max-w-xl md:mt-24"
 					initial={{ opacity: 0, y: 28 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{
@@ -224,29 +296,23 @@ export function SpotlightScrollSection({
 						margin: "0% 0px -12% 0px",
 						amount: 0.35,
 					}}
-					transition={{
-						duration: 0.55,
-						delay: 0.12,
-						ease: easeOut,
-					}}
+					transition={{ duration: 0.55, delay: 0.12, ease: easeOut }}
 				>
-					<button
-						type="button"
-						onClick={() => onOpenMinuriHub?.()}
-						aria-label="Open Minuri hub"
-						className="group relative block h-19 w-full cursor-pointer overflow-hidden rounded-[1.25rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-650 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-minuri-white hover:bg-none hover:border-minuri-silver/80 hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white motion-reduce:transition-none"
+					<Link
+						href="/journey"
+						className="group relative flex h-19 w-full cursor-pointer items-center overflow-hidden rounded-[1.25rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-minuri-white hover:bg-none hover:border-minuri-silver/80 hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white motion-reduce:transition-none"
 					>
-						<span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(1.45rem,3.4vw,1.85rem)] tracking-[-0.04em] text-minuri-white transition-all duration-650 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-8 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-8 group-focus-visible:translate-x-0 group-focus-visible:text-foreground motion-reduce:transition-none">
+						<span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.45rem,3.4vw,1.85rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-8 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-8 group-focus-visible:translate-x-0 group-focus-visible:text-foreground motion-reduce:transition-none">
 							Let's Get Started
 						</span>
 						<span className="absolute right-4 top-1/2 -translate-y-1/2">
-							<span className="pointer-events-auto inline-flex cursor-pointer items-center rounded-full border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-5 py-2.5 text-sm font-semibold tracking-tight text-minuri-white opacity-0 shadow-[0_12px_20px_-14px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-all duration-650 ease-[cubic-bezier(0.22,1,0.36,1)] translate-y-[140%] scale-90 group-hover:translate-y-0 group-hover:scale-[1.08] group-hover:opacity-100 hover:scale-[1.12] focus-visible:scale-[1.12] group-focus-visible:translate-y-0 group-focus-visible:scale-[1.08] group-focus-visible:opacity-100 motion-reduce:transition-none">
-								Open Minuri hub
+							<span className="inline-flex translate-y-[140%] scale-90 items-center rounded-full border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-5 py-2.5 text-sm font-semibold tracking-tight text-minuri-white opacity-0 shadow-[0_12px_20px_-14px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-hover:scale-[1.08] group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:scale-[1.08] group-focus-visible:opacity-100 motion-reduce:transition-none">
+								Start your journey
 							</span>
 						</span>
-					</button>
+					</Link>
 				</motion.div>
 			</div>
-		</section>
+		</div>
 	);
 }
