@@ -78,24 +78,32 @@
 ## Ready-to-Speak Pitches
 
 ### Landing Page Pitch
-"Imagine arriving in a new city where everything feels unfamiliar — where to eat, how to get around, how to access healthcare, who to ask for help. For many newcomers, that uncertainty is the hardest part.
+"Imagine arriving in Melbourne and feeling that quiet panic: so many things to figure out, and no obvious place to start. Food, transport, healthcare, paperwork, community. Each task sounds small, but together they feel overwhelming.
 
-Our landing page is designed to meet people in that moment. The first thing they see is not a wall of features, but reassurance: you are not alone, and there is a clear way forward.
+Minuri’s landing page is designed for that exact moment.
 
-From there, the experience guides them naturally into two practical paths: trusted advice through Guides, and immediate local action through Near Me. It feels simple, warm, and human.
+In the hero section, we begin with reassurance and clarity. We acknowledge the stress without dramatizing it, and we make one promise: you can take this one step at a time.
 
-This matters because first impressions shape trust. The landing page is where fear starts turning into confidence — and where users understand that Minuri is built to help them take real next steps, not just read information."
+As users continue down the page, the experience opens up in a deliberate flow. They see what Minuri offers, why it matters, and how it supports real life. The services area introduces two practical paths: Guides for trusted, step-by-step understanding, and Near Me for immediate local action. This is not abstract advice. It is support users can apply today.
+
+Then the spotlight and care-focused sections deepen the emotional connection. They show that Minuri is not only functional, but also humane. We are not just listing resources; we are helping people feel seen, supported, and less alone while they settle.
+
+The access-oriented part of the page reinforces fairness and usability: help should be easy to reach, easy to understand, and available when people need it most. That reflects a core Minuri value: support should reduce friction, not add to it.
+
+And importantly, the landing experience includes a personal hub pattern where users can set suburb, choose their current life moment, and pick focus topics. That small act of personalization turns the page from a static homepage into a meaningful starting point. It tells users: this support can adapt to you.
+
+So the landing page is much more than a first impression. It is the beginning of trust. It moves users from uncertainty to orientation, from orientation to action, and from action to confidence."
 
 ### Journey Pitch
-"If the landing page is the welcome, Journey is the promise kept.
+"If the landing page is the welcome, Journey is Minuri’s promise in action.
 
-Journey turns one-time help into ongoing support. Instead of asking users to keep figuring things out from scratch, it learns from their story, their suburb, and what matters most right now.
+Journey turns support into something personal, practical, and continuous. It listens to a user’s moment, suburb, and priorities, then translates that into a clear week-by-week path.
 
-Then it gives them something emotionally powerful: a clear path. Day by day, users can see what to focus on, what to read, and where to go nearby. Big life changes become manageable actions.
+What users feel here is relief: instead of carrying everything at once, they can focus on one meaningful next step each day. That is Minuri’s value of clarity under pressure.
 
-What makes Journey special is that it combines guidance and local services in one flow. Users move from 'I feel lost' to 'I know what I’m doing next.'
+Journey also reflects trust and respect. Guidance is tailored to real life, local options are connected at the right time, and personal context is treated with care.
 
-And that is the heart of Minuri: not just helping someone once, but helping them settle, belong, and grow with confidence over time."
+In the end, Journey is about belonging with confidence — helping people move from 'I’m still figuring this out' to 'I know where I’m going next, and I can do this.'"
 
 ---
 

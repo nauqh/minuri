@@ -126,6 +126,10 @@ function makePinIcon(
 
 // ── Popup HTML ──
 
+function formatK(n: number): string {
+	return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+}
+
 function makePopupContent(
 	place: NearMePlace,
 	index: number,
@@ -140,13 +144,18 @@ function makePopupContent(
 		: `<div style="width:100%;height:52px;background:#f0f4f5;display:flex;align-items:center;justify-content:center;border-radius:10px 10px 0 0"><svg width="18" height="18" fill="none" stroke="#9baabb" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>`;
 
 	const ratingHtml = place.rating
-		? `<span style="background:${darkColor};color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0">&#9733; ${place.rating}</span>`
+		? `<span style="font-size:11px;color:#374151">⭐ ${place.rating.toFixed(1)}${place.reviewCount ? ` (${formatK(place.reviewCount)})` : ""}</span>`
 		: "";
 
+	const openLabel = place.hours
+		? `${place.openNow ? "Open" : "Closed"} · ${escapeHtml(place.hours)}`
+		: place.openNow
+			? "Open now"
+			: "";
 	const statusParts = [
 		place.type ? escapeHtml(place.type) : "",
-		place.openNow
-			? `<span style="color:#16a34a;font-weight:500">Open now</span>`
+		openLabel
+			? `<span style="color:${place.openNow ? "#16a34a" : "#dc2626"};font-weight:500">${escapeHtml(openLabel)}</span>`
 			: "",
 	].filter(Boolean);
 

@@ -330,13 +330,7 @@ export function NearMeView({
 						const { isOpen, label: hoursLabel } = parseOpenState(
 							place.open_state ?? undefined,
 						);
-						const rawTags: string[] = place.price ? [place.price] : [];
-						const tags =
-							topic === "health-wellbeing" && rawTags.length === 0
-								? ["Bulk-billing: call to confirm"]
-								: rawTags.length > 0
-									? rawTags
-									: undefined;
+						const tags = topic === "health-wellbeing" ? ["Bulk-billing: call to confirm"] : undefined;
 						const placeLat = place.gps_coordinates?.latitude ?? -37.8136;
 						const placeLng = place.gps_coordinates?.longitude ?? 144.9631;
 						return {
@@ -357,6 +351,7 @@ export function NearMeView({
 							reviewCount:
 								typeof place.reviews === "number" ? place.reviews : undefined,
 							type: place.type ?? undefined,
+							price: place.price ?? undefined,
 							hours: hoursLabel || undefined,
 							openNow: isOpen,
 							snippet: place.description
@@ -768,7 +763,11 @@ export function NearMeView({
 
 						{/* Results */}
 						{status === "success" && (
-							<div className="divide-y divide-minuri-silver/30">
+							<div className={cn(
+								cardLayout === "grid"
+									? "grid grid-cols-1 gap-3 p-4 sm:grid-cols-2"
+									: "divide-y divide-minuri-silver/30",
+							)}>
 								{places.map((place, i) => (
 									<PlaceCard
 										key={place.id}

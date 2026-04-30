@@ -79,7 +79,7 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 			{ slug: "community-spaces", label: "Parks & free" },
 			{ slug: "social-venues", label: "Bars & social" },
 		],
-		layout: "map-focus",
+		layout: "card-grid",
 		heading: "Places to hang out near {suburb}",
 		emptyPrompt: "Nothing here yet — try a nearby suburb.",
 	},
@@ -99,6 +99,7 @@ export type NearMePlace = {
 	rating?: number;
 	reviewCount?: number;
 	type?: string;
+	price?: string;
 	distanceKm?: number;
 	hours?: string;
 	snippet?: string;
