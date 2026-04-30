@@ -288,7 +288,7 @@ export function SpotlightScrollSection() {
 			{/* CTA button */}
 			<div className="bg-minuri-white px-6 pb-20 pt-12 sm:px-10 md:pt-16">
 				<motion.div
-					className="mx-auto mt-16 w-full max-w-xl md:mt-24"
+					className="mx-auto mt-16 w-full max-w-2xl md:mt-24"
 					initial={{ opacity: 0, y: 28 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{
@@ -314,13 +314,13 @@ export function SpotlightScrollSection() {
 							};
 							window.addEventListener("scroll", onScroll);
 						}}
-						className="group relative flex h-19 w-full cursor-pointer items-center overflow-hidden rounded-[1.25rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-minuri-white hover:bg-none hover:border-minuri-silver/80 hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
+						className="group relative flex h-22 w-full cursor-pointer items-center overflow-hidden rounded-[1.35rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-minuri-white hover:bg-none hover:border-minuri-silver/80 hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
 					>
-						<span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.45rem,3.4vw,1.85rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-8 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-8 group-focus-visible:translate-x-0 group-focus-visible:text-foreground">
+						<span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.65rem,3.8vw,2.1rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-9 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-9 group-focus-visible:translate-x-0 group-focus-visible:text-foreground">
 							Let's Get Started
 						</span>
-						<span className="absolute right-4 top-1/2 -translate-y-1/2">
-							<span className="inline-flex translate-y-[140%] items-center rounded-full border border-transparent bg-minuri-white px-6 py-2.5 text-base font-semibold tracking-tight text-minuri-teal opacity-0 shadow-[0_12px_20px_-14px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-[transform,opacity,background-color,color,border-color] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+						<span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 translate-x-6 opacity-0 transition-[transform,opacity] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:pointer-events-auto group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
+							<span className="inline-flex items-center rounded-full border border-minuri-silver/50 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-7 py-3 text-lg font-semibold tracking-tight text-minuri-white shadow-[0_12px_20px_-14px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:scale-105 focus-visible:-translate-y-0.5 focus-visible:scale-105">
 								Start your journey
 							</span>
 						</span>

@@ -194,7 +194,8 @@ export function LandingHeroSectionV2({
 			setTimeout(() => setCtaHighlighted(false), 1600);
 		};
 		window.addEventListener("minuri:highlight-cta", handler);
-		return () => window.removeEventListener("minuri:highlight-cta", handler);
+		return () =>
+			window.removeEventListener("minuri:highlight-cta", handler);
 	}, []);
 
 	useEffect(() => {
@@ -298,17 +299,29 @@ export function LandingHeroSectionV2({
 						>
 							<motion.div
 								className="hidden md:block"
-								animate={ctaHighlighted ? {
-									scale: [1, 1.13, 0.97, 1.1, 1],
-									boxShadow: [
-										"0 0 0 0px rgba(20,184,166,0)",
-										"0 0 0 12px rgba(20,184,166,0.6)",
-										"0 0 0 4px rgba(20,184,166,0.15)",
-										"0 0 0 12px rgba(20,184,166,0.55)",
-										"0 0 0 0px rgba(20,184,166,0)",
-									],
-								} : { scale: 1, boxShadow: "0 0 0 0px rgba(20,184,166,0)" }}
-								transition={{ duration: 2, ease: "easeInOut", times: [0, 0.25, 0.5, 0.75, 1] }}
+								animate={
+									ctaHighlighted
+										? {
+												scale: [1, 1.13, 0.97, 1.1, 1],
+												boxShadow: [
+													"0 0 0 0px rgba(20,184,166,0)",
+													"0 0 0 12px rgba(20,184,166,0.6)",
+													"0 0 0 4px rgba(20,184,166,0.15)",
+													"0 0 0 12px rgba(20,184,166,0.55)",
+													"0 0 0 0px rgba(20,184,166,0)",
+												],
+											}
+										: {
+												scale: 1,
+												boxShadow:
+													"0 0 0 0px rgba(20,184,166,0)",
+											}
+								}
+								transition={{
+									duration: 2,
+									ease: "easeInOut",
+									times: [0, 0.25, 0.5, 0.75, 1],
+								}}
 								style={{ borderRadius: 9999 }}
 							>
 								<Link
@@ -515,7 +528,7 @@ export function LandingHeroSectionV2({
 					<div className="mt-0 grid flex-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex h-full flex-col">
 							<motion.p
-								className="mt-4 text-2xl font-bold text-minuri-ocean"
+								className="mt-4 text-2xl font-semibold text-minuri-ocean"
 								variants={{
 									hidden: {
 										opacity: 0,
@@ -531,7 +544,8 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								Your everyday support system
+								Your everyday support system to start living
+								independently
 							</motion.p>
 							<motion.div
 								className="mt-auto"
