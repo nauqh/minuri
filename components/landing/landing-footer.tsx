@@ -230,8 +230,22 @@ export function LandingFooter() {
 							</Link>
 						))}
 					</div>
-					<Link
-						href="#contact"
+					<button
+						type="button"
+						onClick={() => {
+							if (window.scrollY <= 5) {
+								window.dispatchEvent(new CustomEvent("minuri:highlight-cta"));
+								return;
+							}
+							window.scrollTo({ top: 0, behavior: "smooth" });
+							const onScroll = () => {
+								if (window.scrollY <= 5) {
+									window.removeEventListener("scroll", onScroll);
+									window.dispatchEvent(new CustomEvent("minuri:highlight-cta"));
+								}
+							};
+							window.addEventListener("scroll", onScroll);
+						}}
 						className="group flex items-center gap-1 text-[0.78rem] font-semibold text-minuri-white/45 transition-colors hover:text-minuri-mint"
 					>
 						Start where you are
@@ -239,7 +253,7 @@ export function LandingFooter() {
 							className="size-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
 							aria-hidden
 						/>
-					</Link>
+					</button>
 				</div>
 			</div>
 		</footer>

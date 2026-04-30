@@ -310,7 +310,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 	return (
 		<div className="flex h-screen flex-col overflow-hidden bg-minuri-fog">
 			{/* ═══ Layer 1: Location context strip ═══ */}
-			<div className="shrink-0 border-b border-minuri-silver/50 bg-minuri-white px-4 py-2 md:px-6">
+			<div className="shrink-0 border-b border-minuri-silver/50 bg-minuri-white px-4 py-2.5 md:px-6">
 				<div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3">
 					<div ref={locationRef} className="relative">
 						<button
@@ -318,11 +318,11 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 							onClick={() =>
 								setLocationPickerOpen(!locationPickerOpen)
 							}
-							className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-minuri-fog px-3 py-1.5 text-sm font-medium text-minuri-mid transition hover:bg-minuri-mist"
+							className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-minuri-teal/25 bg-minuri-teal/8 px-3.5 py-2 text-sm font-semibold text-minuri-teal transition hover:border-minuri-teal/45 hover:bg-minuri-teal/12"
 						>
-							<MapPin className="size-3.5 text-minuri-teal" />
+							<MapPin className="size-3.5" />
 							{displaySuburb}
-							<ChevronDown className="size-3 text-minuri-slate" />
+							<ChevronDown className="size-3 text-minuri-teal/60" />
 						</button>
 
 						{locationPickerOpen && (
@@ -404,10 +404,10 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 						<button
 							type="button"
 							onClick={() => router.push("/")}
-							className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-minuri-silver/60 px-3 py-1.5 text-xs font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
+							className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-minuri-silver/50 bg-minuri-fog px-3 py-1.5 text-xs font-medium text-minuri-slate transition hover:border-minuri-silver hover:text-minuri-mid"
 						>
 							<House className="size-3.5" />
-							Back to home
+							Home
 						</button>
 					</div>
 				</div>
@@ -416,7 +416,7 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 			{/* ═══ Layer 2: Topic tabs ═══ */}
 			<div className="shrink-0 border-b border-minuri-silver/50 bg-minuri-white">
 				<div className="mx-auto max-w-[1440px]">
-					<nav className="flex gap-0 overflow-x-auto px-2 md:px-4">
+					<nav className="flex gap-0 overflow-x-auto px-2 md:px-3">
 						{allTopics.map((t) => {
 							const active = topic === t.slug;
 							const isEnabled = enabledTopics.has(t.slug);
@@ -429,24 +429,24 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 									className={cn(
 										"relative flex shrink-0 flex-col items-center gap-0.5 px-4 py-3 text-xs font-medium transition md:flex-row md:gap-1.5 md:px-5",
 										active
-											? "text-minuri-mid"
+											? "text-minuri-teal"
 											: "text-minuri-slate",
 										isEnabled
 											? "cursor-pointer hover:text-minuri-mid"
-											: "cursor-not-allowed opacity-60",
+											: "cursor-not-allowed opacity-50",
 									)}
 								>
 									<span className="text-base md:text-sm">
 										{t.icon}
 									</span>
-									<span>{t.label}</span>
+									<span className={active ? "font-semibold" : ""}>{t.label}</span>
 									{!isEnabled && (
-										<span className="rounded-full bg-minuri-fog px-1.5 py-0.5 text-[10px] font-medium text-minuri-slate">
-											Comming soon
+										<span className="rounded-full bg-minuri-fog px-1.5 py-0.5 text-[10px] font-medium text-minuri-slate/70">
+											Coming soon
 										</span>
 									)}
 									{active && (
-										<span className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full bg-minuri-teal" />
+										<span className="absolute bottom-0 left-3 right-3 h-[2.5px] rounded-full bg-minuri-teal" />
 									)}
 								</button>
 							);
@@ -518,8 +518,8 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 								className={cn(
 									"shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition",
 									activeSubtype === null
-										? "bg-minuri-mid text-minuri-white"
-										: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
+										? "bg-minuri-teal text-minuri-white"
+										: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist hover:text-minuri-mid",
 								)}
 							>
 								All
@@ -532,8 +532,8 @@ export function NearMeView({ initialTopic, initialSuburb }: NearMeViewProps) {
 									className={cn(
 										"shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition",
 										activeSubtype === sub.slug
-											? "bg-minuri-mid text-minuri-white"
-											: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
+											? "bg-minuri-teal text-minuri-white"
+											: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist hover:text-minuri-mid",
 									)}
 								>
 									{sub.label}
@@ -733,10 +733,10 @@ function DetailList({
 								onSelect(place.id);
 						}}
 						className={cn(
-							"cursor-pointer px-5 py-4 transition",
+							"cursor-pointer border-l-2 px-5 py-4 transition",
 							selected
-								? "bg-minuri-teal/5"
-								: "hover:bg-minuri-fog/50",
+								? "border-l-minuri-teal bg-minuri-teal/5"
+								: "border-l-transparent hover:bg-minuri-fog/50",
 						)}
 					>
 						<div className="flex gap-4">
@@ -853,10 +853,10 @@ function CardGridList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 								onSelect(place.id);
 						}}
 						className={cn(
-							"cursor-pointer px-5 py-4 transition",
+							"cursor-pointer border-l-2 px-5 py-4 transition",
 							selected
-								? "bg-minuri-teal/5"
-								: "hover:bg-minuri-fog/50",
+								? "border-l-minuri-teal bg-minuri-teal/5"
+								: "border-l-transparent hover:bg-minuri-fog/50",
 						)}
 					>
 						<div className="flex gap-4">
@@ -969,10 +969,10 @@ function CompactList({ places, selectedId, onSelect, rowRefs }: ListProps) {
 								onSelect(place.id);
 						}}
 						className={cn(
-							"cursor-pointer px-4 py-3 transition",
+							"cursor-pointer border-l-2 px-4 py-3 transition",
 							selected
-								? "bg-minuri-teal/5"
-								: "hover:bg-minuri-fog/50",
+								? "border-l-minuri-teal bg-minuri-teal/5"
+								: "border-l-transparent hover:bg-minuri-fog/50",
 						)}
 					>
 						<div className="flex items-center gap-3">
