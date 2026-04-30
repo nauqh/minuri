@@ -123,6 +123,9 @@ export function JourneyNearbyPanel({ suburb }: Props) {
                             places={places}
                             selectedPlaceId={selectedId}
                             onSelectPlace={handleSelectPlace}
+                            topic="survive"
+                            hoveredPlaceId={null}
+                            onHoverPlace={() => undefined}
                         />
                     </div>
                     <ul className="max-h-60 divide-y divide-minuri-silver/40 overflow-y-auto">

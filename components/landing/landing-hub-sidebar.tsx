@@ -16,8 +16,10 @@ import {
 import {
 	LANDING_KEYS,
 	readLandingJourneyState,
+	readSavedPlaces,
 	saveLifeMoment,
 	type LandingJourneyState,
+	type SavedNearMePlace,
 } from "@/components/landing/landing-local-state";
 import {
 	normalizeSuburbName,
@@ -113,6 +115,7 @@ export function LandingHubSidebar({
 	const router = useRouter();
 	const [activeStep, setActiveStep] = useState<1 | 2 | 3>(1);
 	const [journey, setJourney] = useState<LandingJourneyState>(EMPTY_STATE);
+	const [savedPlaces, setSavedPlaces] = useState<SavedNearMePlace[]>([]);
 	const [suburbInput, setSuburbInput] = useState("");
 	const [suburbOptions, setSuburbOptions] = useState<SuburbOption[]>([]);
 	const [selectedSuburb, setSelectedSuburb] = useState<SuburbOption | null>(
@@ -132,6 +135,7 @@ export function LandingHubSidebar({
 		setSuburbInput(next.selectedSuburb ?? "");
 		setSelectedTopics(next.topicHistory.slice(0, 5));
 		setActiveStep(!next.selectedSuburb ? 1 : !next.lifeMoment ? 2 : 3);
+		setSavedPlaces(readSavedPlaces().slice(0, 3));
 	}, []);
 
 	useEffect(() => {
@@ -809,6 +813,29 @@ export function LandingHubSidebar({
 										})}
 									</div>
 								</section>
+
+								{savedPlaces.length > 0 && (
+									<section className="rounded-2xl bg-minuri-white p-4 shadow-[0_16px_30px_-24px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)]">
+										<p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">
+											Saved places
+										</p>
+										<div className="mt-2.5 flex flex-col gap-1.5">
+											{savedPlaces.map((place) => (
+												<a
+													key={place.id}
+													href={`/near-me?place=${place.id}&suburb=${encodeURIComponent(place.suburb)}&category=${place.topic}`}
+													className="flex items-center gap-2 rounded-xl border border-minuri-silver/50 bg-minuri-fog px-3 py-2 text-xs font-medium text-minuri-ocean transition hover:border-minuri-teal/40 hover:text-minuri-teal"
+												>
+													<MapPin className="size-3.5 shrink-0 text-minuri-teal" />
+													<span className="truncate">{place.name}</span>
+													<span className="ml-auto shrink-0 text-[10px] text-minuri-slate">
+														{place.suburb}
+													</span>
+												</a>
+											))}
+										</div>
+									</section>
+								)}
 
 								<section className="rounded-2xl bg-minuri-white p-4 shadow-[0_16px_30px_-24px_color-mix(in_oklch,var(--minuri-mid)_42%,transparent)]">
 									<p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-minuri-teal">

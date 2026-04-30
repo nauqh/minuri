@@ -327,6 +327,54 @@ export function exportJourneyReceipt() {
 	exportJourneyState();
 }
 
+// ── Saved Near Me places ──
+
+const SAVED_PLACES_KEY = "minuri-saved-places";
+
+export type SavedNearMePlace = {
+	id: string;
+	name: string;
+	topic: string;
+	suburb: string;
+	thumbnail?: string;
+};
+
+export function readSavedPlaces(): SavedNearMePlace[] {
+	if (typeof window === "undefined") return [];
+	try {
+		const raw = window.localStorage.getItem(SAVED_PLACES_KEY);
+		if (!raw) return [];
+		const parsed = JSON.parse(raw) as unknown;
+		if (!Array.isArray(parsed)) return [];
+		return parsed.filter(
+			(item): item is SavedNearMePlace =>
+				item !== null &&
+				typeof item === "object" &&
+				typeof (item as Record<string, unknown>).id === "string",
+		);
+	} catch {
+		return [];
+	}
+}
+
+export function savePlaceToHub(place: SavedNearMePlace): void {
+	if (typeof window === "undefined") return;
+	const current = readSavedPlaces();
+	if (current.some((p) => p.id === place.id)) return;
+	window.localStorage.setItem(
+		SAVED_PLACES_KEY,
+		JSON.stringify([place, ...current].slice(0, 20)),
+	);
+}
+
+export function unsavePlaceFromHub(placeId: string): void {
+	if (typeof window === "undefined") return;
+	window.localStorage.setItem(
+		SAVED_PLACES_KEY,
+		JSON.stringify(readSavedPlaces().filter((p) => p.id !== placeId)),
+	);
+}
+
 export async function importJourneyReceipt(
 	file: File,
 ): Promise<JourneyImportResult> {

@@ -1,0 +1,247 @@
+[
+  {
+    "category": "map-ux",
+    "description": "Switch tile layer from Breton OSM to CartoDB Positron for a clean, data-focused base map",
+    "steps": [
+      "Open components/near-me/near-me-map.tsx",
+      "Replace the tile URL from 'https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png' to 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'",
+      "Update attribution text to CartoDB and OpenStreetMap contributors",
+      "Update subdomains option to ['a','b','c','d']",
+      "Verify map renders a light grey/white base with minimal labels",
+      "Verify teal markers are visually prominent against the new base",
+      "Check tile loads correctly on both desktop and mobile viewports"
+    ],
+    "passes": true
+  },
+  {
+    "category": "map-ux",
+    "description": "Clicking a map marker opens a rich floating popup card with place details inline on the map",
+    "steps": [
+      "In near-me-map.tsx, create a makePopupContent(place, index) function that renders a card with: numbered index, thumbnail image, place name, star rating badge, type, open/closed status, and Directions + Call buttons",
+      "Replace marker.bindTooltip() with marker.bindPopup() using the new popup HTML content",
+      "Style popup with white background, rounded corners, 280px max-width, and minuri-teal accent on the selected state",
+      "Add closeButton: true and autoPan: true to popup options",
+      "Ensure clicking Directions or Call inside popup does not also trigger onSelectPlace",
+      "Verify popup appears above the marker anchor point without being clipped by the map edge",
+      "Verify popup closes when clicking another marker or the map background",
+      "Verify popup shows placeholder icon when thumbnail is absent"
+    ],
+    "passes": true
+  },
+  {
+    "category": "map-ux",
+    "description": "Hovering a list row highlights the corresponding map marker; hovering a map marker subtly highlights the list row",
+    "steps": [
+      "Add hoveredPlaceId state (string | null) to near-me-view.tsx alongside selectedPlaceId",
+      "Pass hoveredPlaceId and onHoverPlace callback as props to NearMeMap",
+      "In NearMeMap, add mouseover and mouseout event listeners to each marker",
+      "On mouseover, call onHoverPlace(place.id); on mouseout, call onHoverPlace(null)",
+      "In makePinIcon(), accept a hovered boolean and render a slightly larger size (32px) with an opacity ring when hovered and not active",
+      "In DetailList, CardGridList, and CompactList, add onMouseEnter and onMouseLeave handlers on each row div",
+      "Apply a bg-minuri-teal/8 background to the hovered row when it is not already selected",
+      "Verify hovering a list row causes the corresponding map pin to visually enlarge",
+      "Verify hovering a map pin causes the corresponding list row to highlight",
+      "Verify hover state clears correctly on mouseout without affecting the selected state"
+    ],
+    "passes": true
+  },
+  {
+    "category": "map-ux",
+    "description": "Map markers animate in with a staggered cascade when results first load, instead of appearing all at once",
+    "steps": [
+      "In near-me-map.tsx, add a CSS keyframe animation 'markerDrop' (scale 0 -> 1, translateY -8px -> 0, opacity 0 -> 1) via a <style> tag injected once on mount",
+      "When creating markers in the places useEffect, assign each divIcon's inner element a style of animation-delay: {i * 40}ms",
+      "Keep animation duration at 280ms with an ease-out curve",
+      "Verify markers appear sequentially from first to last result rather than all simultaneously",
+      "Verify animation respects prefers-reduced-motion by omitting the animation when the media query matches",
+      "Verify re-searching a suburb replays the animation for the new result set"
+    ],
+    "passes": true
+  },
+  {
+    "category": "map-ux",
+    "description": "'Search this area' button appears when user pans or zooms the map away from the current suburb center",
+    "steps": [
+      "Add a showSearchArea state (boolean) to NearMeMap, initialised to false",
+      "Attach a moveend event listener to the map instance after initialisation",
+      "On moveend, calculate the distance between the map center and the original fitBounds center; if > 800m, set showSearchArea to true",
+      "Render a floating pill button 'Search this area' centered at the top of the map div, z-index 800, visible only when showSearchArea is true",
+      "On button click, emit an onSearchArea(center: LatLng) callback prop to near-me-view.tsx",
+      "In near-me-view.tsx, on receiving onSearchArea, reverse-geocode the lat/lng to the nearest suburb using the /api/suburbs endpoint and call pickSuburb()",
+      "Hide the button when a new fetch starts (status === 'loading')",
+      "Verify button appears after panning at least 800m from the original center",
+      "Verify clicking it re-fetches results for the new suburb",
+      "Verify button disappears once results load"
+    ],
+    "passes": true
+  },
+  {
+    "category": "map-ux",
+    "description": "A pulsing blue dot appears at the user's GPS position when 'Use my location' is activated",
+    "steps": [
+      "Extend NearMeMap props to accept userLat and userLng (number | null)",
+      "In near-me-view.tsx, store geolocation coords in a userCoords state when useMyLocation() succeeds via navigator.geolocation.getCurrentPosition()",
+      "Pass userCoords to NearMeMap",
+      "In NearMeMap, create an L.circleMarker at userCoords with radius 8, fillColor '#3b82f6', color white, weight 2, and a CSS pulse animation on a second larger circle (radius 16, opacity 0.3, animating to opacity 0 and radius 24)",
+      "Ensure the user dot renders above all place markers via a higher zIndexOffset",
+      "Remove the user dot marker when userLat/userLng become null",
+      "Verify dot appears at the correct GPS position on the map",
+      "Verify pulse animation runs continuously",
+      "Verify dot is not shown when the user has not activated location"
+    ],
+    "passes": true
+  },
+  {
+    "category": "map-ux",
+    "description": "Map marker color reflects the active Near Me topic rather than a single teal for all topics",
+    "steps": [
+      "In near-me-map.tsx, define a TOPIC_COLORS map: survive -> '#e07b39' (amber), health -> '#3a8a5a' (green), get-around -> '#3a6aaa' (blue), setup -> '#2a8a7a' (teal), connect -> '#7a6aaa' (soft purple)",
+      "Extend NearMeMapProps to accept topic: NearMeTopic",
+      "Pass the current topic from near-me-view.tsx to NearMeMap",
+      "Update makePinIcon() to accept color (string) and use TOPIC_COLORS[topic] for inactive markers, and a darkened version for active markers",
+      "Verify each topic tab produces distinctly colored markers on the map",
+      "Verify active marker is a visibly darker shade of the topic color",
+      "Verify markers update color immediately when the user switches topic tabs"
+    ],
+    "passes": true
+  },
+  {
+    "category": "mobile",
+    "description": "Selecting a map marker on mobile shows a slide-up bottom sheet with place details without requiring the user to switch to the list pane",
+    "steps": [
+      "In near-me-view.tsx, add a mobileMapCard state that stores the selected NearMePlace or null",
+      "When mobilePane === 'map' and onSelectPlace fires, set mobileMapCard to the selected place",
+      "Render a fixed bottom sheet div inside the map container: position fixed, bottom 0, left 0, right 0, z-50, white background, rounded-t-2xl, shadow-xl, translate-y animation (hidden -> visible)",
+      "Sheet content: thumbnail (h-28 w-full object-cover), place name, rating badge, type + open status, address, and two action buttons: 'Directions' (links to Google Maps) and 'Call' (tel: link, only if phone exists)",
+      "Render an X close button in the top-right corner of the sheet that sets mobileMapCard to null",
+      "Clicking another marker replaces the sheet content with the new place",
+      "Verify sheet slides up smoothly when a marker is tapped on mobile",
+      "Verify sheet shows correct data for the tapped place",
+      "Verify sheet is not visible on desktop (lg:hidden wrapper)",
+      "Verify X button and tapping outside the sheet dismisses it"
+    ],
+    "passes": true
+  },
+  {
+    "category": "data",
+    "description": "Phone number from SerpAPI is extracted and displayed on place cards and mobile sheet",
+    "steps": [
+      "In lib/near-me-api.ts, add phone?: string | null to the NearbyInterestRecord type",
+      "Verify the backend Python service forwards the 'phone' field from the SerpAPI Google Local response",
+      "In near-me-view.tsx fetchPlaces(), map place.phone to the NearMePlace phone field (currently always undefined)",
+      "In DetailList, confirm the existing phone action button renders when place.phone is truthy (this is already built at line 806 but never receives data)",
+      "In CardGridList, add a phone action button matching the DetailList style when place.phone is truthy",
+      "In the mobile bottom sheet, add a 'Call' button when place.phone is truthy",
+      "In the map popup card, add a phone number line with a call icon when place.phone is truthy",
+      "Verify phone number displays correctly formatted (e.g. '(03) 9123 4567') on all surfaces",
+      "Verify tapping the phone link opens the native dialler on mobile"
+    ],
+    "passes": true
+  },
+  {
+    "category": "data",
+    "description": "Website URL from SerpAPI is extracted and shown as a 'Visit website' action on place cards",
+    "steps": [
+      "In lib/near-me-api.ts, add website?: string | null to NearbyInterestRecord",
+      "In lib/near-me.ts, add website?: string to NearMePlace",
+      "Verify the backend Python service forwards the 'website' field from SerpAPI",
+      "In near-me-view.tsx fetchPlaces(), map place.website to NearMePlace.website",
+      "In DetailList and CardGridList, add a 'Visit website' anchor tag next to the Directions button when place.website is truthy",
+      "Ensure the link opens in a new tab with rel='noreferrer'",
+      "Truncate displayed domain to hostname only (e.g. 'melbourneclinic.com.au') not full URL",
+      "Verify website link renders only when data is present and does not break layout when absent"
+    ],
+    "passes": true
+  },
+  {
+    "category": "data",
+    "description": "Service options (dine-in, takeaway, delivery) from SerpAPI are surfaced as tags on Survive topic cards",
+    "steps": [
+      "In lib/near-me-api.ts, add service_options?: string[] | null to NearbyInterestRecord",
+      "In lib/near-me.ts, add serviceOptions?: string[] to NearMePlace",
+      "Map service_options from SerpAPI response to NearMePlace.serviceOptions in fetchPlaces()",
+      "In CardGridList (used for Survive topic), render serviceOptions as small tag chips below the type line when topic === 'survive'",
+      "Style chips with bg-minuri-teal/10 text-minuri-teal text-[10px] rounded-full px-2 py-0.5",
+      "Cap display at 3 options maximum to avoid overflow",
+      "Verify chips appear on food/restaurant cards with relevant options like 'Dine-in', 'Takeaway'",
+      "Verify chips do not appear on non-Survive topic cards"
+    ],
+    "passes": true
+  },
+  {
+    "category": "topic-ux",
+    "description": "Star rating badge is hidden on the Connect topic — belonging is not ranked",
+    "steps": [
+      "In near-me-view.tsx, pass topic to CompactList as a prop",
+      "In CompactList, conditionally suppress the rating display when topic === 'connect'",
+      "In the map popup card, suppress the rating line when topic === 'connect'",
+      "Verify Connect tab place cards show no rating badge",
+      "Verify all other topic tabs continue to show ratings where available",
+      "Verify the layout does not shift or leave empty space where the badge was"
+    ],
+    "passes": true
+  },
+  {
+    "category": "topic-ux",
+    "description": "Health tab cards show a 'Bulk-billing: call to confirm' nudge in place of price tags, since SerpAPI does not return clinical billing data",
+    "steps": [
+      "In near-me-view.tsx, when topic === 'health' and place.tags is empty or absent, inject a synthetic tag: 'Bulk-billing: call to confirm'",
+      "Style this tag with bg-amber-50 text-amber-700 border border-amber-200 to distinguish it from regular tags",
+      "Add a small info tooltip icon next to the tag that explains: 'We cannot verify bulk-billing from this source. Always call the clinic to confirm.'",
+      "Verify the nudge appears on all Health topic cards when no price/billing tag is present",
+      "Verify the nudge does not appear on other topic cards",
+      "Verify regular price tags (e.g. '$', '$$') still render normally on Survive topic cards"
+    ],
+    "passes": true
+  },
+  {
+    "category": "topic-ux",
+    "description": "Crisis lines are pinned at the top of the Health tab result list regardless of scroll position",
+    "steps": [
+      "Define a CRISIS_LINES constant in lib/near-me.ts with entries for Lifeline (13 11 14), Beyond Blue (1300 22 4636), and 000 Emergency — each with name, phone, description, and a direct tel: link",
+      "In near-me-view.tsx, when topic === 'health', render a sticky CrisisLineBanner above the scrollable results list",
+      "Banner should be position sticky, top 0, z-10, with a soft amber or teal tinted background",
+      "Display 2-3 crisis lines as compact inline chips with a phone icon and the number",
+      "Banner persists at the top of the list panel while the user scrolls through results",
+      "Verify banner appears only on the Health tab",
+      "Verify crisis line phone chips are tappable and open the native dialler",
+      "Verify banner does not overlay or obscure the subtype filter chips"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration",
+    "description": "'Came from a guide' context banner appears on Near Me when navigated via a Guide Bridge CTA deep-link",
+    "steps": [
+      "Confirm /near-me page reads ?from=<guide-slug> and ?topic=<topic> from URL search params in app/near-me/page.tsx",
+      "Pass fromGuide: string | null as a prop to NearMeView",
+      "In near-me-view.tsx, when fromGuide is truthy, fetch the guide title from a guides metadata lookup by slug",
+      "Render a dismissable banner below the topic tabs: 'You're here after reading \"<Guide Title>\" — here are places near you.'",
+      "Style with bg-minuri-teal/8 border-l-4 border-minuri-teal text-minuri-mid px-4 py-3",
+      "Include an X button that clears the banner (stored in local state, does not change URL)",
+      "Verify banner appears when arriving from /guides/:arc/:slug via Bridge CTA",
+      "Verify banner does not appear on direct navigation to /near-me",
+      "Verify the correct topic tab is pre-selected based on the ?topic= param",
+      "Verify banner is dismissed permanently within the session when X is clicked"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration",
+    "description": "Users can save a Near Me place to localStorage via a heart icon, surfacing it later in the Landing hub",
+    "steps": [
+      "Add a savePlaceToHub(place: NearMePlace) utility in lib/landing-local-state.ts that appends the place to a 'minuri-saved-places' localStorage key (max 20 entries, deduplicated by id)",
+      "In DetailList, CardGridList, and CompactList, add a heart (Heart icon from lucide-react) toggle button on each place row",
+      "Read current saved state from localStorage on render to determine filled vs outline heart",
+      "On click, toggle save state and animate the heart icon (scale 1 -> 1.3 -> 1 over 200ms)",
+      "In the mobile bottom sheet, also include the heart toggle button",
+      "In the Landing hub sidebar (components/landing/LandingHubSidebar), read 'minuri-saved-places' from localStorage and render up to 3 saved place chips in the 'Your <suburb>' section",
+      "Each chip shows topic icon, place name, and a one-tap link to /near-me?place=<id>&suburb=<suburb>",
+      "Verify saving a place persists across page reloads",
+      "Verify the heart icon reflects saved state correctly on page re-visit",
+      "Verify saved places appear in the Landing hub sidebar",
+      "Verify unsaving a place removes it from localStorage and from the hub"
+    ],
+    "passes": true
+  }
+]

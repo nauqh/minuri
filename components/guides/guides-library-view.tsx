@@ -138,10 +138,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		});
 	}
 
-	const title = isBookmarksMode ? "My Bookmarks" : "Your Guides Journey";
-	const description = isBookmarksMode
-		? "Saved chapters from every moment, all in one place."
-		: "Day 1 through your first month — every topic has a first step.";
 
 	const arcProgress = GUIDE_ARCS.map((arc) => ({
 		arc,
@@ -690,12 +686,13 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		</button>
 	) : null;
 
+	const title = isBookmarksMode ? "My Bookmarks" : "Your Guides Journey";
+	const description = isBookmarksMode
+		? "Saved chapters from every moment, all in one place."
+		: "Day 1 through your first month — every topic has a first step.";
+
 	return (
-		<GuidesShell
-			title={title}
-			description={description}
-			headerEnd={libraryHeaderFiltersButton}
-		>
+		<GuidesShell title={title} description={description} headerEnd={libraryHeaderFiltersButton}>
 			{!isBookmarksMode ? (
 				<>
 					{storyOverlay}

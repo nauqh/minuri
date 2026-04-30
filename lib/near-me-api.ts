@@ -17,6 +17,9 @@ export type NearbyInterestRecord = {
 	description?: string | null;
 	thumbnail?: string | null;
 	place_id?: string | null;
+	phone?: string | null;
+	website?: string | null;
+	service_options?: string[] | null;
 	gps_coordinates?:
 		| {
 				latitude?: number | null;

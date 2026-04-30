@@ -112,7 +112,21 @@ export type NearMePlace = {
 	tags?: string[];
 	openNow?: boolean;
 	thumbnail?: string;
+	website?: string;
+	serviceOptions?: string[];
 };
+
+export type CrisisLine = {
+	name: string;
+	phone: string;
+	description: string;
+};
+
+export const CRISIS_LINES: CrisisLine[] = [
+	{ name: "Lifeline", phone: "13 11 14", description: "24/7 crisis support" },
+	{ name: "Beyond Blue", phone: "1300 22 4636", description: "Mental health support" },
+	{ name: "000", phone: "000", description: "Emergency" },
+];
 
 // ── Accessors ──
 
