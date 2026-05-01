@@ -96,7 +96,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	const isBookmarksMode = mode === "bookmarks";
 	const isStoryReady = searchParams.get("story") === "ready";
 	const showStoryOverlay = false;
-	const filterQuery = isBookmarksMode ? deferredQuery : "";
+	const filterQuery = deferredQuery;
 	const [storyMomentDraft, setStoryMomentDraft] = useState(storyMoment);
 	const [storyNeedsDraft, setStoryNeedsDraft] =
 		useState<string[]>(storyNeeds);
@@ -520,50 +520,53 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		</AnimatePresence>
 	) : null;
 
-	const bookmarksSearchAndFilters = (
-		<section className="rounded-[1.5rem] border border-minuri-silver/70 bg-minuri-white p-6 md:p-8">
-			<div className="grid gap-6">
-				<div className="relative">
-					<label htmlFor="guide-search" className="sr-only">
-						Search guides
-					</label>
-					<Search
-						className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-minuri-slate"
-						aria-hidden="true"
-					/>
-					<input
-						id="guide-search"
-						type="search"
-						value={rawQuery}
-						placeholder="Search topics like bulk billing, Myki or rent"
-						className="h-12 w-full rounded-[0.85rem] border border-minuri-silver/80 bg-minuri-white pl-12 pr-12 text-sm text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate focus:border-minuri-teal"
-						onChange={(event) =>
-							updateParams((params) => {
-								const nextValue =
-									event.target.value.trimStart();
-								if (nextValue) {
-									params.set("q", nextValue);
-								} else {
-									params.delete("q");
-								}
-							})
+	const guideSearchField = (
+		<div className="relative">
+			<label htmlFor="guide-search" className="sr-only">
+				Search guides
+			</label>
+			<Search
+				className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-minuri-slate"
+				aria-hidden="true"
+			/>
+			<input
+				id="guide-search"
+				type="search"
+				value={rawQuery}
+				placeholder="Search topics like bulk billing, Myki or rent"
+				className="h-12 w-full rounded-[0.85rem] border border-minuri-silver/80 bg-minuri-white pl-12 pr-12 text-sm text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate focus:border-minuri-teal"
+				onChange={(event) =>
+					updateParams((params) => {
+						const nextValue = event.target.value.trimStart();
+						if (nextValue) {
+							params.set("q", nextValue);
+						} else {
+							params.delete("q");
 						}
-					/>
-					{rawQuery ? (
-						<button
-							type="button"
-							className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate hover:bg-minuri-mist"
-							aria-label="Clear search"
-							onClick={() =>
-								updateParams((params) => {
-									params.delete("q");
-								})
-							}
-						>
-							<X className="size-4" aria-hidden="true" />
-						</button>
-					) : null}
-				</div>
+					})
+				}
+			/>
+			{rawQuery ? (
+				<button
+					type="button"
+					className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate hover:bg-minuri-mist"
+					aria-label="Clear search"
+					onClick={() =>
+						updateParams((params) => {
+							params.delete("q");
+						})
+					}
+				>
+					<X className="size-4" aria-hidden="true" />
+				</button>
+			) : null}
+		</div>
+	);
+
+	const bookmarksSearchAndFilters = (
+		<section className="rounded-[1.5rem] bg-minuri-white p-6 md:p-8">
+			<div className="grid gap-6">
+				{guideSearchField}
 
 				<div className="flex flex-wrap gap-2">
 					{topicOptions.map((topic) => (
@@ -621,7 +624,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 							href={buildGuideHref(guide, {
 								arcFilter: effectiveArcFilter,
 								topicFilter: activeTopicFilter,
-								query: isBookmarksMode ? rawQuery : "",
+								query: rawQuery,
 								from: mode,
 							})}
 							bookmarked={isBookmarked(guide.slug)}
@@ -639,7 +642,9 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 				<p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-minuri-slate">
 					{isBookmarksMode
 						? "Try another topic or a different search."
-						: "Try another moment or topic."}
+						: rawQuery.trim()
+							? "Try a different search, or adjust your topic or moment filters."
+							: "Try another moment or topic."}
 				</p>
 			</section>
 		);
@@ -701,6 +706,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 						{librarySidebar}
 						<div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1">
 							{storyContextBanner}
+							{!isBookmarksMode ? guideSearchField : null}
 							{guidesListBody}
 						</div>
 					</div>

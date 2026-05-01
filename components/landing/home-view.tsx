@@ -9,24 +9,27 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingHeroSectionV2 } from "./landing-hero-section-v2";
 import { ScrollToTopButton } from "@/components/landing/scroll-to-top-button";
 import { LandingServicesSection } from "@/components/landing/landing-services-section";
+import { PasswordGate } from "@/components/password-gate";
 
 export function HomeView() {
 	const [headerVisible, setHeaderVisible] = useState(false);
 
 	return (
 		<div className="relative min-h-screen bg-minuri-fog text-foreground">
-			<LandingHeroSectionV2
-				headerVisible={headerVisible}
-				onHeroReveal={() => setHeaderVisible(true)}
-			/>
+			<PasswordGate>
+				<LandingHeroSectionV2
+					headerVisible={headerVisible}
+					onHeroReveal={() => setHeaderVisible(true)}
+				/>
 
-			<main>
-				<LandingServicesSection />
-				<SpotlightScrollSection />
-				<LandingCareSection />
-				<LandingAccessSection />
-			</main>
-			<LandingFooter />
+				<main>
+					<LandingServicesSection />
+					<SpotlightScrollSection />
+					<LandingCareSection />
+					<LandingAccessSection />
+				</main>
+				<LandingFooter />
+			</PasswordGate>
 			<ScrollToTopButton />
 		</div>
 	);

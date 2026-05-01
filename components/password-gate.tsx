@@ -1,7 +1,7 @@
 "use client";
 
 import { Heart } from "lucide-react";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "@/components/ui/button";
@@ -45,6 +45,7 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 	const [unlocked, setUnlocked] = useState(false);
 	const [promptOpen, setPromptOpen] = useState(false);
 	const formId = useId();
+	const gateRootRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		try {
@@ -59,7 +60,11 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 	const gateClick = useCallback(
 		(e: MouseEvent) => {
 			if (unlocked) return;
-			if (!findGateTarget(e.target)) return;
+			const node = e.target;
+			if (!(node instanceof Node)) return;
+			if (!gateRootRef.current?.contains(node)) return;
+			const el = node instanceof Element ? node : node.parentElement;
+			if (!el || !findGateTarget(el)) return;
 			e.preventDefault();
 			e.stopPropagation();
 			setPromptOpen(true);
@@ -94,7 +99,9 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 
 	return (
 		<>
-			<div className={cn("flex flex-1 flex-col")}>{children}</div>
+			<div ref={gateRootRef} className={cn("flex flex-1 flex-col")}>
+				{children}
+			</div>
 			{promptOpen && typeof document !== "undefined"
 				? createPortal(
 						<PasswordPromptDialog
