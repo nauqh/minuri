@@ -2,26 +2,40 @@
   "id": 3,
   "slug": "getting-myki-and-surviving-ptv",
   "title": "Getting a Myki & Surviving PTV",
-  "summary": "Learn the minimum transport system knowledge to move confidently.",
+  "summary": "Set up Myki once, learn the Free Tram Zone, the daily cap and the auto-top-up trick, and most first-week transport stress disappears.",
   "arc": "day-1",
   "arcOrder": 2,
   "topic": "getting-around",
-  "readingTimeMin": 4,
+  "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": true,
   "markdownPath": "/guides-content/getting-around/getting-myki-and-surviving-ptv.json",
-  "nextGuideSlug": "night-transport-and-getting-home-safe",
+  "nextGuideSlug": "finding-a-gp-before-you-need-one",
   "searchTerms": [
     "myki",
     "ptv",
     "tram",
     "train",
-    "free tram zone"
+    "free tram zone",
+    "concession",
+    "mobile myki"
   ],
   "sourceLinks": [
     {
-      "label": "Study Melbourne transport guide",
+      "label": "Study Melbourne — Guide to public transportation",
       "href": "https://studymelbourne.vic.gov.au/living-here/transport/guide-to-public-transportation"
+    },
+    {
+      "label": "Stay Down Under — Myki Card Explained",
+      "href": "https://staydownunder.com/articles/myki-card-explained--getting-a/"
+    },
+    {
+      "label": "Everything in Melbourne — How to apply for Myki concession card",
+      "href": "https://everythinginmelbourne.com.au/apply-myki-concession-card-melbourne/"
+    },
+    {
+      "label": "VIC Premier — Free travel for young Victorians",
+      "href": "https://www.premier.vic.gov.au/free-travel-young-victorians-january"
     }
   ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-getting-myki-and-surviving-ptv/640/420",
@@ -30,50 +44,32 @@
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "First commute. Everyone taps through and you are still decoding zones and platforms."
+      "value": "First commute. The platform is full of people who clearly know what they're doing — they tap a card or a phone on a green reader and walk through without breaking stride. You stand at the gate trying to remember whether you're in Zone 1 or Zone 2, whether you're supposed to tap on for this tram or not, and whether the $10 you put on the card is enough. Behind you, a small queue is forming. The reader beeps red. You try again. The queue gets bigger."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "Public transport feels simple for everyone else and chaotic for you."
+      "value": "Public transport is one of those systems that looks effortless from the outside and chaotic from the inside, and the asymmetry is brutal in your first week. Everyone else has had a decade of muscle memory; you've had two days.\n\nThe trick most newcomers don't realise: you don't need to understand the whole network. You need one route to work right, and one Friday-night route home. Everything else can be learned slowly, on a Saturday, with no pressure."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "Most first-week transport stress disappears once one recurring route is stable."
+      "title": "What nobody told you",
+      "value": "The Free Tram Zone covers most of the CBD and Docklands, and you do **not** need to tap on for any tram trip that starts and ends inside it. You can also skip the physical card entirely — **Mobile Myki** in Apple Wallet or Google Wallet works on every reader.\n\nAnd if you're under 18, **Myki travel is free** across all trains, trams and buses in Victoria as of 1 January 2026 — a Youth Myki is all you need."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Set up Myki, save your top-up pattern, and rehearse your most important weekly route.\n\nUse the Free Tram Zone and cap rules to avoid unnecessary spending."
+      "title": "How it actually works",
+      "value": "**1. Get your Myki sorted in one go.**\n\nYou have three sensible options:\n\n- **Mobile Myki** (the easiest) — set up on your phone via Apple Wallet or Google Wallet. Top up in the app, tap your phone on any reader. No card to lose.\n- **Physical Myki** — buy at any train station, PTV Hub, or 7-Eleven. Around $6 for a Full Fare card, $3 concession.\n- **Youth Myki** — free for under-18s, available online via Transport Victoria or at staffed stations.\n\nWhichever version you get, **set up auto top-up** the same day. It triggers automatically when your balance drops below a level you set, so you never get stuck at a barrier with $0.45 on your card.\n\n**2. Understand the zones in 30 seconds.**\n\nMelbourne's network has **Zone 1** (the CBD plus inner suburbs — Fitzroy, Carlton, Southbank, South Yarra, St Kilda, Williamstown) and **Zone 2** (everything further out). A *Zone 1+2* fare lets you travel anywhere in metropolitan Melbourne. The system charges automatically based on where you tap on and tap off — you don't choose a zone in advance.\n\n**3. Use the daily and weekly cap.**\n\nMyki has a built-in **daily cap** — once you've spent the cap amount in a single day, every trip after that is free until midnight. There's also a **weekly cap** roughly equal to five daily caps, so a heavy commuting week costs the same as a five-day week. Check the current cap on the PTV Fare Calculator (ptv.vic.gov.au) — fares change yearly.\n\n**4. The Free Tram Zone is real and worth memorising.**\n\nIt covers most of the CBD grid, plus Docklands and the Queen Victoria Market. If your trip starts and ends inside the zone, **you do not tap on**. You also do not get charged. If your tram leaves the zone — say, heading toward Carlton or South Yarra — you need to have tapped on before crossing the boundary.\n\n**5. Concessions and student discounts.**\n\n- **International students** can buy a **50% discount Travel Pass** (90, 180 or 365 days) — savings can exceed $1,000 a year for daily commuters.\n- **Domestic students** with a Victorian Public Transport Concession Card pay roughly half-price.\n- **Asylum seekers, healthcare card holders and seniors** also qualify — check the PTV concession page.\n\nThe paperwork takes one online form. The savings start the day the card arrives.\n\n**6. Service frequency, in plain numbers.**\n\nTrains: every 4–5 minutes in peak, every 20 minutes off-peak, running roughly 5am–midnight.\nTrams: every 7–10 minutes peak, 20–30 minutes off-peak.\nBuses: every 10–15 minutes on busy routes, 20–30 minutes off-peak.\n\nFor late-night travel on Friday and Saturday, the **Night Network** runs all-night trains (hourly), six tram routes (every 30 minutes — routes 19, 67, 75, 86, 96, 109), and 21 night-bus routes.\n\n### The bit nobody mentions\n\nThe single biggest source of first-week Myki stress is the *default fare* — what the system charges you when it can't figure out where you tapped on or off. It's higher than any normal trip and is the reason your balance disappears mysteriously. The fix is boring and effective: **always tap on, always tap off**, even on trams where it feels optional. Two seconds of your day saves you $5–$10 a week."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you're ready, find stations, tram stops, and top-up points near you."
+      "title": "When you're ready",
+      "value": "→ Find train stations, tram stops and Myki top-up points near you (opens Near Me → Getting Around, suburb pre-filled)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "Next: Finding a GP Before You Need One - before a bad day becomes a crisis."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Buy a Myki card at 7-Eleven, a train station, or online",
-      "estimateMin": 15
-    },
-    {
-      "label": "Top it up with at least $20",
-      "estimateMin": 5
-    },
-    {
-      "label": "Download the PTV app and find your nearest stop",
-      "estimateMin": 10
-    },
-    {
-      "label": "Plan one trip using the app before you actually need to take it",
-      "estimateMin": 5
+      "title": "Up next",
+      "value": "Finding a GP Before You Need One — set up healthcare in a calm hour before the day you're sick and trying to figure it all out at once."
     }
   ]
 }

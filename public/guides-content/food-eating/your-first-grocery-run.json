@@ -2,11 +2,11 @@
   "id": 1,
   "slug": "your-first-grocery-run",
   "title": "Your First Grocery Run",
-  "summary": "Build a low-stress first-week food system without overspending.",
+  "summary": "Build a low-stress first-week food system without overspending — pick a base supermarket, learn unit pricing, and start with twelve essentials instead of a full pantry.",
   "arc": "day-1",
   "arcOrder": 1,
   "topic": "food-eating",
-  "readingTimeMin": 4,
+  "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": true,
   "markdownPath": "/guides-content/food-eating/your-first-grocery-run.json",
@@ -16,63 +16,56 @@
     "budget",
     "woolworths",
     "coles",
-    "aldi"
+    "aldi",
+    "unit pricing",
+    "first shop"
   ],
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "label": "CHOICE — Which is the cheapest supermarket?",
+      "href": "https://www.choice.com.au/shopping/everyday-shopping/supermarkets/articles/cheapest-groceries-australia"
+    },
+    {
+      "label": "MyConnect — Grocery budget for students in Australia",
+      "href": "https://www.myconnect.com.au/post/grocery-budget-student-australia"
+    },
+    {
+      "label": "Insider Guides — Best ways to save money on food & groceries",
+      "href": "https://insiderguides.com.au/best-ways-save-money-food-groceries/"
+    }
+  ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-your-first-grocery-run/640/420",
   "nearMeDeeplink": "/near-me?topic=food-eating&from=your-first-grocery-run",
   "sections": [
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "Day two. You are standing in a supermarket aisle with no reliable price memory and no food plan."
+      "value": "Day two. You are standing in a supermarket aisle holding a basket that is somehow both too empty and too expensive. The pasta sauces have ten brands you have never seen. The bread shelf has prices that don't quite match what your brain remembers from home. You don't know if $4.50 for milk is normal or a rip-off, you don't know which of the four nearly identical bottles of olive oil is the one a sensible person buys, and you've already been in this aisle for six minutes pretending to read a label so the staff don't notice you stalling."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "You are not confused about food. You are overloaded by decisions without context."
+      "value": "You are not confused about food. You are overloaded by decisions without context.\n\nAt home, you bought the brands your family bought because that's what was always in the cupboard. Here, every shelf is asking you to make a fresh judgement with no reference point — and the small, constant mental tax of *is this the cheap one or the expensive one* turns a thirty-minute shop into something quietly exhausting. That's not a personal failing. That's what shopping in a new country actually feels like before you have a baseline."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "You can eat well in your first week with a tiny repeat list. Brand familiarity is not the same as value."
+      "title": "What nobody told you",
+      "value": "You can eat well in your first week with a tiny repeat list — twelve essentials, three meals, one supermarket — and almost everything else can wait.\n\nAnd one fact most newcomers don't have on day two: **ALDI is meaningfully cheaper than Coles or Woolworths on most staples**, and the brands you don't recognise are usually the same products from the same factories with a different label. Brand familiarity is not the same as value, and the sooner you stop equating them, the cheaper your week gets."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Start with 10-12 essentials you can combine into 3 meals. Use unit pricing, not packaging size.\n\nPick one supermarket for routine shopping and one backup store for low-stock days."
+      "title": "How it actually works",
+      "value": "**1. Pick one base supermarket and one backup.**\n\nYour base is where you do the weekly shop. Your backup is for the night you run out of milk and don't want to walk further. For most people in Melbourne, the cheapest sensible base is **ALDI** — Insider Guides and CHOICE both put it consistently below Coles and Woolworths on a like-for-like basket. Your backup is whichever Coles, Woolworths or IGA is closest to your front door, for the 9pm \"I forgot eggs\" moments.\n\n**2. Start with twelve essentials, not a full pantry.**\n\nOn your first shop, buy enough to cook three repeat meals for the week — not enough to recreate your mum's kitchen. A workable starter list:\n\n- Rice or pasta · oats · bread\n- Eggs · milk · a block of cheese\n- One protein (chicken thighs, mince, tofu, or canned tuna)\n- Frozen vegetables (last longer than fresh, less waste)\n- One fresh vegetable you actually like\n- Onion · garlic · olive oil · salt\n- One sauce (soy, pasta sauce, or curry paste — pick one)\n- Coffee, tea, or whatever the morning ritual is\n\nThat's roughly $50–$70 at ALDI and will feed one person for the week. MyConnect's student grocery guide pegs a sustainable monthly grocery spend at around **$200/month, or $50/week** — your first run should sit inside that.\n\n**3. Use unit pricing, not packet size.**\n\nEvery price tag on every Australian supermarket shelf has a small line showing the price *per 100g*, *per litre*, or *per kg*. That is the only number that lets you actually compare two products. The big bottle is not always cheaper. The brand name is not always more expensive. Once you start glancing at unit pricing instead of pack price, you stop being tricked by packaging.\n\n**4. Sign up for the free loyalty cards.**\n\n**Everyday Rewards** (Woolworths) and **Flybuys** (Coles) are free, take two minutes, and quietly knock 5–10% off most weeks through member-only prices. ALDI doesn't have a loyalty program — its prices are already the discount. If you want to compare prices across stores without walking, the **Frugl Grocery** app shows live prices across ALDI, Coles, Woolies and IGA.\n\n**5. Shop late on a Friday if you can.**\n\nPerishables — bakery, meat, deli — get marked down at the end of trading day, especially Friday afternoon and evening, to clear stock before the weekend. A $9 roast chicken at 7:30pm is a real thing. You don't have to plan your life around it, but if you happen to be near a supermarket at the end of a Friday, walk through.\n\n### The bit nobody mentions\n\nYou don't need to figure out the whole pantry on day two. The version of yourself you're shopping for right now is not the cook you'll be in three months — it's the tired person walking home from the train who needs to eat in twenty minutes and not spend $25 on UberEats. Twelve essentials, one base supermarket, one backup, and the unit-price habit will carry that person through the whole first month. Everything else — the spice rack, the second oil, the speciality sauces — can be added later, one or two items at a time, as you actually run into the meals that need them."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you're ready, find supermarkets and markets near you."
+      "title": "When you're ready",
+      "value": "→ Find supermarkets, ALDI stores and fresh markets near you (opens Near Me → Food & Eating → Supermarkets, suburb pre-filled)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "Next: Getting a Myki and surviving PTV — so you can move without guessing."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Find your nearest supermarket (Coles, Woolworths, or Aldi)",
-      "estimateMin": 10
-    },
-    {
-      "label": "Write a simple list: staples, a few meals, toiletries",
-      "estimateMin": 5
-    },
-    {
-      "label": "Download the supermarket app for weekly specials",
-      "estimateMin": 3
-    },
-    {
-      "label": "Shop with your list and keep to a $40–60 budget",
-      "estimateMin": 30
-    },
-    {
-      "label": "Keep your receipt to track spending this week",
-      "estimateMin": 2
+      "title": "Up next",
+      "value": "Getting a Myki & Surviving PTV — so the trip home from the supermarket doesn't quietly cost you another $6 you didn't budget for."
     }
   ]
 }

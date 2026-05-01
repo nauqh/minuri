@@ -4,7 +4,7 @@
   "title": "Sustaining Yourself: Sleep, Movement and Disconnecting",
   "summary": "High-leverage maintenance habits are usually simple, quiet, and cheaper than wellness culture suggests.",
   "arc": "month-1",
-  "arcOrder": 11,
+  "arcOrder": 7,
   "topic": "health-wellbeing",
   "readingTimeMin": 7,
   "isPublished": true,
@@ -52,24 +52,6 @@
       "sectionKey": "next-chapter",
       "title": "Up next",
       "value": "Finding Your Community in Melbourne — because social connection is one of the most effective wellbeing tools there is, and it deserves its own guide."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Set a consistent wake and sleep time and hold it for 7 days",
-      "estimateMin": 2
-    },
-    {
-      "label": "Find one free exercise option near you (park, pool, or council gym)",
-      "estimateMin": 10
-    },
-    {
-      "label": "Block one 30-minute screen-free slot in your daily schedule",
-      "estimateMin": 1
-    },
-    {
-      "label": "Download Smiling Mind for free guided breathing and mindfulness",
-      "estimateMin": 5
     }
   ]
 }

@@ -2,72 +2,69 @@
   "id": 15,
   "slug": "building-a-local-routine",
   "title": "Building a Local Routine That Feels Like Yours",
-  "summary": "Turn repeated places and rhythms into a stable sense of home.",
+  "summary": "Belonging is built by repetition before it is felt as emotion. Three weekly anchors — movement, nourishment, connection — turn a city you live in into a city you're from.",
   "arc": "month-1",
-  "arcOrder": 5,
+  "arcOrder": 3,
   "topic": "getting-around",
-  "readingTimeMin": 3,
+  "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": false,
   "markdownPath": "/guides-content/getting-around/building-a-local-routine.json",
-  "nextGuideSlug": "cycling-melbourne-without-fear",
+  "nextGuideSlug": "finding-your-community",
   "searchTerms": [
     "routine",
     "local",
     "habit",
-    "belonging"
+    "belonging",
+    "weekly anchors",
+    "third place"
   ],
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "label": "Melbourne Now — PTV Night Network",
+      "href": "https://www.melbournenow.com.au/plan/useful-info/ptv-night-network"
+    },
+    {
+      "label": "Transport VIC — Late-night public transport",
+      "href": "https://transport.vic.gov.au/plan-a-journey/public-transport-tools-and-resources/travel-tips-and-resources/late-night-public-transport"
+    },
+    {
+      "label": "City of Melbourne — Guide to Melbourne for young people",
+      "href": "https://www.melbourne.vic.gov.au/news/guide-melbourne-young-people"
+    }
+  ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-building-a-local-routine/640/420",
   "nearMeDeeplink": "/near-me?topic=getting-around&from=building-a-local-routine",
   "sections": [
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "You notice your daily route now feels familiar instead of foreign."
+      "value": "Six weeks in. You're walking home from the train station and you realise you've started nodding at the man who runs the corner shop. You know which side of the platform the train doors will open on. You took a left turn at a corner today without thinking about it. Nothing dramatic happened — but something quietly shifted, and the city you were holding at arm's length two weeks ago is now closer than that. You don't have words for it yet."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "Repetition starts to feel comforting instead of limiting."
+      "value": "Most newcomers wait to *feel* like they belong before they accept that they do. That's the wrong order. Belonging is a lagging indicator — it shows up after the routines, the repeated faces, and the small accumulating familiarities that you don't notice until they're already there.\n\nThe strange relief of month two: the city stops being a project and starts being a place."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "Belonging is often built by routine before it is felt emotionally."
+      "title": "What nobody told you",
+      "value": "Belonging is engineered by repetition, not by events. The people who feel rooted in a new city aren't the ones who went to the most things — they're the ones who went to the same things over and over until the staff started recognising them.\n\nThree weekly anchors is enough. **Movement** (a route or a class), **nourishment** (a cafe or market), and **connection** (a class, group, or recurring catch-up). Hold them stable for six weeks and the city quietly becomes yours."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Create three place anchors across your week: movement, nourishment, and connection.\n\nKeep the anchors stable for six weeks before changing them."
+      "title": "How it actually works",
+      "value": "**1. Pick a movement anchor.**\n\nA single recurring physical loop. The Tan around the Royal Botanic Gardens (3.8km). The Capital City Trail along the Yarra (30km — you don't need to do all of it). Princes Park in Carlton. Albert Park Lake. Or a yoga class on the same evening every week, or a free Saturday-morning parkrun (5km, free, every Saturday at 8am at multiple Melbourne locations).\n\nThe specific route matters less than the *recurrence*. Your body learns the path. Your brain decompresses on a familiar loop in a way it never can on a new one.\n\n**2. Pick a nourishment anchor.**\n\nOne cafe, one bakery, or one market that you visit on the same day each week. The Queen Victoria Market on Saturday mornings. A specific bakery on the way home from work on Fridays. A cafe near your place where the staff know what you order.\n\nThe small social warmth of *being recognised* is one of the most underrated forms of belonging in a new city. It costs nothing and accumulates fast — usually around visit four or five.\n\n**3. Pick a connection anchor.**\n\nThis is the harder one and the one that matters most. A weekly thing where the same people show up. A recreational sports team, a volunteer shift, a language exchange, a board-game night, a religious service, a writing group, a community choir, a class that runs for ten weeks rather than a one-off workshop.\n\nThe single biggest predictor of friendship in a new city isn't shared interests — it's **repeated proximity**. You don't need to be interesting. You need to keep turning up.\n\n**4. Hold the anchors stable for six weeks before changing them.**\n\nThis is the part most people skip. Six weeks is roughly how long it takes for a new routine to stop costing willpower and start being a default. If you switch your yoga studio after three weeks, or skip parkrun two weekends in a row, the routine doesn't compound. Treat the first six weeks as installation.\n\n**5. Use the Friday/Saturday Night Network for late returns.**\n\nA hidden enabler of routines that involve evenings out: Melbourne's **Night Network** runs all-night trains (hourly), six tram routes (every 30 minutes — routes 19, 67, 75, 86, 96, 109), and 21 night-bus routes on Friday and Saturday nights. You're not stranded if a class or catch-up runs late — which removes the *what if I can't get home* anxiety that quietly kills evening commitments in the first month.\n\n**6. Let the third place come to you.**\n\nThe sociologist Ray Oldenburg called the cafe-pub-library-park-bookshop layer of city life the *third place* — not home, not work, but the place where regulars become familiar without effort. You don't pick a third place. It picks itself, somewhere around month two, when you realise you've been to the same library three Sundays in a row and you don't have a good reason for it. That's the place. Lean into it.\n\n### The bit nobody mentions\n\nThe day you start feeling like a Melburnian isn't the day something big happens — it's a Tuesday in the third month when you realise you gave someone directions on the tram without thinking about it. Routines built that. Not events. Not experiences. Not the highlight reel."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you're ready, find parks, paths, and neighborhood hubs near you."
+      "title": "When you're ready",
+      "value": "→ Find parks, paths, libraries and recurring community spaces near you (opens Near Me → Getting Around and Social & Belonging)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "You have finished this arc. Revisit any chapter whenever life shifts again."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Identify your 3 most regular journeys (work/study, groceries, social)",
-      "estimateMin": 5
-    },
-    {
-      "label": "Find the most efficient transport combo for each",
-      "estimateMin": 15
-    },
-    {
-      "label": "Set up Myki auto-top-up so you never run out mid-trip",
-      "estimateMin": 5
-    },
-    {
-      "label": "Find one café or park within 10 minutes to anchor your mornings",
-      "estimateMin": 10
+      "title": "Up next",
+      "value": "Finding Your Community — turning a routine into a wider sense of place."
     }
   ]
 }
