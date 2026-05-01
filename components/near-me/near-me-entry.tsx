@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Loader2, MapPin, Search } from "lucide-react";
+import { CheckCircle2, House, Loader2, MapPin, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -131,9 +132,13 @@ export function NearMeEntry() {
 		<div className="flex min-h-screen flex-col lg:flex-row">
 			{/* ── Brand panel (desktop only) ── */}
 			<div className="hidden lg:flex lg:w-[42%] xl:w-[45%] flex-col justify-between bg-minuri-ocean px-10 py-14 xl:px-14">
-				<p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-minuri-mint/50">
-					Minuri · Near Me
-				</p>
+				<Link
+					href="/"
+					className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-minuri-mint/60 transition-colors hover:text-minuri-mint focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-mint/45 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-ocean"
+				>
+					<House className="size-3.5 shrink-0" />
+					Home
+				</Link>
 				<div>
 					<h2 className="text-[2.6rem] xl:text-[3rem] font-black leading-[1.08] tracking-tight text-minuri-white">
 						Find what you need,{" "}
@@ -153,7 +158,7 @@ export function NearMeEntry() {
 						].map((t) => (
 							<span
 								key={t}
-								className="rounded-full border border-minuri-white/15 px-3 py-1.5 text-[0.72rem] font-medium text-minuri-white/45"
+								className="rounded-full border border-minuri-white/35 bg-minuri-white/8 px-3 py-1.5 text-[0.72rem] font-semibold text-minuri-white/90"
 							>
 								{t}
 							</span>
@@ -167,9 +172,13 @@ export function NearMeEntry() {
 
 			{/* ── Form panel ── */}
 			<div className="flex flex-1 flex-col items-center justify-center bg-minuri-fog px-5 py-12 md:px-8">
-				<p className="mb-6 text-[0.62rem] font-black uppercase tracking-[0.2em] text-minuri-teal lg:hidden">
-					Minuri · Near Me
-				</p>
+				<Link
+					href="/"
+					className="mb-6 inline-flex w-fit items-center gap-1.5 text-xs font-medium text-minuri-slate/60 transition-colors hover:text-minuri-teal focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/35 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog lg:hidden"
+				>
+					<House className="size-3.5 shrink-0" />
+					Home
+				</Link>
 
 				<div className="w-full max-w-md">
 					<div className="rounded-2xl border border-minuri-silver/40 bg-minuri-white p-7 shadow-[0_12px_36px_-18px_rgba(4,30,43,0.16)] md:p-8">
