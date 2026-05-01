@@ -220,17 +220,17 @@ export function SpotlightScrollSection() {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	/*
-	 * Single shared scroll progress over the 700 vh container.
+	 * Single shared scroll progress over the tall container (below).
 	 * progress = 0  →  container top at viewport top
 	 * progress = 1  →  container bottom at viewport bottom
 	 *
-	 * 5 equal segments × 120 vh each (600 vh scroll + 100 vh sticky):
+	 * Five equal progress segments (dwell / slide / dwell / slide / dwell):
 	 *
-	 * Card 0 dwell:       0.00 – 0.20  (120 vh)
-	 * Slide 0→1:          0.20 – 0.40  (120 vh) — card 1 slides up
-	 * Card 1 dwell:       0.40 – 0.60  (120 vh)
-	 * Slide 1→2:          0.60 – 0.80  (120 vh) — card 2 slides up
-	 * Card 2 dwell:       0.80 – 1.00  (120 vh)
+	 * Card 0 dwell:       0.00 – 0.20
+	 * Slide 0→1:          0.20 – 0.40  — card 1 slides up
+	 * Card 1 dwell:       0.40 – 0.60
+	 * Slide 1→2:          0.60 – 0.80  — card 2 slides up
+	 * Card 2 dwell:       0.80 – 1.00
 	 */
 	const { scrollYProgress } = useScroll({
 		target: containerRef,
@@ -265,13 +265,14 @@ export function SpotlightScrollSection() {
 			</div>
 
 			{/*
-			 * 400 vh container  →  300 vh of scroll space with a 100 vh sticky stage.
-			 * The stage holds all 3 cards stacked; scroll drives the shared flip.
+			 * 400 vh container  →  ~300 vh of scroll travel with a 100 vh sticky stage.
+			 * Shorter than extra-tall pin sections so wheel/trackpad scroll feels normal.
+			 * The stage holds all 3 cards stacked; scroll drives the transitions.
 			 */}
 			<div
 				ref={containerRef}
 				className="relative"
-				style={{ height: "700vh" }}
+				style={{ height: "400vh" }}
 			>
 				<div className="sticky top-0 h-screen overflow-hidden bg-minuri-white">
 					{cards.map((card, i) => (
