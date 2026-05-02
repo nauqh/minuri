@@ -68,7 +68,7 @@ const HERO_TOPIC_CARDS: {
 	{
 		title: "Social & Belonging",
 		desc: "Community, friendships & finding your place.",
-		bg: "#bdb2ff",
+		bg: "#eaf2d7",
 		rotate: -3,
 		floatPhase: 1.4,
 		word: "belong",
