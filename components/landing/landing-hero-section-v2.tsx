@@ -95,18 +95,19 @@ function HeroTopicCard({
 	return (
 		<motion.div
 			className={className}
-			initial={{ opacity: 0, y: 32, scale: 0.94 }}
+			initial={{ opacity: 0, y: -800 }}
 			animate={{ opacity: 1, y: 0, scale: isActive ? 1.05 : 1 }}
 			transition={{
 				opacity: {
-					duration: 0.6,
-					delay: 0.5 + index * 0.07,
-					ease: entranceEase,
+					duration: 0.35,
+					delay: 0.5 + index * 0.12,
+					ease: "easeOut",
 				},
 				y: {
-					duration: 0.6,
-					delay: 0.5 + index * 0.07,
-					ease: entranceEase,
+					type: "spring",
+					stiffness: 120,
+					damping: 18,
+					delay: 0.5 + index * 0.15,
 				},
 				scale: { duration: 0.2, ease: "easeOut" },
 			}}

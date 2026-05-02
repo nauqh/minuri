@@ -1,6 +1,5 @@
 "use client";
 
-import { Heart } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -168,39 +167,30 @@ function PasswordPromptDialog({
 					aria-hidden
 				/>
 				<div className="px-8 py-9 sm:px-10 sm:py-10">
-					<div className="flex flex-col gap-6 sm:flex-row sm:gap-8">
-						<div
-							className={cn(
-								"flex size-14 shrink-0 items-center justify-center self-start rounded-2xl",
-								"bg-minuri-mint/35 text-minuri-teal",
-								"shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--minuri-white)_65%,transparent)]",
-							)}
-							aria-hidden
+					<div className="min-w-0">
+						<p className="text-xs font-semibold tracking-[0.12em] text-minuri-teal uppercase">
+							Minuri preview
+						</p>
+						<h2
+							id={`${formId}-title`}
+							className="font-heading mt-2 text-2xl leading-snug font-semibold tracking-tight text-minuri-ocean sm:text-[1.65rem]"
 						>
-							<Heart className="size-7 fill-minuri-teal/15 stroke-2" strokeLinecap="round" />
-						</div>
-						<div className="min-w-0 flex-1">
-							<p className="text-xs font-semibold tracking-[0.12em] text-minuri-teal uppercase">
-								Minuri preview
-							</p>
-							<h2
-								id={`${formId}-title`}
-								className="font-heading mt-2 text-2xl leading-snug font-semibold tracking-tight text-minuri-ocean sm:text-[1.65rem]"
-							>
-								{"Glad you're exploring — here's a gentle pause"}
-							</h2>
-							<p
-								id={`${formId}-desc`}
-								className="mt-3 text-base leading-relaxed text-minuri-slate"
-							>
-								{
-									"Take your time scrolling and reading: everything on the page is yours to browse. When you're ready to open guides, maps, or next steps, pop in the invite password we shared — it keeps this space calm for the community we're building."
-								}
-							</p>
-						</div>
+							{"Psst... secret door ahead"}
+						</h2>
+						<p
+							id={`${formId}-desc`}
+							className="mt-3 text-base leading-relaxed text-minuri-slate"
+						>
+							{
+								"Browse all you want. When you're ready for the deeper goodies, drop in your invite password."
+							}
+						</p>
 					</div>
 
-					<form onSubmit={submit} className="mt-8 flex flex-col gap-5">
+					<form
+						onSubmit={submit}
+						className="mt-8 flex flex-col gap-5"
+					>
 						<div className="flex flex-col gap-2">
 							<label
 								htmlFor={`${formId}-password`}
@@ -223,16 +213,19 @@ function PasswordPromptDialog({
 								className={cn(
 									"h-12 w-full rounded-[min(var(--radius-md),12px)] border bg-minuri-fog/80 px-4 text-base",
 									"text-minuri-ocean placeholder:text-minuri-slate/55 outline-none transition-colors",
-									"border-minuri-silver/90 focus-visible:border-minuri-teal focus-visible:ring-4 focus-visible:ring-minuri-teal/25",
+									"border-minuri-silver/90 focus-visible:border-minuri-teal",
 									error &&
-										"border-minuri-coral/80 focus-visible:border-minuri-coral focus-visible:ring-minuri-coral/20",
+										"border-minuri-coral/80 focus-visible:border-minuri-coral",
 								)}
 								aria-invalid={error}
 								aria-describedby={`${formId}-hint${error ? ` ${formId}-err` : ""}`}
 							/>
-							<p id={`${formId}-hint`} className="text-sm text-minuri-slate/85">
+							<p
+								id={`${formId}-hint`}
+								className="text-sm text-minuri-slate/85"
+							>
 								{
-									"If you don't have it yet, no stress — you can close this and keep reading."
+									"No password yet? No drama. Close this and keep exploring."
 								}
 							</p>
 						</div>
@@ -243,7 +236,7 @@ function PasswordPromptDialog({
 								role="alert"
 							>
 								{
-									"Not quite — double-check the password and try again. We're here when you're ready."
+									"Close! That password is playing hide-and-seek. Try once more."
 								}
 							</p>
 						) : null}
@@ -265,7 +258,7 @@ function PasswordPromptDialog({
 									"h-11 w-full bg-minuri-teal text-primary-foreground hover:bg-minuri-teal/90 sm:w-auto sm:min-w-44",
 								)}
 							>
-								Unlock & continue
+								Enter Minuri
 							</Button>
 						</div>
 					</form>
