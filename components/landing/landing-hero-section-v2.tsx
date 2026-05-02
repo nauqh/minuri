@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-	CheckCircle,
 	ChevronRight,
 	Heart,
 	Home,
@@ -15,12 +14,6 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-
-const heroHighlights = [
-	"REAL-LIFE GUIDES, NOT FLUFF",
-	"LOCAL SUPPORT THAT IS ACTUALLY NEARBY",
-	"CLEAR NEXT STEPS YOU CAN DO TODAY",
-];
 
 const HERO_TOPIC_CARDS: {
 	title: string;
@@ -35,7 +28,7 @@ const HERO_TOPIC_CARDS: {
 	{
 		title: "Food & Eating",
 		desc: "Groceries, cheap meals & cooking basics.",
-		bg: "#00f5d4",
+		bg: "#00f5c8",
 		rotate: -6,
 		floatPhase: 0,
 		word: "eat",
@@ -45,27 +38,27 @@ const HERO_TOPIC_CARDS: {
 	{
 		title: "Getting Around",
 		desc: "Trams, buses & cycling Melbourne.",
-		bg: "#7fdcff",
+		bg: "#5dd6ff",
 		rotate: 5,
 		floatPhase: 1.1,
 		word: "travel",
-		wordColor: "#1a7ab3",
+		wordColor: "#0077a8",
 		icon: MapPin,
 	},
 	{
 		title: "Health & Wellbeing",
 		desc: "GPs, Medicare & mental health.",
-		bg: "#fff14a",
+		bg: "#fcf300",
 		rotate: -2,
 		floatPhase: 0.5,
 		word: "heal",
-		wordColor: "#9a8000",
+		wordColor: "#9a7000",
 		icon: Heart,
 	},
 	{
 		title: "Home & Admin",
 		desc: "Renting, utilities & paperwork.",
-		bg: "#ff7ecb",
+		bg: "#ffc2d1",
 		rotate: 6,
 		floatPhase: 0.8,
 		word: "settle",
@@ -75,11 +68,11 @@ const HERO_TOPIC_CARDS: {
 	{
 		title: "Social & Belonging",
 		desc: "Community, friendships & finding your place.",
-		bg: "#dcf5ee",
+		bg: "#bdb2ff",
 		rotate: -3,
 		floatPhase: 1.4,
 		word: "belong",
-		wordColor: "#1a7a54",
+		wordColor: "#7a1ac4",
 		icon: Users,
 	},
 ];
@@ -136,8 +129,8 @@ function HeroTopicCard({
 					</h3>
 					<card.icon
 						aria-hidden
-						className="mt-0.5 size-5 shrink-0 text-[#05292a]/30"
-						strokeWidth={1.5}
+						className="mt-0.5 size-5 shrink-0 text-[#05292a]/60"
+						strokeWidth={2.5}
 					/>
 				</div>
 				<p className="mt-3 text-[0.75rem] leading-snug text-[#163a3a]/70 md:text-[0.8rem]">
@@ -496,7 +489,7 @@ export function LandingHeroSectionV2({
 							}}
 						>
 							Feeling at home, wherever
-							{" you "}
+							{" you "} <br />
 							<AnimatePresence mode="wait">
 								<motion.span
 									key={headlineWord}
@@ -515,7 +508,6 @@ export function LandingHeroSectionV2({
 									}}
 									style={{
 										color: headlineWordColor,
-										filter: "brightness(0.85)",
 									}}
 									className="inline-block"
 								>
@@ -611,9 +603,9 @@ export function LandingHeroSectionV2({
 							</motion.div>
 						</div>
 
-						<div className="relative z-10 flex h-full w-full flex-col md:pb-4">
+						<div className="relative z-10 flex h-full w-full flex-col md:pb-4 min-[1500px]:origin-top min-[1500px]:scale-[1.18]">
 							<div
-								className="grid h-full grid-cols-2 gap-2.5 md:gap-3"
+								className="grid h-full max-h-[520px] grid-cols-2 gap-2.5 md:gap-3"
 								style={{ gridAutoRows: "1fr" }}
 							>
 								{HERO_TOPIC_CARDS.slice(0, 4).map((card, i) => (
@@ -647,51 +639,6 @@ export function LandingHeroSectionV2({
 						</div>
 					</div>
 				</motion.div>
-
-				{/* <motion.div
-					className="grid gap-4 pb-8 md:grid-cols-3 md:gap-6"
-					initial="hidden"
-					animate="visible"
-					variants={{
-						hidden: {},
-						visible: {
-							transition: {
-								staggerChildren: 0.08,
-								delayChildren: 0.55,
-							},
-						},
-					}}
-				>
-					{heroHighlights.map((highlight) => (
-						<motion.div
-							key={highlight}
-							className="flex items-center gap-3 rounded-md bg-minuri-fog p-5"
-							variants={{
-								hidden: {
-									opacity: 0,
-									y: 12,
-								},
-								visible: {
-									opacity: 1,
-									y: 0,
-									transition: {
-										duration: 0.45,
-										ease: entranceEase,
-									},
-								},
-							}}
-						>
-							<CheckCircle
-								className="size-4 shrink-0 text-minuri-ocean"
-								strokeWidth={2.4}
-								aria-hidden
-							/>
-							<p className="text-sm font-black uppercase tracking-[0.03em] text-minuri-ocean">
-								{highlight}
-							</p>
-						</motion.div>
-					))}
-				</motion.div> */}
 			</div>
 		</section>
 	);

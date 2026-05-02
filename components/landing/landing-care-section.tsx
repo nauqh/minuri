@@ -65,7 +65,7 @@ function ScrollyTopicCard({
 	index: number;
 	progress: MotionValue<number>;
 }) {
-	const revealStart = 0.15 + index * 0.145;
+	const revealStart = 0.1 + index * 0.185;
 	const revealEnd = revealStart + 0.065;
 	const finalX = X_OFFSETS[index];
 	const finalY = Y_OFFSETS[index];
@@ -119,10 +119,9 @@ export function LandingCareSection() {
 		target: sectionRef,
 		offset: ["start start", "end end"],
 	});
-	// Finish card animation early, then hold final state for extra scroll.
 	const cardsProgress = useTransform(
 		scrollYProgress,
-		[0, 0.78, 1],
+		[0, 0.95, 1],
 		[0, 1, 1],
 	);
 
@@ -130,7 +129,7 @@ export function LandingCareSection() {
 		<section
 			ref={sectionRef}
 			id="care"
-			className="relative bg-minuri-white py-16 text-minuri-ink md:min-h-[620vh] md:py-0"
+			className="relative bg-minuri-white py-16 text-minuri-ink md:min-h-[450vh] md:py-0"
 		>
 			<div className="md:sticky md:top-0 md:flex md:h-screen md:items-start md:pt-[12vh]">
 				<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">

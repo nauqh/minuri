@@ -5,13 +5,20 @@ import { motion } from "motion/react";
 
 import { FadeUp } from "@/components/landing/home-shared";
 
+const STATS = [
+	{ value: "5", label: "Life topics covered" },
+	{ value: "Free", label: "No sign-up needed" },
+	{ value: "1", label: "Focused reply per ask" },
+	{ value: "Melb.", label: "Local knowledge" },
+] as const;
+
 export function LandingAccessSection() {
 	return (
 		<section
 			id="contact"
-			className="flex min-h-[88dvh] flex-col justify-center bg-minuri-white py-28 md:py-32"
+			className="flex min-h-screen flex-col justify-center bg-minuri-fog py-36 md:py-52"
 		>
-			<div className="mx-auto w-full px-5 text-center md:px-8">
+			<div className="mx-auto w-full max-w-screen-2xl px-5 text-center md:px-8">
 				<FadeUp>
 					<p className="landing-section-kicker">Get support</p>
 				</FadeUp>
@@ -39,7 +46,7 @@ export function LandingAccessSection() {
 						name="email"
 						placeholder="you@example.com"
 						autoComplete="email"
-						className="min-h-13 w-full flex-1 rounded-minuri border border-minuri-silver bg-minuri-fog/60 px-5 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm transition focus:border-minuri-teal focus:outline-none focus:ring-2 focus:ring-minuri-teal/20 sm:min-w-[25rem]"
+						className="min-h-13 w-full flex-1 rounded-minuri border border-minuri-silver bg-minuri-white px-5 py-3.5 text-base text-foreground placeholder:text-muted-foreground shadow-sm transition focus:border-minuri-teal focus:outline-none focus:ring-2 focus:ring-minuri-teal/20 sm:min-w-[25rem]"
 					/>
 					<motion.button
 						type="button"
@@ -51,6 +58,36 @@ export function LandingAccessSection() {
 						<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 					</motion.button>
 				</FadeUp>
+				<FadeUp delay={0.24}>
+					<p className="mt-3 text-sm text-muted-foreground">
+						No spam. Just one focused email with practical next
+						steps.
+					</p>
+				</FadeUp>
+
+				<div className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-minuri-silver bg-minuri-silver md:grid-cols-4">
+					{STATS.map((stat, i) => (
+						<motion.div
+							key={stat.label}
+							className="flex flex-col items-center gap-1.5 bg-minuri-white px-6 py-8"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{
+								duration: 0.5,
+								delay: 0.3 + i * 0.07,
+								ease: [0.22, 1, 0.36, 1],
+							}}
+						>
+							<span className="text-[2.2rem] font-black leading-none tracking-tight text-minuri-teal">
+								{stat.value}
+							</span>
+							<span className="text-center text-sm text-muted-foreground">
+								{stat.label}
+							</span>
+						</motion.div>
+					))}
+				</div>
 			</div>
 		</section>
 	);

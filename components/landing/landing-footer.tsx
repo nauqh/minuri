@@ -110,7 +110,7 @@ export function LandingFooter() {
 								Melbourne, Australia
 							</p>
 							<p className="mt-1 text-[0.88rem] text-minuri-white/55">
-								Supporting international students
+								Supporting young adult in Melbourne
 							</p>
 						</div>
 						<div>
@@ -234,14 +234,21 @@ export function LandingFooter() {
 						type="button"
 						onClick={() => {
 							if (window.scrollY <= 5) {
-								window.dispatchEvent(new CustomEvent("minuri:highlight-cta"));
+								window.dispatchEvent(
+									new CustomEvent("minuri:highlight-cta"),
+								);
 								return;
 							}
 							window.scrollTo({ top: 0, behavior: "smooth" });
 							const onScroll = () => {
 								if (window.scrollY <= 5) {
-									window.removeEventListener("scroll", onScroll);
-									window.dispatchEvent(new CustomEvent("minuri:highlight-cta"));
+									window.removeEventListener(
+										"scroll",
+										onScroll,
+									);
+									window.dispatchEvent(
+										new CustomEvent("minuri:highlight-cta"),
+									);
 								}
 							};
 							window.addEventListener("scroll", onScroll);
