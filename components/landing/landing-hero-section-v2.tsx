@@ -68,7 +68,7 @@ const HERO_TOPIC_CARDS: {
 	{
 		title: "Social & Belonging",
 		desc: "Community, friendships & finding your place.",
-		bg: "#eaf2d7",
+		bg: "#cae9ff",
 		rotate: -3,
 		floatPhase: 1.4,
 		word: "belong",
@@ -634,7 +634,7 @@ export function LandingHeroSectionV2({
 										restartCycle();
 									}}
 									entranceEase={entranceEase}
-									className="col-span-2"
+									className="col-span-2 mx-auto w-[calc(50%-5px)] md:w-[calc(50%-6px)]"
 								/>
 							</div>
 						</div>
