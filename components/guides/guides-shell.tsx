@@ -1,28 +1,27 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { House } from "lucide-react";
 
 type GuidesShellProps = {
 	children: ReactNode;
 	title: string;
 	description: string;
+	headerStart: ReactNode;
 	headerEnd?: ReactNode;
 };
 
-export function GuidesShell({ children, title, description, headerEnd }: GuidesShellProps) {
+export function GuidesShell({
+	children,
+	title,
+	description,
+	headerStart,
+	headerEnd,
+}: GuidesShellProps) {
 	return (
 		<div className="min-h-screen bg-minuri-white text-foreground">
 			<div className="mx-auto max-w-screen-2xl px-6 md:px-10">
 				<div className="flex items-center justify-between py-3">
-					<Link
-						href="/"
-						className="inline-flex items-center gap-1.5 text-xs font-medium text-minuri-slate/60 transition hover:text-minuri-teal"
-					>
-						<House className="size-3.5" />
-						Home
-					</Link>
+					{headerStart}
 					{headerEnd && <div>{headerEnd}</div>}
 				</div>
 

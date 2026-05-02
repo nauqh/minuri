@@ -9,8 +9,9 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { ListFilter, Search, X } from "lucide-react";
+import { ArrowLeft, ListFilter, Search, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { easeOut } from "@/components/landing/home-constants";
@@ -137,7 +138,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			window.history.replaceState(null, "", nextHref);
 		});
 	}
-
 
 	const arcProgress = GUIDE_ARCS.map((arc) => ({
 		arc,
@@ -696,8 +696,23 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		? "Saved chapters from every moment, all in one place."
 		: "Day 1 through your first month — every topic has a first step.";
 
+	const libraryBackHome = (
+		<Link
+			href="/"
+			className="mt-4 inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
+		>
+			<ArrowLeft className="size-3.5" aria-hidden />
+			Back to home
+		</Link>
+	);
+
 	return (
-		<GuidesShell title={title} description={description} headerEnd={libraryHeaderFiltersButton}>
+		<GuidesShell
+			title={title}
+			description={description}
+			headerStart={libraryBackHome}
+			headerEnd={libraryHeaderFiltersButton}
+		>
 			{!isBookmarksMode ? (
 				<>
 					{storyOverlay}
