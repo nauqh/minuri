@@ -2,73 +2,70 @@
   "id": 20,
   "slug": "finding-your-way-around-melbourne-in-week-one",
   "title": "Finding Your Way Around Melbourne in Week One",
-  "summary": "Grid, spine streets, and trams as a compass so the inner suburbs start to feel legible.",
+  "summary": "Four spine streets, a tight CBD grid, and the tram lines that follow them — the city stops feeling cryptic once you have a compass.",
   "arc": "week-1",
-  "arcOrder": 9,
+  "arcOrder": 6,
   "topic": "getting-around",
   "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": true,
   "markdownPath": "/guides-content/getting-around/finding-your-way-around-melbourne-in-week-one.json",
-  "nextGuideSlug": "free-things-to-do-this-week",
+  "nextGuideSlug": "making-friends-in-a-city-where-everyones-busy",
   "searchTerms": [
     "navigation",
     "CBD grid",
     "maps",
     "walking",
-    "tram"
+    "tram",
+    "cycling",
+    "e-scooter"
   ],
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "label": "Study Melbourne — Guide to public transportation",
+      "href": "https://studymelbourne.vic.gov.au/living-here/transport/guide-to-public-transportation"
+    },
+    {
+      "label": "Study Melbourne — Cycling and scooters",
+      "href": "https://studymelbourne.vic.gov.au/living-here/transport/cycling-and-scooters"
+    },
+    {
+      "label": "City of Melbourne — Bike routes for beginners",
+      "href": "https://www.melbourne.vic.gov.au/news/bike-routes-beginners-commuting-your-neighbourhood"
+    }
+  ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-week-one-navigation/640/420",
   "nearMeDeeplink": "/near-me?topic=getting-around&from=finding-your-way-around-melbourne-in-week-one",
   "sections": [
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "Day four. A fifteen-minute walk turns into thirty because a one-way street and a tram line pointed the wrong way."
+      "value": "Day four. You set off for what Google said was a fifteen-minute walk and somehow it's been thirty-five. A one-way street pointed you the wrong way. A tram you assumed went north went east. The blue dot on your map keeps spinning. You're standing on a corner where three streets meet at slightly different angles and you genuinely cannot tell which way the river is. Your phone is at 18%."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "The city is not hostile — it is just written in a dialect you have not learned yet."
+      "value": "Melbourne's geography is not hostile — it's just written in a dialect you haven't learned yet. The CBD is a tight rectangular grid. The minute you leave it, the streets start curving and renaming themselves, and the trams that felt logical on the map turn out to follow rules of their own.\n\nThis is normal. Everyone who lives here was once also lost on Spencer Street looking for a tram going the wrong way."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "The CBD is a tight grid; just outside, streets curve. Learn four spine streets and the tram lines that follow them, and most inner suburbs click into place."
+      "title": "What nobody told you",
+      "value": "Most of inner Melbourne clicks into place once you learn **four spine streets** and the trams that run along them. The grid does the rest of the work. You don't need a mental map of the whole metro area in your first week — you need a compass.\n\nAnd a quieter thing nobody mentions: **walking is often faster than transit for trips under 2km in the CBD**, especially in peak hour, when trams crawl behind cars."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Use Swanston, Elizabeth, Flinders and Collins as anchors. Toggle walking vs transit in maps deliberately. Treat trams as north-south or east-west backbones. Repeat the same commute twice — familiarity beats novelty this week."
+      "title": "How it actually works",
+      "value": "**1. Learn four streets and you've learned the CBD.**\n\nThe Melbourne CBD is a perfect rectangle, about 1.6km × 1km. Four streets do most of the navigational work:\n\n- **Swanston Street** — north–south spine; trams 1, 3, 5, 6, 16, 64, 67, 72\n- **Elizabeth Street** — north–south, parallel to Swanston, a block west; trams 19, 57, 59\n- **Flinders Street** — east–west, southern edge along the river; the station, the Yarra, Federation Square\n- **Collins Street** — east–west, the central business spine; trams 11, 12, 48, 109\n\nIf you can locate any one of these four, you can locate yourself. The rest of the grid is just counting blocks.\n\n**2. Trams are not buses with rails — they're a backbone.**\n\nThink of trams as long, slow corridors that go either north–south *or* east–west, but rarely both. If your destination is roughly along Swanston, you take a Swanston tram. If it's roughly along Collins, you take a Collins tram. If it's diagonal, you take one tram, walk a few blocks, and take another. The Free Tram Zone makes this kind of stitched-together CBD trip cost zero.\n\n**3. Toggle between walking and transit deliberately in Google Maps.**\n\nMaps will default to whichever it thinks is fastest, but it under-weights how often a 14-minute tram trip is a 12-minute walk plus tap-on stress. Force walking mode for trips under 2km in the CBD. Force transit mode for anything north of Carlton, west of Spencer, or south of South Yarra.\n\n**4. Just outside the CBD, streets curve. Don't fight it.**\n\nFitzroy, Carlton, Richmond, Collingwood and Brunswick are mostly grid-ish. South Yarra, Prahran, St Kilda and Hawthorn are not — they curve, fork, and rename themselves at strange points. The fix is to learn one **anchor street per suburb** rather than a full mental map. Brunswick has Sydney Road. Fitzroy has Brunswick Street. Richmond has Bridge Road and Swan Street. Once the anchor is in your head, everything else attaches to it.\n\n**5. Bikes and e-scooters are real options.**\n\nMelbourne's flat inner suburbs are good for cycling — the **Capital City Trail** is a 30km loop along the Yarra and the rail corridor and is fully separated from traffic for most of it. Helmets are legally required, even on shared bikes and scooters. E-scooters cap at **20km/h**, must stay off footpaths, and can't ride on roads with a speed limit over 60km/h. Lime and Beam apps cover most of the inner city.\n\n**6. Repeat your first week's commute, twice.**\n\nFamiliarity beats novelty in week one. Take the same route to your most-frequent destination twice in the first week, the same way, even if Maps suggests a faster alternative the second time. The mental cost of a known route is zero; an unknown route is high. Save the optimisation for week three, when you have a baseline.\n\n### The bit nobody mentions\n\nMelbourne becomes legible faster than you expect — usually around day twelve, when you suddenly realise you've been walking somewhere without checking your phone. Until then, getting lost is the only way the map gets built. The fifteen minutes you 'wasted' going the wrong way down Lonsdale Street is what installs the map in your head. Treat it as installation cost."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you are ready, find stops, bike share and paths near you."
+      "title": "When you're ready",
+      "value": "→ Find tram stops, bike-share docks and walking paths near you (opens Near Me → Getting Around, suburb pre-filled)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "Next: Making Friends in a City Where Everyone's Busy — turning place into people."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Save 5 key locations in Google Maps (home, supermarket, GP, work/study, CBD)",
-      "estimateMin": 10
-    },
-    {
-      "label": "Walk a 15-minute radius from home to get your bearings",
-      "estimateMin": 15
-    },
-    {
-      "label": "Take one tram or train line end-to-end just to learn it",
-      "estimateMin": 60
-    },
-    {
-      "label": "Locate your nearest 24-hour pharmacy",
-      "estimateMin": 5
+      "title": "Up next",
+      "value": "Making Friends in a City Where Everyone's Busy — once the map clicks, the next layer is turning places into people."
     }
   ]
 }

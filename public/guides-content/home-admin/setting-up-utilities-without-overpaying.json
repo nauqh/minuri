@@ -2,11 +2,11 @@
   "id": 9,
   "slug": "setting-up-utilities-without-overpaying",
   "title": "Setting Up Utilities Without Overpaying",
-  "summary": "Avoid default-plan traps in power, internet, and essential services.",
+  "summary": "Default plans are convenience products, not value products. Use Victorian Energy Compare once, set a yearly review reminder, and most utility leakage stops.",
   "arc": "week-1",
-  "arcOrder": 3,
+  "arcOrder": 2,
   "topic": "home-admin",
-  "readingTimeMin": 4,
+  "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": false,
   "markdownPath": "/guides-content/home-admin/setting-up-utilities-without-overpaying.json",
@@ -15,63 +15,58 @@
     "utilities",
     "electricity",
     "internet",
-    "energy compare"
+    "energy compare",
+    "NBN",
+    "gas",
+    "AGL",
+    "Origin"
   ],
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "label": "Youth Central — Setting up gas, electricity and services",
+      "href": "https://www.youthcentral.vic.gov.au/housing/renting-and-sharehousing/setting-gas-electricity-and-services"
+    },
+    {
+      "label": "Soho — Setting up utilities when renting Australia",
+      "href": "https://soho.com.au/articles/setting-up-utilities-when-renting-australia"
+    },
+    {
+      "label": "MoneySmart — Ways to save on energy costs",
+      "href": "https://moneysmart.gov.au/budgeting/ways-to-save-on-energy-costs"
+    }
+  ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-setting-up-utilities-without-overpaying/640/420",
   "nearMeDeeplink": "/near-me?topic=home-admin&from=setting-up-utilities-without-overpaying",
   "sections": [
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "A surprisingly high bill arrives before you know your plan type."
+      "value": "Six weeks in. The first quarterly bill arrives in the email — $487 for electricity and gas combined. You read it twice. You don't really know what a *supply charge* is, what your *peak* and *off-peak* rates are doing, or whether $487 for one person in a small flat is normal. There's a graph showing your *daily average* compared to *similar households*. You appear to be using twice as much. You haven't even been home most of the time."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "Utilities feel fixed and non-negotiable when they are not."
+      "value": "Utilities feel non-negotiable in a way that most things in your budget aren't. The bill arrives, you pay it, you assume the price is the price. Calling around to compare retailers feels like a Saturday-afternoon chore for retired people who have time for that.\n\nBut the gap between the *default* plan you got handed and the *competitive* plan you'd have if you spent twenty minutes choosing is real, and consistent: usually $200–$500 a year for one person."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "Default plans are convenience products, not value products."
+      "title": "What nobody told you",
+      "value": "**Victorian Energy Compare** (compare.energy.vic.gov.au) is a free, government-run comparison tool that shows every retailer's plan for your specific address against your actual usage. It is not a marketing site. It exists because the government legally requires retailers to list their offers there.\n\nMost first-year renters are on a default plan that costs them $200–$500/year more than the cheapest equivalent. The fix is one twenty-minute session and a calendar reminder."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Compare providers once, set calendar reminders for annual checks, and record account numbers in one secure place.\n\nCheck usage versus supply charges to avoid false savings assumptions."
+      "title": "How it actually works",
+      "value": "**1. Connect electricity and gas in your name, in the right order.**\n\nFor a place with no current connection in your name:\n\n- **Electricity** — call any retailer (AGL, Origin, Energy Australia, Red Energy, Powershop) at least 1–2 business days before you move in. Quote your move-in date and address. They'll send a smart-meter read remotely; you'll have power on day one.\n- **Gas** — same process, but allow **3–5 business days**. If your place is all-electric, skip this entirely and save the supply charge.\n- **Water** — in most rented apartments, the rental provider pays. In standalone houses or some townhouses, you do. Confirm with the agent so you don't accidentally not pay a bill that's been arriving in the rental provider's name.\n\n**2. Don't accept the first plan offered.**\n\nThe retailer's first offer when you call is rarely their best. Use **Victorian Energy Compare** to see all plans for your postcode, sorted by estimated annual cost based on your usage. Look at:\n\n- **Usage rate** (cents per kWh) — the cost per unit of electricity\n- **Supply charge** (cents per day) — the daily fee even if you use nothing\n- **Discounts** — pay-on-time, direct debit, etc; treat as nice-to-have, not core to the comparison\n- **Contract length and exit fees** — most plans are now no-contract, but check\n\nA low supply charge matters more for low users (one person in a small flat). A low usage rate matters more for high users (sharehouse with electric heating). Pick accordingly.\n\n**3. Internet — pick the speed you need, not the plan you're upsold.**\n\nMost Australian homes are on the NBN. The four common tiers:\n\n- **NBN 25** (~$60–70/month) — fine for one person, video calls, streaming\n- **NBN 50** (~$70–85/month) — the sweet spot for most sharehouses\n- **NBN 100** (~$85–105/month) — gamers, multiple streams, working from home\n- **NBN 250+** — overkill for most renters\n\nProviders worth comparing: Aussie Broadband (consistently good service), Tangerine and More (cheap, reliable), Belong (cheap, owned by Telstra). Avoid the slowest tier (NBN 12) and the contract-locked offers. Standard NBN connection takes 3–10 business days; book before move-in if possible.\n\n**4. Read the meters on day one. Read them again on bill day.**\n\nPhotograph the electricity and gas meters when you move in and email the readings to your retailer. Do the same on the day each bill arrives. This catches the surprisingly common error where the retailer has been *estimating* your usage rather than reading the meter — sometimes for months — and the correction is in the wrong direction.\n\n**5. Set a yearly calendar reminder to re-check.**\n\nThe single highest-leverage utility move is the one most people don't make: re-running Victorian Energy Compare every 12 months. Retailer plans expire, default rates drift up, and the plan that was best when you moved in is rarely the best a year later. A 20-minute review on the same date every year keeps the leak closed.\n\n**6. Small habits that compound.**\n\n- Wash clothes on cold and hang-dry — saves the bulk of laundry energy cost.\n- Set the heater to **20°C in winter, AC to 25°C in summer** — every degree warmer/cooler typically adds 5–10% to that appliance's running cost.\n- Switch off appliances at the wall when not in use; standby power is roughly 10% of an average home's bill.\n- Run dishwasher and washing machine on full loads.\n\n### The bit nobody mentions\n\nThe utility companies are not your enemy, but they're not your advocate either. The default plan exists because it's profitable, not because it's competitive. Twenty minutes once, twenty minutes a year later, and you've usually saved more than most one-off side hustles would earn in the same time."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you're ready, find home and utility service touchpoints near you."
+      "title": "When you're ready",
+      "value": "→ Find energy retailers, internet installers and utility support services near you (opens Near Me → Home & Admin, suburb pre-filled)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "Next: Cooking 5 Meals You'll Actually Eat - stable routines make budgets sustainable."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Confirm with your landlord which utilities are included in rent",
-      "estimateMin": 5
-    },
-    {
-      "label": "Use Victorian Energy Compare to find the best electricity deal",
-      "estimateMin": 15
-    },
-    {
-      "label": "Set up electricity (and gas if needed) in your name",
-      "estimateMin": 15
-    },
-    {
-      "label": "Compare NBN plans on Finder or WhistleOut",
-      "estimateMin": 20
-    },
-    {
-      "label": "Set up direct debit and paper-free billing to avoid late fees",
-      "estimateMin": 5
+      "title": "Up next",
+      "value": "Cooking 5 Meals You'll Actually Eat — the second-largest weekly spend after rent and utilities is food, and the same compounding logic applies."
     }
   ]
 }

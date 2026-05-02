@@ -4,13 +4,13 @@
   "title": "Medicare, Bulk-Billing & Mental Health Care Plans",
   "summary": "Learn the three healthcare terms that unlock affordable support: Medicare, bulk-billing, and Mental Health Care Plans.",
   "arc": "week-1",
-  "arcOrder": 6,
+  "arcOrder": 4,
   "topic": "health-wellbeing",
   "readingTimeMin": 8,
   "isPublished": true,
   "isFeatured": false,
   "markdownPath": "/guides-content/health-wellbeing/medicare-bulk-billing-and-mental-health-care-plans.json",
-  "nextGuideSlug": "your-pharmacist-is-the-cheapest-first-stop",
+  "nextGuideSlug": "managing-your-prescriptions-in-a-new-city",
   "searchTerms": [
     "medicare",
     "bulk billing",
@@ -54,24 +54,6 @@
       "sectionKey": "next-chapter",
       "title": "Up next",
       "value": "Managing Your Prescriptions in a New City — for the medication side of all this."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Enrol in Medicare via the Services Australia website or MyGov app",
-      "estimateMin": 20
-    },
-    {
-      "label": "Activate your Medicare card when it arrives in the mail",
-      "estimateMin": 2
-    },
-    {
-      "label": "Ask your GP about a Mental Health Care Plan at your next visit",
-      "estimateMin": 10
-    },
-    {
-      "label": "Use your MHCP to book a subsidised psychologist appointment",
-      "estimateMin": 5
     }
   ]
 }

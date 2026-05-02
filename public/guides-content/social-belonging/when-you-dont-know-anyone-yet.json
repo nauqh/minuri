@@ -2,11 +2,11 @@
   "id": 19,
   "slug": "when-you-dont-know-anyone-yet",
   "title": "When You Don't Know Anyone Yet",
-  "summary": "Social baseline loneliness after a move is common — small routines that help on day one.",
+  "summary": "Day-one loneliness in a new city is normal, common, and managed by a few small interventions — one real-world interaction, one scheduled call, one walk outside.",
   "arc": "day-1",
-  "arcOrder": 10,
+  "arcOrder": 6,
   "topic": "social-belonging",
-  "readingTimeMin": 4,
+  "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": true,
   "markdownPath": "/guides-content/social-belonging/when-you-dont-know-anyone-yet.json",
@@ -16,59 +16,51 @@
     "homesick",
     "new city",
     "social",
-    "first day"
+    "first day",
+    "headspace"
   ],
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "label": "headspace — How to understand and deal with loneliness",
+      "href": "https://headspace.org.au/explore-topics/for-young-people/loneliness/"
+    },
+    {
+      "label": "Allianz Care — Dealing with homesickness in Australia",
+      "href": "https://www.allianzcare.com.au/en/blog/dealing-with-homesickness.html"
+    }
+  ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-dont-know-anyone/640/420",
   "nearMeDeeplink": "/near-me?topic=social-belonging&from=when-you-dont-know-anyone-yet",
   "sections": [
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "Evening of day one. The group chat is quiet. You realise you have not spoken out loud to anyone since the Uber driver."
+      "value": "Evening of day one. The boxes are mostly unpacked. The flat is technically yours. You sit down on the couch with a takeaway container in your lap, open Instagram, and see your old housemates at the same Friday-night pub you used to go to. The group chat has a few jokes you don't quite have context for anymore. You realise the only person you've spoken out loud to all day was the Uber driver from the airport. The quiet is sudden and louder than you expected."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "Not crisis — more like a room without furniture. You are between old ties and new ones, and the gap feels personal."
+      "value": "It's not a crisis. It's more like sitting in a room without furniture. The shape of *who you are* depended, more than you realised, on the dozen tiny daily interactions you used to take for granted — the colleague who said hi, the bus driver who nodded, the friend who texted *what are you doing tonight*. None of those are here yet. The gap between your old social baseline and your new one feels personal, even though it isn't.\n\nMost newcomers don't say this part out loud, because it sounds like *I made the wrong choice*. It isn't. It's the same evening every newcomer has had."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "Relocation loneliness is extremely common. It does not mean you chose wrong. It means you are building a social world from zero."
+      "title": "What nobody told you",
+      "value": "**Relocation loneliness is one of the most common — and one of the most temporary — experiences of moving to a new city.** headspace's research on young-adult loneliness is clear: it spikes hardest at exactly these life transitions, and the people you'll later think of as *your Melbourne people* are almost certainly not the people you've met yet.\n\nDay-one loneliness is not a verdict on the choice. It's a verdict on day one."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Aim for one small real-world interaction tomorrow. Message one person you trust with a specific time to call. Take a ten-minute walk outside. Avoid comparing your day one to other people's highlight posts."
+      "title": "How it actually works",
+      "value": "**1. One real-world interaction tomorrow.**\n\nThe single most effective intervention for day-one isolation is one *small* real-world interaction within the next 24 hours. Order coffee at a counter and chat with the barista. Buy something at a corner shop. Ask someone for directions you don't actually need. The goal is not friendship — the goal is the small physiological reset that comes from a face-to-face exchange, however brief.\n\nheadspace puts it simply: connection is built more by *small repeated acts* than by big single events.\n\n**2. Schedule one specific call with someone who knows you.**\n\nTonight or tomorrow, message one person from home with a *specific* time: *can we FaceTime Sunday at 8pm my time*. Not *let's catch up soon*, which never happens. A scheduled call gives you something to look forward to and breaks the doomscrolling loop where you watch other people's lives in real time and feel further away from your own.\n\nAllianz Care's homesickness guide makes the same point: scheduled contact is steadier than reactive contact. Knowing the next call is in three days is calming. Calling impulsively at 11pm tonight, when you're already low, often isn't.\n\n**3. Take a ten-minute walk outside, alone, today.**\n\nNot a productive walk. Not an errand. Just outside, ten minutes, on a familiar block. The slight novelty of being in a new place plus the steadiness of moving your body is one of the most reliable mood-stabilising tools available, and the only one that takes no setup.\n\nIf it's late, walk to the closest 24-hour spot — a 7-Eleven, a service station — and back. The point is moving and seeing other humans, not the destination.\n\n**4. Don't compare your day one to other people's highlight reels.**\n\nThe single most damaging thing you can do tonight is scroll Instagram comparing your evening to other people's curated weekends. The friends you envy on the feed are also having quiet Tuesdays you don't see — they just don't post those.\n\nMute the accounts that hurt for a week. Not unfollow — *mute*. Reversible, no awkward conversations.\n\n**5. Set up *one* anchor for week one, today.**\n\nPick a single recurring thing you can show up to inside the first 7 days. A run club, a parkrun on Saturday morning, a free yoga class, a board-game night, a library event, a free city walking tour, a free gallery opening. The bar is low: it just needs a fixed time and a place. The point is to have *one* recurring social thing on the calendar before the loneliness compounds. (See *Building a Local Routine* for the longer version.)\n\n**6. Recognise the difference between low and dangerous.**\n\nLow on day one is normal. **Persistent low for more than two weeks**, with changes in sleep, appetite, motivation or how you talk to yourself — that's the signal to call your GP, headspace (1800 650 890), Lifeline (13 11 14), or Beyond Blue (1300 22 4636). They are not for *worst-case crisis only*; they are for exactly the version of low that has lasted longer than it should.\n\nIf you're under 25 and want low-pressure mental health support, **headspace** has free in-person centres across Melbourne (Collingwood, Werribee, Glenroy, Greensborough, Sunshine, Frankston and more) plus a national online chat.\n\n### The bit nobody mentions\n\nYour Melbourne friends in three months will not be the people you meet through 'meeting people' in week one. They'll come from the recurring thing you keep showing up to — the team, the class, the volunteer shift, the housemate's flatmate. So tonight, don't try to find friends. Try to find *one anchor* you can show up to twice next week. The friendship part takes care of itself."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you are ready, find parks, community spaces and low-key venues near you."
+      "title": "When you're ready",
+      "value": "→ Find parks, community spaces, libraries and low-key venues near you (opens Near Me → Social & Belonging, suburb pre-filled)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "Tomorrow, open Week 1 — cooking, utilities, and the rest of settling in."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Message one person from home to let them know you arrived safely",
-      "estimateMin": 3
-    },
-    {
-      "label": "Find a café, park, or library near you that feels comfortable",
-      "estimateMin": 15
-    },
-    {
-      "label": "Join one online group for your area (Facebook, Meetup, or WhatsApp)",
-      "estimateMin": 10
-    },
-    {
-      "label": "Plan one small outing outside your home for tomorrow",
-      "estimateMin": 5
+      "title": "Up next",
+      "value": "Tomorrow, open Week 1 — cooking, utilities, transport and the rest of settling in. Nothing in this guide expires."
     }
   ]
 }

@@ -2,76 +2,74 @@
   "id": 8,
   "slug": "budgeting-on-what-you-actually-earn",
   "title": "Budgeting on What You Actually Earn",
-  "summary": "Build a realistic weekly money system for Melbourne costs.",
+  "summary": "A weekly rhythm beats a monthly guess. Split fixed essentials from flex spend, automate the boring bit, and review the same day every week.",
   "arc": "week-1",
-  "arcOrder": 4,
+  "arcOrder": 3,
   "topic": "home-admin",
-  "readingTimeMin": 4,
+  "readingTimeMin": 5,
   "isPublished": true,
   "isFeatured": false,
   "markdownPath": "/guides-content/home-admin/budgeting-on-what-you-actually-earn.json",
-  "nextGuideSlug": "super-and-your-first-paycheck",
+  "nextGuideSlug": "medicare-bulk-billing-and-mental-health-care-plans",
   "searchTerms": [
     "budget",
     "weekly spending",
     "rent",
-    "cost of living"
+    "cost of living",
+    "youth allowance",
+    "centrelink",
+    "moneysmart"
   ],
-  "sourceLinks": [],
+  "sourceLinks": [
+    {
+      "label": "MoneySmart — How to do a budget",
+      "href": "https://moneysmart.gov.au/budgeting/how-to-do-a-budget"
+    },
+    {
+      "label": "Youth Central — How to budget and save",
+      "href": "https://www.youthcentral.vic.gov.au/money/how-budget-and-save"
+    },
+    {
+      "label": "Youth Central — Youth Allowance / Austudy",
+      "href": "https://www.youthcentral.vic.gov.au/study/financial-support/youth-allowance-austudy-and-other-allowances"
+    },
+    {
+      "label": "Youth Central — Student concessions and discounts",
+      "href": "https://www.youthcentral.vic.gov.au/study/financial-support/student-concessions-and-discounts"
+    }
+  ],
   "thumbnailUrl": "https://picsum.photos/seed/minuri-budgeting-on-what-you-actually-earn/640/420",
   "nearMeDeeplink": "/near-me?topic=home-admin&from=budgeting-on-what-you-actually-earn",
   "sections": [
     {
       "sectionKey": "moment",
       "title": "The Moment",
-      "value": "End of month one and your spending does not match your memory."
+      "value": "End of month one. You open the bank app and the number is lower than it should be. Not catastrophically — just *quietly* off. You think back through the month: rent, groceries, that bigger-than-planned pub night, the Uber the night the tram ran late, the haircut, the second pair of work shoes you didn't strictly need. None of it felt reckless. Yet here you are, two weeks before payday, with $312 to your name and a vague suspicion that this is just going to be how every month feels."
     },
     {
       "sectionKey": "feeling",
       "title": "The Feeling",
-      "value": "You feel careful, but your system still leaks."
+      "value": "First-year independence has a specific financial mood: you feel *careful*, but the system still leaks. You're not making big mistakes — you're making twenty $7–$15 ones a week, and the monthly view doesn't catch them until they've already happened.\n\nThe instinct is to budget harder. The actual fix is to budget *more often*."
     },
     {
       "sectionKey": "reveal",
-      "title": "The Reveal",
-      "value": "A weekly rhythm beats a monthly guess for early independence."
+      "title": "What nobody told you",
+      "value": "Monthly budgets are too coarse for someone in their first year of independence. Your income, expenses, and judgement all move on a weekly cycle — payday, rent, groceries, weekend social — and trying to manage that on a monthly grid means you don't notice you're off-track until you already are.\n\nA **weekly review on a fixed day**, with two protected categories, catches drift in week 1 instead of in week 4."
     },
     {
       "sectionKey": "how-it-works",
-      "title": "How It Actually Works",
-      "value": "Split costs into fixed essentials and weekly flex spending, then review on the same day every week.\n\nKeep one protected buffer category so every surprise does not become debt."
+      "title": "How it actually works",
+      "value": "**1. Split your money into three pots, not five.**\n\nForget the apps with twenty categories. The simplest model that works:\n\n- **Fixed essentials** — rent, utilities, phone, transport, insurance, any subscription you've decided is non-negotiable. Pay these from a *bills account* that nothing else touches.\n- **Weekly flex spend** — groceries, transport top-ups, eating out, social, small impulse buys. This is the only category you actively manage day-to-day.\n- **Buffer + savings** — a protected category for the *unexpected* (broken phone, dental, flights home) and slowly-accumulating savings.\n\nThe MoneySmart approach is the same: separate accounts (bills / spending / savings) with automatic transfers on payday. If your bank lets you nickname accounts, do it — *Rent & Bills*, *Spending*, *Buffer* — so the screen shows you what each pot is for.\n\n**2. Set a realistic flex number, weekly.**\n\nFor a Melbourne renter on a modest income, a defensible weekly flex number is:\n\n- Groceries: $60–80\n- Transport (after concession or weekly cap): $25–45\n- Eating out / social: $50–80\n- Buffer for everything else: $30–50\n\nTotal: roughly **$165–$255 a week**. Below $165 starts to feel restrictive; above $255 starts to leak. Your number is whatever leaves you with $50–$150 unspent at the end of the week — that's the savings, by default.\n\n**3. Pick one day a week to review. Make it the same day.**\n\nSunday evenings tend to work because they're between paydays for most people. Open the bank app, look at the last 7 days, ask three questions:\n\n- Did I overspend in any category? Why?\n- Is anything coming up next week I haven't budgeted for?\n- Did I move anything to savings?\n\nThis takes ten minutes. The compounding insight comes from doing it every week, not from the depth of any one session.\n\n**4. Automate the boring bit.**\n\nOn payday, automatic transfers should:\n\n- Move *fixed essentials* to the bills account\n- Move *savings* to a separate high-interest account (ING, ME Bank, or the bank you have, with bonus-interest conditions met)\n- Leave only *weekly flex* in your spending account\n\nThis is the single biggest behavioural change. If the savings money is sitting in your everyday account, it isn't savings — it's just slow spending money.\n\n**5. Use every concession and discount you qualify for.**\n\nMelbourne is quietly generous to students, low earners, and concession card holders, and most newcomers don't claim half of what they're entitled to:\n\n- **Youth Allowance / Austudy / ABSTUDY** via Centrelink — fortnightly payments for full-time students and apprentices under 25.\n- **Public Transport Concession Card** — half-price Myki fares, or free under-18 travel via Youth Myki.\n- **Student Edge / UniDays** — ongoing discounts on food, software, retail.\n- **Healthcare Card / Low Income Card** — cheaper PBS prescriptions, GP gaps, some utility concessions.\n- **City of Melbourne library** — free e-books, audiobooks, magazines, courses; saves $20–$40/month on Netflix-equivalent media.\n\nApplying for these is one boring afternoon. The savings run for years.\n\n**6. Hold one *protected* category, always.**\n\nThe single most common reason a budget fails isn't overspending — it's the unplanned expense (a $300 dental bill, a $150 flight change, a phone screen). Keep a buffer category that you don't touch except for true surprises. Even $20/week, untouched for a year, is $1,040 — usually enough to absorb the kind of one-off cost that otherwise turns into a credit-card balance you spend six months paying off.\n\n### The bit nobody mentions\n\nMost of the financial stress in your first year is not from earning too little — it's from not having a system to *see* what's happening with the money you do have. The weekly review, the three accounts, and the protected buffer turn financial life from a series of small surprises into something you can actually steer. Boring, repeatable, quietly transformative."
     },
     {
       "sectionKey": "bridge",
-      "title": "The Bridge",
-      "value": "When you're ready, find banks and support services near you."
+      "title": "When you're ready",
+      "value": "→ Find banks, financial counsellors and budgeting support services near you (opens Near Me → Home & Admin, suburb pre-filled)"
     },
     {
       "sectionKey": "next-chapter",
-      "title": "Next Chapter",
-      "value": "Next: Setting Up Utilities Without Overpaying - your biggest fixed-cost tune-up."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "List all monthly income sources after tax",
-      "estimateMin": 10
-    },
-    {
-      "label": "List fixed expenses: rent, utilities, transport",
-      "estimateMin": 10
-    },
-    {
-      "label": "Estimate variable expenses: food, social, subscriptions",
-      "estimateMin": 10
-    },
-    {
-      "label": "Set a weekly discretionary cash allowance and stick to it",
-      "estimateMin": 5
-    },
-    {
-      "label": "Download a free budgeting app (Pocketbook or YNAB trial)",
-      "estimateMin": 5
+      "title": "Up next",
+      "value": "Medicare, Bulk-Billing & Mental Health Care Plans — the health-admin layer of the same independence."
     }
   ]
 }
