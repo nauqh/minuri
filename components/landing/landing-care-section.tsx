@@ -66,11 +66,11 @@ function ScrollyTopicCard({
 	progress: MotionValue<number>;
 }) {
 	const revealStart = 0.15 + index * 0.145;
-	const revealEnd = revealStart + 0.085;
+	const revealEnd = revealStart + 0.065;
 	const finalX = X_OFFSETS[index];
 	const finalY = Y_OFFSETS[index];
 	const entryX = finalX * 0.18;
-	const entryY = 430;
+	const entryY = 220;
 
 	const opacity = useTransform(
 		progress,
