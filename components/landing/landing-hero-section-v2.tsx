@@ -13,7 +13,7 @@ import {
 	type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const HERO_TOPIC_CARDS: {
 	title: string;
@@ -74,6 +74,33 @@ const HERO_TOPIC_CARDS: {
 		word: "belong",
 		wordColor: "#7a1ac4",
 		icon: Users,
+	},
+];
+
+const MOBILE_NAV_ITEMS = [
+	{
+		emoji: "🗺️",
+		label: "Start my journey",
+		description: "Your personalised first-week plan",
+		href: "/journey",
+	},
+	{
+		emoji: "📖",
+		label: "First-time guides",
+		description: "Practical guides for every topic",
+		href: "/guides",
+	},
+	{
+		emoji: "📍",
+		label: "Near me",
+		description: "Find services in your suburb",
+		href: "/near-me",
+	},
+	{
+		emoji: "💬",
+		label: "Get support",
+		description: "Our story and who we help",
+		href: "#contact",
 	},
 ];
 
@@ -161,6 +188,7 @@ export function LandingHeroSectionV2({
 	const headlineWordColor = hasStartedWordCycle
 		? HERO_TOPIC_CARDS[activeIndex].bg
 		: "#0f766e";
+	const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
 
 	const restartCycle = () => {
 		if (intervalRef.current) clearInterval(intervalRef.current);
@@ -330,112 +358,169 @@ export function LandingHeroSectionV2({
 									/>
 								</Link>
 							</motion.div>
-							<button
-								type="button"
-								className="inline-flex size-10 items-center justify-center rounded-full text-minuri-ocean transition-colors hover:bg-minuri-ice/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-ocean/35 md:hidden"
-								aria-expanded={mobileMenuOpen}
-								aria-controls="landing-mobile-menu-v2"
-								aria-label={
-									mobileMenuOpen ? "Close menu" : "Open menu"
-								}
-								onClick={() =>
-									setMobileMenuOpen((open) => !open)
-								}
-							>
-								{mobileMenuOpen ? (
-									<X
-										className="size-8"
-										strokeWidth={2}
-										aria-hidden
-									/>
-								) : (
-									<Menu
-										className="size-8"
-										strokeWidth={2}
-										aria-hidden
-									/>
-								)}
-							</button>
+							<div className="relative md:hidden">
+								<button
+									type="button"
+									className="relative z-50 flex size-10 cursor-pointer items-center justify-center rounded-full text-foreground transition-opacity duration-200 ease-out hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-ocean/45 active:opacity-85"
+									aria-expanded={mobileMenuOpen}
+									aria-haspopup="true"
+									aria-controls="landing-mobile-menu-v2"
+									aria-label={
+										mobileMenuOpen
+											? "Close menu"
+											: "Open menu"
+									}
+									onClick={() =>
+										setMobileMenuOpen((open) => !open)
+									}
+								>
+									<span className="relative size-5" aria-hidden>
+										<X
+											strokeWidth={2.25}
+											className={`absolute left-0 top-0 size-5 stroke-foreground text-foreground transition-all duration-300 ease-in-out ${
+												mobileMenuOpen
+													? "rotate-0 opacity-100"
+													: "rotate-90 opacity-0"
+											}`}
+										/>
+										<Menu
+											strokeWidth={2.25}
+											className={`absolute left-0 top-0 size-5 stroke-foreground text-foreground transition-all duration-300 ease-in-out ${
+												mobileMenuOpen
+													? "-rotate-90 opacity-0"
+													: "rotate-0 opacity-100"
+											}`}
+										/>
+									</span>
+								</button>
+							</div>
 						</motion.div>
 					</motion.header>
 					<div className="-mx-4 mt-2 h-px bg-minuri-silver/65 md:hidden" />
-					<div
-						id="landing-mobile-menu-v2"
-						className={`fixed inset-x-0 bottom-0 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 overflow-y-auto bg-minuri-white transition-[opacity,transform] duration-300 ease-out md:hidden ${
-							mobileMenuOpen
-								? "translate-y-0 opacity-100 pointer-events-auto"
-								: "-translate-y-1 opacity-0 pointer-events-none"
-						}`}
-						aria-hidden={!mobileMenuOpen}
-					>
-						<div className="flex h-full flex-col px-4 pt-3">
-							<nav>
-								<Link
-									href="#services"
-									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
-									onClick={() => setMobileMenuOpen(false)}
+					<AnimatePresence>
+						{mobileMenuOpen && (
+							<>
+								<motion.div
+									key="backdrop"
+									className="fixed inset-0 z-40 bg-black/40 md:hidden"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+									transition={{ duration: 0.25 }}
+									onClick={closeMobileMenu}
+									aria-hidden
+								/>
+								<motion.div
+									key="drawer"
+									id="landing-mobile-menu-v2"
+									className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col rounded-t-3xl md:hidden"
+									style={{
+										background:
+											"radial-gradient(ellipse 120% 80% at 10% 0%, color-mix(in oklch, var(--minuri-teal) 18%, var(--minuri-ocean)) 0%, var(--minuri-ocean) 60%)",
+									}}
+									initial={{ y: "100%" }}
+									animate={{ y: 0 }}
+									exit={{ y: "100%" }}
+									transition={{ duration: 0.38, ease: "easeOut" }}
+									aria-modal="true"
+									role="dialog"
+									aria-label="Navigation menu"
 								>
-									<span>Services</span>
-									<ChevronRight
-										className="size-6"
-										aria-hidden
-									/>
-								</Link>
-								<Link
-									href="#service"
-									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									<span>How it works</span>
-									<ChevronRight
-										className="size-6"
-										aria-hidden
-									/>
-								</Link>
-								<Link
-									href="#care"
-									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									<span>Topics</span>
-									<ChevronRight
-										className="size-6"
-										aria-hidden
-									/>
-								</Link>
-								<Link
-									href="#contact"
-									className="flex items-center justify-between py-4 text-[2rem] font-medium tracking-tight text-minuri-ocean"
-									onClick={() => setMobileMenuOpen(false)}
-								>
-									<span>Get support</span>
-									<ChevronRight
-										className="size-6"
-										aria-hidden
-									/>
-								</Link>
-							</nav>
-
-							<div className="mt-auto border-t border-minuri-silver/70 bg-minuri-white pb-[max(1rem,env(safe-area-inset-bottom))] pt-4">
-								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-slate">
-									Quick start
-								</p>
-								<div className="mt-3">
-									<Link
-										href="/journey"
-										className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-minuri-teal px-5 py-2 text-sm font-semibold text-primary-foreground"
-										onClick={() => setMobileMenuOpen(false)}
-									>
-										Start your journey
-										<ChevronRight
-											className="size-4"
-											aria-hidden
-										/>
-									</Link>
-								</div>
-							</div>
-						</div>
-					</div>
+									<div className="flex shrink-0 justify-center pb-1 pt-3">
+										<div className="h-1 w-10 rounded-full bg-minuri-white/20" />
+									</div>
+									<div className="flex-1 overflow-y-auto px-6 pb-8 pt-4">
+										<motion.div
+											initial={{ opacity: 0, y: 10 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{
+												delay: 0.12,
+												duration: 0.3,
+												ease: "easeOut",
+											}}
+											className="mb-6"
+										>
+											<p className="text-xs font-semibold uppercase tracking-[0.15em] text-minuri-teal">
+												Hey there 👋
+											</p>
+											<p className="mt-1 text-2xl font-bold tracking-tight text-minuri-white">
+												Where to?
+											</p>
+										</motion.div>
+										<nav aria-label="Mobile navigation">
+											<ul className="flex flex-col gap-2">
+												{MOBILE_NAV_ITEMS.map((item, i) => (
+													<motion.li
+														key={item.href}
+														initial={{ opacity: 0, x: -16 }}
+														animate={{ opacity: 1, x: 0 }}
+														transition={{
+															delay: 0.16 + i * 0.06,
+															duration: 0.3,
+															ease: "easeOut",
+														}}
+													>
+														<Link
+															href={item.href}
+															onClick={closeMobileMenu}
+															className="group flex items-center gap-4 rounded-2xl px-4 py-3.5 transition-colors duration-150 hover:bg-minuri-white/10 active:bg-minuri-white/15"
+														>
+															<span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-minuri-white/10 text-xl">
+																{item.emoji}
+															</span>
+															<span className="min-w-0 flex-1">
+																<span className="block text-base font-semibold text-minuri-white">
+																	{item.label}
+																</span>
+																<span className="mt-0.5 block text-sm text-minuri-slate/80">
+																	{item.description}
+																</span>
+															</span>
+															<ChevronRight
+																className="size-4 shrink-0 text-minuri-slate/50 transition-transform duration-200 group-hover:translate-x-0.5"
+																strokeWidth={2}
+																aria-hidden
+															/>
+														</Link>
+													</motion.li>
+												))}
+											</ul>
+										</nav>
+										<motion.div
+											initial={{ opacity: 0, y: 12 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{
+												delay: 0.42,
+												duration: 0.32,
+												ease: "easeOut",
+											}}
+											className="mt-6 rounded-2xl border border-minuri-teal/30 bg-minuri-teal/20 px-5 py-5"
+										>
+											<p className="text-xs font-semibold uppercase tracking-[0.13em] text-minuri-teal">
+												Ready to start?
+											</p>
+											<p className="mt-1 text-sm text-minuri-white/80">
+												We&apos;ll build your personalised
+												week-one plan in under a minute.
+											</p>
+											<Link
+												href="/journey"
+												onClick={closeMobileMenu}
+												className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform duration-200 ease-out active:scale-95"
+											>
+												Start my journey
+												<ChevronRight
+													className="size-4"
+													strokeWidth={2.25}
+													aria-hidden
+												/>
+											</Link>
+										</motion.div>
+									</div>
+								</motion.div>
+							</>
+						)}
+					</AnimatePresence>
 				</div>
 
 				<motion.div
