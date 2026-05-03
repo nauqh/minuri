@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,31 +10,16 @@ import { cn } from "@/lib/utils";
 const PASSWORD = "minuri";
 const STORAGE_KEY = "minuri-password-gate";
 
-function findGateTarget(start: EventTarget | null): Element | null {
+function findGateTarget(start: EventTarget | null): HTMLAnchorElement | null {
 	if (!(start instanceof Element)) return null;
 	if (start.closest("[data-password-gate-ui]")) return null;
-
-	const buttonLike = start.closest(
-		'button, [role="button"], [data-slot="button"], input[type="submit"], input[type="button"]',
-	);
-	if (buttonLike) {
-		if (buttonLike instanceof HTMLButtonElement && buttonLike.disabled) {
-			return null;
-		}
-		if (buttonLike instanceof HTMLInputElement && buttonLike.disabled) {
-			return null;
-		}
-		if (buttonLike.getAttribute("aria-disabled") === "true") {
-			return null;
-		}
-		return buttonLike;
-	}
 
 	const anchor = start.closest("a[href]");
 	if (anchor instanceof HTMLAnchorElement) {
 		const href = anchor.getAttribute("href") ?? "";
 		if (href === "" || href.startsWith("#")) return null;
 		if (href.startsWith("javascript:")) return null;
+		if (href.startsWith("mailto:") || href.startsWith("tel:")) return null;
 		return anchor;
 	}
 
@@ -41,8 +27,10 @@ function findGateTarget(start: EventTarget | null): Element | null {
 }
 
 export function PasswordGate({ children }: { children: React.ReactNode }) {
+	const router = useRouter();
 	const [unlocked, setUnlocked] = useState(false);
 	const [promptOpen, setPromptOpen] = useState(false);
+	const [pendingHref, setPendingHref] = useState<string | null>(null);
 	const formId = useId();
 	const gateRootRef = useRef<HTMLDivElement>(null);
 
@@ -63,7 +51,14 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 			if (!(node instanceof Node)) return;
 			if (!gateRootRef.current?.contains(node)) return;
 			const el = node instanceof Element ? node : node.parentElement;
-			if (!el || !findGateTarget(el)) return;
+			const target = el ? findGateTarget(el) : null;
+			if (!target) return;
+			if (e.button !== 0 || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
+				return;
+			}
+			const targetAttr = target.getAttribute("target");
+			if (targetAttr && targetAttr !== "_self") return;
+			setPendingHref(target.getAttribute("href"));
 			e.preventDefault();
 			e.stopPropagation();
 			setPromptOpen(true);
@@ -94,6 +89,19 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 		}
 		setUnlocked(true);
 		setPromptOpen(false);
+		if (!pendingHref) return;
+		try {
+			const url = new URL(pendingHref, window.location.href);
+			if (url.origin === window.location.origin) {
+				const destination = `${url.pathname}${url.search}${url.hash}`;
+				router.push(destination);
+			} else {
+				window.location.assign(url.toString());
+			}
+		} catch {
+			/* ignore invalid URL */
+		}
+		setPendingHref(null);
 	}
 
 	return (
