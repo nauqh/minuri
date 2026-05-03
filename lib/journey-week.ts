@@ -8,6 +8,7 @@ export type DayPlan = {
     topicSlug: GuideTopicSlug;
     narrative: string;
     guides: Guide[];
+    task: string;
 };
 
 export const TOPIC_NEAR_ME: Record<GuideTopicSlug, NearMeTopic> = {
@@ -41,6 +42,24 @@ export function getTopicTheme(slug: GuideTopicSlug) {
 export function getTopicShort(slug: GuideTopicSlug) {
     return TOPIC_SHORT[slug];
 }
+
+// Checklist items shown in onboarding
+export const ALREADY_SORTED_ITEMS = [
+    { id: "myki", label: "Myki card" },
+    { id: "gp", label: "GP registered" },
+    { id: "bank", label: "Bank account" },
+    { id: "sim", label: "SIM card" },
+    { id: "lease", label: "Lease signed" },
+] as const;
+
+// Guide slugs to skip when a checklist item is ticked
+const ALREADY_SORTED_SKIP: Record<string, string[]> = {
+    myki: ["getting-myki-and-surviving-ptv"],
+    gp: ["finding-a-gp-before-you-need-one"],
+    bank: [],
+    sim: [],
+    lease: ["renting-without-getting-burned", "your-bond-starts-on-day-one"],
+};
 
 const GUIDE_NARRATIVES: Partial<Record<string, string>> = {
     "your-first-48-hours-checklist":
@@ -109,9 +128,108 @@ const GUIDE_NARRATIVES: Partial<Record<string, string>> = {
         "Volunteering is one of the most efficient ways to meet people with shared values while doing something that matters. Today you explore what's near you.",
 };
 
+// A single concrete action sentence per guide
+const GUIDE_TASKS: Partial<Record<string, string>> = {
+    "your-first-48-hours-checklist":
+        "Complete at least 3 items from today's checklist before you sleep.",
+    "your-first-grocery-run":
+        "Walk to your nearest supermarket and buy ingredients for 3 simple meals.",
+    "cheap-eats-when-broke":
+        "Save your 3 cheapest nearby meal options in your phone maps right now.",
+    "cooking-5-meals-youll-actually-eat":
+        "Write down 5 meals you can reliably cook and buy the ingredients for one.",
+    "meal-prepping-on-a-tight-budget":
+        "Block 2 hours this Sunday in your calendar for a single meal-prep session.",
+    "finding-free-community-meals":
+        "Find one free community meal near your suburb and note the day and time.",
+    "getting-myki-and-surviving-ptv":
+        "Buy a Myki card at a 7-Eleven or station today and top it up with $20.",
+    "finding-your-way-around-melbourne-in-week-one":
+        "Add your 5 most-used locations to your phone maps and plan a route between them.",
+    "night-transport-and-getting-home-safe":
+        "Find the last train and last tram from your nearest station and save them.",
+    "cycling-melbourne-without-fear":
+        "Plan one safe cycling route near you using the Melways cycle path map.",
+    "building-a-local-routine":
+        "Write down one recurring weekly thing — a walk, a market, a café — and add it to your calendar.",
+    "finding-a-gp-before-you-need-one":
+        "Book a GP appointment online today — even if you feel completely fine.",
+    "crisis-lines-you-can-actually-call":
+        "Save 1800 512 348 (Beyond Blue) in your phone right now.",
+    "emergency-vs-urgent-care-in-melbourne":
+        "Find the nearest urgent care clinic to your home and save its address.",
+    "medicare-bulk-billing-and-mental-health-care-plans":
+        "Check your Medicare eligibility and confirm your GP bulk-bills.",
+    "managing-your-prescriptions-in-a-new-city":
+        "Request repeat prescriptions at your first GP visit and note the pharmacy closest to you.",
+    "your-pharmacist-is-the-cheapest-first-stop":
+        "Walk into your nearest pharmacy and introduce yourself — ask about their free advice service.",
+    "when-to-see-a-psych-counsellor-or-friend":
+        "Find one free counselling option near you (headspace, uni, or community) and save the number.",
+    "sustaining-yourself-sleep-movement-and-disconnecting":
+        "Pick one thing — a 20-minute walk, a phone-free hour, or a consistent sleep time — and commit to it this week.",
+    "renting-without-getting-burned":
+        "Read your lease tonight and highlight any clause you don't understand.",
+    "your-bond-starts-on-day-one":
+        "Take 20 timestamped photos of your room today and email them to yourself.",
+    "budgeting-on-what-you-actually-earn":
+        "List your monthly income and your 5 biggest recurring expenses right now.",
+    "setting-up-utilities-without-overpaying":
+        "Compare two electricity plans on the Victorian Energy Compare website and pick one.",
+    "super-and-your-first-paycheck":
+        "Check if your employer has enrolled you in super — and pick your own fund if not.",
+    "tenant-rights-when-things-go-wrong":
+        "Save the VCAT tenancy hotline (1300 906 380) and note one right you have as a renter.",
+    "when-you-dont-know-anyone-yet":
+        "Find one regular local thing — a class, a market, a run club — and put the next date in your calendar.",
+    "surviving-the-first-weekend-alone":
+        "Plan Saturday now: one outdoor activity and one meal out, even if you go alone.",
+    "homesickness-nobody-warns-you-about":
+        "Write one paragraph about what you miss and one about what you're looking forward to.",
+    "making-friends-in-a-city-where-everyones-busy":
+        "Find one low-pressure recurring social option near you and sign up or bookmark it.",
+    "finding-your-community":
+        "Search for one group that shares your language, culture, or interest in Melbourne and save the details.",
+    "free-things-to-do-this-week":
+        "Find one free event or place in Melbourne this week and add it to your calendar.",
+    "volunteering-as-a-way-in":
+        "Browse Seek Volunteer and save one opportunity that fits your schedule.",
+};
+
 const ARC_PRIORITY = { "day-1": 0, "week-1": 1, "month-1": 2 } as const;
 
-export function buildWeekPlan(selectedTopics: GuideTopicSlug[]): DayPlan[] {
+// Boost guide slugs based on keywords in the user's moment text
+function getKeywordBoosts(moment: string): Set<string> {
+    const lower = moment.toLowerCase();
+    const boosts = new Set<string>();
+
+    if (/international|overseas|arrived|arrival|new to australia/i.test(lower)) {
+        boosts.add("medicare-bulk-billing-and-mental-health-care-plans");
+        boosts.add("getting-myki-and-surviving-ptv");
+    }
+    if (/budget|broke|afford|tight|cheap|money/i.test(lower)) {
+        boosts.add("cheap-eats-when-broke");
+        boosts.add("budgeting-on-what-you-actually-earn");
+        boosts.add("finding-free-community-meals");
+    }
+    if (/alone|by myself|no one|nobody|lonely|don't know anyone/i.test(lower)) {
+        boosts.add("when-you-dont-know-anyone-yet");
+        boosts.add("surviving-the-first-weekend-alone");
+    }
+    if (/uni|student|university|study|campus|tafe/i.test(lower)) {
+        boosts.add("medicare-bulk-billing-and-mental-health-care-plans");
+        boosts.add("cheap-eats-when-broke");
+    }
+    if (/anxious|overwhelmed|stressed|mental|crisis|scared/i.test(lower)) {
+        boosts.add("crisis-lines-you-can-actually-call");
+        boosts.add("when-to-see-a-psych-counsellor-or-friend");
+    }
+
+    return boosts;
+}
+
+// Deliberate 7-day arc: fixed structure, user's choices fill days 3–4
+function buildArcTopics(selectedTopics: GuideTopicSlug[]): GuideTopicSlug[] {
     const allTopics: GuideTopicSlug[] = [
         "food-eating",
         "getting-around",
@@ -120,74 +238,101 @@ export function buildWeekPlan(selectedTopics: GuideTopicSlug[]): DayPlan[] {
         "social-belonging",
     ];
 
-    // Topics in priority order: selected first, then remainder
-    const topicOrder: GuideTopicSlug[] = [
-        ...selectedTopics,
-        ...allTopics.filter((t) => !selectedTopics.includes(t)),
+    // User's chosen priorities for days 3–4, falling back to remaining topics
+    const remaining = allTopics.filter(
+        (t) =>
+            !["food-eating", "home-admin", "health-wellbeing", "social-belonging"].includes(t) &&
+            !selectedTopics.includes(t),
+    );
+
+    const priority1 = selectedTopics[0] ?? remaining[0] ?? "getting-around";
+    const priority2 =
+        selectedTopics[1] ??
+        selectedTopics[0] ??
+        remaining[0] ??
+        "getting-around";
+
+    return [
+        "food-eating",      // Day 1: survival basics
+        "home-admin",       // Day 2: admin foundation
+        priority1,          // Day 3: user's first chosen priority
+        priority2,          // Day 4: user's second chosen priority
+        "health-wellbeing", // Day 5: health baseline
+        "social-belonging", // Day 6: community anchor
+        "getting-around",   // Day 7: build your routine
+    ];
+}
+
+const ARC_THEMES: Record<number, { theme: string; shortLabel: string }> = {
+    1: { theme: "Survival Basics", shortLabel: "Survive" },
+    2: { theme: "Admin Foundation", shortLabel: "Admin" },
+    5: { theme: "Health Baseline", shortLabel: "Health" },
+    6: { theme: "Community", shortLabel: "Connect" },
+    7: { theme: "Build Your Routine", shortLabel: "Routine" },
+};
+
+export function buildWeekPlan(
+    selectedTopics: GuideTopicSlug[],
+    yourMoment = "",
+    alreadySorted: string[] = [],
+): DayPlan[] {
+    const allTopics: GuideTopicSlug[] = [
+        "food-eating",
+        "getting-around",
+        "health-wellbeing",
+        "home-admin",
+        "social-belonging",
     ];
 
-    // Sort all guides by topic priority → arc → arcOrder
-    const sortedGuides = [...GUIDES]
-        .filter((g) => g.isPublished)
-        .sort((a, b) => {
-            const ai = topicOrder.indexOf(a.topic);
-            const bi = topicOrder.indexOf(b.topic);
-            if (ai !== bi) return ai - bi;
-            if (a.arc !== b.arc)
-                return ARC_PRIORITY[a.arc] - ARC_PRIORITY[b.arc];
-            return a.arcOrder - b.arcOrder;
-        });
+    const skipSlugs = new Set(
+        alreadySorted.flatMap((item) => ALREADY_SORTED_SKIP[item] ?? []),
+    );
+    const boostedSlugs = getKeywordBoosts(yourMoment);
 
-    // Build topic queues
+    // Build per-topic guide queues sorted by boost → arc priority → arcOrder
     const topicQueues = new Map<GuideTopicSlug, Guide[]>();
-    for (const topic of topicOrder) {
-        topicQueues.set(
-            topic,
-            sortedGuides.filter((g) => g.topic === topic),
-        );
+    for (const topic of allTopics) {
+        const guides = [...GUIDES]
+            .filter((g) => g.isPublished && g.topic === topic && !skipSlugs.has(g.slug))
+            .sort((a, b) => {
+                const aBoosted = boostedSlugs.has(a.slug) ? 0 : 1;
+                const bBoosted = boostedSlugs.has(b.slug) ? 0 : 1;
+                if (aBoosted !== bBoosted) return aBoosted - bBoosted;
+                if (a.arc !== b.arc) return ARC_PRIORITY[a.arc] - ARC_PRIORITY[b.arc];
+                return a.arcOrder - b.arcOrder;
+            });
+        topicQueues.set(topic, guides);
     }
 
+    const arcTopics = buildArcTopics(selectedTopics);
     const usedSlugs = new Set<string>();
     const days: DayPlan[] = [];
-    let cycleIdx = 0;
 
-    for (let dayIdx = 0; dayIdx < 7; dayIdx++) {
-        // Find the next topic that still has unused guides
-        let dayTopic: GuideTopicSlug | null = null;
-        for (let attempt = 0; attempt < topicOrder.length; attempt++) {
-            const candidate = topicOrder[cycleIdx % topicOrder.length];
-            const available = (topicQueues.get(candidate) ?? []).filter(
-                (g) => !usedSlugs.has(g.slug),
-            );
-            if (available.length > 0) {
-                dayTopic = candidate;
-                break;
-            }
-            cycleIdx++;
-        }
+    for (let dayIdx = 0; dayIdx < arcTopics.length; dayIdx++) {
+        const dayNum = dayIdx + 1;
+        const topicSlug = arcTopics[dayIdx];
 
-        if (!dayTopic) break;
-
-        const available = (topicQueues.get(dayTopic) ?? []).filter(
+        const available = (topicQueues.get(topicSlug) ?? []).filter(
             (g) => !usedSlugs.has(g.slug),
         );
-        const dayGuides = available.slice(0, 2);
-        dayGuides.forEach((g) => usedSlugs.add(g.slug));
+        if (available.length === 0) continue;
 
-        const primary = dayGuides[0];
-        const narrative =
-            GUIDE_NARRATIVES[primary?.slug ?? ""] ?? primary?.summary ?? "";
+        const guide = available[0];
+        usedSlugs.add(guide.slug);
+
+        const override = ARC_THEMES[dayNum];
+        const narrative = GUIDE_NARRATIVES[guide.slug] ?? guide.summary ?? "";
+        const task = GUIDE_TASKS[guide.slug] ?? "";
 
         days.push({
-            day: dayIdx + 1,
-            theme: TOPIC_THEME[dayTopic],
-            shortLabel: TOPIC_SHORT[dayTopic],
-            topicSlug: dayTopic,
+            day: dayNum,
+            theme: override?.theme ?? TOPIC_THEME[topicSlug],
+            shortLabel: override?.shortLabel ?? TOPIC_SHORT[topicSlug],
+            topicSlug,
             narrative,
-            guides: dayGuides,
+            guides: [guide],
+            task,
         });
-
-        cycleIdx++;
     }
 
     return days;

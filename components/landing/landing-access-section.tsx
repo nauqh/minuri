@@ -65,16 +65,22 @@ export function LandingAccessSection() {
 					</p>
 				</FadeUp>
 
-				<div className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-minuri-silver bg-minuri-silver md:grid-cols-4">
+				<motion.div
+					className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-minuri-silver bg-minuri-silver md:grid-cols-4"
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "0px 0px -6% 0px" }}
+					transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+				>
 					{STATS.map((stat, i) => (
 						<motion.div
 							key={stat.label}
 							className="flex flex-col items-center gap-1.5 bg-minuri-white px-6 py-8"
-							initial={{ opacity: 0, y: 20 }}
+							initial={{ opacity: 0, y: 10 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true }}
 							transition={{
-								duration: 0.5,
+								duration: 0.45,
 								delay: 0.3 + i * 0.07,
 								ease: [0.22, 1, 0.36, 1],
 							}}
@@ -87,7 +93,7 @@ export function LandingAccessSection() {
 							</span>
 						</motion.div>
 					))}
-				</div>
+				</motion.div>
 			</div>
 		</section>
 	);
