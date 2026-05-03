@@ -303,7 +303,7 @@ export function JourneyPlanView() {
     }
 
     return (
-        <div className="min-h-screen bg-minuri-white text-minuri-ink">
+        <div className="min-h-screen bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]">
             {/* Header */}
             <header className="border-b border-minuri-silver/60 px-6 py-4 md:px-10">
                 <div className="mx-auto flex max-w-screen-xl items-center justify-between">

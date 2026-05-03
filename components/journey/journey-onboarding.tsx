@@ -244,7 +244,7 @@ export function JourneyOnboarding() {
 			) : (
 				<motion.div
 					key="form"
-					className="h-screen overflow-hidden bg-minuri-white text-minuri-ink"
+					className="h-screen overflow-hidden bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]"
 					exit={{
 						opacity: 0,
 						transition: {
