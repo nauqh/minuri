@@ -66,5 +66,23 @@
       "title": "Up next",
       "value": "The Homesickness Nobody Warns You About — when connection is growing but the grief for home still arrives in waves."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Join one activity-based group (sport, art, language, or cooking)",
+      "estimateMin": 10
+    },
+    {
+      "label": "Commit to showing up at least twice — connection takes repetition",
+      "estimateMin": 120
+    },
+    {
+      "label": "Have one low-stakes conversation with someone outside your comfort zone",
+      "estimateMin": 10
+    },
+    {
+      "label": "Connect with a neighbour or colleague on a first-name basis",
+      "estimateMin": 5
+    }
   ]
 }

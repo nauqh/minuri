@@ -71,5 +71,27 @@
       "title": "Up next",
       "value": "Building a Local Routine That Feels Like Yours — once the housing is sorted, the work shifts from logistics to belonging."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Read your lease agreement in full before signing",
+      "estimateMin": 30
+    },
+    {
+      "label": "Confirm how your bond is lodged (RTBA in VIC)",
+      "estimateMin": 10
+    },
+    {
+      "label": "Know your maintenance rights and required notice periods",
+      "estimateMin": 10
+    },
+    {
+      "label": "Save Consumer Affairs Victoria as a contact for future disputes",
+      "estimateMin": 2
+    },
+    {
+      "label": "Set rent payment reminders in your calendar",
+      "estimateMin": 3
+    }
   ]
 }

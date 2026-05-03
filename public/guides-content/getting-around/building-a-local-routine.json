@@ -66,5 +66,23 @@
       "title": "Up next",
       "value": "Finding Your Community — turning a routine into a wider sense of place."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Identify your 3 most regular journeys (work/study, groceries, social)",
+      "estimateMin": 5
+    },
+    {
+      "label": "Find the most efficient transport combo for each",
+      "estimateMin": 15
+    },
+    {
+      "label": "Set up Myki auto-top-up so you never run out mid-trip",
+      "estimateMin": 5
+    },
+    {
+      "label": "Find one café or park within 10 minutes to anchor your mornings",
+      "estimateMin": 10
+    }
   ]
 }

@@ -71,5 +71,23 @@
       "title": "Up next",
       "value": "Finding a GP Before You Need One — set up healthcare in a calm hour before the day you're sick and trying to figure it all out at once."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Buy a Myki card at 7-Eleven, a train station, or online",
+      "estimateMin": 15
+    },
+    {
+      "label": "Top it up with at least $20",
+      "estimateMin": 5
+    },
+    {
+      "label": "Download the PTV app and find your nearest stop",
+      "estimateMin": 10
+    },
+    {
+      "label": "Plan one trip using the app before you actually need to take it",
+      "estimateMin": 5
+    }
   ]
 }

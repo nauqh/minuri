@@ -55,5 +55,23 @@
       "title": "Up next",
       "value": "Managing Your Prescriptions in a New City — for the medication side of all this."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Enrol in Medicare via the Services Australia website or MyGov app",
+      "estimateMin": 20
+    },
+    {
+      "label": "Activate your Medicare card when it arrives in the mail",
+      "estimateMin": 2
+    },
+    {
+      "label": "Ask your GP about a Mental Health Care Plan at your next visit",
+      "estimateMin": 10
+    },
+    {
+      "label": "Use your MHCP to book a subsidised psychologist appointment",
+      "estimateMin": 5
+    }
   ]
 }

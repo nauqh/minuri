@@ -67,5 +67,23 @@
       "title": "Up next",
       "value": "Renting Without Getting Burned — the other half of stretching a payday is not losing $200 a week to a rental that quietly overcharges you."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Map cheap-eat spots within 20 minutes of home",
+      "estimateMin": 10
+    },
+    {
+      "label": "Find one reliable meal under $10 near work or campus",
+      "estimateMin": 15
+    },
+    {
+      "label": "Check the Menulog or Uber Eats app for budget student deals",
+      "estimateMin": 5
+    },
+    {
+      "label": "Identify one free community meal in your area this week",
+      "estimateMin": 10
+    }
   ]
 }

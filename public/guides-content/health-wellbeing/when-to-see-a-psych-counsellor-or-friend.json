@@ -56,5 +56,23 @@
       "title": "Up next",
       "value": "Sustaining Yourself: Sleep, Movement and Disconnecting — when things are okay but you want to keep them that way."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Ask your GP about a Mental Health Care Plan if you haven't yet",
+      "estimateMin": 10
+    },
+    {
+      "label": "Search 'bulk billing psychologist [suburb]' on Healthdirect",
+      "estimateMin": 10
+    },
+    {
+      "label": "Book an initial appointment (common wait: 2–3 weeks)",
+      "estimateMin": 5
+    },
+    {
+      "label": "Check for free counselling at your university or workplace",
+      "estimateMin": 10
+    }
   ]
 }

@@ -66,5 +66,27 @@
       "title": "Up next",
       "value": "Setting Up Utilities Without Overpaying — because the second-biggest leak in a one-person budget is the energy plan you didn't choose."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Pick 5 simple recipes you already know or that have 5 ingredients",
+      "estimateMin": 20
+    },
+    {
+      "label": "Write one combined shopping list for all 5 meals",
+      "estimateMin": 10
+    },
+    {
+      "label": "Buy all ingredients in a single trip",
+      "estimateMin": 45
+    },
+    {
+      "label": "Batch-cook the first two meals on Sunday",
+      "estimateMin": 60
+    },
+    {
+      "label": "Portion and label leftovers with date before storing",
+      "estimateMin": 5
+    }
   ]
 }

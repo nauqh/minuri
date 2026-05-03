@@ -71,5 +71,27 @@
       "title": "Up next",
       "value": "Medicare, Bulk-Billing & Mental Health Care Plans — the health-admin layer of the same independence."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "List all monthly income sources after tax",
+      "estimateMin": 10
+    },
+    {
+      "label": "List fixed expenses: rent, utilities, transport",
+      "estimateMin": 10
+    },
+    {
+      "label": "Estimate variable expenses: food, social, subscriptions",
+      "estimateMin": 10
+    },
+    {
+      "label": "Set a weekly discretionary cash allowance and stick to it",
+      "estimateMin": 5
+    },
+    {
+      "label": "Download a free budgeting app (Pocketbook or YNAB trial)",
+      "estimateMin": 5
+    }
   ]
 }

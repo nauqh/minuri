@@ -68,5 +68,27 @@
       "title": "Up next",
       "value": "Cooking 5 Meals You'll Actually Eat — the second-largest weekly spend after rent and utilities is food, and the same compounding logic applies."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Confirm with your landlord which utilities are included in rent",
+      "estimateMin": 5
+    },
+    {
+      "label": "Use Victorian Energy Compare to find the best electricity deal",
+      "estimateMin": 15
+    },
+    {
+      "label": "Set up electricity (and gas if needed) in your name",
+      "estimateMin": 15
+    },
+    {
+      "label": "Compare NBN plans on Finder or WhistleOut",
+      "estimateMin": 20
+    },
+    {
+      "label": "Set up direct debit and paper-free billing to avoid late fees",
+      "estimateMin": 5
+    }
   ]
 }

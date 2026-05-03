@@ -50,5 +50,23 @@
       "title": "Up next",
       "value": "When you're past the immediate moment and want to think about ongoing support, the next guide that fits is When to See a Psych, a Counsellor, or a Friend (Arc 3) — but if you're still in early days, that one can wait."
     }
+  ],
+  "firstSteps": [
+    {
+      "label": "Save Lifeline (13 11 14) in your phone contacts right now",
+      "estimateMin": 1
+    },
+    {
+      "label": "Save Beyond Blue (1300 22 4636) in your phone contacts",
+      "estimateMin": 1
+    },
+    {
+      "label": "Note the address of your nearest 24-hour emergency department",
+      "estimateMin": 5
+    },
+    {
+      "label": "Share these contacts with one trusted person who checks in on you",
+      "estimateMin": 2
+    }
   ]
 }
