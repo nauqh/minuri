@@ -3,7 +3,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, House, Loader2, MapPin, Search } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2, MapPin, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -134,10 +134,10 @@ export function NearMeEntry() {
 			<div className="hidden lg:flex lg:w-[42%] xl:w-[45%] flex-col justify-between bg-minuri-ocean px-10 py-14 xl:px-14">
 				<Link
 					href="/"
-					className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-minuri-mint/60 transition-colors hover:text-minuri-mint focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-mint/45 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-ocean"
+					className="inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
 				>
-					<House className="size-3.5 shrink-0" />
-					Home
+					<ArrowLeft className="size-3.5" aria-hidden />
+					Back to home
 				</Link>
 				<div>
 					<h2 className="text-[2.6rem] xl:text-[3rem] font-black leading-[1.08] tracking-tight text-minuri-white">
@@ -174,10 +174,10 @@ export function NearMeEntry() {
 			<div className="flex flex-1 flex-col items-center justify-center bg-minuri-fog px-5 py-12 md:px-8">
 				<Link
 					href="/"
-					className="mb-6 inline-flex w-fit items-center gap-1.5 text-xs font-medium text-minuri-slate/60 transition-colors hover:text-minuri-teal focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/35 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-fog lg:hidden"
+					className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105 lg:hidden"
 				>
-					<House className="size-3.5 shrink-0" />
-					Home
+					<ArrowLeft className="size-3.5" aria-hidden />
+					Back to home
 				</Link>
 
 				<div className="w-full max-w-md">

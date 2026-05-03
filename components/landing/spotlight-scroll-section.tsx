@@ -105,17 +105,17 @@ function CardFace({
 				zIndex: index + 1,
 			}}
 		>
-			{/* coloured half panel */}
+			{/* coloured half panel — desktop only; on mobile it splits the single-column layout */}
 			<div
 				aria-hidden
 				className={cn(
-					"pointer-events-none absolute inset-y-0 w-1/2",
+					"pointer-events-none absolute inset-y-0 hidden w-1/2 md:block",
 					visualOnRight ? "right-0" : "left-0",
 				)}
 				style={{ background: card.color }}
 			/>
 
-			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-12 px-6 py-20 sm:px-10 md:grid-cols-2 md:px-14 xl:px-16">
+			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:px-10 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:px-16">
 				{/* ── text ── */}
 				<div
 					className={cn(
@@ -125,8 +125,8 @@ function CardFace({
 							: "md:pr-14 lg:pr-20",
 					)}
 				>
-					<div className="w-full max-w-136 rounded-[1.7rem] border border-minuri-silver/55 bg-minuri-white/85 p-6 shadow-[0_20px_44px_-34px_rgba(4,30,43,0.35)] backdrop-blur-[2px] md:p-8">
-						<div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-minuri-silver/60 bg-minuri-white px-3.5 py-1.5">
+					<div className="w-full max-w-136 rounded-[1.7rem] border border-minuri-silver/55 bg-minuri-white/85 p-5 shadow-[0_20px_44px_-34px_rgba(4,30,43,0.35)] backdrop-blur-[2px] sm:p-6 md:p-8">
+						<div className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-minuri-silver/60 bg-minuri-white px-3.5 py-1.5 sm:mb-6">
 							<span
 								aria-hidden
 								className="size-2.5 rounded-full"
@@ -142,19 +142,19 @@ function CardFace({
 							</span>
 						</div>
 
-						<h3 className="text-[2rem] font-bold leading-[1.12] tracking-tight text-minuri-ocean md:text-[2.35rem]">
+						<h3 className="text-[1.75rem] font-bold leading-[1.12] tracking-tight text-minuri-ocean sm:text-[2rem] md:text-[2.35rem]">
 							{card.title}
 						</h3>
 
-						<p className="mt-5 text-[1.03rem] leading-relaxed text-minuri-slate md:text-[1.08rem]">
+						<p className="mt-3 text-[0.98rem] leading-relaxed text-minuri-slate sm:mt-5 md:text-[1.08rem]">
 							{card.body}
 						</p>
 
-						<div className="mt-6 space-y-3.5">
+						<div className="mt-4 space-y-2.5 sm:mt-6 sm:space-y-3.5">
 							{card.options.map((opt, optionIndex) => (
 								<div
 									key={opt.title}
-									className="flex items-start gap-3.5 rounded-xl border border-minuri-silver/55 bg-minuri-white/80 px-3.5 py-3.5 transition-transform duration-300 ease-out hover:-translate-y-0.5"
+									className="flex items-start gap-3 rounded-xl border border-minuri-silver/55 bg-minuri-white/80 px-3 py-3 transition-transform duration-300 ease-out hover:-translate-y-0.5 sm:gap-3.5 sm:px-3.5 sm:py-3.5"
 								>
 									<span
 										aria-hidden
@@ -170,11 +170,11 @@ function CardFace({
 										)}
 									</span>
 									<div>
-										<p className="text-[1rem] font-semibold text-minuri-ocean">
+										<p className="text-[0.95rem] font-semibold text-minuri-ocean sm:text-[1rem]">
 											{opt.title}
 										</p>
 										{opt.description && (
-											<p className="mt-0.5 text-[0.9rem] leading-relaxed text-minuri-slate">
+											<p className="mt-0.5 text-[0.85rem] leading-relaxed text-minuri-slate sm:text-[0.9rem]">
 												{opt.description}
 											</p>
 										)}
@@ -185,10 +185,10 @@ function CardFace({
 					</div>
 				</div>
 
-				{/* ── visual ── */}
+				{/* ── visual — hidden on mobile to prevent overflow in h-screen sticky stage ── */}
 				<div
 					className={cn(
-						"relative flex items-center justify-center py-16 md:min-h-screen md:py-0",
+						"relative hidden items-center justify-center md:flex md:min-h-screen",
 						!visualOnRight && "md:order-1",
 					)}
 				>

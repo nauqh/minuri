@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+    CheckCircle2,
     Compass,
     HeartPulse,
     Home,
     RotateCcw,
     Sandwich,
+    Square,
     Users,
     type LucideIcon,
 } from "lucide-react";
@@ -19,11 +21,8 @@ import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { GuideCard } from "@/components/guides/guide-card";
-import { JourneyNearbyPanel } from "@/components/journey/journey-nearby-panel";
-import {
-    buildWeekPlan,
-    type DayPlan,
-} from "@/lib/journey-week";
+import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
+import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
 
 const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
     "food-eating": Sandwich,
@@ -72,10 +71,12 @@ const TOPIC_COLORS: Record<
 function DayTab({
     plan,
     active,
+    completed,
     onClick,
 }: {
     plan: DayPlan;
     active: boolean;
+    completed: boolean;
     onClick: () => void;
 }) {
     const Icon = TOPIC_ICONS[plan.topicSlug];
@@ -87,12 +88,23 @@ function DayTab({
             onClick={onClick}
             aria-pressed={active}
             className={cn(
-                "group flex min-w-[5.5rem] flex-col items-center gap-1.5 rounded-2xl border px-3 py-3 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
+                "group relative flex min-w-[5.5rem] flex-col items-center gap-1.5 rounded-2xl border px-3 py-3 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
                 active
                     ? "border-minuri-teal bg-minuri-teal shadow-sm"
                     : "border-minuri-silver/70 bg-minuri-white hover:border-minuri-teal/40 hover:bg-minuri-fog",
             )}
         >
+            {completed && (
+                <span className="absolute right-1.5 top-1.5">
+                    <CheckCircle2
+                        className={cn(
+                            "size-3.5",
+                            active ? "text-white/70" : "text-minuri-teal",
+                        )}
+                        aria-hidden
+                    />
+                </span>
+            )}
             <span
                 className={cn(
                     "text-[10px] font-bold uppercase tracking-[0.12em]",
@@ -130,17 +142,22 @@ function DayTab({
 function DayContent({
     plan,
     suburb,
+    completed,
     isBookmarked,
     toggleBookmark,
+    onToggleComplete,
 }: {
     plan: DayPlan;
     suburb: string;
+    completed: boolean;
     isBookmarked: (slug: string) => boolean;
     toggleBookmark: (slug: string) => void;
+    onToggleComplete: () => void;
 }) {
     const prefersReducedMotion = useReducedMotion();
     const colors = TOPIC_COLORS[plan.topicSlug];
     const Icon = TOPIC_ICONS[plan.topicSlug];
+    const guide = plan.guides[0];
 
     return (
         <motion.div
@@ -148,7 +165,10 @@ function DayContent({
             initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -8 }}
-            transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+                duration: prefersReducedMotion ? 0.01 : 0.28,
+                ease: [0.22, 1, 0.36, 1],
+            }}
         >
             {/* Day header */}
             <div className="mb-6 flex items-start gap-4">
@@ -175,26 +195,69 @@ function DayContent({
                 </div>
             </div>
 
-            {/* Guides */}
-            <div className="grid gap-6 sm:grid-cols-2">
-                {plan.guides.map((guide, index) => (
-                    <GuideCard
-                        key={guide.slug}
-                        guide={guide}
-                        href={`/guides/${guide.arc}/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
-                        bookmarked={isBookmarked(guide.slug)}
-                        onToggleBookmark={toggleBookmark}
-                        animationDelay={index * 0.06}
-                    />
-                ))}
-            </div>
+            {/* Guide — single card, full width */}
+            {guide && (
+                <GuideCard
+                    guide={guide}
+                    href={`/guides/${guide.arc}/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
+                    bookmarked={isBookmarked(guide.slug)}
+                    onToggleBookmark={toggleBookmark}
+                    animationDelay={0}
+                />
+            )}
+
+            {/* Task */}
+            {plan.task && (
+                <button
+                    type="button"
+                    onClick={onToggleComplete}
+                    className={cn(
+                        "mt-5 flex w-full items-start gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors",
+                        completed
+                            ? "border-minuri-teal/40 bg-minuri-mist/40"
+                            : "border-minuri-silver/70 bg-minuri-fog/40 hover:border-minuri-teal/30 hover:bg-minuri-fog",
+                    )}
+                    aria-pressed={completed}
+                >
+                    {completed ? (
+                        <CheckCircle2
+                            className="mt-0.5 size-4.5 shrink-0 text-minuri-teal"
+                            aria-hidden
+                        />
+                    ) : (
+                        <Square
+                            className="mt-0.5 size-4.5 shrink-0 text-minuri-silver"
+                            aria-hidden
+                        />
+                    )}
+                    <span>
+                        <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-minuri-mid">
+                            Your task today
+                        </span>
+                        <span
+                            className={cn(
+                                "mt-0.5 block text-sm leading-relaxed",
+                                completed
+                                    ? "text-minuri-teal line-through"
+                                    : "text-minuri-ocean",
+                            )}
+                        >
+                            {plan.task}
+                        </span>
+                    </span>
+                </button>
+            )}
+
+            {/* Inline near-me for today's topic */}
+            <JourneyDayPlaces suburb={suburb} topicSlug={plan.topicSlug} />
         </motion.div>
     );
 }
 
 export function JourneyPlanView() {
     const router = useRouter();
-    const { journeyState, hydrated, clearJourney } = useJourneyState();
+    const { journeyState, hydrated, clearJourney, completedDays, toggleDayComplete } =
+        useJourneyState();
     const { isBookmarked, toggleBookmark } = useGuideBookmarks();
     const prefersReducedMotion = useReducedMotion();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -218,14 +281,16 @@ export function JourneyPlanView() {
         );
     }
 
-    const { suburb, selectedTopics, yourMoment } = journeyState;
-    const weekPlan = buildWeekPlan(selectedTopics);
+    const { suburb, selectedTopics, yourMoment, alreadySorted = [] } = journeyState;
+    const weekPlan = buildWeekPlan(selectedTopics, yourMoment, alreadySorted);
     const currentDay = weekPlan.find((d) => d.day === activeDay) ?? weekPlan[0];
 
     const truncatedMoment =
         yourMoment.length > 120
             ? yourMoment.slice(0, 117).trimEnd() + "..."
             : yourMoment;
+
+    const doneCount = completedDays.size;
 
     function handleStartOver() {
         clearJourney();
@@ -279,11 +344,14 @@ export function JourneyPlanView() {
                         <motion.div
                             initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: prefersReducedMotion ? 0.01 : 0.4, delay: 0.1 }}
+                            transition={{
+                                duration: prefersReducedMotion ? 0.01 : 0.4,
+                                delay: 0.1,
+                            }}
                             className="mt-4 flex gap-3 rounded-xl border border-minuri-silver/60 bg-minuri-fog/50 px-4 py-3.5"
                         >
                             <span className="mt-0.5 text-xl leading-none text-minuri-silver">
-                                "
+                                &ldquo;
                             </span>
                             <p className="text-sm italic leading-relaxed text-minuri-slate">
                                 {truncatedMoment}
@@ -292,8 +360,8 @@ export function JourneyPlanView() {
                     )}
 
                     <p className="mt-4 text-sm text-minuri-slate">
-                        One focus per day. Seven days to get settled. Each day
-                        has a guide to read and services to find near you.
+                        One guide per day. One task to do. Places to go near{" "}
+                        {suburb} — all in one place.
                     </p>
                 </motion.div>
 
@@ -318,20 +386,30 @@ export function JourneyPlanView() {
                                     key={plan.day}
                                     plan={plan}
                                     active={plan.day === activeDay}
+                                    completed={completedDays.has(plan.day)}
                                     onClick={() => selectDay(plan.day)}
                                 />
                             ))}
                         </div>
 
                         {/* Day content */}
-                        <div ref={scrollRef} className="rounded-2xl border border-minuri-silver/60 bg-minuri-white p-6 md:p-8">
+                        <div
+                            ref={scrollRef}
+                            className="rounded-2xl border border-minuri-silver/60 bg-minuri-white p-6 md:p-8"
+                        >
                             <AnimatePresence mode="wait">
                                 {currentDay && (
                                     <DayContent
                                         plan={currentDay}
                                         suburb={suburb}
+                                        completed={completedDays.has(
+                                            currentDay.day,
+                                        )}
                                         isBookmarked={isBookmarked}
                                         toggleBookmark={toggleBookmark}
+                                        onToggleComplete={() =>
+                                            toggleDayComplete(currentDay.day)
+                                        }
                                     />
                                 )}
                             </AnimatePresence>
@@ -367,7 +445,7 @@ export function JourneyPlanView() {
                         </div>
                     </motion.div>
 
-                    {/* Sidebar: services near you */}
+                    {/* Sidebar: week progress overview */}
                     <motion.aside
                         className="lg:sticky lg:top-6 lg:self-start"
                         initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
@@ -378,18 +456,22 @@ export function JourneyPlanView() {
                             delay: prefersReducedMotion ? 0 : 0.1,
                         }}
                     >
-                        <JourneyNearbyPanel suburb={suburb} />
-
-                        {/* Week overview */}
-                        <div className="mt-6 rounded-2xl border border-minuri-silver/60 bg-minuri-fog/40 px-5 py-5">
+                        {/* Progress summary */}
+                        <div className="rounded-2xl border border-minuri-silver/60 bg-minuri-fog/40 px-5 py-5">
                             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-                                This week at a glance
+                                Your week at a glance
                             </p>
-                            <ol className="mt-4 space-y-2.5">
+                            {doneCount > 0 && (
+                                <p className="mt-1 text-xs text-minuri-slate">
+                                    {doneCount} of {weekPlan.length} days done
+                                </p>
+                            )}
+                            <ol className="mt-4 space-y-2">
                                 {weekPlan.map((plan) => {
                                     const Icon = TOPIC_ICONS[plan.topicSlug];
                                     const colors = TOPIC_COLORS[plan.topicSlug];
                                     const isActive = plan.day === activeDay;
+                                    const isDone = completedDays.has(plan.day);
                                     return (
                                         <li key={plan.day}>
                                             <button
@@ -401,28 +483,39 @@ export function JourneyPlanView() {
                                                     "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition-colors",
                                                     isActive
                                                         ? "bg-minuri-teal/10 text-minuri-ocean"
-                                                        : "hover:bg-minuri-silver/20 text-minuri-slate",
+                                                        : "text-minuri-slate hover:bg-minuri-silver/20",
                                                 )}
                                             >
                                                 <span
                                                     className={cn(
                                                         "flex size-6 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold",
-                                                        isActive
+                                                        isDone
                                                             ? "bg-minuri-teal text-white"
-                                                            : colors.iconBg +
-                                                              " " +
-                                                              colors.text,
+                                                            : isActive
+                                                              ? "bg-minuri-teal text-white"
+                                                              : colors.iconBg +
+                                                                " " +
+                                                                colors.text,
                                                     )}
                                                 >
-                                                    {plan.day}
+                                                    {isDone ? (
+                                                        <CheckCircle2
+                                                            className="size-3.5"
+                                                            aria-hidden
+                                                        />
+                                                    ) : (
+                                                        plan.day
+                                                    )}
                                                 </span>
-                                                <span>
+                                                <span className="min-w-0">
                                                     <span
                                                         className={cn(
                                                             "block text-xs font-semibold",
-                                                            isActive
+                                                            isDone
                                                                 ? "text-minuri-teal"
-                                                                : "text-minuri-ocean",
+                                                                : isActive
+                                                                  ? "text-minuri-teal"
+                                                                  : "text-minuri-ocean",
                                                         )}
                                                     >
                                                         {plan.theme}

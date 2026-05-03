@@ -5,9 +5,9 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
+	ArrowLeft,
 	ChevronDown,
 	ExternalLink,
-	House,
 	List,
 	LocateFixed,
 	Map,
@@ -527,10 +527,10 @@ export function NearMeView({
 						<button
 							type="button"
 							onClick={() => router.push("/")}
-							className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-minuri-silver/50 bg-minuri-fog px-3 py-1.5 text-xs font-medium text-minuri-slate transition hover:border-minuri-silver hover:text-minuri-mid"
+							className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
 						>
-							<House className="size-3.5" />
-							Home
+							<ArrowLeft className="size-3.5" aria-hidden />
+							Back to home
 						</button>
 					</div>
 				</div>
