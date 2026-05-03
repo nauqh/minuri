@@ -42,6 +42,7 @@ import {
 	unsavePlaceFromHub,
 } from "@/components/landing/landing-local-state";
 import { PlaceCard, type CardLayout } from "@/components/near-me/place-card";
+import { getCachedPlaces, setCachedPlaces } from "@/lib/near-me-cache";
 
 const NearMeMap = dynamic(
 	() =>
@@ -316,81 +317,91 @@ export function NearMeView({
 
 	function fetchPlaces() {
 		if (!displaySuburb) return;
+		const capturedCoords = userCoords;
+
+		function applyRaw(payload: NearbyInterestRecord[]) {
+			const mapped = (Array.isArray(payload) ? payload : []).map(
+				(place, index): NearMePlace => {
+					const { isOpen, label: hoursLabel } = parseOpenState(
+						place.open_state ?? undefined,
+					);
+					const tags = topic === "health-wellbeing" ? ["Bulk-billing: call to confirm"] : undefined;
+					const placeLat = place.gps_coordinates?.latitude ?? -37.8136;
+					const placeLng = place.gps_coordinates?.longitude ?? 144.9631;
+					return {
+						id:
+							place.place_id ||
+							`${topic}-${index}-${place.title.replace(/\s+/g, "-").toLowerCase()}`,
+						name: place.title,
+						address: place.address ?? displaySuburb,
+						lat: placeLat,
+						lng: placeLng,
+						topic,
+						subtype: activeSubtype ?? "general",
+						phone: place.phone ?? undefined,
+						website: place.website ?? undefined,
+						serviceOptions: place.service_options ?? undefined,
+						rating:
+							typeof place.rating === "number" ? place.rating : undefined,
+						reviewCount:
+							typeof place.reviews === "number" ? place.reviews : undefined,
+						type: place.type ?? undefined,
+						price: place.price ?? undefined,
+						hours: hoursLabel || undefined,
+						openNow: isOpen,
+						snippet: place.description
+							? place.description.replace(/^"|"$/g, "")
+							: undefined,
+						thumbnail: place.thumbnail ?? undefined,
+						photos: place.photos ?? undefined,
+						tags,
+						distanceKm:
+							usingLocation && capturedCoords
+								? Number(
+										haversineKm(
+											capturedCoords.lat,
+											capturedCoords.lng,
+											placeLat,
+											placeLng,
+										).toFixed(1),
+									)
+								: undefined,
+					};
+				},
+			);
+
+			if (!mapped.length) {
+				setStatus("empty");
+				setMessage(topicMeta.emptyPrompt);
+				setPlaces([]);
+				setSelectedPlaceId(null);
+				return;
+			}
+
+			if (usingLocation && capturedCoords) {
+				mapped.sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+			}
+			setPlaces(mapped);
+			setSelectedPlaceId(mapped[0]?.id ?? null);
+			setStatus("success");
+		}
+
+		const cached = getCachedPlaces(displaySuburb, topic, activeSubtype);
+		if (cached) {
+			applyRaw(cached);
+			return;
+		}
+
 		setStatus("loading");
 		setMessage("");
 		const params = new URLSearchParams({ suburb: displaySuburb, topic });
 		if (activeSubtype) params.set("subtype", activeSubtype);
-		const capturedCoords = userCoords;
 		void fetch(`/api/nearby-interest?${params.toString()}`)
 			.then(async (res) => {
 				if (!res.ok) throw new Error("Failed");
 				const payload = (await res.json()) as NearbyInterestRecord[];
-				const mapped = (Array.isArray(payload) ? payload : []).map(
-					(place, index): NearMePlace => {
-						const { isOpen, label: hoursLabel } = parseOpenState(
-							place.open_state ?? undefined,
-						);
-						const tags = topic === "health-wellbeing" ? ["Bulk-billing: call to confirm"] : undefined;
-						const placeLat = place.gps_coordinates?.latitude ?? -37.8136;
-						const placeLng = place.gps_coordinates?.longitude ?? 144.9631;
-						return {
-							id:
-								place.place_id ||
-								`${topic}-${index}-${place.title.replace(/\s+/g, "-").toLowerCase()}`,
-							name: place.title,
-							address: place.address ?? displaySuburb,
-							lat: placeLat,
-							lng: placeLng,
-							topic,
-							subtype: activeSubtype ?? "general",
-							phone: place.phone ?? undefined,
-							website: place.website ?? undefined,
-							serviceOptions: place.service_options ?? undefined,
-							rating:
-								typeof place.rating === "number" ? place.rating : undefined,
-							reviewCount:
-								typeof place.reviews === "number" ? place.reviews : undefined,
-							type: place.type ?? undefined,
-							price: place.price ?? undefined,
-							hours: hoursLabel || undefined,
-							openNow: isOpen,
-							snippet: place.description
-								? place.description.replace(/^"|"$/g, "")
-								: undefined,
-							thumbnail: place.thumbnail ?? undefined,
-							photos: place.photos ?? undefined,
-							tags,
-							distanceKm:
-								usingLocation && capturedCoords
-									? Number(
-											haversineKm(
-												capturedCoords.lat,
-												capturedCoords.lng,
-												placeLat,
-												placeLng,
-											).toFixed(1),
-										)
-									: undefined,
-						};
-					},
-				);
-
-				if (!mapped.length) {
-					setStatus("empty");
-					setMessage(topicMeta.emptyPrompt);
-					setPlaces([]);
-					setSelectedPlaceId(null);
-					return;
-				}
-
-				if (usingLocation && capturedCoords) {
-					mapped.sort(
-						(a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999),
-					);
-				}
-				setPlaces(mapped);
-				setSelectedPlaceId(mapped[0]?.id ?? null);
-				setStatus("success");
+				setCachedPlaces(displaySuburb, topic, activeSubtype, Array.isArray(payload) ? payload : []);
+				applyRaw(payload);
 			})
 			.catch(() => {
 				setStatus("error");

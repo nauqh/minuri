@@ -17,7 +17,9 @@ export async function GET(request: NextRequest) {
 		}
 
 		const payload = await fetchNearbyInterest({ suburb, topic, subtype });
-		return Response.json(payload);
+		return Response.json(payload, {
+			headers: { "Cache-Control": "public, max-age=300, stale-while-revalidate=600" },
+		});
 	} catch {
 		return Response.json(
 			{ error: "Nearby interest service is temporarily unavailable" },

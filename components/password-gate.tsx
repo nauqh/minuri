@@ -53,7 +53,13 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
 			const el = node instanceof Element ? node : node.parentElement;
 			const target = el ? findGateTarget(el) : null;
 			if (!target) return;
-			if (e.button !== 0 || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
+			if (
+				e.button !== 0 ||
+				e.metaKey ||
+				e.ctrlKey ||
+				e.altKey ||
+				e.shiftKey
+			) {
 				return;
 			}
 			const targetAttr = target.getAttribute("target");
