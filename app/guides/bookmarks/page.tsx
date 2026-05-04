@@ -9,7 +9,7 @@ export default function BookmarksPage() {
 			<Suspense fallback={null}>
 				<GuidesLibraryView mode="bookmarks" />
 			</Suspense>
-			<ScrollToTopButton trackedSectionIds={[]} />
+			<ScrollToTopButton />
 		</>
 	);
 }

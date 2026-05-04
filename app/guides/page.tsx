@@ -9,7 +9,7 @@ export default function GuidesPage() {
 			<Suspense fallback={null}>
 				<GuidesLibraryView mode="library" />
 			</Suspense>
-			<ScrollToTopButton trackedSectionIds={[]} />
+			<ScrollToTopButton />
 		</>
 	);
 }

@@ -97,7 +97,7 @@ export default async function GuidesSegmentsPage({
                     from={from}
                     suburb={suburb}
                 />
-                <ScrollToTopButton trackedSectionIds={[]} />
+                <ScrollToTopButton />
             </>
         );
     }
