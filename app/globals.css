@@ -67,7 +67,7 @@
 }
 
 :root {
-	--vibe-accent: #3DBFB8; /* default: Fresh Mint — overwritten by useVibe() */
+	--vibe-accent: #3dbfb8; /* default: Fresh Mint — overwritten by useVibe() */
 	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.145 0 0);
 	--popover: oklch(1 0 0);

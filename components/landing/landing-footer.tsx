@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 
 import { easeOut } from "@/components/landing/home-constants";
 import { LandingFooterCurve } from "@/components/landing/home-shared";
+import { scrollToTopAndHighlightLandingCta } from "@/lib/scroll-to-top-and-highlight-cta";
 
 function TramIllustration() {
 	return (
@@ -232,27 +233,7 @@ export function LandingFooter() {
 					</div>
 					<button
 						type="button"
-						onClick={() => {
-							if (window.scrollY <= 5) {
-								window.dispatchEvent(
-									new CustomEvent("minuri:highlight-cta"),
-								);
-								return;
-							}
-							window.scrollTo({ top: 0, behavior: "smooth" });
-							const onScroll = () => {
-								if (window.scrollY <= 5) {
-									window.removeEventListener(
-										"scroll",
-										onScroll,
-									);
-									window.dispatchEvent(
-										new CustomEvent("minuri:highlight-cta"),
-									);
-								}
-							};
-							window.addEventListener("scroll", onScroll);
-						}}
+						onClick={scrollToTopAndHighlightLandingCta}
 						className="group flex items-center gap-1 text-[0.78rem] font-semibold text-minuri-white/45 transition-colors hover:text-minuri-mint"
 					>
 						Start where you are

@@ -11,6 +11,7 @@ import {
 	type MotionValue,
 } from "motion/react";
 import { cn } from "@/lib/utils";
+import { scrollToTopAndHighlightLandingCta } from "@/lib/scroll-to-top-and-highlight-cta";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -115,7 +116,7 @@ function CardFace({
 				style={{ background: card.color }}
 			/>
 
-			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:px-10 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:px-16">
+			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:px-16">
 				{/* ── text ── */}
 				<div
 					className={cn(
@@ -287,7 +288,7 @@ export function SpotlightScrollSection() {
 			</div>
 
 			{/* CTA button */}
-			<div className="bg-minuri-white px-6 pb-20 pt-12 sm:px-10 md:pt-16">
+			<div className="bg-minuri-white px-6 pb-20 pt-12 md:pt-16">
 				<motion.div
 					className="mx-auto mt-16 w-full max-w-2xl md:mt-24"
 					initial={{ opacity: 0, y: 28 }}
@@ -301,20 +302,7 @@ export function SpotlightScrollSection() {
 				>
 					<button
 						type="button"
-						onClick={() => {
-							if (window.scrollY <= 5) {
-								window.dispatchEvent(new CustomEvent("minuri:highlight-cta"));
-								return;
-							}
-							window.scrollTo({ top: 0, behavior: "smooth" });
-							const onScroll = () => {
-								if (window.scrollY <= 5) {
-									window.removeEventListener("scroll", onScroll);
-									window.dispatchEvent(new CustomEvent("minuri:highlight-cta"));
-								}
-							};
-							window.addEventListener("scroll", onScroll);
-						}}
+						onClick={scrollToTopAndHighlightLandingCta}
 						className="group relative flex h-22 w-full cursor-pointer items-center overflow-hidden rounded-[1.35rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-minuri-white hover:bg-none hover:border-minuri-silver/80 hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
 					>
 						<span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.65rem,3.8vw,2.1rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-9 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-9 group-focus-visible:translate-x-0 group-focus-visible:text-foreground">

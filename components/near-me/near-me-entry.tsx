@@ -131,7 +131,7 @@ export function NearMeEntry() {
 	return (
 		<div className="flex min-h-screen flex-col lg:flex-row">
 			{/* ── Brand panel (desktop only) ── */}
-			<div className="hidden lg:flex lg:w-[42%] xl:w-[45%] flex-col justify-between bg-minuri-ocean px-10 py-14 xl:px-14">
+			<div className="hidden lg:flex lg:w-[42%] xl:w-[45%] flex-col justify-between bg-minuri-ocean px-6 py-14 xl:px-6">
 				<Link
 					href="/"
 					className="inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"

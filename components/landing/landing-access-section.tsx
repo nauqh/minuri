@@ -70,7 +70,11 @@ export function LandingAccessSection() {
 					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, margin: "0px 0px -6% 0px" }}
-					transition={{ duration: 0.55, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+					transition={{
+						duration: 0.55,
+						delay: 0.3,
+						ease: [0.22, 1, 0.36, 1],
+					}}
 				>
 					{STATS.map((stat, i) => (
 						<motion.div

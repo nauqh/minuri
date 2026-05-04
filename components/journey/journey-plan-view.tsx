@@ -500,9 +500,7 @@ function DayContent({
 								key={guide.slug}
 								guide={guide}
 								suburb={suburb}
-								open={
-									index === 0 || openGuides.has(guide.slug)
-								}
+								open={index === 0 || openGuides.has(guide.slug)}
 								onToggle={() => {
 									if (index === 0) return;
 									toggleGuide(guide.slug);
@@ -656,7 +654,7 @@ export function JourneyPlanView() {
 			/>
 
 			{/* Header */}
-			<header className="px-6 py-4 md:px-10">
+			<header className="px-6 py-4">
 				<div className="mx-auto flex max-w-screen-xl items-center justify-between">
 					<Link
 						href="/"
@@ -692,7 +690,7 @@ export function JourneyPlanView() {
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-screen-xl px-6 py-10 md:px-10 md:py-12">
+			<main className="mx-auto max-w-screen-xl px-6 py-10 md:py-12">
 				{/* Hero */}
 				<motion.div
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 18 }}

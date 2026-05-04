@@ -134,7 +134,9 @@ export function LandingCareSection() {
 			<div className="md:sticky md:top-0 md:flex md:h-screen md:items-start md:pt-[12vh]">
 				<div className="mx-auto w-full max-w-screen-2xl px-5 md:px-8">
 					<div className="text-center">
-						<p className="landing-section-kicker">Topics we cover</p>
+						<p className="landing-section-kicker">
+							Topics we cover
+						</p>
 						<h2 className="landing-section-heading">
 							Support across everyday life
 						</h2>

@@ -36,12 +36,17 @@ export function LandingHeader({
 	const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
 
 	useEffect(() => {
+		let clearHighlight: ReturnType<typeof setTimeout> | undefined;
 		const handler = () => {
 			setCtaHighlighted(true);
-			setTimeout(() => setCtaHighlighted(false), 1600);
+			if (clearHighlight) clearTimeout(clearHighlight);
+			clearHighlight = setTimeout(() => setCtaHighlighted(false), 2800);
 		};
 		window.addEventListener("minuri:highlight-cta", handler);
-		return () => window.removeEventListener("minuri:highlight-cta", handler);
+		return () => {
+			window.removeEventListener("minuri:highlight-cta", handler);
+			if (clearHighlight) clearTimeout(clearHighlight);
+		};
 	}, []);
 
 	useEffect(() => {
@@ -60,7 +65,7 @@ export function LandingHeader({
 	return (
 		<div className="relative">
 			<motion.header
-				className="mx-auto flex w-full items-center justify-between bg-minuri-white py-2 md:min-h-21 md:rounded-full md:py-0"
+				className="-mx-6 flex w-[calc(100%+3rem)] max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-21 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
 				initial={{ opacity: 0, y: -18 }}
 				animate={
 					headerVisible
@@ -73,10 +78,14 @@ export function LandingHeader({
 				}}
 			>
 				<motion.div
-					className="flex items-center gap-8 md:gap-12"
+					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-6 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12"
 					initial={{ opacity: 0, y: 12 }}
 					animate={{ opacity: headerVisible ? 1 : 0, y: 0 }}
-					transition={{ duration: 0.45, delay: 0.12, ease: entranceEase }}
+					transition={{
+						duration: 0.45,
+						delay: 0.12,
+						ease: entranceEase,
+					}}
 				>
 					<Link
 						href="/"
@@ -114,40 +123,31 @@ export function LandingHeader({
 				</motion.div>
 
 				<motion.div
-					className="ml-auto flex items-center gap-2.5 md:gap-3.5"
+					className="flex items-stretch gap-2.5 md:ml-auto md:items-center md:gap-3.5"
 					initial={{ opacity: 0, x: 12 }}
 					animate={{ opacity: headerVisible ? 1 : 0, x: 0 }}
-					transition={{ duration: 0.45, delay: 0.2, ease: entranceEase }}
+					transition={{
+						duration: 0.45,
+						delay: 0.2,
+						ease: entranceEase,
+					}}
 				>
 					<motion.div
-						className="hidden md:block"
+						className="hidden rounded-full md:inline-flex"
 						animate={
 							ctaHighlighted
-								? {
-										scale: [1, 1.13, 0.97, 1.1, 1],
-										boxShadow: [
-											"0 0 0 0px rgba(20,184,166,0)",
-											"0 0 0 12px rgba(20,184,166,0.6)",
-											"0 0 0 4px rgba(20,184,166,0.15)",
-											"0 0 0 12px rgba(20,184,166,0.55)",
-											"0 0 0 0px rgba(20,184,166,0)",
-										],
-									}
-								: {
-										scale: 1,
-										boxShadow: "0 0 0 0px rgba(20,184,166,0)",
-									}
+								? { scale: [1, 1.13, 0.97, 1.1, 1] }
+								: { scale: 1 }
 						}
 						transition={{
-							duration: 2,
+							duration: 2.5,
 							ease: "easeInOut",
 							times: [0, 0.25, 0.5, 0.75, 1],
 						}}
-						style={{ borderRadius: 9999 }}
 					>
 						<Link
 							href="/journey"
-							className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+							className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-ocean px-6 text-base font-medium text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
 						>
 							Start your journey
 							<ChevronRight
@@ -157,20 +157,22 @@ export function LandingHeader({
 							/>
 						</Link>
 					</motion.div>
-					<div className="relative md:hidden">
+					<div className="relative flex self-stretch md:hidden">
 						<button
 							type="button"
-							className="relative z-50 flex size-10 cursor-pointer items-center justify-center rounded-full text-foreground transition-opacity duration-200 ease-out hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-ocean/45 active:opacity-85"
+							className="relative z-50 flex h-full min-h-14 w-[3.35rem] shrink-0 cursor-pointer items-center justify-center rounded-none bg-minuri-ocean text-minuri-white transition-opacity duration-200 ease-out hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-ocean active:opacity-90"
 							aria-expanded={mobileMenuOpen}
 							aria-haspopup="true"
 							aria-controls="landing-mobile-menu-v2"
-							aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+							aria-label={
+								mobileMenuOpen ? "Close menu" : "Open menu"
+							}
 							onClick={() => setMobileMenuOpen((open) => !open)}
 						>
 							<span className="relative size-5" aria-hidden>
 								<X
 									strokeWidth={2.25}
-									className={`absolute left-0 top-0 size-5 stroke-foreground text-foreground transition-all duration-300 ease-in-out ${
+									className={`absolute left-0 top-0 size-5 stroke-minuri-white text-minuri-white transition-all duration-300 ease-in-out ${
 										mobileMenuOpen
 											? "rotate-0 opacity-100"
 											: "rotate-90 opacity-0"
@@ -178,7 +180,7 @@ export function LandingHeader({
 								/>
 								<Menu
 									strokeWidth={2.25}
-									className={`absolute left-0 top-0 size-5 stroke-foreground text-foreground transition-all duration-300 ease-in-out ${
+									className={`absolute left-0 top-0 size-5 stroke-minuri-white text-minuri-white transition-all duration-300 ease-in-out ${
 										mobileMenuOpen
 											? "-rotate-90 opacity-0"
 											: "rotate-0 opacity-100"
@@ -189,8 +191,6 @@ export function LandingHeader({
 					</div>
 				</motion.div>
 			</motion.header>
-
-			<div className="-mx-4 mt-2 h-px bg-minuri-silver/65 md:hidden" />
 
 			<AnimatePresence>
 				{mobileMenuOpen && (

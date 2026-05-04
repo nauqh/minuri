@@ -19,7 +19,7 @@ export function GuidesShell({
 }: GuidesShellProps) {
 	return (
 		<div className="min-h-screen bg-minuri-white text-foreground">
-			<div className="mx-auto max-w-screen-2xl px-6 md:px-10">
+			<div className="mx-auto max-w-screen-2xl px-6">
 				<div className="flex items-center justify-between py-3">
 					{headerStart}
 					{headerEnd && <div>{headerEnd}</div>}
@@ -27,12 +27,14 @@ export function GuidesShell({
 
 				<div className="pb-8 pt-6 text-center md:pt-8">
 					<p className="landing-section-kicker">First-time guides</p>
-					<h1 className="landing-section-heading md:text-6xl">{title}</h1>
+					<h1 className="landing-section-heading md:text-6xl">
+						{title}
+					</h1>
 					<p className="landing-section-subheading">{description}</p>
 				</div>
 			</div>
 
-			<main className="mx-auto max-w-screen-2xl px-6 pb-10 md:px-10">
+			<main className="mx-auto max-w-screen-2xl px-6 pb-10">
 				{children}
 			</main>
 		</div>

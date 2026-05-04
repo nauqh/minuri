@@ -181,15 +181,15 @@ export function LandingHeroSectionV2({
 	}, []);
 
 	return (
-		<section className="relative flex min-h-screen flex-col overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen-2xl px-6 pb-10 pt-4 md:px-10 md:pt-0">
+		<section className="relative flex min-h-screen flex-col overflow-hidden md:overflow-visible bg-minuri-white text-minuri-ink">
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen-2xl px-8 pb-10 pt-4 sm:px-10 md:px-6 md:pt-0">
 				<LandingHeader
 					headerVisible={headerVisible}
 					onHeroReveal={onHeroReveal}
 				/>
 
 				<motion.div
-					className="flex flex-1 flex-col pb-10 pt-10 md:pb-16 md:pt-12"
+					className="flex flex-1 flex-col pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-16 md:pt-12"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -223,7 +223,7 @@ export function LandingHeroSectionV2({
 							Living independently
 						</motion.span>
 						<motion.h1
-							className="mt-5 w-full text-5xl font-black uppercase tracking-tight text-minuri-teal md:text-7xl"
+							className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-7xl md:leading-none"
 							variants={{
 								hidden: {
 									opacity: 0,
@@ -268,10 +268,10 @@ export function LandingHeroSectionV2({
 						</motion.h1>
 					</div>
 
-					<div className="mt-0 grid flex-1 gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
+					<div className="mt-0 grid flex-1 gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-stretch md:gap-10">
 						<div className="flex h-full flex-col">
 							<motion.p
-								className="mt-4 text-2xl font-semibold text-minuri-ocean"
+								className="hidden text-2xl font-semibold leading-snug text-minuri-ocean md:mt-4 md:block md:leading-tight"
 								variants={{
 									hidden: {
 										opacity: 0,
@@ -291,7 +291,7 @@ export function LandingHeroSectionV2({
 								independently
 							</motion.p>
 							<motion.div
-								className="mt-auto"
+								className="mt-auto space-y-6 pt-10 md:space-y-0 md:pt-0"
 								variants={{
 									hidden: {
 										opacity: 0,
@@ -307,13 +307,13 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<p className="max-w-xl leading-relaxed text-minuri-ocean font-medium">
+								<p className="max-w-xl text-[1.0625rem] leading-[1.6] text-minuri-ocean font-medium md:text-base md:leading-relaxed">
 									Get plain-language guides, find nearby
 									services, and follow clear next steps for
 									day-to-day independent life.
 								</p>
 								<motion.div
-									className="my-6 flex flex-wrap items-center gap-3"
+									className="flex flex-wrap items-center gap-4 md:my-6 md:gap-3 max-md:flex-col max-md:items-stretch pt-2 md:pt-0"
 									variants={{
 										hidden: {
 											opacity: 0,
@@ -332,7 +332,7 @@ export function LandingHeroSectionV2({
 								>
 									<Link
 										href="/near-me"
-										className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-6 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6"
 									>
 										Find nearby support
 										<ChevronRight
@@ -342,7 +342,7 @@ export function LandingHeroSectionV2({
 									</Link>
 									<Link
 										href="/guides"
-										className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-6 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6"
 									>
 										Start with guides
 										<ChevronRight
@@ -354,7 +354,7 @@ export function LandingHeroSectionV2({
 							</motion.div>
 						</div>
 
-						<div className="relative z-10 flex h-full w-full flex-col md:pb-4 min-[1500px]:origin-top min-[1500px]:scale-[1.18]">
+						<div className="relative z-10 flex h-full w-full flex-col md:-ml-8 md:pb-4 min-[1500px]:origin-top min-[1500px]:scale-[1.18]">
 							<div
 								className="grid h-full max-h-[520px] grid-cols-2 gap-2.5 md:gap-3"
 								style={{ gridAutoRows: "1fr" }}

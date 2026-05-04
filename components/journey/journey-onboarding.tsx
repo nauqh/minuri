@@ -293,7 +293,7 @@ export function JourneyOnboarding() {
 						},
 					}}
 				>
-					<div className="mx-auto h-full max-w-screen-xl px-6 py-8 md:px-10 md:py-10">
+					<div className="mx-auto h-full max-w-screen-xl px-6 py-8 md:py-10">
 						<LayoutGroup>
 							<div
 								className={cn(
