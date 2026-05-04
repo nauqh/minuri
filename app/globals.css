@@ -183,6 +183,7 @@
 		@apply font-sans;
 		position: relative;
 		scroll-behavior: smooth;
+		overflow-x: hidden;
 	}
 }
 

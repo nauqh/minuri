@@ -15,16 +15,27 @@ const TOPIC_PLACE_LABEL: Record<GuideTopicSlug, string> = {
     "social-belonging": "community centres & volunteering",
 };
 
+const placesCache = new Map<string, NearbyInterestRecord[]>();
+
 type Props = {
     suburb: string;
     topicSlug: GuideTopicSlug;
 };
 
 export function JourneyDayPlaces({ suburb, topicSlug }: Props) {
-    const [places, setPlaces] = useState<NearbyInterestRecord[]>([]);
-    const [ready, setReady] = useState(false);
+    const cacheKey = `${suburb}:${topicSlug}`;
+    const [places, setPlaces] = useState<NearbyInterestRecord[]>(
+        () => placesCache.get(cacheKey) ?? [],
+    );
+    const [ready, setReady] = useState(() => placesCache.has(cacheKey));
 
     useEffect(() => {
+        if (placesCache.has(cacheKey)) {
+            setPlaces(placesCache.get(cacheKey)!);
+            setReady(true);
+            return;
+        }
+
         let cancelled = false;
         setReady(false);
         setPlaces([]);
@@ -36,7 +47,9 @@ export function JourneyDayPlaces({ suburb, topicSlug }: Props) {
             .then((r) => r.json() as Promise<NearbyInterestRecord[]>)
             .then((data) => {
                 if (cancelled) return;
-                setPlaces(Array.isArray(data) ? data.slice(0, 3) : []);
+                const results = Array.isArray(data) ? data.slice(0, 3) : [];
+                placesCache.set(cacheKey, results);
+                setPlaces(results);
                 setReady(true);
             })
             .catch(() => {
@@ -46,7 +59,7 @@ export function JourneyDayPlaces({ suburb, topicSlug }: Props) {
         return () => {
             cancelled = true;
         };
-    }, [suburb, topicSlug]);
+    }, [cacheKey, suburb, topicSlug]);
 
     if (!ready || places.length === 0) return null;
 

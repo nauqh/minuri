@@ -19,7 +19,8 @@ import {
 	useReducedMotion,
 } from "motion/react";
 
-import { GUIDE_TOPICS, type GuideTopicSlug } from "@/content/guides";
+import Image from "next/image";
+import { GUIDES, GUIDE_TOPICS, type GuideTopicSlug } from "@/content/guides";
 import { normalizeSuburbName, type SuburbOption } from "@/lib/suburbs";
 import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
@@ -219,31 +220,71 @@ export function JourneyOnboarding() {
 			{stage === "loading" ? (
 				<motion.div
 					key="loading"
-					className="flex h-screen flex-col items-center justify-center bg-minuri-white px-6"
-					initial={{
-						opacity: 0,
-						scale: prefersReducedMotion ? 1 : 0.96,
-					}}
+					className="flex min-h-screen flex-col items-center justify-center bg-minuri-white px-6 py-16"
+					initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.97 }}
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{
 						duration: prefersReducedMotion ? 0.01 : 0.35,
 						ease: [0.22, 1, 0.36, 1],
 					}}
 				>
-					<div className="text-center">
-						<Loader2 className="mx-auto size-10 animate-spin text-minuri-teal" />
-						<p className="mt-6 text-2xl font-bold text-minuri-ocean">
-							Putting together your Melbourne starter kit...
-						</p>
-						<p className="mt-3 text-sm text-minuri-slate">
-							Personalising your guide path for{" "}
-							{selectedSuburb?.locality}
-						</p>
+					<div className="w-full max-w-2xl">
+						{/* Spinner + heading */}
+						<div className="text-center">
+							<Loader2 className="mx-auto size-10 animate-spin text-minuri-teal" />
+							<p className="mt-6 text-2xl font-bold text-minuri-ocean md:text-3xl">
+								Putting together your Melbourne starter kit...
+							</p>
+							<p className="mt-3 text-sm text-minuri-slate">
+								Personalising your guide path for{" "}
+								{selectedSuburb?.locality}
+							</p>
+						</div>
+
+						{/* Guide thumbnail grid */}
+						{(() => {
+							const previewGuides = GUIDES.filter(
+								(g) =>
+									g.isPublished &&
+									(selectedTopics.length === 0 ||
+										selectedTopics.includes(g.topic)),
+							).slice(0, 8);
+							return (
+								<div className="mt-10 grid grid-cols-4 gap-3">
+									{previewGuides.map((guide, i) => (
+										<motion.div
+											key={guide.slug}
+											initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 14 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{
+												duration: prefersReducedMotion ? 0.01 : 0.32,
+												delay: prefersReducedMotion ? 0 : 0.25 + i * 0.07,
+												ease: [0.22, 1, 0.36, 1],
+											}}
+											className="overflow-hidden rounded-2xl bg-minuri-fog"
+										>
+											<div className="relative aspect-[4/3] w-full">
+												<Image
+													src={guide.thumbnailUrl}
+													alt={guide.title}
+													fill
+													className="object-cover"
+													sizes="(max-width: 640px) 40vw, 200px"
+												/>
+											</div>
+											<p className="line-clamp-2 px-2.5 py-2 text-[11px] font-medium leading-snug text-minuri-ocean">
+												{guide.title}
+											</p>
+										</motion.div>
+									))}
+								</div>
+							);
+						})()}
 					</div>
 				</motion.div>
 			) : (
-				<motion.div
-					key="form"
+			<motion.div
+				key="form"
 					className="h-screen overflow-hidden bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]"
 					exit={{
 						opacity: 0,
@@ -1053,7 +1094,7 @@ export function JourneyOnboarding() {
 							</div>
 						</LayoutGroup>
 					</div>
-				</motion.div>
+			</motion.div>
 			)}
 		</AnimatePresence>
 	);

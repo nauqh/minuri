@@ -38,7 +38,7 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 			{!done && (
 				<motion.div
 					key="loading"
-					className="fixed inset-0 z-[200] overflow-hidden pointer-events-none select-none"
+					className="fixed inset-0 z-200 overflow-hidden pointer-events-none select-none"
 					style={{ backgroundColor: "var(--minuri-ocean)" }}
 					exit={{ y: "-100%" }}
 					transition={{ duration: 0.72, ease: [0.76, 0, 0.24, 1] }}
@@ -46,8 +46,8 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 					{/* Top: label + progress line */}
 					<div className="flex items-center gap-5 px-7 pt-8">
 						<span
-							className="shrink-0 text-sm font-medium uppercase tracking-[0.22em]"
-							style={{ color: "var(--minuri-teal)" }}
+							className="shrink-0 text-sm font-light uppercase tracking-[0.22em]"
+							style={{ color: "var(--minuri-white)" }}
 						>
 							Loading..
 						</span>
@@ -56,7 +56,7 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 								className="h-[3px] rounded-full"
 								style={{
 									width: `${progress}%`,
-									backgroundColor: "var(--minuri-teal)",
+									backgroundColor: "var(--minuri-white)",
 								}}
 							/>
 						</div>
