@@ -16,6 +16,7 @@ export const LANDING_KEYS = {
 	topicHistory: "minuri.topicHistory",
 	readGuides: "minuri.readGuides",
 	stateVersion: "minuri.landingStateVersion",
+	vibe: "minuri.vibe",
 } as const;
 
 type ArcName = "day1" | "week1" | "month1";
