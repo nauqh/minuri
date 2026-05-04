@@ -180,34 +180,32 @@ The following principles govern every design decision in this document.
 
 ### 4.1 High-Level Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   Browser (Client)                       │
-│                                                          │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │              Next.js Application                  │   │
-│  │                                                   │   │
-│  │  Landing   ←→   Guides   ←→   Near Me             │   │
-│  │     ↕               ↕             ↕               │   │
-│  │         localStorage / sessionStorage              │   │
-│  └──────────────────────────────────────────────────┘   │
-│                         ↕                                │
-└─────────────────────────↕───────────────────────────────┘
-                          ↕
-┌─────────────────────────────────────────────────────────┐
-│              FastAPI Backend (minuri-server)             │
-│                                                          │
-│  /suburb            /api/population    /api/nearby-      │
-│  /suburb/larger-    (ABS data)         interest          │
-│   region                               (SerpAPI proxy)  │
-│                                                          │
-│  ┌──────────────────┐   ┌──────────────────────────┐    │
-│  │  PostgreSQL (Neon)│   │   External APIs           │    │
-│  │  - suburbs        │   │   - SerpAPI (Google Local)│    │
-│  │  - suburb_demo-   │   │   - PTV Timetable API     │    │
-│  │    graphics       │   └──────────────────────────┘    │
-│  └──────────────────┘                                    │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+  subgraph Client["Browser (Client)"]
+    subgraph NextApp["Next.js Application"]
+      L[Landing]
+      G[Guides]
+      NM[Near Me]
+      Store[("localStorage / sessionStorage")]
+      L <--> G
+      G <--> NM
+      L <--> NM
+      L --- Store
+      G --- Store
+      NM --- Store
+    end
+  end
+  subgraph Server["FastAPI Backend (minuri-server)"]
+    Routes["/suburb · /suburb/larger-region · /api/population (ABS) · /api/nearby-interest (SerpAPI proxy)"]
+    PG[("PostgreSQL (Neon)<br/>suburbs · suburb_demographics")]
+    Ext["External APIs<br/>SerpAPI (Google Local) · PTV Timetable API"]
+    Routes --- PG
+    Routes --- Ext
+  end
+  L <-->|HTTP / JSON| Routes
+  G <-->|HTTP / JSON| Routes
+  NM <-->|HTTP / JSON| Routes
 ```
 
 ### 4.2 Frontend Technology Stack
@@ -235,15 +233,18 @@ The following principles govern every design decision in this document.
 
 ### 4.4 Data Flow Overview
 
-```
-Guide JSON files (static)          localStorage               FastAPI backend
-public/guides-content/             ─────────────              ──────────────
-   └── topic/slug.json     →    arc progress          ←    /suburb
-                                read history               /api/population
-                                saved locations            /api/nearby-interest
-                                suburb                         │
-                                life moment                    ↓
-                                                           SerpAPI / PTV API
+```mermaid
+flowchart TB
+  Guides["Guide JSON (static)<br/>public/guides-content/topic/slug.json"]
+  LS[("localStorage<br/>arc progress · read history · saved locations<br/>suburb · life moment")]
+  API["FastAPI backend<br/>/suburb · /api/population · /api/nearby-interest"]
+  Ext[SerpAPI / PTV API]
+  Client["Next.js client"]
+
+  Guides --> Client
+  Client <--> LS
+  API --> Client
+  API --> Ext
 ```
 
 ---
@@ -325,23 +326,75 @@ Each guide is a JSON file at `public/guides-content/<topic-slug>/<guide-slug>.js
 
 The backend PostgreSQL schema supports suburb lookup, population statistics, and reference data. Guide content is not stored in the database — it is served statically.
 
-```
-TOPIC ||--o{ GUIDE : classifies
-ARC ||--o{ GUIDE : groups
-GUIDE ||--o{ GUIDE_SECTION : contains
-GUIDE ||--o| GUIDE : next_guide
-SUBURB_DEMOGRAPHIC ||--o{ SUBURB : maps_sa2
+```mermaid
+erDiagram
+  TOPIC ||--o{ GUIDE : classifies
+  ARC ||--o{ GUIDE : groups
+  GUIDE ||--o{ GUIDE_SECTION : contains
+  GUIDE ||--o| GUIDE : next_guide
+  SUBURB_DEMOGRAPHIC ||--o{ SUBURB : maps_sa2
 
-TOPIC { id, slug (UK), name, sort_order, is_active }
-ARC { id, slug (UK), name, sort_order, timeframe_label }
-GUIDE { id, title, slug (UK), arc_id (FK), arc_order, topic_id (FK),
-        next_guide_id (FK), near_me_deeplink, reading_time_min,
-        is_published, is_featured, created_at, updated_at }
-GUIDE_SECTION { id, guide_id (FK), section_key, section_order, body, updated_at }
-SUBURB { id, name, postcode, state, lat, lng, sa2_code (FK), sa3_name }
-SUBURB_DEMOGRAPHIC { id, sa2_code (UK), sa2_name, sa3_name, sa4_name,
-                     gccsa_name, erp_2024, erp_2025, erp_change_no,
-                     erp_change_pct, area_km2, pop_density_2025 }
+  TOPIC {
+    int id
+    string slug UK
+    string name
+    int sort_order
+    boolean is_active
+  }
+  ARC {
+    int id
+    string slug UK
+    string name
+    int sort_order
+    string timeframe_label
+  }
+  GUIDE {
+    int id
+    string title
+    string slug UK
+    int arc_id FK
+    int arc_order
+    int topic_id FK
+    int next_guide_id FK
+    string near_me_deeplink
+    int reading_time_min
+    boolean is_published
+    boolean is_featured
+    string created_at
+    string updated_at
+  }
+  GUIDE_SECTION {
+    int id
+    int guide_id FK
+    string section_key
+    int section_order
+    text body
+    string updated_at
+  }
+  SUBURB {
+    int id
+    string name
+    string postcode
+    string state
+    float lat
+    float lng
+    string sa2_code FK
+    string sa3_name
+  }
+  SUBURB_DEMOGRAPHIC {
+    int id
+    string sa2_code UK
+    string sa2_name
+    string sa3_name
+    string sa4_name
+    string gccsa_name
+    int erp_2024
+    int erp_2025
+    int erp_change_no
+    float erp_change_pct
+    float area_km2
+    float pop_density_2025
+  }
 ```
 
 ### 5.5 localStorage State Model
@@ -478,31 +531,14 @@ Landing separates its two audiences by layer, not by route.
 
 ### 8.2 Sidebar Hub State Machine
 
-```
-                    First visit
-                        │
-                        ▼
-               ┌────────────────┐
-               │  Hidden / Nav  │
-               │  button exists │
-               └────────────────┘
-                        │ User completes onboarding
-                        │ (suburb + life moment set)
-                        ▼
-               ┌────────────────┐
-               │  Hub available │ ◄──── Subsequent visits: auto-opens
-               └────────────────┘
-                    │         │
-                   Open     Dismiss (X / ESC / swipe-down)
-                    │         │
-                    ▼         ▼
-             ┌──────────┐  ┌──────────────────────┐
-             │ Hub open │  │ hub_dismissed_session │
-             └──────────┘  │ = true (sessionStorage│
-                           └──────────────────────┘
-                                    │ Next visit
-                                    ▼
-                              Hub auto-opens again
+```mermaid
+flowchart TD
+  F[First visit] --> H[Hidden / Nav button exists]
+  H -->|User completes onboarding<br/>suburb + life moment| A[Hub available]
+  A -->|Subsequent visits: auto-opens| A
+  A -->|Open| O[Hub open]
+  A -->|Dismiss X / ESC / swipe-down| D["hub_dismissed_session = true<br/>(sessionStorage)"]
+  D -->|Next visit| A
 ```
 
 ### 8.3 Hub Vertical Composition (Returning User Mode)
@@ -673,22 +709,14 @@ PTV stop data appears on the map when the Getting Around tab is active.
 
 ### 10.6 Save Locations Flow
 
-```
-User clicks place card
-        │
-        ▼
-ServiceDetailPanel opens
-        │
-User clicks SaveButton (heart icon)
-        │
-        ▼
-useFavourites hook writes to minuri:savedLocations
-{ placeId, name, topic, address, lat, lng }
-        │
-        ▼
-SaveButton changes to filled state ("Saved")
-Star icon appears on map marker
-Saved place appears in Hub Section 4 on next Landing visit
+```mermaid
+flowchart TD
+  A[User clicks place card] --> B[ServiceDetailPanel opens]
+  B --> C[User clicks SaveButton heart icon]
+  C --> D["useFavourites writes minuri:savedLocations<br/>placeId, name, topic, address, lat, lng"]
+  D --> E[SaveButton shows Saved state]
+  E --> F[Star icon on map marker]
+  F --> G[Saved place in Hub Section 4 on next Landing visit]
 ```
 
 ### 10.7 User Story Mapping
@@ -750,25 +778,16 @@ The guide catalog remains static — keyword scoring only adjusts selection orde
 
 Each day replaces the Iteration 1 two-guide-card layout with three distinct zones:
 
-```
-┌─────────────────────────────────────────┐
-│  Day N · [Topic]                        │
-│  [Day narrative paragraph]              │
-│  ─────────────── [topic-color rule] ─── │
-│                                         │
-│  READ                                   │
-│  [GuideAccordion — collapsed by default]│
-│  > Guide title · 5 min                  │
-│    [Expand: summary + "Read guide →"]   │
-│                                         │
-│  YOUR TASK TODAY                        │
-│  □ One concrete action sentence         │
-│                                         │
-│  PLACES TO GO IN [SUBURB]               │
-│  [2–3 inline compact place cards]       │
-│                                         │
-│  ← Day N-1 · Theme   Day N+1 · Theme → │
-└─────────────────────────────────────────┘
+```mermaid
+flowchart TB
+  subgraph DayPanel["Day N · Topic"]
+    H["Day narrative paragraph + topic-color rule"]
+    R["READ — GuideAccordion (collapsed by default)<br/>Guide title · reading time · expand → summary + Read guide"]
+    T["YOUR TASK TODAY — one concrete action checkbox"]
+    P["PLACES TO GO IN SUBURB — 2–3 inline compact place cards"]
+    Nav["← Day N-1 · theme | Day N+1 · theme →"]
+    H --> R --> T --> P --> Nav
+  end
 ```
 
 **Design rules for day content:**
@@ -852,28 +871,28 @@ The "Read guide" link carries two URL parameters:
 
 The four epics form a deliberate loop. Journey is the most structured entry point — a user who completes a journey plan has touched all four epics in a single session.
 
-```
-LANDING
-  │ Life-moment tile → /guides?topic=<slug>
-  │ Hub "Continue reading" → /guides/:arc/:slug
-  │ Hub CTA → /journey (start a plan)
-  ▼
-GUIDES
-  │ Bridge CTA → /near-me?topic=<slug>&from=<guide-slug>
-  │ "Up next" → /guides/:arc/:slug (next guide)
-  ▼
-NEAR ME
-  │ Save location → minuri:savedLocations
-  │ Back-reference link → /guides/:arc/:slug
-  ▼
-LANDING (hub Section 4 surfaces saved locations)
-  
-JOURNEY (/journey/plan)
-  │ Guide accordion → /guides/:arc/:slug?suburb=<s>&from=journey
-  │ Inline near-me cards → /near-me?topic=<slug>
-  │ Day completion → minuri:journey:completion (localStorage)
-  ▼
-LANDING (hub reads arc progress; journey completion feeds "Continue reading")
+```mermaid
+flowchart TB
+  subgraph LA["LANDING"]
+    L1["Life-moment tile → /guides?topic=…"]
+    L2["Hub Continue reading → /guides/:arc/:slug"]
+    L3["Hub CTA → /journey"]
+  end
+  subgraph GU["GUIDES"]
+    G1["Bridge CTA → /near-me?topic=…&from=…"]
+    G2["Up next → /guides/:arc/:slug next guide"]
+  end
+  subgraph NE["NEAR ME"]
+    N1["Save location → minuri:savedLocations"]
+    N2["Back-reference → /guides/:arc/:slug"]
+  end
+  subgraph JO["JOURNEY (/journey/plan)"]
+    J1["Guide accordion → /guides/:arc/:slug?suburb=&from=journey"]
+    J2["Inline near-me → /near-me?topic=…"]
+    J3["Day completion → minuri:journey:completion"]
+  end
+  LA --> GU --> NE --> L4["LANDING — hub Section 4 shows saved locations"]
+  JO --> L5["LANDING — hub arc progress; journey feeds Continue reading"]
 ```
 
 ### 12.2 Deep-Link URL Contract
