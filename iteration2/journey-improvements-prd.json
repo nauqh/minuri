@@ -1,0 +1,283 @@
+[
+    {
+        "feature": "Onboarding — Preset Moment Cards",
+        "category": "functional",
+        "description": "Four preset scenario cards pre-fill the moment textarea and can be edited before continuing",
+        "steps": [
+            "Navigate to /journey",
+            "Verify four preset cards are visible: 'Just started uni', 'First job in the city', 'New to Australia', 'Moved from another city'",
+            "Click the 'New to Australia' card",
+            "Verify the card shows a selected state (distinct border/background and CheckCircle2 badge)",
+            "Verify a textarea appears below the cards pre-filled with the preset's full text",
+            "Edit the textarea to change a word",
+            "Verify the continue button becomes active once the 30-character minimum is met and a suburb + topic are also filled",
+            "Click a different preset card",
+            "Verify the textarea updates to that preset's text",
+            "Verify the previously selected card deselects"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Onboarding — Write Your Own Moment",
+        "category": "functional",
+        "description": "'Write your own' link opens a blank textarea without selecting any preset card",
+        "steps": [
+            "Navigate to /journey",
+            "Click 'Something else? Write your own'",
+            "Verify a blank textarea appears",
+            "Verify no preset card is selected",
+            "Type fewer than 30 characters",
+            "Verify a character-count hint appears (e.g. '12/30 characters')",
+            "Type until 30+ characters",
+            "Verify the hint disappears and the textarea border turns teal"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Onboarding — Already Sorted Checklist",
+        "category": "functional",
+        "description": "Checklist chips in onboarding toggle correctly and the ticked items suppress the corresponding guides from the plan",
+        "steps": [
+            "Navigate to /journey",
+            "Locate the 'Already sorted?' checklist section",
+            "Verify five chips are visible: Myki card, GP registered, Bank account, SIM card, Lease signed",
+            "Click 'GP registered'",
+            "Verify it shows a checked state (tick icon, teal border and background)",
+            "Click 'GP registered' again",
+            "Verify it returns to unchecked state",
+            "Check 'GP registered' and 'Lease signed'",
+            "Complete the rest of the form and proceed to /journey/plan",
+            "Verify 'finding-a-gp-before-you-need-one' does not appear on the health-wellbeing day (Day 5 defaults to 'crisis-lines-you-can-actually-call' instead)",
+            "Verify 'renting-without-getting-burned' and 'your-bond-starts-on-day-one' do not appear across any day"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Onboarding — Hide/Show How It Works Sidebar",
+        "category": "ui",
+        "description": "Desktop sidebar can be toggled via a button in the onboarding form header",
+        "steps": [
+            "Navigate to /journey on a desktop viewport (≥1024px)",
+            "Verify the 'How it works' sidebar is visible by default",
+            "Click the 'Hide guide' button in the top-right of the form",
+            "Verify the sidebar animates out and is no longer visible",
+            "Verify the button label changes to 'How it works'",
+            "Click the button again",
+            "Verify the sidebar animates back in"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Deliberate Week Arc",
+        "category": "functional",
+        "description": "Days 1, 2, 5, 6, 7 always map to fixed topics regardless of user topic selection",
+        "steps": [
+            "Complete onboarding selecting only 'Health & Wellbeing' and 'Social & Belonging'",
+            "Proceed to /journey/plan",
+            "Verify Day 1 tab shows the Food/Sandwich icon and is labelled 'Survive'",
+            "Verify Day 2 tab shows the Home icon and is labelled 'Admin'",
+            "Verify Day 5 tab covers Health & Wellbeing (labelled 'Health')",
+            "Verify Day 6 tab covers Social & Belonging (labelled 'Connect')",
+            "Verify Day 7 tab covers Getting Around (labelled 'Routine')",
+            "Start over and repeat with a completely different topic selection (e.g. Getting Around + Food & Eating)",
+            "Verify Days 1, 2, 5, 6, 7 still map to the same topics as before"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — User Priority Days (Days 3–4)",
+        "category": "functional",
+        "description": "Days 3 and 4 reflect the user's first and second selected topics; a single selection fills both slots",
+        "steps": [
+            "Complete onboarding selecting 'Getting Around' first, then 'Health & Wellbeing'",
+            "Proceed to /journey/plan",
+            "Verify Day 3 shows a Getting Around guide (first guide: 'getting-myki-and-surviving-ptv')",
+            "Verify Day 4 shows a Health & Wellbeing guide (first guide: 'finding-a-gp-before-you-need-one')",
+            "Start over and repeat onboarding selecting 'Social & Belonging' only",
+            "Verify Day 3 shows 'when-you-dont-know-anyone-yet' (first social guide, day-1 arcOrder=6)",
+            "Verify Day 4 shows 'surviving-the-first-weekend-alone' (second social guide, day-1 arcOrder=9)"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Keyword Scoring: International / Overseas",
+        "category": "functional",
+        "description": "Moment text containing 'international' or 'overseas' boosts the medicare guide to the front of the health-wellbeing queue",
+        "steps": [
+            "Complete onboarding with moment text containing 'I arrived from overseas recently' (30+ characters)",
+            "Select any topics and proceed to /journey/plan",
+            "Navigate to Day 5 (health-wellbeing)",
+            "Verify the guide shown is 'medicare-bulk-billing-and-mental-health-care-plans' — normally this guide sits behind three day-1 health guides, so boost is required to surface it",
+            "Start over with moment text that does not contain international/overseas keywords",
+            "Navigate to Day 5 and verify the guide shown is 'finding-a-gp-before-you-need-one' (the default first health-wellbeing guide: day-1, arcOrder=3)"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Keyword Scoring: Budget / Broke",
+        "category": "functional",
+        "description": "Moment text containing 'budget', 'broke', or 'afford' promotes cheap-eats and budgeting guides to the front of their topic queues",
+        "steps": [
+            "Complete onboarding with moment text containing 'I can not afford much right now' (30+ characters)",
+            "Proceed to /journey/plan",
+            "Navigate to Day 1 (food-eating)",
+            "Verify the guide shown is 'cheap-eats-when-broke' — normally 'your-first-grocery-run' wins (day-1 arcOrder=1), so boost is required",
+            "Navigate to Day 2 (home-admin)",
+            "Verify the guide shown is 'budgeting-on-what-you-actually-earn' — normally 'your-first-48-hours-checklist' wins (day-1 arcOrder=5), so boost is required",
+            "Start over with neutral moment text and verify Day 1 defaults back to 'your-first-grocery-run'"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Keyword Scoring: Anxious / Overwhelmed",
+        "category": "functional",
+        "description": "Moment text containing 'anxious' or 'overwhelmed' surfaces crisis lines as the health-wellbeing guide",
+        "steps": [
+            "Complete onboarding with moment text containing 'I feel quite anxious about all of this' (30+ characters)",
+            "Proceed to /journey/plan",
+            "Navigate to the health-wellbeing day (Day 5)",
+            "Verify the guide shown is 'crisis-lines-you-can-actually-call' — both crisis-lines and psych are boosted; crisis-lines wins the tie because it is day-1 arc vs psych's month-1",
+            "Start over with neutral moment text and verify Day 5 defaults to 'finding-a-gp-before-you-need-one'"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — One Guide Per Day",
+        "category": "functional",
+        "description": "Each day's content panel shows exactly one guide card, not two",
+        "steps": [
+            "Complete onboarding and proceed to /journey/plan",
+            "Click each day tab in turn (Day 1 through Day 7)",
+            "For each day, count the number of guide cards rendered in the content panel",
+            "Verify exactly one guide card is visible per day",
+            "Verify no second guide card appears below the first"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Your Task Today Checkbox",
+        "category": "functional",
+        "description": "Each day shows a single actionable task that can be toggled complete",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Verify a 'Your task today' row is visible below the guide card",
+            "Verify the row contains a concrete action sentence (not a generic placeholder)",
+            "Verify the task shows an unchecked Square icon initially",
+            "Click the task row",
+            "Verify the Square icon becomes a CheckCircle2 icon",
+            "Verify the task text is struck through and turns teal",
+            "Click the task row again",
+            "Verify it reverts to unchecked state"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Day Tab Completion Tick",
+        "category": "functional",
+        "description": "Completing a day's task marks the day tab with a tick badge visible in the tab strip",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Select Day 2",
+            "Click the 'Your task today' row to mark it complete",
+            "Verify a CheckCircle2 tick badge appears in the top-right corner of the Day 2 tab",
+            "Click a different day tab",
+            "Verify the Day 2 tab retains its tick while inactive",
+            "Click Day 2 again and untick the task",
+            "Verify the tick badge disappears from the Day 2 tab"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Inline Near Me (JourneyDayPlaces)",
+        "category": "functional",
+        "description": "Each day's content shows up to 3 relevant nearby places inline, driven by the day's topic and the user's suburb",
+        "steps": [
+            "Complete onboarding with suburb 'Clayton' and proceed to /journey/plan",
+            "Navigate to Day 1 (food-eating)",
+            "Verify a 'Places to go today in Clayton' section appears below the guide card and task",
+            "Verify the section subtitle mentions 'cheap supermarkets & community meals'",
+            "Verify up to 3 place entries are listed, each showing a name and address",
+            "Navigate to the health-wellbeing day",
+            "Verify the subtitle changes to 'bulk-billing GPs & pharmacies'",
+            "Navigate to the getting-around day",
+            "Verify the subtitle changes to 'transport & Myki top-up points'",
+            "Verify place entries update to match the new topic"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Plan — Sidebar as Week Progress Tracker",
+        "category": "ui",
+        "description": "The desktop sidebar shows 'Your week at a glance' — an ordered list of all 7 days, not a nearby-services panel",
+        "steps": [
+            "Navigate to /journey/plan on a desktop viewport (≥1024px)",
+            "Verify the right-hand sidebar is labelled 'Your week at a glance'",
+            "Verify it lists all 7 days with their theme names and first guide title",
+            "Verify the active day is highlighted (teal background or teal text)",
+            "Click a different day in the sidebar list",
+            "Verify the main content panel switches to that day",
+            "Verify no 'nearby services' or map panel appears in the sidebar"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Plan — Progress Count in Sidebar",
+        "category": "functional",
+        "description": "Sidebar shows a done count once at least one day is completed",
+        "steps": [
+            "Navigate to /journey/plan with no completed days",
+            "Verify no progress count text is shown in the sidebar",
+            "Complete Day 1's task",
+            "Verify the sidebar now shows '1 of 7 days done'",
+            "Complete Day 3's task",
+            "Verify the sidebar updates to '2 of 7 days done'"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "State Persistence — localStorage (Plan Survives Tab Close)",
+        "category": "functional",
+        "description": "Journey state is stored in localStorage so the plan is restored after closing and reopening the tab",
+        "steps": [
+            "Complete onboarding and arrive at /journey/plan",
+            "Note the suburb and which guides appear on Days 1 and 2",
+            "Close the browser tab",
+            "Open a new tab and navigate to /journey/plan",
+            "Verify the plan is restored — suburb name appears in the header",
+            "Verify the same guides appear on Days 1 and 2 as before tab close",
+            "Verify the user is not redirected back to /journey"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "State Persistence — Completed Days Survive Refresh",
+        "category": "functional",
+        "description": "Days marked as complete remain complete after a page refresh",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Mark Day 1 and Day 3 as complete via the task checkbox",
+            "Verify both day tabs show tick badges",
+            "Refresh the browser",
+            "Verify Day 1 and Day 3 still show tick badges after refresh",
+            "Verify the sidebar progress count reflects 2 completed days",
+            "Verify Day 2 and other days remain unchecked"
+        ],
+        "passes": true
+    },
+    {
+        "feature": "Start Over — Clears Both Storage Keys",
+        "category": "functional",
+        "description": "Clicking 'Start over' clears journey state and completed days, then returns to onboarding",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Mark at least two days as complete",
+            "Click the 'Start over' button in the header",
+            "Verify the browser routes to /journey",
+            "Verify the onboarding form is blank (no pre-filled moment, no suburb, no topics selected, no checklist ticked)",
+            "Complete onboarding again and proceed to /journey/plan",
+            "Verify no day tabs show tick badges",
+            "Verify the progress count is absent from the sidebar"
+        ],
+        "passes": true
+    }
+]

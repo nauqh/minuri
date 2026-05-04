@@ -1,0 +1,278 @@
+[
+    {
+        "feature": "Layout — Full Content Width",
+        "category": "ui",
+        "description": "Main content on /journey/plan spans the full max-w-screen-xl container, matching the header width exactly. No sidebar grid column consumes horizontal space by default.",
+        "steps": [
+            "Navigate to /journey/plan on a desktop viewport (≥1024px)",
+            "Inspect the width of the header inner container (max-w-screen-xl)",
+            "Verify the main content area (hero, stepper, day content) has the same computed width as the header",
+            "Verify no right-hand sidebar column is occupying space in the default state",
+            "Resize to 768px viewport and verify the content still spans the full container width",
+            "Resize to 1440px viewport and verify the content does not exceed max-w-screen-xl"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Layout — Day Stepper Navigation Replaces Tab Pills",
+        "category": "ui",
+        "description": "The horizontal row of bordered tab pill buttons is replaced by a numbered stepper component — a horizontal line of 7 numbered steps with topic labels beneath, connected by a thin rule. No rounded-border pill shapes.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Verify no bordered pill tab buttons are present",
+            "Verify a horizontal stepper is visible with 7 steps numbered 1 through 7",
+            "Verify each step shows a small circle marker and a short topic label beneath it (e.g. 'Survive', 'Admin')",
+            "Verify a connecting line or track runs between the step markers",
+            "Verify the active day marker is visually distinct (e.g. filled circle, bold label)",
+            "Click step 3 on the stepper",
+            "Verify the day content panel updates to Day 3"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Layout — Stepper Active and Completed States",
+        "category": "ui",
+        "description": "Active day marker uses the vibe accent color. Completed day markers show a checkmark or filled dot in minuri-teal. Future days are muted.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Verify the Day 1 step marker uses the vibe accent color (--vibe-accent) since it is the default active day",
+            "Complete all tasks for Day 1",
+            "Verify the Day 1 marker changes to a completed state (checkmark or teal fill)",
+            "Click Day 3 to make it active",
+            "Verify Day 3 marker uses the vibe accent color",
+            "Verify Day 1 retains its completed state styling",
+            "Verify Days 4–7 appear muted or de-emphasised"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Sidebar Drawer — Toggle Button in Header",
+        "category": "ui",
+        "description": "A 'Week' button appears in the page header alongside 'Start over'. Clicking it opens a slide-in drawer from the right side. The button label changes to reflect open/closed state.",
+        "steps": [
+            "Navigate to /journey/plan on desktop",
+            "Verify a 'Week' button is visible in the header next to 'Start over'",
+            "Verify no sidebar panel is visible by default",
+            "Click the 'Week' button",
+            "Verify a drawer panel slides in from the right",
+            "Verify the button label or icon changes to indicate the drawer is open (e.g. shows 'Close' or an X icon)",
+            "Click the button again",
+            "Verify the drawer slides out and is no longer visible"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Sidebar Drawer — Content: Week Progress",
+        "category": "ui",
+        "description": "The drawer contains a 'Your week at a glance' section listing all 7 days with theme, completion state, and a clickable row that switches the active day and closes the drawer.",
+        "steps": [
+            "Open the week drawer via the header toggle",
+            "Verify the drawer is labelled 'Your week at a glance'",
+            "Verify all 7 days are listed with their theme names",
+            "Verify the currently active day is visually highlighted",
+            "Verify completed days show a checkmark or done indicator",
+            "Click a different day row in the drawer",
+            "Verify the main content switches to that day",
+            "Verify the drawer closes after the day selection"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Sidebar Drawer — Content: Vibe Section",
+        "category": "ui",
+        "description": "Below the week list, the drawer shows a 'Your vibe' section with the color swatch, hex code, vibe name, and traits text.",
+        "steps": [
+            "Open the week drawer",
+            "Scroll to the bottom of the drawer",
+            "Verify a 'Your vibe' section is present",
+            "Verify it shows a color swatch square in the current vibe hex color",
+            "Verify the vibe name (e.g. 'Coral Drift') is displayed",
+            "Verify the hex value (e.g. '#F76C6C') is displayed in monospace",
+            "Verify the traits description text is displayed below the swatch row",
+            "Refresh the page and open the drawer",
+            "Verify the vibe shown matches the --vibe-accent CSS variable applied to the page"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Sidebar Drawer — Overlay Behaviour and Dismiss",
+        "category": "ui",
+        "description": "The drawer overlays the main content (does not push it). Clicking the backdrop or pressing Escape closes it.",
+        "steps": [
+            "Open the week drawer",
+            "Verify the main content is visible behind the drawer (drawer overlays, not pushes)",
+            "Verify a semi-transparent backdrop is rendered behind the drawer",
+            "Click on the backdrop (outside the drawer panel)",
+            "Verify the drawer closes",
+            "Open the drawer again",
+            "Press the Escape key",
+            "Verify the drawer closes"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Day Content — No Outer Card Border",
+        "category": "ui",
+        "description": "The day content area renders directly on the page background with no rounded-2xl bordered card wrapper. Structure and hierarchy come from typography and spacing alone.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Inspect the day content area in devtools",
+            "Verify there is no element with both a border and border-radius wrapping the day header, guides, and tasks together",
+            "Verify the day header, guide list, and task list sit directly on the white page background",
+            "Verify visual separation between sections is achieved via spacing or a divider rule, not a card border",
+            "Switch between days and verify each day renders without a card wrapper"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Hero — Pull-Quote Style Moment",
+        "category": "ui",
+        "description": "The user's moment text is displayed as a typographic pull-quote: large italic text with a vibe-accent left border bar. No background fill, no rounded box, no outer border.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Locate the user's moment text below the H1",
+            "Verify the text is rendered in italic style",
+            "Verify there is no background fill or rounded-border container around the quote",
+            "Verify a left-side accent bar is present in the vibe accent color (--vibe-accent)",
+            "Verify the bar is a thin vertical line (2–4px wide), not a full box border",
+            "Inspect devtools and confirm no bg-* fill class is applied to the quote wrapper"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Guide Accordion — Collapsed Default State",
+        "category": "ui",
+        "description": "Guides are displayed as flat expandable rows showing only the guide title and reading time. No full GuideCard (thumbnail, summary, bookmark) visible by default.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Verify guides for the active day are rendered as compact rows, not full cards",
+            "Verify each row shows the guide title and reading time (e.g. '5 min')",
+            "Verify no guide thumbnail image is visible in the collapsed state",
+            "Verify no guide summary paragraph is visible in the collapsed state",
+            "Verify an expand indicator (e.g. chevron or arrow) is visible on each row",
+            "Verify the rows have no rounded border card styling"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Guide Accordion — Expanded State",
+        "category": "ui",
+        "description": "Clicking a guide row expands it inline to reveal the guide summary and a 'Read guide' link. Collapsing hides the expanded content.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Click the first guide row",
+            "Verify the row expands to show the guide summary paragraph",
+            "Verify a 'Read guide' or equivalent CTA link is visible",
+            "Verify the expand indicator rotates or changes to reflect the open state",
+            "Click the row again",
+            "Verify the expanded content collapses and is no longer visible",
+            "Verify the row returns to its default compact appearance"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Guide Accordion — Multiple Guides Independently Expandable",
+        "category": "ui",
+        "description": "When a day has 2–3 guides, each row can be expanded and collapsed independently. Expanding one does not collapse another.",
+        "steps": [
+            "Navigate to a day that has at least 2 guides",
+            "Expand the first guide row",
+            "Verify the first guide's summary is visible",
+            "Click the second guide row to expand it",
+            "Verify both the first and second guide summaries are simultaneously visible",
+            "Collapse the first guide row",
+            "Verify only the first guide collapses; the second remains expanded"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Guide Accordion — CTA Link Routes to Guide Page",
+        "category": "functional",
+        "description": "The 'Read guide' link inside an expanded accordion row routes to the correct guide page with suburb and journey referral parameters.",
+        "steps": [
+            "Complete onboarding with suburb 'Fitzroy' and navigate to /journey/plan",
+            "Expand any guide row",
+            "Click the 'Read guide' link",
+            "Verify the browser routes to /guides/[arc]/[slug]",
+            "Verify the URL contains ?suburb=Fitzroy",
+            "Verify the URL contains ?from=journey",
+            "Verify the guide page loads without errors"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Task List — Flat Style Without Outer Border Box",
+        "category": "ui",
+        "description": "The task list renders as plain divide-y separated rows with no outer rounded border container and no background-fill header row. The 'Your tasks today' label is plain uppercase text above the list.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Locate the task list below the guide accordion",
+            "Verify there is no rounded-border card wrapping all the task rows together",
+            "Verify the 'Your tasks today' label is rendered as plain text above the list, not as a header row inside a bordered container",
+            "Verify task rows are separated by a divider line only (no card border)",
+            "Verify the task rows sit directly on the page background with no fill",
+            "Verify checking a task still updates the row styling (strikethrough, teal icon)"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Day Navigation — Borderless Text Links",
+        "category": "ui",
+        "description": "Previous and next day navigation uses plain text links with no pill border buttons. Labels show the adjacent day name, not just 'Previous day' / 'Next day'.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Locate the day navigation below the task list",
+            "Verify there are no rounded-pill bordered buttons for previous/next",
+            "Verify the navigation is rendered as plain text links (e.g. '← Day 1 · Survive' and 'Day 3 · Health →')",
+            "Verify the links include the adjacent day's theme or short label",
+            "Click the next link",
+            "Verify the day content switches to the next day",
+            "On Day 1 verify no 'previous' link is rendered",
+            "On the last day verify no 'next' link is rendered"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Layout — Section Divider Between Day Header and Guides",
+        "category": "ui",
+        "description": "A full-width horizontal rule in the topic color separates the day header (icon + narrative) from the guide list below. No card border needed for visual grouping.",
+        "steps": [
+            "Navigate to /journey/plan",
+            "Observe the transition from the day narrative text to the guide list",
+            "Verify a horizontal divider or subtle rule is present between them",
+            "Verify the divider uses the topic color (e.g. orange for food-eating, sky for getting-around)",
+            "Switch to a different day",
+            "Verify the divider color updates to match the new day's topic color"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Mobile — Drawer Full-Screen on Small Viewports",
+        "category": "ui",
+        "description": "On mobile viewports the week drawer takes up the full screen width rather than a partial panel.",
+        "steps": [
+            "Navigate to /journey/plan at a 375px viewport",
+            "Tap the 'Week' button in the header",
+            "Verify the drawer covers the full screen width",
+            "Verify week list and vibe section are both scrollable within the drawer",
+            "Tap outside or press the close button",
+            "Verify the drawer closes and full-width content is restored"
+        ],
+        "passes": false
+    },
+    {
+        "feature": "Mobile — Stepper Scrolls Horizontally",
+        "category": "ui",
+        "description": "On narrow viewports the day stepper overflows horizontally with scroll rather than wrapping or truncating.",
+        "steps": [
+            "Navigate to /journey/plan at a 375px viewport",
+            "Verify the stepper is visible",
+            "Verify all 7 day steps are accessible via horizontal scroll",
+            "Verify no step labels are clipped or hidden",
+            "Scroll the stepper to Day 7",
+            "Click Day 7",
+            "Verify the content panel updates to Day 7"
+        ],
+        "passes": false
+    }
+]
