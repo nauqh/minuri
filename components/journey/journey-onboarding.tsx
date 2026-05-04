@@ -219,7 +219,7 @@ export function JourneyOnboarding() {
 			{stage === "loading" ? (
 				<motion.div
 					key="loading"
-					className="flex min-h-screen flex-col items-center justify-center bg-minuri-white px-6"
+					className="flex h-screen flex-col items-center justify-center bg-minuri-white px-6"
 					initial={{
 						opacity: 0,
 						scale: prefersReducedMotion ? 1 : 0.96,

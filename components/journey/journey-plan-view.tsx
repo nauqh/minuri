@@ -23,6 +23,8 @@ import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { GuideCard } from "@/components/guides/guide-card";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
+import { getVibe, DEFAULT_VIBE_ID, type Vibe } from "@/lib/vibes";
+import { LANDING_KEYS } from "@/components/landing/landing-local-state";
 
 const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
     "food-eating": Sandwich,
@@ -142,22 +144,21 @@ function DayTab({
 function DayContent({
     plan,
     suburb,
-    completed,
+    completedTasks,
     isBookmarked,
     toggleBookmark,
-    onToggleComplete,
+    toggleTaskComplete,
 }: {
     plan: DayPlan;
     suburb: string;
-    completed: boolean;
+    completedTasks: Set<string>;
     isBookmarked: (slug: string) => boolean;
     toggleBookmark: (slug: string) => void;
-    onToggleComplete: () => void;
+    toggleTaskComplete: (key: string) => void;
 }) {
     const prefersReducedMotion = useReducedMotion();
     const colors = TOPIC_COLORS[plan.topicSlug];
     const Icon = TOPIC_ICONS[plan.topicSlug];
-    const guide = plan.guides[0];
 
     return (
         <motion.div
@@ -195,57 +196,69 @@ function DayContent({
                 </div>
             </div>
 
-            {/* Guide — single card, full width */}
-            {guide && (
-                <GuideCard
-                    guide={guide}
-                    href={`/guides/${guide.arc}/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
-                    bookmarked={isBookmarked(guide.slug)}
-                    onToggleBookmark={toggleBookmark}
-                    animationDelay={0}
-                />
-            )}
+            {/* Guides */}
+            <div className="space-y-3">
+                {plan.guides.map((guide, i) => (
+                    <GuideCard
+                        key={guide.slug}
+                        guide={guide}
+                        href={`/guides/${guide.arc}/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
+                        bookmarked={isBookmarked(guide.slug)}
+                        onToggleBookmark={toggleBookmark}
+                        animationDelay={i * 0.05}
+                    />
+                ))}
+            </div>
 
-            {/* Task */}
-            {plan.task && (
-                <button
-                    type="button"
-                    onClick={onToggleComplete}
-                    className={cn(
-                        "mt-5 flex w-full items-start gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors",
-                        completed
-                            ? "border-minuri-teal/40 bg-minuri-mist/40"
-                            : "border-minuri-silver/70 bg-minuri-fog/40 hover:border-minuri-teal/30 hover:bg-minuri-fog",
-                    )}
-                    aria-pressed={completed}
-                >
-                    {completed ? (
-                        <CheckCircle2
-                            className="mt-0.5 size-4.5 shrink-0 text-minuri-teal"
-                            aria-hidden
-                        />
-                    ) : (
-                        <Square
-                            className="mt-0.5 size-4.5 shrink-0 text-minuri-silver"
-                            aria-hidden
-                        />
-                    )}
-                    <span>
-                        <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-minuri-mid">
-                            Your task today
-                        </span>
-                        <span
-                            className={cn(
-                                "mt-0.5 block text-sm leading-relaxed",
-                                completed
-                                    ? "text-minuri-teal line-through"
-                                    : "text-minuri-ocean",
-                            )}
-                        >
-                            {plan.task}
-                        </span>
-                    </span>
-                </button>
+            {/* Task list */}
+            {plan.tasks.length > 0 && (
+                <div className="mt-5 overflow-hidden rounded-xl border border-minuri-silver/60">
+                    <p className="border-b border-minuri-silver/60 bg-minuri-fog/60 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: "var(--vibe-accent)" }}>
+                        Your tasks today
+                    </p>
+                    <div className="divide-y divide-minuri-silver/40">
+                        {plan.tasks.map((task, i) => {
+                            const key = `${plan.day}-${i}`;
+                            const done = completedTasks.has(key);
+                            return (
+                                <button
+                                    key={key}
+                                    type="button"
+                                    onClick={() => toggleTaskComplete(key)}
+                                    className={cn(
+                                        "flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors",
+                                        done
+                                            ? "bg-minuri-mist/40"
+                                            : "bg-minuri-white hover:bg-minuri-fog",
+                                    )}
+                                    aria-pressed={done}
+                                >
+                                    {done ? (
+                                        <CheckCircle2
+                                            className="mt-0.5 size-4.5 shrink-0 text-minuri-teal"
+                                            aria-hidden
+                                        />
+                                    ) : (
+                                        <Square
+                                            className="mt-0.5 size-4.5 shrink-0 text-minuri-silver"
+                                            aria-hidden
+                                        />
+                                    )}
+                                    <span
+                                        className={cn(
+                                            "text-sm leading-relaxed",
+                                            done
+                                                ? "text-minuri-teal line-through"
+                                                : "text-minuri-ocean",
+                                        )}
+                                    >
+                                        {task}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
             )}
 
             {/* Inline near-me for today's topic */}
@@ -256,13 +269,22 @@ function DayContent({
 
 export function JourneyPlanView() {
     const router = useRouter();
-    const { journeyState, hydrated, clearJourney, completedDays, toggleDayComplete } =
+    const { journeyState, hydrated, clearJourney, completedTasks, toggleTaskComplete } =
         useJourneyState();
     const { isBookmarked, toggleBookmark } = useGuideBookmarks();
     const prefersReducedMotion = useReducedMotion();
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const [activeDay, setActiveDay] = useState(1);
+    const [vibe, setVibe] = useState<Vibe>(() => getVibe(DEFAULT_VIBE_ID));
+
+    useEffect(() => {
+        const stored = typeof window !== "undefined"
+            ? (window.localStorage.getItem(LANDING_KEYS.vibe) ?? DEFAULT_VIBE_ID)
+            : DEFAULT_VIBE_ID;
+        setVibe(getVibe(stored));
+    }, []);
+
     const revealTransition = {
         duration: prefersReducedMotion ? 0.01 : 0.45,
         ease: [0.22, 1, 0.36, 1] as const,
@@ -290,7 +312,12 @@ export function JourneyPlanView() {
             ? yourMoment.slice(0, 117).trimEnd() + "..."
             : yourMoment;
 
-    const doneCount = completedDays.size;
+    function isDayDone(plan: DayPlan) {
+        return plan.tasks.length > 0 &&
+            plan.tasks.every((_, i) => completedTasks.has(`${plan.day}-${i}`));
+    }
+
+    const doneCount = weekPlan.filter(isDayDone).length;
 
     function handleStartOver() {
         clearJourney();
@@ -337,7 +364,8 @@ export function JourneyPlanView() {
                         Your guide journey
                     </p>
                     <h1 className="mt-2 text-2xl font-black leading-tight text-minuri-ocean md:text-3xl">
-                        Your first week in {suburb}
+                        Your first week in{" "}
+                        <span style={{ color: "var(--vibe-accent)" }}>{suburb}</span>
                     </h1>
 
                     {truncatedMoment && (
@@ -348,7 +376,8 @@ export function JourneyPlanView() {
                                 duration: prefersReducedMotion ? 0.01 : 0.4,
                                 delay: 0.1,
                             }}
-                            className="mt-4 flex gap-3 rounded-xl border border-minuri-silver/60 bg-minuri-fog/50 px-4 py-3.5"
+                            className="mt-4 flex gap-3 rounded-r-xl border border-l-0 border-minuri-silver/60 bg-minuri-fog/50 px-4 py-3.5"
+                            style={{ borderLeftWidth: "3px", borderLeftStyle: "solid", borderLeftColor: "var(--vibe-accent)" }}
                         >
                             <span className="mt-0.5 text-xl leading-none text-minuri-silver">
                                 &ldquo;
@@ -386,7 +415,7 @@ export function JourneyPlanView() {
                                     key={plan.day}
                                     plan={plan}
                                     active={plan.day === activeDay}
-                                    completed={completedDays.has(plan.day)}
+                                    completed={isDayDone(plan)}
                                     onClick={() => selectDay(plan.day)}
                                 />
                             ))}
@@ -402,14 +431,10 @@ export function JourneyPlanView() {
                                     <DayContent
                                         plan={currentDay}
                                         suburb={suburb}
-                                        completed={completedDays.has(
-                                            currentDay.day,
-                                        )}
+                                        completedTasks={completedTasks}
                                         isBookmarked={isBookmarked}
                                         toggleBookmark={toggleBookmark}
-                                        onToggleComplete={() =>
-                                            toggleDayComplete(currentDay.day)
-                                        }
+                                        toggleTaskComplete={toggleTaskComplete}
                                     />
                                 )}
                             </AnimatePresence>
@@ -471,7 +496,7 @@ export function JourneyPlanView() {
                                     const Icon = TOPIC_ICONS[plan.topicSlug];
                                     const colors = TOPIC_COLORS[plan.topicSlug];
                                     const isActive = plan.day === activeDay;
-                                    const isDone = completedDays.has(plan.day);
+                                    const isDone = isDayDone(plan);
                                     return (
                                         <li key={plan.day}>
                                             <button
@@ -529,6 +554,26 @@ export function JourneyPlanView() {
                                     );
                                 })}
                             </ol>
+                        </div>
+
+                        {/* Vibe card */}
+                        <div className="mt-4 rounded-2xl border border-minuri-silver/60 bg-minuri-fog/40 px-5 py-5">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
+                                Your vibe
+                            </p>
+                            <div className="mt-3 flex items-center gap-3">
+                                <span
+                                    className="size-8 shrink-0 rounded-xl"
+                                    style={{ backgroundColor: vibe.hex }}
+                                />
+                                <div>
+                                    <p className="text-sm font-bold text-minuri-ocean">{vibe.name}</p>
+                                    <p className="text-[11px] font-mono text-minuri-slate">{vibe.hex}</p>
+                                </div>
+                            </div>
+                            <p className="mt-3 text-xs leading-relaxed text-minuri-slate">
+                                {vibe.traits}
+                            </p>
                         </div>
                     </motion.aside>
                 </div>

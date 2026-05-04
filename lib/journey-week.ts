@@ -8,7 +8,7 @@ export type DayPlan = {
     topicSlug: GuideTopicSlug;
     narrative: string;
     guides: Guide[];
-    task: string;
+    tasks: string[];
 };
 
 export const TOPIC_NEAR_ME: Record<GuideTopicSlug, NearMeTopic> = {
@@ -317,12 +317,14 @@ export function buildWeekPlan(
         );
         if (available.length === 0) continue;
 
-        const guide = available[0];
-        usedSlugs.add(guide.slug);
+        const guides = available.slice(0, 3);
+        for (const g of guides) usedSlugs.add(g.slug);
 
         const override = ARC_THEMES[dayNum];
-        const narrative = GUIDE_NARRATIVES[guide.slug] ?? guide.summary ?? "";
-        const task = GUIDE_TASKS[guide.slug] ?? "";
+        const narrative = GUIDE_NARRATIVES[guides[0].slug] ?? guides[0].summary ?? "";
+        const tasks = guides
+            .map((g) => GUIDE_TASKS[g.slug] ?? "")
+            .filter(Boolean);
 
         days.push({
             day: dayNum,
@@ -330,8 +332,8 @@ export function buildWeekPlan(
             shortLabel: override?.shortLabel ?? TOPIC_SHORT[topicSlug],
             topicSlug,
             narrative,
-            guides: [guide],
-            task,
+            guides,
+            tasks,
         });
     }
 

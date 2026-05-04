@@ -11,19 +11,19 @@ export type JourneyState = {
 };
 
 const STORAGE_KEY = "minuri:journey:v2";
-const COMPLETED_KEY = "minuri:journey:completed";
+const TASKS_KEY = "minuri:journey:tasks:v1";
 
 export function useJourneyState() {
     const [state, setState] = useState<JourneyState | null>(null);
     const [hydrated, setHydrated] = useState(false);
-    const [completedDays, setCompletedDays] = useState<Set<number>>(new Set());
+    const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (raw) setState(JSON.parse(raw) as JourneyState);
-            const comp = localStorage.getItem(COMPLETED_KEY);
-            if (comp) setCompletedDays(new Set(JSON.parse(comp) as number[]));
+            const tasks = localStorage.getItem(TASKS_KEY);
+            if (tasks) setCompletedTasks(new Set(JSON.parse(tasks) as string[]));
         } catch { /* ignore */ }
         setHydrated(true);
     }, []);
@@ -38,22 +38,22 @@ export function useJourneyState() {
     const clearJourney = useCallback(() => {
         try {
             localStorage.removeItem(STORAGE_KEY);
-            localStorage.removeItem(COMPLETED_KEY);
+            localStorage.removeItem(TASKS_KEY);
         } catch { /* ignore */ }
         setState(null);
-        setCompletedDays(new Set());
+        setCompletedTasks(new Set());
     }, []);
 
-    const toggleDayComplete = useCallback((day: number) => {
-        setCompletedDays((prev) => {
+    const toggleTaskComplete = useCallback((key: string) => {
+        setCompletedTasks((prev) => {
             const next = new Set(prev);
-            if (next.has(day)) {
-                next.delete(day);
+            if (next.has(key)) {
+                next.delete(key);
             } else {
-                next.add(day);
+                next.add(key);
             }
             try {
-                localStorage.setItem(COMPLETED_KEY, JSON.stringify([...next]));
+                localStorage.setItem(TASKS_KEY, JSON.stringify([...next]));
             } catch { /* ignore */ }
             return next;
         });
@@ -64,7 +64,7 @@ export function useJourneyState() {
         hydrated,
         saveJourney,
         clearJourney,
-        completedDays,
-        toggleDayComplete,
+        completedTasks,
+        toggleTaskComplete,
     };
 }
