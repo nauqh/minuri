@@ -161,7 +161,8 @@ export function GuideDetailView({
 	from,
 	suburb,
 }: GuideDetailViewProps) {
-	const { isBookmarked, toggleBookmark } = useGuideBookmarks();
+	const { isBookmarked, toggleBookmark, bookmarks, hasHydrated } =
+		useGuideBookmarks();
 	const pathname = usePathname();
 	const arcMeta = getArcMeta(guide.arc);
 	const topicMeta = getTopicMeta(guide.topic);
@@ -434,6 +435,18 @@ export function GuideDetailView({
 			window.removeEventListener("resize", updateProgress);
 		};
 	}, [guide.slug]);
+
+	useEffect(() => {
+		if (!hasHydrated || readingProgress < 100) return;
+		if (bookmarks.includes(guide.slug)) return;
+		toggleBookmark(guide.slug);
+	}, [
+		bookmarks,
+		guide.slug,
+		hasHydrated,
+		readingProgress,
+		toggleBookmark,
+	]);
 
 	return (
 		<div className="min-h-screen bg-minuri-white text-minuri-ink">

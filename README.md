@@ -100,14 +100,16 @@ Reusable UI primitives live in `components/ui/*` (buttons, icons, menu, etc.).
 
 ## System Diagram
 
-This diagram shows the end-to-end system across the Next.js frontend, the FastAPI backend, external data sources, and ingestion pipelines.
+This diagram shows the end-to-end system across the Next.js frontend, the FastAPI backend, external data sources, and ingestion pipelines (Iteration 2: [Data Management Plan](iteration2/minuri_iteration2_data_management_plan.md), [Analysis & Design](iteration2/minuri_iteration2_analysis_design.md)).
 
 ```mermaid
 flowchart LR
     U[User Browser]
 
     subgraph FE[Minuri Frontend<br/>Next.js / React / TypeScript]
-        PAGES[App Pages<br/>/, /guides, /guides/:slug, /guides/bookmarks, /near-me]
+        PAGES[App Pages<br/>/, /guides, /guides/:arc/:slug, /guides/bookmarks,<br/>/journey, /journey/plan, /near-me]
+        LS[localStorage / sessionStorage<br/>minuri: namespace]
+        GJSON[Static guide JSON<br/>public/guides-content/]
         API_SUB[GET /api/suburbs<br/>app/api/suburbs/route.ts]
         API_POP[GET /api/population<br/>app/api/population/route.ts]
         API_NEAR[GET /api/nearby-interest<br/>app/api/nearby-interest/route.ts]
@@ -121,6 +123,8 @@ flowchart LR
         API_SUB --> LIB_SUB
         API_POP --> LIB_API
         API_NEAR --> LIB_API
+        PAGES --- LS
+        GJSON --> PAGES
     end
 
     subgraph BE[Minuri Server<br/>FastAPI / Python]
@@ -128,46 +132,57 @@ flowchart LR
         SVC_SUB[suburb_service.py]
         SVC_POP[population_service.py]
         SVC_NEAR[near_me.py]
+        SVC_PTV[ptv_service.py]
 
         FASTAPI --> SVC_SUB
         FASTAPI --> SVC_POP
         FASTAPI --> SVC_NEAR
+        FASTAPI --> SVC_PTV
     end
 
     subgraph DATA[Data and External Sources]
-        DB[(Postgres / Neon DB)]
+        DB[(Postgres / Neon DB<br/>suburbs · demographics · topics · arcs)]
+        S3B[(AWS S3<br/>guides-content/ prefix)]
         SRC_POST[Australian Postcodes CSV<br/>GitHub source]
         LOAD_SUB[load_melbourne_suburbs.py]
         SRC_ABS[ABS Regional Population XLSX]
         ETL_EXTRACT[extract.py]
-        ETL_CSV[victoria_population_table.csv]
+        ETL_CSV[app/data/victoria_population_table.csv]
         LOAD_POP[load_population_records.py]
-        SERP[SerpApi<br/>Google Local results]
+        LOAD_SEED[seed_static_reference_data.py]
+        S3SRC[app/s3/<br/>mirror for sync]
+        SYNC_S3[sync_s3_content.py]
+        SERP[SerpAPI<br/>Google Local results]
+        PTVAPI[PTV Timetable API]
 
         SRC_POST --> LOAD_SUB --> DB
         SRC_ABS --> ETL_EXTRACT --> ETL_CSV --> LOAD_POP --> DB
+        LOAD_SEED --> DB
+        S3SRC --> SYNC_S3 --> S3B
     end
 
     U --> PAGES
-    LIB_API -->|HTTPS| FASTAPI
-    FASTAPI -->|GET /suburb, /suburb/larger-region| LIB_API
-    FASTAPI -->|GET /api/population| LIB_API
-    FASTAPI -->|GET /api/nearby-interest| LIB_API
+    U --- LS
+    LIB_API <-->|HTTPS JSON| FASTAPI
+    PAGES -.->|HTTPS JSON<br/>GET /api/ptv/stops-nearby · /api/ptv/departures| FASTAPI
     SVC_SUB --> DB
     SVC_POP --> DB
     SVC_NEAR --> SERP
+    SVC_PTV --> PTVAPI
 
     classDef source fill:#e3f2fd,stroke:#1e88e5,color:#0d47a1;
     classDef etl fill:#ede7f6,stroke:#5e35b1,color:#311b92;
     classDef db fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20;
+    classDef objectstore fill:#fff8e1,stroke:#f57c00,color:#e65100;
     classDef serve fill:#f5f5f5,stroke:#9e9e9e,color:#424242;
     classDef client fill:#fce4ec,stroke:#c2185b,color:#880e4f;
 
-    class SRC_POST,SRC_ABS,SERP source;
-    class LOAD_SUB,ETL_EXTRACT,ETL_CSV,LOAD_POP etl;
+    class SRC_POST,SRC_ABS,SERP,PTVAPI,GJSON source;
+    class LOAD_SUB,ETL_EXTRACT,ETL_CSV,LOAD_POP,LOAD_SEED,SYNC_S3 etl;
     class DB db;
-    class FE,BE,DATA,PAGES,API_SUB,API_POP,API_NEAR,LIB_API,LIB_SUB,FASTAPI,SVC_SUB,SVC_POP,SVC_NEAR serve;
-    class U client;
+    class S3B,S3SRC objectstore;
+    class FE,BE,DATA,PAGES,API_SUB,API_POP,API_NEAR,LIB_API,LIB_SUB,FASTAPI,SVC_SUB,SVC_POP,SVC_NEAR,SVC_PTV serve;
+    class U,LS client;
 ```
 
 ## Simple React Component Map
