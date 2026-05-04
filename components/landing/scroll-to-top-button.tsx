@@ -9,45 +9,17 @@ import { cn } from "@/lib/utils";
 const SHOW_AFTER_PX = 360;
 const SCROLL_UP_INTENT_PX = 10;
 const SCROLL_DOWN_HIDE_PX = 10;
-const TRACKED_SECTION_IDS = ["service", "care", "contact"] as const;
-
-type ScrollToTopButtonProps = {
-	trackedSectionIds?: readonly string[];
-};
-
-export function ScrollToTopButton({
-	trackedSectionIds = TRACKED_SECTION_IDS,
-}: ScrollToTopButtonProps) {
+export function ScrollToTopButton() {
 	const [visible, setVisible] = useState(false);
 	const previousScrollYRef = useRef(0);
 
 	useEffect(() => {
-		const isInTrackedSection = () => {
-			if (trackedSectionIds.length === 0) {
-				return true;
-			}
-
-			const viewportCenterY = window.innerHeight * 0.5;
-
-			return trackedSectionIds.some((id) => {
-				const section = document.getElementById(id);
-				if (!section) return false;
-
-				const rect = section.getBoundingClientRect();
-				return (
-					rect.top <= viewportCenterY &&
-					rect.bottom >= viewportCenterY
-				);
-			});
-		};
-
 		const onScroll = () => {
 			const currentScrollY = window.scrollY;
 			const scrollDelta = previousScrollYRef.current - currentScrollY;
 			const scrollingUp = scrollDelta > SCROLL_UP_INTENT_PX;
 			const scrollingDown = scrollDelta < -SCROLL_DOWN_HIDE_PX;
-			const canShow =
-				currentScrollY > SHOW_AFTER_PX && isInTrackedSection();
+			const canShow = currentScrollY > SHOW_AFTER_PX;
 
 			setVisible((previousVisible) => {
 				if (!canShow) return false;
@@ -62,7 +34,7 @@ export function ScrollToTopButton({
 		onScroll();
 		window.addEventListener("scroll", onScroll, { passive: true });
 		return () => window.removeEventListener("scroll", onScroll);
-	}, [trackedSectionIds]);
+	}, []);
 
 	const scrollToTop = useCallback(() => {
 		window.scrollTo({ top: 0, behavior: "smooth" });

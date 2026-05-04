@@ -2,12 +2,7 @@
 
 import { useEffect } from "react";
 import { LANDING_KEYS } from "@/components/landing/landing-local-state";
-import { DEFAULT_VIBE_ID, getVibe, type VibeId } from "@/lib/vibes";
-
-function readVibeId(): VibeId {
-	if (typeof window === "undefined") return DEFAULT_VIBE_ID;
-	return (window.localStorage.getItem(LANDING_KEYS.vibe) as VibeId) ?? DEFAULT_VIBE_ID;
-}
+import { VIBES, getVibe, type VibeId } from "@/lib/vibes";
 
 export function saveVibe(id: VibeId) {
 	if (typeof window === "undefined") return;
@@ -15,10 +10,11 @@ export function saveVibe(id: VibeId) {
 	document.documentElement.style.setProperty("--vibe-accent", getVibe(id).hex);
 }
 
-/** Reads the stored vibe on mount and stamps --vibe-accent onto :root. */
+/** Picks a random vibe on mount, persists it for the session, and stamps --vibe-accent onto :root. */
 export function useVibe() {
 	useEffect(() => {
-		const vibe = getVibe(readVibeId());
-		document.documentElement.style.setProperty("--vibe-accent", vibe.hex);
+		const random = VIBES[Math.floor(Math.random() * VIBES.length)];
+		window.localStorage.setItem(LANDING_KEYS.vibe, random.id);
+		document.documentElement.style.setProperty("--vibe-accent", random.hex);
 	}, []);
 }
