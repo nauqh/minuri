@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "lenis/dist/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -182,7 +183,8 @@
 	html {
 		@apply font-sans;
 		position: relative;
-		scroll-behavior: smooth;
+		/* Lenis drives smoothing — native smooth here doubles animations */
+		scroll-behavior: auto;
 		overflow-x: hidden;
 	}
 }
