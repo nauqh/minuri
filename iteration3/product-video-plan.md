@@ -204,31 +204,54 @@ Everything you need to start feeling at home.
 
 ---
 
-### Scene 6 — The Close
-**Duration:** 2:28 – 2:50
+### Scene 6 — Many Voices, One Feeling
+**Duration:** 2:28 – 2:55
 
-**Visuals:** Clean, calm. Minuri logo holds on screen. A final brief shot of Alex and Mia — living their lives, settled. Music fades to near silence.
+**Visuals:** A series of quick cuts — different people, different places, different moments of settling in. Not Alex and Mia anymore. New faces. Diverse. Each person gets one line, direct to camera or candid. Warm, slightly overlapping energy — like a chorus building to something.
 
-**On-screen text:**
+The lines are short. Personal. Each one a small truth about starting out.
+
+**Voiceover — multiple people, one after another:**
+
+> *"I didn't know you had to register with a doctor before you needed one."*
+
+> *"My first week I just ate toast. I didn't know where anything was."*
+
+> *"Nobody told me how expensive internet would be."*
+
+> *"I cried a little. Just a little."* *(light laugh)*
+
+> *"I thought I was the only one who didn't know what they were doing."*
+
+> *"Turns out everyone feels like that."*
+
+*(Short pause. Music softens.)*
+
+> *"But you figure it out."*
+
+*(Beat. Then, warm and calm — a single final voice:)*
+
+> *"That's Minuri. Me. And you. Figuring it out together."*
+
+**On-screen text** *(as the final line plays)*:
 ```
-Minuri
-For every young adult figuring it out.
+Mini  +  uri
+ Me      You
+```
+*(dissolves to)*
+```
+Minuri.
 ```
 *(beat)*
 ```
 Still feeling home, wherever you are.
 ```
-*(beat)*
+
+**Closing frame:** Minuri logo. Quiet music out.
+
 ```
 Built by [Team Name] · [University / Course]
 ```
-
-**Voiceover:**
-> *"We believe every young person deserves a smooth start. Not just the ones who happen to know someone, or who've done it before.*
->
-> *Minuri is free, accessible, and built with real users in mind. We're looking for partners who share that belief — and who want to be part of giving young Australians the start they deserve.*
->
-> *Thank you."*
 
 ---
 
@@ -258,7 +281,29 @@ Built by [Team Name] · [University / Course]
 
 *One week. That's all it takes to go from overwhelmed to oriented. Not because everything is figured out — but because the right foundations are in place. Minuri doesn't try to solve everything. It just makes sure that in week one, the things that matter most don't get missed.*
 
-*We believe every young person deserves a smooth start. Not just the ones who happen to know someone, or who've done it before. Minuri is free, accessible, and built with real users in mind. We're looking for partners who share that belief — and who want to be part of giving young Australians the start they deserve.*
+---
+
+*[Multiple voices, one after another]*
+
+*"I didn't know you had to register with a doctor before you needed one."*
+
+*"My first week I just ate toast. I didn't know where anything was."*
+
+*"Nobody told me how expensive internet would be."*
+
+*"I cried a little. Just a little."* *[light laugh]*
+
+*"I thought I was the only one who didn't know what they were doing."*
+
+*"Turns out everyone feels like that."*
+
+*"But you figure it out."*
+
+---
+
+*[Single calm voice]*
+
+*"That's Minuri. Me. And you. Figuring it out together.*
 
 *Thank you."*
 
