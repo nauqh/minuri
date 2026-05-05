@@ -2,7 +2,7 @@
 
 **Length:** 2:30 – 2:50 min  
 **Tone:** Friendly, warm, relatable  
-**Format:** Screen recording + real footage + text overlays  
+**Format:** Real footage + screen recording + text overlays  
 
 ---
 
@@ -10,9 +10,15 @@
 
 | | Alex | Mia |
 |---|---|---|
-| **Who** | Young adult, new to the city | First-year uni student, first time away from home |
+| **Who** | Young adult, new to the city for work | First-year uni student, first time away from home |
 | **Arrival** | Steps out of the train station | Hops off the bus near campus |
-| **Struggle** | Adult responsibilities, new environment | Student life, no support network nearby |
+| **Struggle** | Adult responsibilities, unfamiliar city | Student life, no support network nearby |
+
+---
+
+## Full Voiceover Script
+
+> *The voiceover runs almost continuously across the video — warm, conversational, like a friend who's been through it presenting to you. Not a corporate pitch. Not an announcer. Just someone who gets it.*
 
 ---
 
@@ -21,8 +27,9 @@
 ---
 
 ### Scene 1 — Two Arrivals
-**Duration:** 0:00 – 0:30  
-**Visuals:** Alex walks out of the train station exit, pauses, looks up at the buildings and the crowd. Cut to Mia stepping off the bus outside uni — backpack on, looks around, checks her phone. Warm, light music from the first frame. No rush.
+**Duration:** 0:00 – 0:30
+
+**Visuals:** Alex walks out of the train station exit — pauses, looks up at the buildings and the crowd. Cut to Mia stepping off the bus outside uni — backpack on, looks around, checks her phone. Warm, light music from the first frame.
 
 **On-screen text:**
 ```
@@ -35,41 +42,51 @@ Mia.
 First semester. First time on her own.
 ```
 
-**Voiceover:**  
-*(none — let the visuals breathe)*
+**Voiceover:**
+> *"Every year, hundreds of thousands of young Australians take that first big step — moving out, starting uni, starting over in a new city. It's exciting. It's a milestone. And for most of them, the first week is also quietly overwhelming."*
 
-**Closing text overlay:**
-```
-Everyone's first week looks a little different.
-The feeling is the same.
-```
+*(Let the arrivals play out — no rush. The voiceover carries the emotion.)*
 
 ---
 
 ### Scene 2 — The Same Small Problems
-**Duration:** 0:30 – 1:00  
-**Visuals:** Intercut between Alex and Mia — parallel moments, different settings. Quick cuts, warm and slightly playful. No tension, just recognition.
+**Duration:** 0:30 – 1:05
+
+**Visuals:** Intercut between Alex and Mia — parallel moments, different settings. Warm and slightly playful. No tension, just recognition.
 
 | Alex | Mia |
 |---|---|
 | Googles "how to register with a GP" | Googles the exact same thing |
-| Stares at a utilities bill | Tries to figure out which bus goes to the supermarket |
+| Stares at a utilities bill, no idea what to do | Tries to figure out which bus goes to the supermarket |
 | Eats instant noodles alone on the floor | Eats instant noodles alone at her desk |
 
-**On-screen text** *(appears over the noodles moment)*:
+**On-screen text** *(over the noodle moment)*:
+```
+Finding a doctor.
+Setting up utilities.
+Getting around.
+Making friends.
+```
+
+**Voiceover:**
+> *"How do I register with a GP? Which bills do I actually need to pay — and when? Where do I even buy groceries? These are small questions. But when you're figuring them all out at once, for the first time, with no one really showing you the way — they pile up fast.*
+>
+> *The information is out there. But it's scattered, overwhelming, and not written for someone who's never done this before.*
+>
+> *We asked ourselves: what if there was a guide that actually met young people at this moment?"*
+
+**Closing text overlay:**
 ```
 Turns out, adulting is the same
 whether you're 20 minutes or 2 hours from home.
 ```
 
-**Voiceover:**
-> *"First time doing it all yourself. There's a lot nobody really tells you about."*
-
 ---
 
 ### Scene 3 — Enter Minuri
-**Duration:** 1:00 – 1:20  
-**Visuals:** A quiet moment — Alex on the couch, Mia at a café on campus. Both reach for their phones. Both land on Minuri. The product appears naturally on screen — no dramatic zoom, no fanfare. Just the app, on a real phone, in a real hand.
+**Duration:** 1:05 – 1:30
+
+**Visuals:** A natural moment — Alex on the couch, Mia at a campus café. Both reach for their phones. Both open Minuri. The product appears on screen in a real hand — no floating UI, no dramatic zoom. Just the app, being used.
 
 **On-screen text:**
 ```
@@ -82,82 +99,96 @@ one day, one thing at a time.
 ```
 
 **Voiceover:**
-> *"Minuri is built for exactly this moment — your first week of figuring it all out. Five things that actually matter. Broken down into steps you can actually do."*
+> *"That's why we built Minuri. A free, mobile-friendly web app designed for young adults in their first weeks of independent living.*
+>
+> *Minuri organises everything a person needs to settle in — across five core areas of life — and turns it into a simple, day-by-day journey. No login. No noise. Just the right information, at the right moment, with a clear next step.*
+>
+> *Here's how it works."*
 
-**Product shown:** Landing screen → Journey intro → the 5 topic icons
+**Product shown:** Landing screen → Journey feature intro → 5 topic icons
 
 ---
 
 ### Scene 4 — Their Week
-**Duration:** 1:20 – 2:05  
-**Visuals:** Follow both characters through a few days, loosely intercut. Show the app in natural, in-hand moments — not polished screencasts. Each day has one beat per character.
+**Duration:** 1:30 – 2:10
+
+**Visuals:** Follow both characters through their first few days. Show the app naturally — in hand, on the go. Each day introduces one topic through their real-life moment, with the product visible alongside it.
 
 ---
 
 #### Day 1 — Health & Wellbeing
-**Visuals:** Alex books a GP appointment. Mia finds a bulk-billing clinic near campus on the map.
+**Visuals:** Alex opens the Health guide, reads about bulk-billing GPs, and uses Near Me to find one close to him. Mia does the same near campus — calls the clinic, books an appointment.
 
 **On-screen text:**
 ```
-Day 1. Health.
+Day 1 — Health & Wellbeing
 ```
 
 **Voiceover:**
-> *"Finding a doctor before you actually need one. Done."*
+> *"Day one starts with health. Because finding a GP before you actually need one is exactly the kind of thing no one thinks to do — until they're sick at midnight wondering where to go.*
+>
+> *Minuri's guides explain what bulk-billing means, what a Medicare card is, and how to get one. And with our Near Me feature, users can find real, relevant places close to where they actually live — not just anywhere in the city."*
 
-**Product shown:** Near Me map → GP result → "Call" button
+**Product shown:** Health guide → Near Me map → GP listing → Call button
 
 ---
 
 #### Day 2 — Getting Around
-**Visuals:** Mia works out her bus route on the app. Alex checks the tram stops near his new office.
+**Visuals:** Mia maps her bus route to uni on the Getting Around guide. Alex checks tram stops near his new office, figures out how to set up his Myki.
 
 **On-screen text:**
 ```
-Day 2. Getting around.
+Day 2 — Getting Around
 ```
 
 **Voiceover:**
-> *"Knowing your city — even just the bit you need right now."*
+> *"Day two is about getting comfortable with the city. Public transport, routes, how to top up a Myki — the stuff that sounds simple but trips everyone up in week one.*
+>
+> *Minuri breaks it down in plain language. No jargon. No assuming you already know."*
 
-**Product shown:** Getting Around guide → transport tips
+**Product shown:** Getting Around guide → transport tips → Near Me for transport
 
 ---
 
 #### Day 3 — Home & Admin
-**Visuals:** Alex ticks off "set up internet" on the task list. Mia reads the utilities guide at her kitchen table.
+**Visuals:** Alex ticks off "set up internet" on his task checklist. Mia reads the guide on utilities at her kitchen table — crosses something off her phone.
 
 **On-screen text:**
 ```
-Day 3. Home & Admin.
+Day 3 — Home & Admin
 The stuff no one warned you about.
 ```
 
 **Voiceover:**
-> *"The paperwork, the services, the things you didn't know you needed to set up. All in one place."*
+> *"By day three, it's the paperwork. Setting up internet, electricity, understanding a lease — the admin that quietly follows every new address.*
+>
+> *Each guide in Minuri comes with a checklist of real, actionable tasks. Not overwhelming. Just one thing at a time — because that's actually how people get things done."*
 
-**Product shown:** Home & Admin guide → task checklist
+**Product shown:** Home & Admin guide → task checklist with items being ticked off
 
 ---
 
 #### Day 4 — Food & Social
-**Visuals:** Alex finds a cheap eat near his neighbourhood. Mia is out at a campus event she saw mentioned in the Social & Belonging guide.
+**Visuals:** Alex finds a cheap eat near his suburb using Near Me. Mia is out at a campus event she found through the Social & Belonging guide — talking to someone new.
 
 **On-screen text:**
 ```
-Day 4. Getting out there.
+Day 4 — Food & Social Belonging
 ```
 
 **Voiceover:**
-> *"Eating well, spending less, and slowly — meeting people."*
+> *"And then there's the part people don't always talk about — eating well on a budget, and finding your people.*
+>
+> *Minuri's Social & Belonging section is a little different. It doesn't rank community. It just opens doors — local events, groups, spaces where young people actually connect. Because settling in isn't just about logistics. It's about feeling like you belong somewhere."*
 
-**Product shown:** Food guide → Near Me for food → Social & Belonging guide
+**Product shown:** Food guide → Near Me for food → Social & Belonging guide → local events
 
 ---
 
 ### Scene 5 — A Week Later
-**Duration:** 2:05 – 2:25  
-**Visuals:** Both of them, one week on. Small, real moments — not dramatic. Alex knows his neighbourhood, buys a coffee without checking his phone. Mia walks to her lecture without looking at the map. Maybe, without knowing it, they're in the same café at the same time — a quiet visual nod.
+**Duration:** 2:10 – 2:28
+
+**Visuals:** Both characters, one week on. Small, real moments — not dramatic. Alex buys a coffee without checking his phone. Mia walks to her lecture without looking at the map. They're comfortable. Maybe, without realising it, they end up at the same café — a quiet visual nod that Minuri brings people into the same city.
 
 **On-screen text:**
 ```
@@ -167,13 +198,16 @@ Everything you need to start feeling at home.
 ```
 
 **Voiceover:**
-> *"It's not magic. It's just the right guide, at the right moment — when you actually need it."*
+> *"One week. That's all it takes to go from overwhelmed to oriented. Not because everything is figured out — but because the right foundations are in place.*
+>
+> *Minuri doesn't try to solve everything. It just makes sure that in week one, the things that matter most don't get missed."*
 
 ---
 
 ### Scene 6 — The Close
-**Duration:** 2:25 – 2:50  
-**Visuals:** Clean, simple. Minuri logo on screen. Brief shot of both characters living their lives — settled, comfortable. Music fades gently.
+**Duration:** 2:28 – 2:50
+
+**Visuals:** Clean, calm. Minuri logo holds on screen. A final brief shot of Alex and Mia — living their lives, settled. Music fades to near silence.
 
 **On-screen text:**
 ```
@@ -182,40 +216,77 @@ For every young adult figuring it out.
 ```
 *(beat)*
 ```
-Built by [Team Name]
-[University / Course]
+Still feeling home, wherever you are.
+```
+*(beat)*
+```
+Built by [Team Name] · [University / Course]
 ```
 
 **Voiceover:**
-> *"We're building the guide that every young adult deserves when they start out on their own. And we're looking for partners who believe that first step should feel a little less daunting."*
+> *"We believe every young person deserves a smooth start. Not just the ones who happen to know someone, or who've done it before.*
+>
+> *Minuri is free, accessible, and built with real users in mind. We're looking for partners who share that belief — and who want to be part of giving young Australians the start they deserve.*
+>
+> *Thank you."*
 
-**Closing frame:** Minuri logo + tagline — *"Still feeling home, wherever you are."*
+---
+
+## Full Voiceover — Consolidated Script
+
+> *For recording reference — continuous read-through, scene labels removed.*
+
+---
+
+*"Every year, hundreds of thousands of young Australians take that first big step — moving out, starting uni, starting over in a new city. It's exciting. It's a milestone. And for most of them, the first week is also quietly overwhelming.*
+
+*How do I register with a GP? Which bills do I actually need to pay — and when? Where do I even buy groceries? These are small questions. But when you're figuring them all out at once, for the first time, with no one really showing you the way — they pile up fast.*
+
+*The information is out there. But it's scattered, overwhelming, and not written for someone who's never done this before. We asked ourselves: what if there was a guide that actually met young people at this moment?*
+
+*That's why we built Minuri. A free, mobile-friendly web app designed for young adults in their first weeks of independent living. Minuri organises everything a person needs to settle in — across five core areas of life — and turns it into a simple, day-by-day journey. No login. No noise. Just the right information, at the right moment, with a clear next step.*
+
+*Here's how it works.*
+
+*Day one starts with health. Because finding a GP before you actually need one is exactly the kind of thing no one thinks to do — until they're sick at midnight wondering where to go. Minuri's guides explain what bulk-billing means, what a Medicare card is, and how to get one. And with our Near Me feature, users can find real, relevant places close to where they actually live — not just anywhere in the city.*
+
+*Day two is about getting comfortable with the city. Public transport, routes, how to top up a Myki — the stuff that sounds simple but trips everyone up in week one. Minuri breaks it down in plain language. No jargon. No assuming you already know.*
+
+*By day three, it's the paperwork. Setting up internet, electricity, understanding a lease — the admin that quietly follows every new address. Each guide in Minuri comes with a checklist of real, actionable tasks. Not overwhelming. Just one thing at a time — because that's actually how people get things done.*
+
+*And then there's the part people don't always talk about — eating well on a budget, and finding your people. Minuri's Social & Belonging section is a little different. It doesn't rank community. It just opens doors — local events, groups, spaces where young people actually connect. Because settling in isn't just about logistics. It's about feeling like you belong somewhere.*
+
+*One week. That's all it takes to go from overwhelmed to oriented. Not because everything is figured out — but because the right foundations are in place. Minuri doesn't try to solve everything. It just makes sure that in week one, the things that matter most don't get missed.*
+
+*We believe every young person deserves a smooth start. Not just the ones who happen to know someone, or who've done it before. Minuri is free, accessible, and built with real users in mind. We're looking for partners who share that belief — and who want to be part of giving young Australians the start they deserve.*
+
+*Thank you."*
 
 ---
 
 ## Production Notes
 
 ### Music
-- Starts warm and light from frame one — never anxious or dramatic
-- Builds gently through Scene 4, settles into something calm for Scene 5–6
-- Suggested feel: gentle acoustic/indie — think early Novo Amor or similar
+- Warm and light from frame one — never anxious or dramatic
+- Builds gently through Scene 4, settles quietly for Scene 5–6
+- Suggested feel: gentle acoustic/indie — think early Novo Amor, Haux, or similar
 
 ### Visual Style
-- Mix of real footage (people, places, city) + natural phone screen captures
-- Product shown in hand, not as a floating UI — keep it grounded
-- Colour palette follows Minuri's ocean teal — use it in text overlays and transitions
+- Mix of real footage (people, city, campus) + natural in-hand screen captures
+- Product always shown on a real phone in a real setting — not a floating UI
+- Colour palette follows Minuri's ocean teal — use in text overlays and transitions
 
 ### Text Overlays
-- Clean, minimal — same font as the product (sans-serif, light weight)
-- Teal or white on dark moments, dark on bright footage
-- Never more than 2 lines at once
+- Clean, minimal — sans-serif, light weight, matching the product
+- Teal or white on darker footage, dark on bright outdoor shots
+- Never more than 2 lines at once — let the voiceover carry the detail
 
 ### Voiceover
-- Single voice — warm, calm, mid-20s feeling
-- Conversational, not announcer-style
-- Leave silence where the visuals do the work (Scene 1 especially)
+- Single voice — warm, calm, genuine — mid-20s energy
+- Conversational, not announcer-style — read it like you mean it, not like you're presenting
+- Scene 1 has a slight pause before voiceover begins — let the arrivals land first
 
 ### Tools
 - **Editing:** CapCut or DaVinci Resolve (both free, no watermarks)
-- **Screen recording:** built-in on iOS/Android or Quicktime
-- **Music:** Free Music Archive or ccMixter (check licence before use)
+- **Screen recording:** iOS/Android built-in or Quicktime on Mac
+- **Music:** Free Music Archive or ccMixter — check licence before use
