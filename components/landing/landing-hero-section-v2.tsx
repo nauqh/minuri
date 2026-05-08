@@ -391,6 +391,30 @@ export function LandingHeroSectionV2({
 					</div>
 				</motion.div>
 			</div>
+
+			<motion.div
+				className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+				initial={{ opacity: 0, y: -8 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
+				onClick={() => window.scrollBy({ top: window.innerHeight, behavior: "smooth" })}
+				aria-label="Scroll down"
+			>
+				<motion.span
+					className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60"
+					animate={{ opacity: [0.5, 1, 0.5] }}
+					transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+				>
+					Scroll to explore
+				</motion.span>
+				<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
+					<motion.div
+						className="h-1.5 w-1 rounded-full bg-minuri-teal"
+						animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
+						transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+					/>
+				</div>
+			</motion.div>
 		</section>
 	);
 }

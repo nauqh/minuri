@@ -12,8 +12,8 @@ const fraunces = Fraunces({
 	subsets: ["latin"],
 	variable: "--font-hero-serif",
 });
-
 export const metadata: Metadata = {
+	metadataBase: new URL("https://www.minuri.tech"),
 	title: "Minuri — Your guide to settling in Melbourne",
 	description:
 		"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
