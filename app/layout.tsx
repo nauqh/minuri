@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import {
-	Fraunces,
-	Inter,
-} from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { AppShell } from "@/components/app-shell";
@@ -17,11 +14,35 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-	title: "Your guides for living independently | Minuri",
+	title: "Minuri — Your guide to settling in Melbourne",
 	description:
-		"Proactive wellbeing for young adults living independently: reminders, guides, habits, and Care Circle.",
+		"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
 	icons: {
 		icon: "https://cdn-icons-png.flaticon.com/512/6959/6959474.png",
+	},
+	openGraph: {
+		title: "Minuri — Your guide to settling in Melbourne",
+		description:
+			"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
+		url: "https://www.minuri.tech",
+		siteName: "Minuri",
+		images: [
+			{
+				url: "/og-image.png",
+				width: 1200,
+				height: 630,
+				alt: "Minuri — Your guide to settling in Melbourne",
+			},
+		],
+		locale: "en_AU",
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Minuri — Your guide to settling in Melbourne",
+		description:
+			"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
+		images: ["/og-image.png"],
 	},
 };
 
@@ -43,12 +64,12 @@ export default function RootLayout({
 			)}
 		>
 			<body className="min-h-full flex flex-col">
-					<AppShell>
-						<SmoothScrollProvider>
-							<VibeProvider>{children}</VibeProvider>
-						</SmoothScrollProvider>
-					</AppShell>
-				</body>
+				<AppShell>
+					<SmoothScrollProvider>
+						<VibeProvider>{children}</VibeProvider>
+					</SmoothScrollProvider>
+				</AppShell>
+			</body>
 		</html>
 	);
 }
