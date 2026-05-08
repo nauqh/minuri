@@ -272,7 +272,7 @@ function PasswordPromptDialog({
 									"h-11 w-full bg-minuri-teal text-primary-foreground hover:bg-minuri-teal/90 sm:w-auto sm:min-w-44",
 								)}
 							>
-								Enter Minuri
+								Enter minuri
 							</Button>
 						</div>
 					</form>

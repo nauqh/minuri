@@ -159,21 +159,28 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 									<div className="flex flex-col gap-1.5">
 										<p
 											className="text-xs font-semibold tracking-[0.14em] uppercase"
-											style={{ color: "var(--minuri-seafoam)" }}
+											style={{
+												color: "var(--minuri-seafoam)",
+											}}
 										>
 											Minuri Preview
 										</p>
 										<h2
 											className="text-2xl font-semibold leading-snug tracking-tight"
-											style={{ color: "var(--minuri-white)" }}
+											style={{
+												color: "var(--minuri-white)",
+											}}
 										>
 											One sec — drop your invite password
 										</h2>
 										<p
 											className="text-sm font-light leading-relaxed"
-											style={{ color: "rgba(255,255,255,0.55)" }}
+											style={{
+												color: "rgba(255,255,255,0.55)",
+											}}
 										>
-											Enter the password to keep loading and unlock everything.
+											Enter the password to keep loading
+											and unlock everything.
 										</p>
 									</div>
 
@@ -190,7 +197,8 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 											}}
 											className="h-12 w-full rounded-xl border px-4 text-base outline-none transition-colors"
 											style={{
-												backgroundColor: "rgba(255,255,255,0.08)",
+												backgroundColor:
+													"rgba(255,255,255,0.08)",
 												borderColor: pwError
 													? "var(--minuri-coral)"
 													: "rgba(255,255,255,0.2)",
@@ -200,7 +208,9 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 										{pwError && (
 											<p
 												className="text-sm font-medium"
-												style={{ color: "var(--minuri-coral)" }}
+												style={{
+													color: "var(--minuri-coral)",
+												}}
 											>
 												Wrong password — try once more.
 											</p>
@@ -211,11 +221,12 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 										type="submit"
 										className="h-12 w-full rounded-xl text-base font-semibold transition-opacity hover:opacity-90 active:opacity-75"
 										style={{
-											backgroundColor: "var(--minuri-teal)",
+											backgroundColor:
+												"var(--minuri-teal)",
 											color: "var(--minuri-white)",
 										}}
 									>
-										Enter Minuri
+										Enter minuri
 									</button>
 								</form>
 							</motion.div>
