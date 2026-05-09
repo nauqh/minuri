@@ -1,7 +1,7 @@
 export const steps = [
 	{
 		title: "First Time Guides",
-		line: "Practical, plain-language guides for food, health, transport, and social connection while you settle into independent life.",
+		line: "Practical, instructive guides for food, health, transport, and social connection while you settle into independent life.",
 	},
 	{
 		title: "Local Services Near You",

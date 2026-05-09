@@ -322,7 +322,7 @@ export function LandingHeroSectionV2({
 								}}
 							>
 								<p className="max-w-xl text-sm leading-[1.6] text-minuri-ocean font-medium md:hidden">
-									Get plain-language guides, find nearby
+									Get instructive guides, find nearby
 									services, and follow clear next steps for
 									day-to-day independent life.
 								</p>
@@ -397,7 +397,7 @@ export function LandingHeroSectionV2({
 										restartCycle();
 									}}
 									entranceEase={entranceEase}
-									className="absolute right-[calc(100%+10px)] top-[calc(50%+5px)] h-[calc(50%-5px)] w-[calc(50%-5px)]"
+									className="hidden md:block md:absolute right-[calc(100%+10px)] top-[calc(50%+5px)] h-[calc(50%-5px)] w-[calc(50%-5px)]"
 								/>
 							</div>
 						</div>
@@ -417,7 +417,7 @@ export function LandingHeroSectionV2({
 					{/* Text + CTAs stacked on the left */}
 					<div className="flex flex-col gap-4 min-[1500px]:gap-5">
 						<p className="max-w-xl text-base leading-relaxed text-minuri-ocean font-medium min-[1500px]:text-lg">
-							Get plain-language guides, find nearby services, and
+							Get instructive guides, find nearby services, and
 							follow clear next steps for day-to-day independent
 							life.
 						</p>

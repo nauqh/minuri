@@ -100,7 +100,7 @@ function CardFace({
 
 	return (
 		<motion.div
-			className="absolute inset-0 flex items-center border-y-2 border-minuri-ocean bg-minuri-white"
+			className="absolute inset-0 flex items-center bg-minuri-white"
 			style={{
 				y,
 				zIndex: index + 1,
@@ -117,8 +117,6 @@ function CardFace({
 			/>
 
 			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:max-w-screen-2xl xl:px-20 2xl:max-w-none 2xl:px-24 2xl:gap-24">
-				{/* center divider — desktop only */}
-				<div aria-hidden className="absolute inset-y-0 left-1/2 hidden w-0.5 -translate-x-px bg-minuri-ocean md:block" />
 				{/* ── text ── */}
 				<div
 					className={cn(
