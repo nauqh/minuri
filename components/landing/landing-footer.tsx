@@ -71,8 +71,9 @@ const topicLinks = [
 	{ label: "Social & Belonging", href: "/guides" },
 ];
 
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%';
-const ORIGINAL = 'Minuri';
+const SCRAMBLE_CHARS =
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%";
+const ORIGINAL = "Minuri";
 
 export function LandingFooter() {
 	const [displayText, setDisplayText] = useState(ORIGINAL);
@@ -85,11 +86,17 @@ export function LandingFooter() {
 		iterationRef.current = 0;
 		frameRef.current = setInterval(() => {
 			setDisplayText(
-				ORIGINAL.split('').map((c, i) =>
-					i < iterationRef.current
-						? ORIGINAL[i]
-						: SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
-				).join('')
+				ORIGINAL.split("")
+					.map((c, i) =>
+						i < iterationRef.current
+							? ORIGINAL[i]
+							: SCRAMBLE_CHARS[
+									Math.floor(
+										Math.random() * SCRAMBLE_CHARS.length,
+									)
+								],
+					)
+					.join(""),
 			);
 			if (iterationRef.current >= ORIGINAL.length) {
 				clearInterval(frameRef.current!);
@@ -106,13 +113,23 @@ export function LandingFooter() {
 	useEffect(() => {
 		const el = h2Ref.current;
 		if (!el) return;
+		document.fonts.ready.then(() => {
+			if (h2Ref.current) {
+				h2Ref.current.style.width = `${h2Ref.current.offsetWidth}px`;
+			}
+		});
+	}, []);
+
+	useEffect(() => {
+		const el = h2Ref.current;
+		if (!el) return;
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				if (!entry.isIntersecting) return;
 				observer.disconnect();
 				startScramble();
 			},
-			{ threshold: 0.5 }
+			{ threshold: 0.5 },
 		);
 		observer.observe(el);
 		return () => observer.disconnect();
