@@ -113,9 +113,8 @@ function HeroTopicCard({
 				{/* Big editorial word */}
 				<div className="flex flex-1 items-center py-1">
 					<span
-						className="font-hero-serif italic leading-none transition-opacity duration-300"
+						className="font-hero-serif italic leading-none transition-opacity duration-300 text-5xl md:text-5xl min-[1500px]:text-6xl"
 						style={{
-							fontSize: "clamp(2rem, 4.5vw, 3.4rem)",
 							color: "#05292a",
 							opacity: isActive ? 1 : 0.18,
 							fontVariationSettings: "'opsz' 144",
@@ -175,14 +174,14 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative flex h-screen flex-col overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen-2xl px-8 pb-10 pt-4 sm:px-10 md:px-6 md:pt-0">
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-8 pb-10 pt-4 sm:px-10 md:px-6 md:pt-0 min-[1500px]:max-w-[1600px]">
 				<LandingHeader
 					headerVisible={headerVisible}
 					onHeroReveal={onHeroReveal}
 				/>
 
 				<motion.div
-					className="flex flex-1 flex-col pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-16 md:pt-12 min-[1500px]:pb-8 min-[1500px]:pt-6"
+					className="flex flex-1 flex-col pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-16 md:pt-12 min-[1500px]:pb-20 min-[1500px]:pt-20"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -197,7 +196,7 @@ export function LandingHeroSectionV2({
 				>
 					<div className="w-full">
 						<motion.span
-							className="inline-flex rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-minuri-ocean min-[1500px]:text-base"
+							className="inline-flex rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-minuri-ocean min-[1500px]:p-3 min-[1500px]:text-base"
 							variants={{
 								hidden: {
 									opacity: 0,
@@ -216,7 +215,7 @@ export function LandingHeroSectionV2({
 							Living independently
 						</motion.span>
 						<motion.h1
-							className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-7xl md:leading-none min-[1500px]:text-8xl"
+							className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-7xl md:leading-none min-[1500px]:mt-8 min-[1500px]:text-9xl"
 							variants={{
 								hidden: {
 									opacity: 0,
@@ -262,9 +261,9 @@ export function LandingHeroSectionV2({
 					</div>
 
 					<div className="mt-0 grid flex-1 gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-start md:gap-10">
-						<div className="flex flex-col md:h-[350px] min-[1500px]:h-[460px]">
+						<div className="flex flex-col md:h-[350px] min-[1500px]:h-[380px]">
 							<motion.p
-								className="hidden text-2xl font-semibold leading-snug text-minuri-ocean md:mt-4 md:block md:leading-tight min-[1500px]:text-3xl"
+								className="hidden text-2xl font-semibold leading-snug text-minuri-ocean md:mt-4 md:block md:leading-tight min-[1500px]:text-4xl"
 								variants={{
 									hidden: {
 										opacity: 0,
@@ -300,13 +299,13 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<p className="max-w-xl text-[1.0625rem] leading-[1.6] text-minuri-ocean font-medium md:text-base md:leading-relaxed min-[1500px]:text-lg">
+								<p className="max-w-xl text-sm leading-[1.6] text-minuri-ocean font-medium md:text-xl md:leading-relaxed min-[1500px]:text-2xl">
 									Get plain-language guides, find nearby
 									services, and follow clear next steps for
 									day-to-day independent life.
 								</p>
 								<motion.div
-									className="flex flex-wrap items-center gap-4 md:my-6 md:gap-3 max-md:flex-col max-md:items-stretch pt-2 md:pt-0"
+									className="flex flex-wrap items-center gap-4 md:my-6 md:gap-3 max-md:flex-col max-md:items-stretch pt-2 md:pt-0 min-[1500px]:my-10 min-[1500px]:gap-5"
 									variants={{
 										hidden: {
 											opacity: 0,
@@ -325,7 +324,7 @@ export function LandingHeroSectionV2({
 								>
 									<Link
 										href="/near-me"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6 min-[1500px]:h-14 min-[1500px]:px-8 min-[1500px]:text-lg"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
 									>
 										Find nearby support
 										<ChevronRight
@@ -335,7 +334,7 @@ export function LandingHeroSectionV2({
 									</Link>
 									<Link
 										href="/guides"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6 min-[1500px]:h-14 min-[1500px]:px-8 min-[1500px]:text-lg"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
 									>
 										Start with guides
 										<ChevronRight
@@ -347,9 +346,9 @@ export function LandingHeroSectionV2({
 							</motion.div>
 						</div>
 
-						<div className="relative z-10 flex w-full flex-col md:ml-auto md:pb-4 md:max-w-[460px]">
+						<div className="relative z-10 flex w-full flex-col md:ml-auto md:pb-4 md:max-w-[460px] min-[1500px]:max-w-[600px]">
 							<div
-								className="relative grid grid-cols-2 gap-2.5 md:gap-3 h-[350px]"
+								className="relative grid grid-cols-2 gap-2.5 md:gap-3 h-[350px] min-[1500px]:h-[380px]"
 								style={{ gridAutoRows: "1fr" }}
 							>
 								{HERO_TOPIC_CARDS.slice(0, 4).map((card, i) => (
@@ -391,13 +390,22 @@ export function LandingHeroSectionV2({
 				initial={{ opacity: 0, y: -8 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-				onClick={() => lenis?.scrollTo(window.scrollY + window.innerHeight, { duration: 1.2, easing: (t) => 1 - Math.pow(1 - t, 4) })}
+				onClick={() =>
+					lenis?.scrollTo(window.scrollY + window.innerHeight, {
+						duration: 1.2,
+						easing: (t) => 1 - Math.pow(1 - t, 4),
+					})
+				}
 				aria-label="Scroll down"
 			>
 				<motion.span
 					className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60"
 					animate={{ opacity: [0.5, 1, 0.5] }}
-					transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+					transition={{
+						duration: 2,
+						repeat: Infinity,
+						ease: "easeInOut",
+					}}
 				>
 					Scroll to explore
 				</motion.span>
@@ -405,7 +413,11 @@ export function LandingHeroSectionV2({
 					<motion.div
 						className="h-1.5 w-1 rounded-full bg-minuri-teal"
 						animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
-						transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+						transition={{
+							duration: 1.5,
+							repeat: Infinity,
+							ease: "easeInOut",
+						}}
 					/>
 				</div>
 			</motion.div>

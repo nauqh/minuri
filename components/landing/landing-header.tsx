@@ -65,7 +65,7 @@ export function LandingHeader({
 	return (
 		<div className="relative">
 			<motion.header
-				className="-mx-6 flex w-[calc(100%+3rem)] max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-21 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
+				className="-mx-6 flex w-[calc(100%+3rem)] max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-21 min-[1500px]:min-h-28 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
 				initial={{ opacity: 0, y: -18 }}
 				animate={
 					headerVisible
@@ -78,7 +78,7 @@ export function LandingHeader({
 				}}
 			>
 				<motion.div
-					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-6 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12"
+					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-6 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12 min-[1500px]:gap-16"
 					initial={{ opacity: 0, y: 12 }}
 					animate={{ opacity: headerVisible ? 1 : 0, y: 0 }}
 					transition={{
@@ -89,33 +89,33 @@ export function LandingHeader({
 				>
 					<Link
 						href="/"
-						className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem]"
+						className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem] min-[1500px]:text-[2.6rem]"
 					>
 						<span className="uppercase">Minuri</span>
 					</Link>
 
-					<nav className="hidden items-center gap-10 text-base font-medium text-minuri-ocean md:flex">
+					<nav className="hidden items-center gap-10 text-base min-[1500px]:gap-14 min-[1500px]:text-lg font-medium text-minuri-ocean md:flex">
 						<Link
 							href="#services"
-							className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							Services
 						</Link>
 						<Link
 							href="#service"
-							className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							How it works
 						</Link>
 						<Link
 							href="#care"
-							className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							Topics
 						</Link>
 						<Link
 							href="#contact"
-							className="minuri-link-underline inline-flex h-12 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							Get support
 						</Link>
@@ -147,7 +147,7 @@ export function LandingHeader({
 					>
 						<Link
 							href="/journey"
-							className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-ocean px-6 text-base font-medium text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
+							className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-1.5 rounded-full bg-minuri-ocean px-6 min-[1500px]:px-8 text-base min-[1500px]:text-lg font-medium text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
 						>
 							Start your journey
 							<ChevronRight
