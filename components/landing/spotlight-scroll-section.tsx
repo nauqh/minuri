@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { Compass, LayoutGrid, MapPin, type LucideIcon } from "lucide-react";
+import { ChevronRight, Compass, LayoutGrid, MapPin, type LucideIcon } from "lucide-react";
 import {
 	motion,
 	useReducedMotion,
@@ -100,7 +100,7 @@ function CardFace({
 
 	return (
 		<motion.div
-			className="absolute inset-0 flex items-center bg-minuri-white"
+			className="absolute inset-0 flex items-center border-y-2 border-minuri-ocean bg-minuri-white"
 			style={{
 				y,
 				zIndex: index + 1,
@@ -116,73 +116,70 @@ function CardFace({
 				style={{ background: card.color }}
 			/>
 
-			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:px-16">
+			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:px-16 2xl:max-w-screen-2xl 2xl:px-24 2xl:gap-20">
+				{/* center divider — desktop only */}
+				<div aria-hidden className="absolute inset-y-0 left-1/2 hidden w-0.5 -translate-x-px bg-minuri-ocean md:block" />
 				{/* ── text ── */}
 				<div
 					className={cn(
 						"flex flex-col justify-center",
 						!visualOnRight
-							? "md:order-2 md:pl-14 lg:pl-20"
-							: "md:pr-14 lg:pr-20",
+							? "md:order-2 md:pl-14 lg:pl-20 2xl:pl-28"
+							: "md:pr-14 lg:pr-20 2xl:pr-28",
 					)}
 				>
-					<div className="w-full max-w-136 rounded-[1.7rem] border border-minuri-silver/55 bg-minuri-white/85 p-5 shadow-[0_20px_44px_-34px_rgba(4,30,43,0.35)] backdrop-blur-[2px] sm:p-6 md:p-8">
-						<div className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-minuri-silver/60 bg-minuri-white px-3.5 py-1.5 sm:mb-6">
-							<span
-								aria-hidden
-								className="size-2.5 rounded-full"
-								style={{ background: card.color }}
-							/>
-							<span
-								className="text-[0.68rem] font-bold uppercase tracking-[0.2em]"
-								style={{
-									color: `color-mix(in srgb, ${card.color} 60%, #0c1e2e)`,
-								}}
+					<div className="mb-5 flex items-center gap-3 sm:mb-7">
+						<span
+							aria-hidden
+							className="block h-px w-8 shrink-0"
+							style={{ background: card.color }}
+						/>
+						<span
+							className="text-[0.68rem] font-black uppercase tracking-[0.22em]"
+							style={{
+								color: `color-mix(in srgb, ${card.color} 55%, #0c1e2e)`,
+							}}
+						>
+							{card.step}
+						</span>
+					</div>
+
+					<h3 className="text-[2rem] font-bold leading-[1.08] tracking-tight text-minuri-ocean sm:text-[2.4rem] md:text-[2.8rem] 2xl:text-[3.6rem]">
+						{card.title}
+					</h3>
+
+					<p className="mt-4 max-w-sm text-[0.98rem] leading-relaxed text-minuri-slate sm:mt-5 md:text-[1.05rem] 2xl:max-w-lg 2xl:text-[1.2rem]">
+						{card.body}
+					</p>
+
+					<div className="mt-8 sm:mt-10">
+						{card.options.map((opt, optionIndex) => (
+							<div
+								key={opt.title}
+								className="flex items-start gap-4 border-t border-minuri-silver/40 py-4 first:border-t-0 first:pt-0 last:pb-0"
 							>
-								{card.step}
-							</span>
-						</div>
-
-						<h3 className="text-[1.75rem] font-bold leading-[1.12] tracking-tight text-minuri-ocean sm:text-[2rem] md:text-[2.35rem]">
-							{card.title}
-						</h3>
-
-						<p className="mt-3 text-[0.98rem] leading-relaxed text-minuri-slate sm:mt-5 md:text-[1.08rem]">
-							{card.body}
-						</p>
-
-						<div className="mt-4 space-y-2.5 sm:mt-6 sm:space-y-3.5">
-							{card.options.map((opt, optionIndex) => (
-								<div
-									key={opt.title}
-									className="flex items-start gap-3 rounded-xl border border-minuri-silver/55 bg-minuri-white/80 px-3 py-3 transition-transform duration-300 ease-out hover:-translate-y-0.5 sm:gap-3.5 sm:px-3.5 sm:py-3.5"
+								<span
+									aria-hidden
+									className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.65rem] font-black tabular-nums"
+									style={{
+										background: `color-mix(in srgb, ${card.color} 40%, white)`,
+										color: "#0c1e2e",
+									}}
 								>
-									<span
-										aria-hidden
-										className="inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1.5 text-[0.72rem] font-black tabular-nums"
-										style={{
-											background: `color-mix(in srgb, ${card.color} 34%, white)`,
-											color: "#0c1e2e",
-										}}
-									>
-										{String(optionIndex + 1).padStart(
-											2,
-											"0",
-										)}
-									</span>
-									<div>
-										<p className="text-[0.95rem] font-semibold text-minuri-ocean sm:text-[1rem]">
-											{opt.title}
+									{String(optionIndex + 1).padStart(2, "0")}
+								</span>
+								<div>
+									<p className="text-[0.95rem] font-semibold text-minuri-ocean sm:text-[1rem] 2xl:text-[1.1rem]">
+										{opt.title}
+									</p>
+									{opt.description && (
+										<p className="mt-0.5 text-[0.84rem] leading-relaxed text-minuri-slate 2xl:text-[0.95rem]">
+											{opt.description}
 										</p>
-										{opt.description && (
-											<p className="mt-0.5 text-[0.85rem] leading-relaxed text-minuri-slate sm:text-[0.9rem]">
-												{opt.description}
-											</p>
-										)}
-									</div>
+									)}
 								</div>
-							))}
-						</div>
+							</div>
+						))}
 					</div>
 				</div>
 
@@ -303,12 +300,21 @@ export function SpotlightScrollSection() {
 					<button
 						type="button"
 						onClick={scrollToTopAndHighlightLandingCta}
-						className="group relative flex h-22 w-full cursor-pointer items-center overflow-hidden rounded-[1.35rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-minuri-white hover:bg-none hover:border-minuri-silver/80 hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
+						className="group relative flex h-22 w-full cursor-pointer items-center overflow-hidden rounded-[1.35rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.98] md:hover:bg-minuri-white md:hover:bg-none md:hover:border-minuri-silver/80 md:hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
 					>
-						<span className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.65rem,3.8vw,2.1rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-9 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-9 group-focus-visible:translate-x-0 group-focus-visible:text-foreground">
+						{/* Mobile: simple centered layout with always-visible arrow */}
+						<div className="flex w-full items-center justify-center gap-3 px-6 md:hidden">
+							<span className="text-[1.55rem] font-bold tracking-[-0.04em] text-minuri-white">
+								Let's Get Started
+							</span>
+							<ChevronRight aria-hidden className="size-6 shrink-0 text-minuri-white" strokeWidth={2.5} />
+						</div>
+
+						{/* Desktop: animated hover layout */}
+						<span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.65rem,3.8vw,2.1rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:block group-hover:left-9 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-9 group-focus-visible:translate-x-0 group-focus-visible:text-foreground">
 							Let's Get Started
 						</span>
-						<span className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 translate-x-6 opacity-0 transition-[transform,opacity] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:pointer-events-auto group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
+						<span className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 translate-x-6 opacity-0 transition-[transform,opacity] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:block group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:pointer-events-auto group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
 							<span className="inline-flex items-center rounded-full border border-minuri-silver/50 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-7 py-3 text-lg font-semibold tracking-tight text-minuri-white shadow-[0_12px_20px_-14px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:scale-105 focus-visible:-translate-y-0.5 focus-visible:scale-105">
 								Start your journey
 							</span>

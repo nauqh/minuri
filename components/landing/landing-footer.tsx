@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
+import { useState, useRef, useEffect } from "react";
 
 import { easeOut } from "@/components/landing/home-constants";
 import { LandingFooterCurve } from "@/components/landing/home-shared";
@@ -70,7 +71,44 @@ const topicLinks = [
 	{ label: "Social & Belonging", href: "/guides" },
 ];
 
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%';
+const ORIGINAL = 'Minuri';
+
 export function LandingFooter() {
+	const [displayText, setDisplayText] = useState(ORIGINAL);
+	const frameRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const iterationRef = useRef(0);
+	const h2Ref = useRef<HTMLHeadingElement>(null);
+
+	useEffect(() => {
+		const el = h2Ref.current;
+		if (!el) return;
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (!entry.isIntersecting) return;
+				observer.disconnect();
+				if (frameRef.current) clearInterval(frameRef.current);
+				iterationRef.current = 0;
+				frameRef.current = setInterval(() => {
+					setDisplayText(
+						ORIGINAL.split('').map((c, i) =>
+							i < iterationRef.current
+								? ORIGINAL[i]
+								: SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+						).join('')
+					);
+					if (iterationRef.current >= ORIGINAL.length) {
+						clearInterval(frameRef.current!);
+					}
+					iterationRef.current += 0.4;
+				}, 30);
+			},
+			{ threshold: 0.5 }
+		);
+		observer.observe(el);
+		return () => observer.disconnect();
+	}, []);
+
 	return (
 		<footer className="relative z-10 bg-minuri-ocean text-minuri-white">
 			<LandingFooterCurve color="text-minuri-ocean" />
@@ -87,8 +125,11 @@ export function LandingFooter() {
 						<p className="mb-3 text-[0.62rem] font-black uppercase tracking-[0.18em] text-minuri-white/35">
 							We are
 						</p>
-						<h2 className="text-[clamp(6rem,17vw,15rem)] font-black leading-none text-minuri-mint">
-							Minuri
+						<h2
+							ref={h2Ref}
+							className="text-[clamp(6rem,17vw,15rem)] font-black leading-none text-minuri-mint"
+						>
+							{displayText}
 						</h2>
 					</motion.div>
 

@@ -14,14 +14,14 @@ const fraunces = Fraunces({
 });
 export const metadata: Metadata = {
 	metadataBase: new URL("https://www.minuri.tech"),
-	title: "Minuri — Your guide to settling in Melbourne",
+	title: "Minuri | Your guide to settling in Melbourne",
 	description:
 		"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
 	icons: {
 		icon: "https://cdn-icons-png.flaticon.com/512/6959/6959474.png",
 	},
 	openGraph: {
-		title: "Minuri — Your guide to settling in Melbourne",
+		title: "Minuri | Your guide to settling in Melbourne",
 		description:
 			"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
 		url: "https://www.minuri.tech",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Minuri — Your guide to settling in Melbourne",
+		title: "Minuri | Your guide to settling in Melbourne",
 		description:
 			"Practical guides, local maps, and a personalised week plan for young adults starting out in Melbourne.",
 		images: ["/og-image.png"],

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { useLenis } from "lenis/react";
 
 import { LandingHeader } from "@/components/landing/landing-header";
 
@@ -152,6 +153,7 @@ export function LandingHeroSectionV2({
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [hasStartedWordCycle, setHasStartedWordCycle] = useState(false);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const lenis = useLenis();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 	const headlineWord = hasStartedWordCycle
 		? HERO_TOPIC_CARDS[activeIndex].word
@@ -393,11 +395,11 @@ export function LandingHeroSectionV2({
 			</div>
 
 			<motion.div
-				className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+				className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 cursor-pointer"
 				initial={{ opacity: 0, y: -8 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-				onClick={() => window.scrollBy({ top: window.innerHeight, behavior: "smooth" })}
+				onClick={() => lenis?.scrollTo(window.scrollY + window.innerHeight, { duration: 1.2, easing: (t) => 1 - Math.pow(1 - t, 4) })}
 				aria-label="Scroll down"
 			>
 				<motion.span
