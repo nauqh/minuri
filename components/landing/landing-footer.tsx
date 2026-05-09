@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 import { easeOut } from "@/components/landing/home-constants";
 import { LandingFooterCurve } from "@/components/landing/home-shared";
@@ -80,6 +80,29 @@ export function LandingFooter() {
 	const iterationRef = useRef(0);
 	const h2Ref = useRef<HTMLHeadingElement>(null);
 
+	const startScramble = useCallback(() => {
+		if (frameRef.current) clearInterval(frameRef.current);
+		iterationRef.current = 0;
+		frameRef.current = setInterval(() => {
+			setDisplayText(
+				ORIGINAL.split('').map((c, i) =>
+					i < iterationRef.current
+						? ORIGINAL[i]
+						: SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+				).join('')
+			);
+			if (iterationRef.current >= ORIGINAL.length) {
+				clearInterval(frameRef.current!);
+			}
+			iterationRef.current += 0.4;
+		}, 30);
+	}, []);
+
+	const stopScramble = useCallback(() => {
+		if (frameRef.current) clearInterval(frameRef.current);
+		setDisplayText(ORIGINAL);
+	}, []);
+
 	useEffect(() => {
 		const el = h2Ref.current;
 		if (!el) return;
@@ -87,27 +110,13 @@ export function LandingFooter() {
 			([entry]) => {
 				if (!entry.isIntersecting) return;
 				observer.disconnect();
-				if (frameRef.current) clearInterval(frameRef.current);
-				iterationRef.current = 0;
-				frameRef.current = setInterval(() => {
-					setDisplayText(
-						ORIGINAL.split('').map((c, i) =>
-							i < iterationRef.current
-								? ORIGINAL[i]
-								: SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
-						).join('')
-					);
-					if (iterationRef.current >= ORIGINAL.length) {
-						clearInterval(frameRef.current!);
-					}
-					iterationRef.current += 0.4;
-				}, 30);
+				startScramble();
 			},
 			{ threshold: 0.5 }
 		);
 		observer.observe(el);
 		return () => observer.disconnect();
-	}, []);
+	}, [startScramble]);
 
 	return (
 		<footer className="relative z-10 bg-minuri-ocean text-minuri-white">
@@ -127,7 +136,9 @@ export function LandingFooter() {
 						</p>
 						<h2
 							ref={h2Ref}
-							className="text-[clamp(6rem,17vw,15rem)] font-black leading-none text-minuri-mint"
+							className="cursor-default text-[clamp(6rem,17vw,15rem)] font-black leading-none text-minuri-mint"
+							onMouseEnter={startScramble}
+							onMouseLeave={stopScramble}
 						>
 							{displayText}
 						</h2>

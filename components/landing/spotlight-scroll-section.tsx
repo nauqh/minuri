@@ -156,11 +156,11 @@ function CardFace({
 						{card.options.map((opt, optionIndex) => (
 							<div
 								key={opt.title}
-								className="flex items-start gap-4 border-t border-minuri-silver/40 py-4 first:border-t-0 first:pt-0 last:pb-0"
+								className="flex items-start gap-4 border-t border-minuri-silver/40 py-4 first:border-t-0 first:pt-0 last:pb-0 2xl:gap-6 2xl:py-6"
 							>
 								<span
 									aria-hidden
-									className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.65rem] font-black tabular-nums"
+									className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.65rem] font-black tabular-nums 2xl:h-8 2xl:min-w-8 2xl:text-[0.78rem]"
 									style={{
 										background: `color-mix(in srgb, ${card.color} 40%, white)`,
 										color: "#0c1e2e",
