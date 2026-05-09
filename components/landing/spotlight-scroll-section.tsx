@@ -160,7 +160,7 @@ function CardFace({
 							>
 								<span
 									aria-hidden
-									className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.65rem] font-black tabular-nums 2xl:h-8 2xl:min-w-8 2xl:text-[0.78rem]"
+									className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.75rem] font-black tabular-nums 2xl:h-8 2xl:min-w-8 2xl:text-[0.88rem]"
 									style={{
 										background: `color-mix(in srgb, ${card.color} 40%, white)`,
 										color: "#0c1e2e",
@@ -169,11 +169,11 @@ function CardFace({
 									{String(optionIndex + 1).padStart(2, "0")}
 								</span>
 								<div>
-									<p className="text-[0.95rem] font-semibold text-minuri-ocean sm:text-[1rem] 2xl:text-[1.1rem]">
+									<p className="text-[1.08rem] font-semibold text-minuri-ocean sm:text-[1.15rem] 2xl:text-[1.25rem]">
 										{opt.title}
 									</p>
 									{opt.description && (
-										<p className="mt-0.5 text-[0.84rem] leading-relaxed text-minuri-slate 2xl:text-[0.95rem]">
+										<p className="mt-0.5 text-[0.95rem] leading-relaxed text-minuri-slate 2xl:text-[1.05rem]">
 											{opt.description}
 										</p>
 									)}

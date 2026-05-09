@@ -174,7 +174,29 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative flex h-screen flex-col overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-8 pt-4 sm:px-10 md:px-6 md:pt-0 min-[1500px]:max-w-[1600px]">
+			{/* Grid background — lines + radial fade to white at edges */}
+			<div aria-hidden className="pointer-events-none absolute inset-0">
+				<div
+					className="absolute inset-0"
+					style={{
+						backgroundImage: [
+							"linear-gradient(to right, rgba(2,24,25,0.07) 1px, transparent 1px)",
+							"linear-gradient(to bottom, rgba(2,24,25,0.07) 1px, transparent 1px)",
+						].join(", "),
+						backgroundSize: "48px 48px",
+					}}
+				/>
+				{/* Fade grid to white at all four edges */}
+				<div
+					className="absolute inset-0"
+					style={{
+						background:
+							"radial-gradient(ellipse 75% 70% at 50% 42%, transparent 25%, rgba(255,255,255,0.6) 55%, white 78%)",
+					}}
+				/>
+			</div>
+
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-8 pt-4 sm:px-10 md:px-6 md:pt-0 md:pb-40 min-[1500px]:max-w-[1600px] min-[1500px]:pb-48">
 				<LandingHeader
 					headerVisible={headerVisible}
 					onHeroReveal={onHeroReveal}
@@ -299,7 +321,7 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<p className="max-w-xl text-sm leading-[1.6] text-minuri-ocean font-medium md:hidden min-[1500px]:text-2xl">
+								<p className="max-w-xl text-sm leading-[1.6] text-minuri-ocean font-medium md:hidden">
 									Get plain-language guides, find nearby
 									services, and follow clear next steps for
 									day-to-day independent life.
@@ -381,17 +403,20 @@ export function LandingHeroSectionV2({
 						</div>
 					</div>
 				</motion.div>
+			</div>
 
-				{/* Desktop bottom bar — inside content-div; flex-1 motion.div above shrinks to give it room */}
-				<motion.div
-					className="relative hidden md:flex items-end pb-8 px-6 min-[1500px]:px-8"
-					initial={{ opacity: 0, y: -8 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-				>
+			{/* Desktop bottom bar — absolute on section, content-div pb reserves the space */}
+			<motion.div
+				className="absolute bottom-0 left-0 right-0 hidden md:flex pb-8"
+				initial={{ opacity: 0, y: -8 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
+			>
+				{/* Same max-width constraint as the content div above */}
+				<div className="relative mx-auto flex w-full max-w-screen items-end px-6 md:px-6 min-[1500px]:max-w-[1600px] min-[1500px]:px-8">
 					{/* Text + CTAs stacked on the left */}
 					<div className="flex flex-col gap-4 min-[1500px]:gap-5">
-						<p className="max-w-xl text-base leading-relaxed text-minuri-ocean font-medium min-[1500px]:text-xl">
+						<p className="max-w-xl text-base leading-relaxed text-minuri-ocean font-medium min-[1500px]:text-lg">
 							Get plain-language guides, find nearby services, and
 							follow clear next steps for day-to-day independent
 							life.
@@ -399,7 +424,7 @@ export function LandingHeroSectionV2({
 						<div className="flex items-center gap-3 min-[1500px]:gap-5">
 							<Link
 								href="/near-me"
-								className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
+								className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-14 min-[1500px]:px-8 min-[1500px]:text-lg"
 							>
 								Find nearby support
 								<ChevronRight
@@ -409,7 +434,7 @@ export function LandingHeroSectionV2({
 							</Link>
 							<Link
 								href="/guides"
-								className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
+								className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-14 min-[1500px]:px-8 min-[1500px]:text-lg"
 							>
 								Start with guides
 								<ChevronRight
@@ -420,9 +445,9 @@ export function LandingHeroSectionV2({
 						</div>
 					</div>
 
-					{/* Scroll indicator — centered via absolute within this full-width bar */}
+					{/* Scroll indicator — centered within the constrained container */}
 					<div
-						className="absolute bottom-8 left-1/2 -translate-x-1/2 flex cursor-pointer flex-col items-center gap-2 min-[1500px]:bottom-10"
+						className="absolute bottom-0 left-1/2 -translate-x-1/2 flex cursor-pointer flex-col items-center gap-2"
 						onClick={() =>
 							lenis?.scrollTo(
 								window.scrollY + window.innerHeight,
@@ -457,8 +482,8 @@ export function LandingHeroSectionV2({
 							/>
 						</div>
 					</div>
-				</motion.div>
-			</div>
+				</div>
+			</motion.div>
 		</section>
 	);
 }

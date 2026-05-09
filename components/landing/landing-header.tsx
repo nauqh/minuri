@@ -65,7 +65,7 @@ export function LandingHeader({
 	return (
 		<div className="relative">
 			<motion.header
-				className="-mx-6 flex w-[calc(100%+3rem)] max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-21 min-[1500px]:min-h-28 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
+				className="-mx-6 flex w-[calc(100%+3rem)] max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-24 min-[1500px]:min-h-32 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
 				initial={{ opacity: 0, y: -18 }}
 				animate={
 					headerVisible
