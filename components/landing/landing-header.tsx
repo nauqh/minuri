@@ -97,25 +97,25 @@ export function LandingHeader({
 					<nav className="hidden items-center gap-10 text-base min-[1500px]:gap-14 min-[1500px]:text-lg font-medium text-minuri-ocean md:flex">
 						<Link
 							href="#services"
-							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
 						>
 							Services
 						</Link>
 						<Link
 							href="#service"
-							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
 						>
 							How it works
 						</Link>
 						<Link
 							href="#care"
-							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
 						>
 							Topics
 						</Link>
 						<Link
 							href="#contact"
-							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
 						>
 							Get support
 						</Link>

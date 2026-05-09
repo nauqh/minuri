@@ -106,7 +106,7 @@ function HeroTopicCard({
 				}}
 			>
 				{/* Label */}
-				<p className="text-[0.58rem] font-black uppercase tracking-[0.18em] text-[#05292a]/60">
+				<p className="text-sm font-black uppercase tracking-[0.18em] text-[#05292a]">
 					{card.title}
 				</p>
 
@@ -174,14 +174,14 @@ export function LandingHeroSectionV2({
 
 	return (
 		<section className="relative flex h-screen flex-col overflow-hidden bg-minuri-white text-minuri-ink">
-			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-8 pb-10 pt-4 sm:px-10 md:px-6 md:pt-0 min-[1500px]:max-w-[1600px]">
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-8 pt-4 sm:px-10 md:px-6 md:pt-0 min-[1500px]:max-w-[1600px]">
 				<LandingHeader
 					headerVisible={headerVisible}
 					onHeroReveal={onHeroReveal}
 				/>
 
 				<motion.div
-					className="flex flex-1 flex-col pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-16 md:pt-12 min-[1500px]:pb-20 min-[1500px]:pt-20"
+					className="flex flex-1 flex-col pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-0 md:pt-4"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -215,7 +215,7 @@ export function LandingHeroSectionV2({
 							Living independently
 						</motion.span>
 						<motion.h1
-							className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-7xl md:leading-none min-[1500px]:mt-8 min-[1500px]:text-9xl"
+							className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-7xl md:leading-none min-[1500px]:mt-4 min-[1500px]:text-8xl"
 							variants={{
 								hidden: {
 									opacity: 0,
@@ -299,18 +299,16 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<p className="max-w-xl text-sm leading-[1.6] text-minuri-ocean font-medium md:text-xl md:leading-relaxed min-[1500px]:text-2xl">
+								<p className="max-w-xl text-sm leading-[1.6] text-minuri-ocean font-medium md:hidden min-[1500px]:text-2xl">
 									Get plain-language guides, find nearby
 									services, and follow clear next steps for
 									day-to-day independent life.
 								</p>
+								{/* Mobile CTAs only — desktop CTAs live in the bottom bar */}
 								<motion.div
-									className="flex flex-wrap items-center gap-4 md:my-6 md:gap-3 max-md:flex-col max-md:items-stretch pt-2 md:pt-0 min-[1500px]:my-10 min-[1500px]:gap-5"
+									className="flex flex-wrap items-center gap-4 max-md:flex-col max-md:items-stretch pt-2 md:hidden"
 									variants={{
-										hidden: {
-											opacity: 0,
-											y: 10,
-										},
+										hidden: { opacity: 0, y: 10 },
 										visible: {
 											opacity: 1,
 											y: 0,
@@ -324,7 +322,7 @@ export function LandingHeroSectionV2({
 								>
 									<Link
 										href="/near-me"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 									>
 										Find nearby support
 										<ChevronRight
@@ -334,7 +332,7 @@ export function LandingHeroSectionV2({
 									</Link>
 									<Link
 										href="/guides"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 md:w-auto md:justify-start md:px-6 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
 									>
 										Start with guides
 										<ChevronRight
@@ -383,44 +381,84 @@ export function LandingHeroSectionV2({
 						</div>
 					</div>
 				</motion.div>
-			</div>
 
-			<motion.div
-				className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 cursor-pointer"
-				initial={{ opacity: 0, y: -8 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-				onClick={() =>
-					lenis?.scrollTo(window.scrollY + window.innerHeight, {
-						duration: 1.2,
-						easing: (t) => 1 - Math.pow(1 - t, 4),
-					})
-				}
-				aria-label="Scroll down"
-			>
-				<motion.span
-					className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60"
-					animate={{ opacity: [0.5, 1, 0.5] }}
-					transition={{
-						duration: 2,
-						repeat: Infinity,
-						ease: "easeInOut",
-					}}
+				{/* Desktop bottom bar — inside content-div; flex-1 motion.div above shrinks to give it room */}
+				<motion.div
+					className="relative hidden md:flex items-end pb-8 px-6 min-[1500px]:px-8"
+					initial={{ opacity: 0, y: -8 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
 				>
-					Scroll to explore
-				</motion.span>
-				<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
-					<motion.div
-						className="h-1.5 w-1 rounded-full bg-minuri-teal"
-						animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
-						transition={{
-							duration: 1.5,
-							repeat: Infinity,
-							ease: "easeInOut",
-						}}
-					/>
-				</div>
-			</motion.div>
+					{/* Text + CTAs stacked on the left */}
+					<div className="flex flex-col gap-4 min-[1500px]:gap-5">
+						<p className="max-w-xl text-base leading-relaxed text-minuri-ocean font-medium min-[1500px]:text-xl">
+							Get plain-language guides, find nearby services, and
+							follow clear next steps for day-to-day independent
+							life.
+						</p>
+						<div className="flex items-center gap-3 min-[1500px]:gap-5">
+							<Link
+								href="/near-me"
+								className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
+							>
+								Find nearby support
+								<ChevronRight
+									aria-hidden
+									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
+								/>
+							</Link>
+							<Link
+								href="/guides"
+								className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-16 min-[1500px]:px-10 min-[1500px]:text-xl"
+							>
+								Start with guides
+								<ChevronRight
+									aria-hidden
+									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
+								/>
+							</Link>
+						</div>
+					</div>
+
+					{/* Scroll indicator — centered via absolute within this full-width bar */}
+					<div
+						className="absolute bottom-8 left-1/2 -translate-x-1/2 flex cursor-pointer flex-col items-center gap-2 min-[1500px]:bottom-10"
+						onClick={() =>
+							lenis?.scrollTo(
+								window.scrollY + window.innerHeight,
+								{
+									duration: 1.2,
+									easing: (t) => 1 - Math.pow(1 - t, 4),
+								},
+							)
+						}
+						aria-label="Scroll down"
+					>
+						<motion.span
+							className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60"
+							animate={{ opacity: [0.5, 1, 0.5] }}
+							transition={{
+								duration: 2,
+								repeat: Infinity,
+								ease: "easeInOut",
+							}}
+						>
+							Scroll to explore
+						</motion.span>
+						<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
+							<motion.div
+								className="h-1.5 w-1 rounded-full bg-minuri-teal"
+								animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
+								transition={{
+									duration: 1.5,
+									repeat: Infinity,
+									ease: "easeInOut",
+								}}
+							/>
+						</div>
+					</div>
+				</motion.div>
+			</div>
 		</section>
 	);
 }
