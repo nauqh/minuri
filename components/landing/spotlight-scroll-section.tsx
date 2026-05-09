@@ -116,7 +116,7 @@ function CardFace({
 				style={{ background: card.color }}
 			/>
 
-			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:px-16 2xl:max-w-screen-2xl 2xl:px-24 2xl:gap-20">
+			<div className="relative z-10 mx-auto grid w-full max-w-screen-xl items-center gap-8 px-6 py-8 sm:py-14 md:grid-cols-2 md:gap-12 md:px-14 md:py-20 xl:max-w-screen-2xl xl:px-20 2xl:max-w-none 2xl:px-24 2xl:gap-24">
 				{/* center divider — desktop only */}
 				<div aria-hidden className="absolute inset-y-0 left-1/2 hidden w-0.5 -translate-x-px bg-minuri-ocean md:block" />
 				{/* ── text ── */}
