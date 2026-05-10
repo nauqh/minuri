@@ -171,6 +171,10 @@ export function GuideDetailView({
 	const [readingProgress, setReadingProgress] = useState(0);
 	const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 	const [isJourneySidebarOpen, setIsJourneySidebarOpen] = useState(false);
+	const [headerVisible, setHeaderVisible] = useState(true);
+	const [sourcesOpen, setSourcesOpen] = useState(false);
+	const [copied, setCopied] = useState(false);
+	const lastScrollY = useRef(0);
 	const prefersReducedMotion = useReducedMotion();
 	const sectionAnim = {
 		initial: {
@@ -446,16 +450,22 @@ export function GuideDetailView({
 	}, [guide.slug]);
 
 	useEffect(() => {
-		if (!hasHydrated || readingProgress < 100) return;
-		if (bookmarks.includes(guide.slug)) return;
-		toggleBookmark(guide.slug);
-	}, [
-		bookmarks,
-		guide.slug,
-		hasHydrated,
-		readingProgress,
-		toggleBookmark,
-	]);
+		const handleScroll = () => {
+			const currentY = window.scrollY;
+			if (currentY < 80) {
+				setHeaderVisible(true);
+			} else if (currentY < lastScrollY.current) {
+				setHeaderVisible(true);
+			} else if (currentY > lastScrollY.current + 4) {
+				setHeaderVisible(false);
+			}
+			lastScrollY.current = currentY;
+		};
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+
+
 
 	return (
 		<div className="min-h-screen bg-minuri-white text-minuri-ink">
@@ -465,7 +475,10 @@ export function GuideDetailView({
 					style={{ width: `${readingProgress}%` }}
 				/>
 			</div>
-			<header className="sticky top-[2px] z-40 bg-minuri-white backdrop-blur">
+			<header className={cn(
+					"fixed inset-x-0 top-[2px] z-40 bg-minuri-white/95 backdrop-blur transition-transform duration-300",
+					headerVisible ? "translate-y-0" : "-translate-y-full",
+				)}>
 				<div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 					<div className="mx-auto flex min-h-21 w-full items-center justify-between bg-minuri-white">
 						<Link
@@ -502,7 +515,7 @@ export function GuideDetailView({
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-screen-2xl px-4 py-6 md:px-8 md:py-10">
+			<main className="mx-auto max-w-screen-2xl px-4 pt-28 md:px-8 md:pt-32">
 				<div className="mx-auto flex w-full max-w-368 items-start">
 					<motion.article
 						ref={articleRef}
@@ -750,31 +763,116 @@ export function GuideDetailView({
 								</motion.section>
 							) : null}
 
+							{/* Sources */}
 							{guide.sourceLinks.length > 0 ? (
-								<section>
-									<h2 className="text-2xl font-semibold text-minuri-ocean md:text-3xl">
-										Sources and references
-									</h2>
-									<div className="mt-4 grid gap-2">
-										{guide.sourceLinks.map((link) => (
-											<a
-												key={link.href}
-												href={link.href}
-												target="_blank"
-												rel="noreferrer"
-												className="inline-flex items-center gap-2 text-sm text-minuri-teal underline-offset-4 hover:underline"
-											>
-												{link.label}
-												<ExternalLink
-													className="size-4"
-													aria-hidden="true"
-												/>
-											</a>
-										))}
-									</div>
-								</section>
+								<motion.section {...sectionAnim}>
+									<button
+										type="button"
+										onClick={() => setSourcesOpen((o) => !o)}
+										className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-minuri-slate transition-colors hover:text-minuri-teal"
+									>
+										<span>{sourcesOpen ? "Hide" : "Show"} {guide.sourceLinks.length} source{guide.sourceLinks.length !== 1 ? "s" : ""}</span>
+										<span className="text-minuri-silver">{sourcesOpen ? "↑" : "↓"}</span>
+									</button>
+
+									{sourcesOpen && (
+										<div className="mt-4 divide-y divide-minuri-silver/30 rounded-sm border border-minuri-silver/40 bg-minuri-fog/30">
+											{guide.sourceLinks.map((link, i) => {
+												let domain = "";
+												try { domain = new URL(link.href).hostname.replace("www.", ""); } catch {}
+												return (
+													<a
+														key={link.href}
+														href={link.href}
+														target="_blank"
+														rel="noreferrer"
+														className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-minuri-fog/60"
+													>
+														<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-minuri-teal/10 text-[10px] font-bold text-minuri-teal">
+															{i + 1}
+														</span>
+														<div className="min-w-0 flex-1">
+															<p className="text-sm font-medium text-minuri-ink group-hover:text-minuri-teal">
+																{link.label}
+															</p>
+															{domain && (
+																<p className="mt-0.5 text-xs text-minuri-slate">
+																	{domain}
+																</p>
+															)}
+														</div>
+														<ExternalLink className="mt-0.5 size-3.5 shrink-0 text-minuri-silver group-hover:text-minuri-teal" />
+													</a>
+												);
+											})}
+										</div>
+									)}
+								</motion.section>
 							) : null}
-						</div>
+
+						</div>{/* end sections container */}
+
+						{/* Guide footer — full-bleed, content constrained to match sections above */}
+						<motion.footer
+							{...sectionAnim}
+							className="guide-footer-end -mx-4 md:-mx-8"
+						>
+							<div className="relative z-10 mx-auto w-full px-4 text-center md:max-w-3xl md:px-8 lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
+
+									{/* Ornament + title */}
+									<p className="mb-5 text-xl text-minuri-seafoam/30">✦</p>
+									<h2
+										className="text-xl font-semibold leading-snug text-white/80"
+										style={{ fontFamily: "var(--font-hero-serif)" }}
+									>
+										{guide.title}
+									</h2>
+
+									{/* Actions */}
+									<div className="mt-8 flex items-center justify-center gap-3">
+										<button
+											type="button"
+											onClick={() => toggleBookmark(guide.slug)}
+											className={cn(
+												"inline-flex items-center gap-2 rounded-sm border px-5 py-2.5 text-sm font-medium transition-colors",
+												isBookmarked(guide.slug)
+													? "border-minuri-seafoam/60 bg-minuri-seafoam/15 text-minuri-seafoam"
+													: "border-white/20 bg-white/8 text-white/80 hover:bg-white/15 hover:text-white",
+											)}
+										>
+											{isBookmarked(guide.slug) ? "★ Saved" : "☆ Save"}
+										</button>
+										<button
+											type="button"
+											onClick={() => {
+												navigator.clipboard.writeText(window.location.href);
+												setCopied(true);
+												setTimeout(() => setCopied(false), 2000);
+											}}
+											className="inline-flex items-center gap-2 rounded-sm border border-white/20 bg-white/8 px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+										>
+											{copied ? "✓ Copied" : "⎘ Share"}
+										</button>
+									</div>
+
+									{/* Bottom bar */}
+									<div className="mt-10 flex items-center justify-center gap-4 border-t border-white/10 pt-6">
+										<Link
+											href={backHref}
+											className="text-xs text-minuri-seafoam/50 transition-colors hover:text-minuri-seafoam"
+										>
+											← All guides
+										</Link>
+										<span className="text-white/15">·</span>
+										<p
+											className="text-sm font-black uppercase tracking-widest text-white/15"
+											style={{ fontFamily: "var(--font-hero-serif)" }}
+										>
+											Minuri
+										</p>
+									</div>
+								</div>
+							</motion.footer>
 					</motion.article>
 					<motion.div
 						className="hidden shrink-0 xl:block"
