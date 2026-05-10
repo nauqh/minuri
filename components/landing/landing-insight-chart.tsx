@@ -134,7 +134,7 @@ function StripBar({ entry }: { entry: (typeof STRIP_DATA)[number] }) {
 						);
 				}
 			}}
-			className="group relative flex min-h-[200px] w-full cursor-pointer items-stretch overflow-hidden border-t border-white/[0.08] md:min-h-[220px] 2xl:min-h-[300px]"
+			className="group relative flex min-h-[160px] w-full cursor-pointer items-stretch overflow-hidden border-t border-white/[0.08] md:min-h-[220px] 2xl:min-h-[300px]"
 		>
 			{/* ── Colored fill ── */}
 			<motion.div
@@ -157,7 +157,7 @@ function StripBar({ entry }: { entry: (typeof STRIP_DATA)[number] }) {
 			>
 				<span
 					className="whitespace-nowrap pl-3 font-black tabular-nums leading-none text-minuri-white md:pl-4"
-					style={{ fontSize: "clamp(3.5rem, 12vw, 8rem)" }}
+					style={{ fontSize: "clamp(2.5rem, 10vw, 8rem)" }}
 				>
 					{entry.displayStat.includes("%")
 						? `${count}%`
@@ -167,11 +167,11 @@ function StripBar({ entry }: { entry: (typeof STRIP_DATA)[number] }) {
 
 			{/* ── Context text ── */}
 			<div className="relative z-10 flex w-full items-center px-5 md:px-10 lg:px-16">
-				<div className="w-[40%] shrink-0 pr-4 md:w-[36%] md:pr-8 lg:w-[32%]">
-					<p className="text-[9px] font-bold uppercase tracking-[0.18em] text-minuri-ocean/50 md:text-[10px]">
+				<div className="w-[55%] shrink-0 pr-4 md:w-[36%] md:pr-8 lg:w-[32%]">
+					<p className="hidden text-[9px] font-bold uppercase tracking-[0.18em] text-minuri-ocean/50 md:block md:text-[10px]">
 						{entry.source}
 					</p>
-					<p className="mt-2.5 text-base leading-relaxed text-minuri-ocean md:text-lg">
+					<p className="text-sm leading-relaxed text-minuri-ocean md:mt-2.5 md:text-lg">
 						{entry.context.map((run, i) =>
 							run.bold ? (
 								<strong
@@ -181,7 +181,16 @@ function StripBar({ entry }: { entry: (typeof STRIP_DATA)[number] }) {
 									{run.text}
 								</strong>
 							) : (
-								<span key={i}>{run.text}</span>
+								<span
+									key={i}
+									className={
+										run.text.startsWith(" —")
+											? "hidden md:inline"
+											: undefined
+									}
+								>
+									{run.text}
+								</span>
 							),
 						)}
 					</p>
@@ -217,8 +226,13 @@ export function LandingInsightChart() {
 			</div>
 
 			{/* Strips — keyed by displayStat to avoid duplicate-key warning */}
-			{STRIP_DATA.map((entry) => (
-				<StripBar key={entry.source} entry={entry} />
+			{STRIP_DATA.map((entry, i) => (
+				<div
+					key={entry.source}
+					className={i === 2 ? "hidden md:block" : undefined}
+				>
+					<StripBar entry={entry} />
+				</div>
 			))}
 
 			{/* Footer */}

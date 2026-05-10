@@ -57,17 +57,22 @@ export function LandingDataSection() {
 							viewport={{ once: true, amount: 0.7 }}
 							transition={{ duration: 0.6, ease: easeOut }}
 						>
-							Independent living is harder than it looks.
+							Independent living is hard
 						</motion.h2>
 						<motion.p
 							className="landing-section-subheading mt-4 max-w-2xl"
 							initial={{ opacity: 0, y: 14 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true, amount: 0.7 }}
-							transition={{ duration: 0.55, delay: 0.08, ease: easeOut }}
+							transition={{
+								duration: 0.55,
+								delay: 0.08,
+								ease: easeOut,
+							}}
 						>
-							The systems that support you — healthcare, housing, transport,
-							community — assume you already know how they work.
+							The systems that support you — healthcare, housing,
+							transport, community — assume you already know how
+							they work.
 						</motion.p>
 					</div>
 

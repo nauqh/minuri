@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
 import {
-	ChevronRight,
 	Compass,
 	LayoutGrid,
 	MapPin,
@@ -17,9 +15,7 @@ import {
 	type MotionValue,
 } from "motion/react";
 import { cn } from "@/lib/utils";
-import { scrollToTopAndHighlightLandingCta } from "@/lib/scroll-to-top-and-highlight-cta";
 
-const easeOut = [0.22, 1, 0.36, 1] as const;
 
 type HowItWorksCard = {
 	step: string;
@@ -308,48 +304,6 @@ export function SpotlightScrollSection() {
 				</div>
 			</div>
 
-			{/* CTA button */}
-			<div className="bg-minuri-white px-6 pb-20 pt-12 md:pt-16">
-				<motion.div
-					className="mx-auto mt-16 w-full max-w-2xl md:mt-24"
-					initial={{ opacity: 0, y: 28 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{
-						once: true,
-						margin: "0% 0px -12% 0px",
-						amount: 0.35,
-					}}
-					transition={{ duration: 0.55, delay: 0.12, ease: easeOut }}
-				>
-					<button
-						type="button"
-						onClick={scrollToTopAndHighlightLandingCta}
-						className="group relative flex h-22 w-full cursor-pointer items-center overflow-hidden rounded-[1.35rem] border border-minuri-silver/60 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] text-left shadow-[0_18px_34px_-26px_color-mix(in_oklch,var(--minuri-mid)_38%,transparent)] transition-[background,box-shadow,transform] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.98] md:hover:bg-minuri-white md:hover:bg-none md:hover:border-minuri-silver/80 md:hover:shadow-[0_20px_38px_-30px_color-mix(in_oklch,var(--minuri-mid)_28%,transparent)] focus-visible:bg-minuri-white focus-visible:bg-none focus-visible:border-minuri-silver/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/65 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white"
-					>
-						{/* Mobile: simple centered layout with always-visible arrow */}
-						<div className="flex w-full items-center justify-center gap-3 px-6 md:hidden">
-							<span className="text-[1.55rem] font-bold tracking-[-0.04em] text-minuri-white">
-								Let's Get Started
-							</span>
-							<ChevronRight
-								aria-hidden
-								className="size-6 shrink-0 text-minuri-white"
-								strokeWidth={2.5}
-							/>
-						</div>
-
-						{/* Desktop: animated hover layout */}
-						<span className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[clamp(1.65rem,3.8vw,2.1rem)] tracking-[-0.04em] text-minuri-white transition-all duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:block group-hover:left-9 group-hover:translate-x-0 group-hover:text-foreground group-focus-visible:left-9 group-focus-visible:translate-x-0 group-focus-visible:text-foreground">
-							Let's Get Started
-						</span>
-						<span className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 translate-x-6 opacity-0 transition-[transform,opacity] duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:block group-hover:pointer-events-auto group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:pointer-events-auto group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
-							<span className="inline-flex items-center rounded-full border border-minuri-silver/50 bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-7 py-3 text-lg font-semibold tracking-tight text-minuri-white shadow-[0_12px_20px_-14px_color-mix(in_oklch,var(--minuri-mid)_45%,transparent)] transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:scale-105 focus-visible:-translate-y-0.5 focus-visible:scale-105">
-								Start your journey
-							</span>
-						</span>
-					</button>
-				</motion.div>
-			</div>
 		</div>
 	);
 }
