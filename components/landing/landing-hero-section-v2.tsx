@@ -173,7 +173,7 @@ export function LandingHeroSectionV2({
 	}, []);
 
 	return (
-		<section className="relative flex h-screen flex-col overflow-hidden bg-minuri-white text-minuri-ink">
+		<section className="relative flex h-auto min-h-svh flex-col bg-minuri-white text-minuri-ink md:h-svh md:overflow-hidden">
 			{/* Grid background — lines + radial fade to white at edges */}
 			<div aria-hidden className="pointer-events-none absolute inset-0">
 				<div
@@ -183,7 +183,7 @@ export function LandingHeroSectionV2({
 							"linear-gradient(to right, rgba(2,24,25,0.07) 1px, transparent 1px)",
 							"linear-gradient(to bottom, rgba(2,24,25,0.07) 1px, transparent 1px)",
 						].join(", "),
-						backgroundSize: "48px 48px",
+						backgroundSize: "96px 96px",
 					}}
 				/>
 				{/* Fade grid to white at all four edges */}

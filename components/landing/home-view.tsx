@@ -9,6 +9,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingHeroSectionV2 } from "./landing-hero-section-v2";
 import { ScrollToTopButton } from "@/components/landing/scroll-to-top-button";
 import { LandingServicesSection } from "@/components/landing/landing-services-section";
+import { LandingDataSection } from "@/components/landing/landing-data-section";
 export function HomeView() {
 	const [headerVisible, setHeaderVisible] = useState(false);
 
@@ -21,6 +22,7 @@ export function HomeView() {
 
 			<main>
 				<LandingServicesSection />
+				<LandingDataSection />
 				<SpotlightScrollSection />
 				<LandingCareSection />
 				<LandingAccessSection />

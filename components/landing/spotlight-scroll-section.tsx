@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useRef } from "react";
-import { ChevronRight, Compass, LayoutGrid, MapPin, type LucideIcon } from "lucide-react";
+import {
+	ChevronRight,
+	Compass,
+	LayoutGrid,
+	MapPin,
+	type LucideIcon,
+} from "lucide-react";
 import {
 	motion,
 	useReducedMotion,
@@ -126,58 +132,78 @@ function CardFace({
 							: "md:pr-14 lg:pr-20 2xl:pr-28",
 					)}
 				>
-					<div className="mb-5 flex items-center gap-3 sm:mb-7">
-						<span
+					{/* sticky note wrapper */}
+					<div
+						className="relative rounded-sm p-6 sm:p-8 2xl:p-10"
+						style={{
+							background: `color-mix(in srgb, ${card.color} 22%, #fffef5)`,
+							boxShadow:
+								"4px 5px 18px rgba(0,0,0,0.13), 0 1px 3px rgba(0,0,0,0.07)",
+							rotate: "-1.5deg",
+						}}
+					>
+						{/* tape strip */}
+						<div
 							aria-hidden
-							className="block h-px w-8 shrink-0"
-							style={{ background: card.color }}
-						/>
-						<span
-							className="text-[0.68rem] font-black uppercase tracking-[0.22em]"
+							className="absolute -top-3.5 left-1/2 h-7 w-14 -translate-x-1/2 rounded-sm opacity-60 2xl:h-8 2xl:w-16"
 							style={{
-								color: `color-mix(in srgb, ${card.color} 55%, #0c1e2e)`,
+								background: `color-mix(in srgb, ${card.color} 55%, white)`,
 							}}
-						>
-							{card.step}
-						</span>
-					</div>
+						/>
 
-					<h3 className="text-[2rem] font-bold leading-[1.08] tracking-tight text-minuri-ocean sm:text-[2.4rem] md:text-[2.8rem] 2xl:text-[3.6rem]">
-						{card.title}
-					</h3>
-
-					<p className="mt-4 max-w-sm text-[0.98rem] leading-relaxed text-minuri-slate sm:mt-5 md:text-[1.05rem] 2xl:max-w-lg 2xl:text-[1.2rem]">
-						{card.body}
-					</p>
-
-					<div className="mt-8 sm:mt-10">
-						{card.options.map((opt, optionIndex) => (
-							<div
-								key={opt.title}
-								className="flex items-start gap-4 border-t border-minuri-silver/40 py-4 first:border-t-0 first:pt-0 last:pb-0 2xl:gap-6 2xl:py-6"
+						<div className="mb-5 flex items-center gap-3 sm:mb-7">
+							<span
+								aria-hidden
+								className="block h-px w-8 shrink-0"
+								style={{ background: card.color }}
+							/>
+							<span
+								className="text-[0.68rem] font-black uppercase tracking-[0.22em]"
+								style={{
+									color: `color-mix(in srgb, ${card.color} 55%, #0c1e2e)`,
+								}}
 							>
-								<span
-									aria-hidden
-									className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.75rem] font-black tabular-nums 2xl:h-8 2xl:min-w-8 2xl:text-[0.88rem]"
-									style={{
-										background: `color-mix(in srgb, ${card.color} 40%, white)`,
-										color: "#0c1e2e",
-									}}
+								{card.step}
+							</span>
+						</div>
+
+						<h3 className="text-[2rem] font-bold leading-[1.08] tracking-tight text-minuri-ocean sm:text-[2.4rem] md:text-[2.8rem] 2xl:text-[3.6rem]">
+							{card.title}
+						</h3>
+
+						<p className="mt-4 max-w-sm text-[0.98rem] leading-relaxed text-minuri-slate sm:mt-5 md:text-[1.05rem] 2xl:max-w-lg 2xl:text-[1.2rem]">
+							{card.body}
+						</p>
+
+						<div className="mt-8 sm:mt-10">
+							{card.options.map((opt, optionIndex) => (
+								<div
+									key={opt.title}
+									className="flex items-start gap-4 border-t border-minuri-silver/40 py-6 first:border-t-0 first:pt-0 last:pb-0 2xl:gap-6 2xl:py-8"
 								>
-									{String(optionIndex + 1).padStart(2, "0")}
-								</span>
-								<div>
-									<p className="text-[1.08rem] font-semibold text-minuri-ocean sm:text-[1.15rem] 2xl:text-[1.25rem]">
-										{opt.title}
-									</p>
-									{opt.description && (
-										<p className="mt-0.5 text-[0.95rem] leading-relaxed text-minuri-slate 2xl:text-[1.05rem]">
-											{opt.description}
+									<span
+										aria-hidden
+										className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full text-[0.75rem] font-black tabular-nums 2xl:h-8 2xl:min-w-8 2xl:text-[0.88rem]"
+										style={{
+											background: `color-mix(in srgb, ${card.color} 40%, white)`,
+											color: "#0c1e2e",
+										}}
+									>
+										{String(optionIndex + 1).padStart(2, "0")}
+									</span>
+									<div>
+										<p className="text-[1.08rem] font-semibold text-minuri-ocean sm:text-[1.15rem] 2xl:text-[1.25rem]">
+											{opt.title}
 										</p>
-									)}
+										{opt.description && (
+											<p className="mt-0.5 text-[0.95rem] leading-relaxed text-minuri-slate 2xl:text-[1.05rem]">
+												{opt.description}
+											</p>
+										)}
+									</div>
 								</div>
-							</div>
-						))}
+							))}
+						</div>
 					</div>
 				</div>
 
@@ -305,7 +331,11 @@ export function SpotlightScrollSection() {
 							<span className="text-[1.55rem] font-bold tracking-[-0.04em] text-minuri-white">
 								Let's Get Started
 							</span>
-							<ChevronRight aria-hidden className="size-6 shrink-0 text-minuri-white" strokeWidth={2.5} />
+							<ChevronRight
+								aria-hidden
+								className="size-6 shrink-0 text-minuri-white"
+								strokeWidth={2.5}
+							/>
 						</div>
 
 						{/* Desktop: animated hover layout */}
