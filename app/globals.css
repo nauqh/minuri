@@ -9,6 +9,7 @@
 	--color-foreground: var(--foreground);
 	--font-sans: var(--font-sans);
 	--font-heading: var(--font-sans);
+	--font-handwriting: var(--font-handwriting);
 	--color-sidebar-ring: var(--sidebar-ring);
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -344,4 +345,253 @@ a:focus-visible .minuri-link-underline::after,
 	display: none;
 	width: 0;
 	height: 0;
+}
+
+/* ── Guide Scrapbook / Sticky-note UI ── */
+
+/* Moment section — lined journal paper with handwriting font */
+.guide-section-moment {
+	background: oklch(0.975 0.025 78);
+	background-image: repeating-linear-gradient(
+		transparent,
+		transparent 1.75rem,
+		oklch(0.82 0.02 220 / 0.22) 1.75rem,
+		oklch(0.82 0.02 220 / 0.22) calc(1.75rem + 1px)
+	);
+	border-left: 3px solid oklch(0.78 0.07 25 / 0.3);
+	padding: 1.5rem 1.75rem 1.5rem 2rem;
+	border-radius: 0 0.75rem 0.75rem 0;
+	font-family: var(--font-handwriting), cursive;
+	font-size: 1.5rem;
+	line-height: 2;
+	color: oklch(0.22 0.03 260);
+}
+
+@media (max-width: 640px) {
+	.guide-section-moment {
+		padding: 1rem 1rem 1rem 1.5rem;
+		font-size: 1.3rem;
+		line-height: 1.75;
+	}
+	.guide-section-feeling {
+		padding: 0.5rem 0.75rem 0.5rem 1rem;
+		font-size: 1rem;
+	}
+	.guide-section-feeling::before {
+		left: 0;
+	}
+	.guide-section-reveal {
+		padding: 2.5rem 1.25rem 5rem;
+	}
+	.guide-section-body {
+		padding: 1.25rem 1rem;
+		background-size: 1.25rem 1.25rem;
+	}
+	.guide-section-bridge {
+		padding-top: 2rem;
+	}
+	/* Remove rotation on small screens — prevents overflow */
+	.guide-sticky-a,
+	.guide-sticky-b,
+	.guide-sticky-c,
+	.guide-sticky-d {
+		transform: none;
+	}
+	.guide-sticky-a:hover,
+	.guide-sticky-b:hover,
+	.guide-sticky-c:hover,
+	.guide-sticky-d:hover {
+		transform: translateY(-2px);
+	}
+}
+
+@media (min-width: 1500px) {
+	.guide-section-moment {
+		padding: 2rem 2.5rem 2rem 2.75rem;
+		font-size: 1.65rem;
+	}
+	.guide-section-feeling {
+		padding: 0.75rem 2rem 0.75rem 1.5rem;
+		font-size: 1.05rem;
+	}
+	.guide-section-feeling::before {
+		left: 0;
+	}
+	.guide-section-reveal {
+		padding: 4.5rem 4rem 7rem;
+	}
+	.guide-section-body {
+		padding: 2.5rem 3rem;
+	}
+}
+
+/* Sticky note base */
+.guide-sticky {
+	position: relative;
+	border-radius: 2px;
+	padding: 1.25rem 1.25rem 1.75rem;
+	box-shadow:
+		2px 3px 0 rgba(0, 0, 0, 0.07),
+		5px 8px 16px rgba(0, 0, 0, 0.06);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.guide-sticky:hover {
+	box-shadow:
+		4px 6px 0 rgba(0, 0, 0, 0.09),
+		8px 12px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Tape strip */
+.guide-sticky::before {
+	content: "";
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%) rotate(-1.5deg);
+	width: 44px;
+	height: 18px;
+	background: rgba(253, 230, 138, 0.72);
+	border-radius: 1px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Colour + rotation variants — cycle with index % 4 */
+.guide-sticky-a {
+	background: oklch(0.97 0.05 88);
+	transform: rotate(-1.5deg);
+}
+.guide-sticky-b {
+	background: oklch(0.96 0.04 165);
+	transform: rotate(0.8deg);
+}
+.guide-sticky-c {
+	background: oklch(0.96 0.05 235);
+	transform: rotate(-0.6deg);
+}
+.guide-sticky-d {
+	background: oklch(0.97 0.05 22);
+	transform: rotate(1.2deg);
+}
+
+.guide-sticky-a:hover { transform: rotate(-1.5deg) translateY(-3px); }
+.guide-sticky-b:hover { transform: rotate(0.8deg) translateY(-3px); }
+.guide-sticky-c:hover { transform: rotate(-0.6deg) translateY(-3px); }
+.guide-sticky-d:hover { transform: rotate(1.2deg) translateY(-3px); }
+
+/* ── FEELING — notebook margin annotation ── */
+.guide-section-feeling {
+	position: relative;
+	padding: 0.5rem 1.5rem 0.5rem 1.25rem;
+	font-size: 1.05rem;
+	line-height: 2;
+	color: oklch(0.28 0.025 260);
+}
+.guide-section-feeling::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 1.5px;
+	background: oklch(0.72 0.1 15 / 0.4);
+}
+
+/* ── REVEAL — dark crumpled paper with torn bottom edge ── */
+.guide-section-reveal {
+	position: relative;
+	background: oklch(0.22 0.028 232);
+	padding: 3.5rem 2.5rem 6rem;
+	border-radius: 4px;
+}
+
+.guide-section-reveal::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 4px;
+	background:
+		radial-gradient(ellipse at 20% 30%, oklch(1 0 0 / 0.04) 0%, transparent 50%),
+		radial-gradient(ellipse at 75% 65%, oklch(0 0 0 / 0.08) 0%, transparent 45%);
+	pointer-events: none;
+}
+/* Torn paper — page-bg colour bleeds up through soft Q-curve wave */
+.guide-section-reveal::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 64px;
+	background: var(--background);
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 64' preserveAspectRatio='none'%3E%3Cpath d='M0,64 L0,32 Q8,10 16,32 Q24,52 32,28 Q40,8 48,30 Q56,50 64,24 Q72,6 80,28 Q88,50 96,26 Q104,6 112,30 Q120,52 128,26 Q136,6 144,30 Q152,52 160,26 Q168,6 176,30 Q184,52 192,26 Q200,6 208,30 Q216,52 224,26 Q232,8 240,30 Q248,52 256,24 Q264,6 272,28 Q280,50 288,24 Q296,6 304,30 Q312,52 320,26 Q328,8 336,30 Q344,52 352,26 Q360,6 368,30 Q376,52 384,26 Q392,6 400,30 Q408,52 416,26 Q424,8 432,30 Q440,52 448,26 Q456,6 464,30 Q472,52 480,26 Q488,6 496,30 Q504,52 512,24 Q520,6 528,28 Q536,50 544,24 Q552,6 560,28 Q568,50 576,24 Q584,6 592,28 Q600,52 608,26 Q616,6 624,30 Q632,52 640,26 Q648,6 656,30 Q664,52 672,26 Q680,6 688,30 Q696,52 704,26 Q712,6 720,30 Q728,52 736,26 Q744,6 752,30 Q760,52 768,26 Q776,6 784,30 Q792,52 800,26 Q808,6 816,30 Q824,52 832,24 Q840,6 848,28 Q856,50 864,24 Q872,6 880,28 Q888,52 896,26 Q904,6 912,30 Q920,52 928,26 Q936,6 944,30 Q952,52 960,24 Q968,6 976,30 Q984,52 992,26 Q1000,6 1008,30 Q1016,52 1024,26 Q1032,6 1040,30 Q1048,52 1056,26 Q1064,6 1072,30 Q1080,52 1088,26 Q1096,6 1104,30 Q1112,52 1120,26 Q1128,6 1136,30 Q1144,52 1152,24 Q1160,6 1168,28 Q1176,50 1184,24 Q1192,6 1200,28 L1200,64 Z' fill='black'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 64' preserveAspectRatio='none'%3E%3Cpath d='M0,64 L0,32 Q8,10 16,32 Q24,52 32,28 Q40,8 48,30 Q56,50 64,24 Q72,6 80,28 Q88,50 96,26 Q104,6 112,30 Q120,52 128,26 Q136,6 144,30 Q152,52 160,26 Q168,6 176,30 Q184,52 192,26 Q200,6 208,30 Q216,52 224,26 Q232,8 240,30 Q248,52 256,24 Q264,6 272,28 Q280,50 288,24 Q296,6 304,30 Q312,52 320,26 Q328,8 336,30 Q344,52 352,26 Q360,6 368,30 Q376,52 384,26 Q392,6 400,30 Q408,52 416,26 Q424,8 432,30 Q440,52 448,26 Q456,6 464,30 Q472,52 480,26 Q488,6 496,30 Q504,52 512,24 Q520,6 528,28 Q536,50 544,24 Q552,6 560,28 Q568,50 576,24 Q584,6 592,28 Q600,52 608,26 Q616,6 624,30 Q632,52 640,26 Q648,6 656,30 Q664,52 672,26 Q680,6 688,30 Q696,52 704,26 Q712,6 720,30 Q728,52 736,26 Q744,6 752,30 Q760,52 768,26 Q776,6 784,30 Q792,52 800,26 Q808,6 816,30 Q824,52 832,24 Q840,6 848,28 Q856,50 864,24 Q872,6 880,28 Q888,52 896,26 Q904,6 912,30 Q920,52 928,26 Q936,6 944,30 Q952,52 960,24 Q968,6 976,30 Q984,52 992,26 Q1000,6 1008,30 Q1016,52 1024,26 Q1032,6 1040,30 Q1048,52 1056,26 Q1064,6 1072,30 Q1080,52 1088,26 Q1096,6 1104,30 Q1112,52 1120,26 Q1128,6 1136,30 Q1144,52 1152,24 Q1160,6 1168,28 Q1176,50 1184,24 Q1192,6 1200,28 L1200,64 Z' fill='black'/%3E%3C/svg%3E");
+	-webkit-mask-size: 100% 100%;
+	mask-size: 100% 100%;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* ── HOW IT WORKS — graph/grid paper ── */
+.guide-section-body {
+	background-image:
+		linear-gradient(oklch(0.60 0.04 220 / 0.08) 1px, transparent 1px),
+		linear-gradient(90deg, oklch(0.60 0.04 220 / 0.08) 1px, transparent 1px);
+	background-size: 1.5rem 1.5rem;
+	padding: 2rem;
+	border-radius: 0.5rem;
+	border: 1px solid oklch(0.88 0.02 210 / 0.45);
+}
+
+/* ── BRIDGE — scissor tear-off coupon ── */
+.guide-section-bridge {
+	position: relative;
+	padding-top: 2.5rem;
+}
+.guide-section-bridge::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 1.25rem;
+	right: 0;
+	border-top: 1.5px dashed oklch(0.68 0.03 220 / 0.4);
+}
+.guide-section-bridge::after {
+	content: "✂";
+	position: absolute;
+	top: -0.65rem;
+	left: 0;
+	background: var(--background);
+	padding-right: 0.35rem;
+	font-size: 0.85rem;
+	line-height: 1;
+	color: oklch(0.58 0.04 220 / 0.5);
+}
+
+/* ── NEXT CHAPTER — pinned index card ── */
+.guide-section-next {
+	position: relative;
+}
+
+@keyframes guide-swing {
+	0%   { transform: rotate(-0.8deg); }
+	20%  { transform: rotate(-6deg); }
+	45%  { transform: rotate(3.5deg); }
+	65%  { transform: rotate(-2deg); }
+	80%  { transform: rotate(1deg); }
+	92%  { transform: rotate(-0.5deg); }
+	100% { transform: rotate(-0.8deg); }
+}
+
+.guide-next-card {
+	transform-origin: top center;
+	transform: rotate(-0.8deg);
+}
+
+.guide-next-card:hover {
+	animation: guide-swing 0.75s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }

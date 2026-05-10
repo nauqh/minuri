@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Caveat, Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { AppShell } from "@/components/app-shell";
@@ -12,6 +12,13 @@ const fraunces = Fraunces({
 	subsets: ["latin"],
 	variable: "--font-hero-serif",
 });
+
+const caveat = Caveat({
+	subsets: ["latin"],
+	variable: "--font-handwriting",
+	weight: ["400", "600", "700"],
+});
+
 export const metadata: Metadata = {
 	metadataBase: new URL("https://www.minuri.tech"),
 	title: "Minuri | Your guide to settling in Melbourne",
@@ -59,6 +66,7 @@ export default function RootLayout({
 				"h-full",
 				"antialiased",
 				fraunces.variable,
+				caveat.variable,
 				"font-sans",
 				inter.variable,
 			)}

@@ -17,14 +17,14 @@ export function GuideMarkdown({
 	paragraphClassName,
 }: GuideMarkdownProps) {
 	return (
-		<div className={cn("space-y-4", className)}>
+		<div className={cn("space-y-6", className)}>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
 				components={{
 					p: ({ children }) => (
 						<p
 							className={cn(
-								"text-[1.04rem] leading-8 text-minuri-ink md:text-[1.1rem] md:leading-9",
+								"leading-8 text-minuri-ink",
 								paragraphClassName,
 							)}
 						>
@@ -32,7 +32,7 @@ export function GuideMarkdown({
 						</p>
 					),
 					strong: ({ children }) => (
-						<strong className="font-semibold text-minuri-ocean">
+						<strong className="font-bold">
 							{children}
 						</strong>
 					),
@@ -58,7 +58,7 @@ export function GuideMarkdown({
 						</ol>
 					),
 					li: ({ children }) => (
-						<li className="text-[1.04rem] leading-8 md:text-[1.1rem] md:leading-9">
+						<li className="leading-7">
 							{children}
 						</li>
 					),

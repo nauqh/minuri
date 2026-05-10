@@ -85,7 +85,7 @@ export function GuideCard({
 				</div>
 			</div>
 
-			<h2 className="w-fit pb-1 font-hero-serif text-xl leading-tight text-minuri-ocean">
+			<h2 className="w-fit pb-1 text-xl leading-tight text-minuri-ocean" style={{ fontFamily: "var(--font-hero-serif)" }}>
 				<span className="minuri-link-underline-multiline">{guide.title}</span>
 			</h2>
 

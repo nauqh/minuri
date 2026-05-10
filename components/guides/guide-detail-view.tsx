@@ -16,7 +16,7 @@ import type {
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuideMarkdown } from "@/components/guides/guide-markdown";
-import { JourneyNearbyPanel } from "@/components/journey/journey-nearby-panel";
+import { GuideSectionLabel } from "@/components/guides/guide-section-label";
 import {
 	buildGuideHref,
 	getArcMeta,
@@ -172,6 +172,19 @@ export function GuideDetailView({
 	const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 	const [isJourneySidebarOpen, setIsJourneySidebarOpen] = useState(false);
 	const prefersReducedMotion = useReducedMotion();
+	const sectionAnim = {
+		initial: {
+			opacity: 0,
+			y: prefersReducedMotion ? 0 : 52,
+			filter: prefersReducedMotion ? "blur(0px)" : "blur(6px)",
+		},
+		whileInView: { opacity: 1, y: 0, filter: "blur(0px)" } as const,
+		viewport: { once: true, amount: 0.08 } as const,
+		transition: {
+			duration: prefersReducedMotion ? 0.01 : 0.7,
+			ease: SECTION_ENTER_EASE,
+		},
+	};
 	const links = [
 		{
 			href: "/",
@@ -254,13 +267,9 @@ export function GuideDetailView({
 	const bodySection = resolvedSections.find(
 		(section) => section.sectionKey === "how-it-works",
 	);
-	const bridgeSection = resolvedSections.find(
-		(section) => section.sectionKey === "bridge",
-	);
 	const nextChapterSection = resolvedSections.find(
 		(section) => section.sectionKey === "next-chapter",
 	);
-	const bridgeCardText = toPlainCardText(bridgeSection?.body[0]);
 	const nextChapterCardText = toPlainCardText(nextChapterSection?.body[0]);
 	const journeyGuides = useMemo(() => {
 		const arcSort = new Map(
@@ -457,7 +466,7 @@ export function GuideDetailView({
 				/>
 			</div>
 			<header className="sticky top-[2px] z-40 bg-minuri-white backdrop-blur">
-				<div className="mx-auto max-w-screen-2xl px-6">
+				<div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 					<div className="mx-auto flex min-h-21 w-full items-center justify-between bg-minuri-white">
 						<Link
 							href="/"
@@ -493,7 +502,7 @@ export function GuideDetailView({
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-screen-2xl px-6 py-8 md:py-10">
+			<main className="mx-auto max-w-screen-2xl px-4 py-6 md:px-8 md:py-10">
 				<div className="mx-auto flex w-full max-w-368 items-start">
 					<motion.article
 						ref={articleRef}
@@ -504,7 +513,7 @@ export function GuideDetailView({
 							duration: prefersReducedMotion ? 0.01 : 0.3,
 						}}
 					>
-						<div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+						<div className="mx-auto flex w-full items-center justify-between gap-3 md:max-w-3xl lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
 							<Link
 								href={backHref}
 								className="inline-flex items-center gap-2 text-xs text-minuri-slate transition-colors hover:text-minuri-teal"
@@ -547,15 +556,15 @@ export function GuideDetailView({
 							</div>
 						</div>
 
-						<section className="mx-auto mt-8 max-w-184">
+						<section className="mx-auto mt-6 w-full md:mt-8 md:max-w-3xl lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
 							<p className="text-xs uppercase tracking-[0.14em] text-minuri-slate">
 								{topicMeta?.name?.toUpperCase()} ·{" "}
 								{arcMeta?.timeframeLabel?.toUpperCase()}
 							</p>
-							<h1 className="mt-4 text-4xl font-black leading-tight text-minuri-ocean md:text-5xl">
+							<h1 className="mt-3 text-2xl font-black leading-tight text-minuri-ocean md:mt-4 md:text-4xl min-[1500px]:text-5xl">
 								{guide.title}
 							</h1>
-							<p className="mt-5 max-w-3xl text-lg leading-relaxed text-minuri-slate md:text-xl md:leading-[1.45]">
+							<p className="mt-3 text-base leading-relaxed text-minuri-slate md:mt-5 md:text-lg md:leading-[1.45] min-[1500px]:text-xl">
 								{guide.summary}
 							</p>
 							<div className="mt-6">
@@ -564,7 +573,7 @@ export function GuideDetailView({
 									{UPDATED_LABEL}
 								</p>
 							</div>
-							<div className="relative mt-8 h-[280px] overflow-hidden rounded-sm bg-minuri-fog md:h-[360px]">
+							<div className="relative mt-6 h-[180px] overflow-hidden rounded-sm bg-minuri-fog md:mt-8 md:h-[300px] min-[1500px]:h-[400px]">
 								<Image
 									src={guide.thumbnailUrl}
 									alt={`${guide.title} hero artwork`}
@@ -576,207 +585,169 @@ export function GuideDetailView({
 							</div>
 						</section>
 
-						<div className="mx-auto mt-10 max-w-184 space-y-12 md:mt-14">
+						<div className="mx-auto mt-8 w-full space-y-8 md:mt-12 md:max-w-3xl md:space-y-12 lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
 							<motion.section
-								initial={{
-									opacity: 0,
-									y: prefersReducedMotion ? 0 : 10,
-								}}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true, amount: 0.2 }}
-								transition={{
-									duration: prefersReducedMotion ? 0.01 : 0.3,
-									ease: SECTION_ENTER_EASE,
-								}}
+								{...sectionAnim}
+								className="guide-section-moment"
 							>
+								<GuideSectionLabel label="The Moment" />
 								{momentSection ? (
 									<GuideMarkdown
 										markdown={momentSection.body.join(
 											"\n\n",
 										)}
-										paragraphClassName="text-[1.06rem] leading-8 text-minuri-ink md:text-[1.15rem] md:leading-9"
+										paragraphClassName="leading-[2.1] text-minuri-ink"
 									/>
 								) : null}
-								<div className="mt-5 space-y-5">
-									{feelingSection ? (
-										<GuideMarkdown
-											markdown={feelingSection.body.join(
-												"\n\n",
-											)}
-											paragraphClassName="text-[1.06rem] leading-8 text-minuri-ink md:text-[1.15rem] md:leading-9"
-										/>
-									) : null}
-								</div>
 							</motion.section>
 
-							{revealSection ? (
-								<motion.section
-									initial={{
-										opacity: 0,
-										y: prefersReducedMotion ? 0 : 10,
-									}}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true, amount: 0.2 }}
-									transition={{
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.3,
-										ease: SECTION_ENTER_EASE,
-									}}
-								>
-									<h2 className="text-2xl font-semibold leading-tight text-minuri-ocean md:text-3xl">
-										{revealSection.title}
-									</h2>
-									<div className="mt-6 border-l-2 border-minuri-silver pl-5">
-										<GuideMarkdown
-											markdown={revealSection.body.join(
-												"\n\n",
-											)}
-											className="space-y-4"
-											paragraphClassName="text-[1.04rem] leading-8 text-minuri-ink md:text-[1.12rem] md:leading-9"
-										/>
-									</div>
-								</motion.section>
+							{(feelingSection || revealSection) ? (
+								<div className="flex flex-col gap-6 md:flex-row md:items-stretch">
+									{feelingSection ? (
+										<motion.section
+											{...sectionAnim}
+											initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -60, filter: prefersReducedMotion ? "blur(0px)" : "blur(4px)" }}
+											whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+											className="guide-section-feeling md:flex-1"
+											style={{ paddingTop: "2rem" }}
+										>
+											<GuideSectionLabel label="The Feeling" />
+											<GuideMarkdown
+												markdown={feelingSection.body.join(
+													"\n\n",
+												)}
+												paragraphClassName="leading-[2.1]"
+											/>
+										</motion.section>
+									) : null}
+
+									{revealSection ? (
+										<motion.section
+											{...sectionAnim}
+											initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 60, filter: prefersReducedMotion ? "blur(0px)" : "blur(4px)" }}
+											whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+											className="guide-section-reveal md:flex-1"
+											style={{ paddingTop: "2rem" }}
+										>
+											<div className="relative z-10">
+												<GuideSectionLabel
+													label={revealSection.title}
+													dark
+												/>
+												<GuideMarkdown
+													markdown={revealSection.body.join(
+														"\n\n",
+													)}
+													paragraphClassName="text-[1.05rem] font-semibold leading-8 text-white"
+												/>
+											</div>
+										</motion.section>
+									) : null}
+								</div>
 							) : null}
 
 							{bodySection ? (
 								<motion.section
-									initial={{
-										opacity: 0,
-										y: prefersReducedMotion ? 0 : 10,
-									}}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true, amount: 0.2 }}
-									transition={{
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.3,
-										ease: SECTION_ENTER_EASE,
-									}}
+									{...sectionAnim}
+									className="guide-section-body"
 								>
-									<h2 className="text-2xl font-semibold leading-tight text-minuri-ocean md:text-3xl">
+									<GuideSectionLabel label="How It Works" />
+									<h2 className="text-2xl font-semibold leading-tight text-minuri-ocean md:text-3xl" style={{ fontFamily: "var(--font-hero-serif)" }}>
 										{bodySection.title}
 									</h2>
 									<GuideMarkdown
 										markdown={bodySection.body.join("\n\n")}
 										className="mt-6 space-y-4"
-										paragraphClassName="text-[1.04rem] leading-8 text-minuri-ink md:text-[1.1rem] md:leading-9"
+										paragraphClassName="text-[1.05rem] leading-8 text-minuri-ink"
 									/>
 								</motion.section>
 							) : null}
 
 							{guide.firstSteps && guide.firstSteps.length > 0 ? (
-								<motion.section
-									initial={{
-										opacity: 0,
-										y: prefersReducedMotion ? 0 : 10,
-									}}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true, amount: 0.2 }}
-									transition={{
-										duration: prefersReducedMotion ? 0.01 : 0.3,
-										ease: SECTION_ENTER_EASE,
-									}}
-									className="rounded-[0.85rem] border border-minuri-silver/70 bg-minuri-fog/50 px-6 py-7 md:px-8 md:py-8"
-								>
+								<motion.section {...sectionAnim}>
+									<GuideSectionLabel label="First Steps" />
 									<h2 className="text-xl font-semibold text-minuri-ocean md:text-2xl">
 										Your first steps
 									</h2>
-									<ol className="mt-5 space-y-3">
-										{guide.firstSteps.map((step, index) => (
-											<li
-												key={index}
-												className="flex items-start gap-4"
-											>
-												<span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-minuri-teal/15 text-xs font-bold text-minuri-teal">
-													{index + 1}
-												</span>
-												<div className="flex min-w-0 flex-1 items-baseline justify-between gap-3">
-													<span className="text-sm leading-relaxed text-minuri-ink">
-														{step.label}
+									<ol className="mt-8 grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
+										{guide.firstSteps.map((step, index) => {
+											const stickyClass = [
+												"guide-sticky guide-sticky-a",
+												"guide-sticky guide-sticky-b",
+												"guide-sticky guide-sticky-c",
+												"guide-sticky guide-sticky-d",
+											][index % 4];
+											return (
+												<li
+													key={index}
+													className={stickyClass}
+												>
+													<span className="mb-3 flex size-6 items-center justify-center rounded-full bg-minuri-teal/20 text-xs font-bold text-minuri-teal">
+														{index + 1}
 													</span>
+													<p className="text-sm font-medium leading-relaxed text-minuri-ink">
+														{step.label}
+													</p>
 													{step.estimateMin > 0 && (
-														<span className="shrink-0 rounded-full bg-minuri-silver/40 px-2 py-0.5 text-xs text-minuri-slate">
-															{step.estimateMin} min
-														</span>
+														<p className="mt-2 text-xs text-minuri-slate">
+															~{step.estimateMin} min
+														</p>
 													)}
-												</div>
-											</li>
-										))}
+												</li>
+											);
+										})}
 									</ol>
 								</motion.section>
 							) : null}
 
-							{suburb ? (
-								<motion.div
-									initial={{
-										opacity: 0,
-										y: prefersReducedMotion ? 0 : 10,
-									}}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true, amount: 0.1 }}
-									transition={{
-										duration: prefersReducedMotion ? 0.01 : 0.3,
-										ease: SECTION_ENTER_EASE,
-									}}
-								>
-									<JourneyNearbyPanel suburb={suburb} />
-								</motion.div>
-							) : null}
-
-							{bridgeSection ? (
-								<motion.section
-									initial={{
-										opacity: 0,
-										y: prefersReducedMotion ? 0 : 10,
-									}}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true, amount: 0.2 }}
-									transition={{
-										duration: prefersReducedMotion
-											? 0.01
-											: 0.3,
-										ease: SECTION_ENTER_EASE,
-									}}
-									className="rounded-[0.85rem] border border-minuri-silver/80 bg-minuri-fog px-6 py-8 text-minuri-ink md:px-8 md:py-9"
-								>
-									<div className="mx-auto max-w-2xl">
-										<p className="text-xs uppercase tracking-[0.14em] text-minuri-slate">
-											Next step
-										</p>
-										<Link
-											href={guide.nearMeDeeplink}
-											className="mt-2 inline-flex text-lg font-semibold leading-tight text-minuri-ocean underline-offset-4 transition hover:text-minuri-teal hover:underline md:text-xl"
-										>
-											→ Find support near you
-										</Link>
-										<p className="mt-3 text-sm text-minuri-slate">
-											{bridgeCardText}
-										</p>
-									</div>
-								</motion.section>
-							) : null}
 
 							{nextGuide ? (
-								<section>
-									<p className="text-xs uppercase tracking-[0.14em] text-minuri-slate">
-										Up next
-									</p>
-									<div className="mt-4">
-										<GuideCard
-											guide={nextGuide}
+								<motion.section {...sectionAnim}>
+									<GuideSectionLabel label="Up Next" />
+									<div className="relative mx-auto mt-8 max-w-md">
+										{/* Pushpin */}
+										<div className="absolute -top-3.5 left-1/2 z-10 flex size-7 -translate-x-1/2 items-center justify-center rounded-full bg-minuri-coral shadow-[0_3px_8px_rgba(0,0,0,0.22)]">
+											<div className="size-2.5 rounded-full bg-white/80" />
+										</div>
+										{/* Index card */}
+										<Link
 											href={`/guides/${nextGuide.arc}/${nextGuide.slug}`}
-											bookmarked={isBookmarked(
-												nextGuide.slug,
-											)}
-											onToggleBookmark={toggleBookmark}
-										/>
+											className="guide-next-card group block overflow-hidden rounded-sm bg-[oklch(0.975_0.022_80)]"
+										>
+											{/* Polaroid thumbnail */}
+											<div className="relative aspect-[16/8] overflow-hidden border-b-4 border-white/60">
+												<Image
+													src={nextGuide.thumbnailUrl}
+													alt={nextGuide.title}
+													fill
+													className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+												/>
+												<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+												<p className="absolute bottom-2.5 left-3.5 text-[0.6rem] uppercase tracking-[0.18em] text-white/70">
+													{getTopicMeta(nextGuide.topic)?.name}
+												</p>
+											</div>
+											{/* Card body */}
+											<div className="px-5 py-4">
+												<p
+													className="text-xl leading-snug text-minuri-ink"
+													style={{
+														fontFamily:
+															"var(--font-hero-serif)",
+													}}
+												>
+													{nextGuide.title}
+												</p>
+												<p className="mt-1 text-xs text-minuri-slate">
+													{nextGuide.readingTimeMin} min read
+												</p>
+												<p className="mt-3 text-sm font-medium text-minuri-teal transition-colors group-hover:text-minuri-ocean">
+													Continue reading →
+												</p>
+											</div>
+										</Link>
 									</div>
-									<p className="mt-4 text-sm leading-7 text-minuri-slate">
-										{nextChapterCardText ||
-											"Continue the next guide in your moment."}
-									</p>
-								</section>
+								</motion.section>
 							) : null}
 
 							{guide.sourceLinks.length > 0 ? (
