@@ -15,6 +15,7 @@ export type Persona = {
     tagline: string;
     situation: string;
     accentColor: string;
+    imageUrl: string;
     journey: string[][];
 };
 
@@ -29,6 +30,7 @@ export const PERSONAS: Persona[] = [
         situation:
             "First-ever time living alone. Arrived two weeks before semester with a student visa and a list of things to figure out when she got there. Capable and organised — missing the local context everyone else takes for granted.",
         accentColor: "#c96b50",
+        imageUrl: "https://images.unsplash.com/photo-1514355315815-2b64b0216b14?w=600&h=800&q=80&fit=crop&auto=format",
         journey: [
             ["your-first-grocery-run", "getting-myki-and-surviving-ptv"],
             ["when-you-dont-know-anyone-yet"],
@@ -49,6 +51,7 @@ export const PERSONAS: Persona[] = [
         situation:
             "Landed his first real job at a Melbourne design studio. Lived independently since 18, but Melbourne has its own systems and rhythms. His entire social infrastructure is still back in Brisbane.",
         accentColor: "#2f6fab",
+        imageUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&q=80&fit=crop&auto=format",
         journey: [
             ["your-first-48-hours-checklist", "getting-myki-and-surviving-ptv"],
             ["surviving-the-first-weekend-alone"],
@@ -69,6 +72,7 @@ export const PERSONAS: Persona[] = [
         situation:
             "Arrived with her partner and two-year-old on a skilled visa. Starts a PM role in three weeks. Managed a household and career for years — the local procedural knowledge is the gap.",
         accentColor: "#1f8f88",
+        imageUrl: "https://images.unsplash.com/photo-1667382137349-0f5cb5818a7c?w=600&h=800&q=80&fit=crop&auto=format",
         journey: [
             ["your-first-48-hours-checklist", "your-bond-starts-on-day-one"],
             ["finding-a-gp-before-you-need-one"],
@@ -89,6 +93,7 @@ export const PERSONAS: Persona[] = [
         situation:
             "Here for 12 months on a Working Holiday visa. Not anxious — excited. Needs efficiency: how to get around without draining $20/day on transport, where to eat well under $10.",
         accentColor: "#a07010",
+        imageUrl: "https://images.unsplash.com/photo-1754347913567-67f94dccfccc?w=600&h=800&q=80&fit=crop&auto=format",
         journey: [
             ["getting-myki-and-surviving-ptv", "night-transport-and-getting-home-safe"],
             ["cheap-eats-when-broke"],
@@ -109,6 +114,7 @@ export const PERSONAS: Persona[] = [
         situation:
             "Arrived three months ago through a humanitarian visa pathway. Has caseworker support for housing — the ongoing daily questions she navigates alone. More resilient than most; exhausted in ways hard to describe.",
         accentColor: "#6357a0",
+        imageUrl: "https://images.unsplash.com/photo-1617187703472-9508e9d3d198?w=600&h=800&q=80&fit=crop&auto=format",
         journey: [
             ["crisis-lines-you-can-actually-call", "when-you-dont-know-anyone-yet"],
             ["finding-a-gp-before-you-need-one"],
@@ -129,6 +135,7 @@ export const PERSONAS: Persona[] = [
         situation:
             "Relocated for a senior ops role. Salary solid, accommodation sorted. Discovering that professional competence doesn't transfer into social ease — and nobody warned him about superannuation.",
         accentColor: "#3a5470",
+        imageUrl: "https://images.unsplash.com/photo-1764084052707-f0d560ad67cf?w=600&h=800&q=80&fit=crop&auto=format",
         journey: [
             ["your-bond-starts-on-day-one", "your-first-48-hours-checklist"],
             ["super-and-your-first-paycheck"],

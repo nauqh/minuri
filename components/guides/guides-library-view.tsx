@@ -22,6 +22,7 @@ import {
 	type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -714,49 +715,29 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 										Browse all →
 									</Link>
 								</div>
-								<div
-									className="grid grid-cols-3 gap-x-4 gap-y-3"
-									style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}
-								>
-									{PERSONAS.map((persona, index) => {
-										const mid = Math.ceil(persona.name.length / 2);
-										const first = persona.name.slice(0, mid);
-										const second = persona.name.slice(mid);
-
-										return (
-											<Link
-												key={persona.id}
-												href={`/guides/journeys?persona=${persona.id}`}
-												className="group inline-flex select-none items-end leading-[0.88]"
-											>
-												<motion.span
-													className="inline-flex items-end"
-													whileHover={{ y: -10 }}
-													transition={{ type: "spring", stiffness: 320, damping: 22 }}
-												>
-													<span
-														className="font-black"
-														style={{
-															fontFamily: "var(--font-hero-serif)",
-															color: persona.accentColor,
-														}}
-													>
-														{first}
-													</span>
-
-													<span
-														className="font-black"
-														style={{
-															fontFamily: "var(--font-hero-serif)",
-															color: persona.accentColor,
-														}}
-													>
-														{second}
-													</span>
-												</motion.span>
-											</Link>
-										);
-									})}
+								<div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+									{PERSONAS.map((persona) => (
+										<Link
+											key={persona.id}
+											href={`/guides/journeys?persona=${persona.id}`}
+											className="group relative block overflow-hidden rounded-xl"
+										>
+											<div className="relative aspect-[3/4]">
+												<Image
+													src={persona.imageUrl}
+													alt={persona.name}
+													fill
+													sizes="(max-width: 640px) 33vw, 16vw"
+													className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+												/>
+												<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+												<div className="absolute bottom-0 left-0 right-0 p-2.5">
+													<p className="text-xs font-bold text-white">{persona.name}</p>
+													<p className="mt-0.5 text-[10px] text-white/60">{persona.role}</p>
+												</div>
+											</div>
+										</Link>
+									))}
 								</div>
 							</section>
 

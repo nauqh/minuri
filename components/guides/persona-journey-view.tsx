@@ -5,6 +5,7 @@ import { ArrowLeft, ChevronRight, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import Lenis from "lenis";
 import { useLenis } from "lenis/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -33,7 +34,6 @@ function PersonaPickerCard({
             type="button"
             onClick={() => onSelect(persona)}
             className="group relative overflow-hidden rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50"
-            style={{ backgroundColor: persona.accentColor }}
             initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.12 }}
@@ -44,7 +44,14 @@ function PersonaPickerCard({
             }}
             whileHover={{ scale: prefersReducedMotion ? 1 : 1.015 }}
         >
-            <div className="absolute inset-0" style={{ backgroundImage: DOT_PATTERN }} />
+            <Image
+                src={persona.imageUrl}
+                alt={persona.name}
+                fill
+                sizes="(max-width: 640px) 50vw, 33vw"
+                className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/15" />
 
             <div className="relative flex aspect-[3/4] flex-col justify-between p-5 sm:p-6">
                 {/* Top — role + age */}
@@ -57,26 +64,7 @@ function PersonaPickerCard({
                     </span>
                 </div>
 
-                {/* Giant vertical name — decorative */}
-                <div
-                    className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                    aria-hidden
-                >
-                    <span
-                        className="select-none font-black leading-none text-white/[0.12] transition-all duration-500 group-hover:text-white/[0.20]"
-                        style={{
-                            fontFamily: "var(--font-hero-serif)",
-                            fontSize: "clamp(5rem, 20vw, 10rem)",
-                            writingMode: "vertical-rl",
-                            transform: "rotate(180deg)",
-                            letterSpacing: "-0.04em",
-                        }}
-                    >
-                        {persona.name}
-                    </span>
-                </div>
-
-                {/* Bottom — name + tagline */}
+{/* Bottom — name + tagline */}
                 <div className="relative">
                     <h3
                         className="text-xl font-bold text-white sm:text-2xl"
@@ -233,14 +221,15 @@ function PersonaDetailFullscreen({
                                 </span>
                             </div>
 
-                            {/* Center — accent photo block */}
-                            <div
-                                className="relative w-[42%] shrink-0"
-                                style={{ backgroundColor: persona.accentColor }}
-                            >
-                                <div
-                                    className="absolute inset-0"
-                                    style={{ backgroundImage: DOT_PATTERN }}
+                            {/* Center — persona photo */}
+                            <div className="relative w-[42%] shrink-0 overflow-hidden">
+                                <Image
+                                    src={persona.imageUrl}
+                                    alt={persona.name}
+                                    fill
+                                    sizes="42vw"
+                                    priority
+                                    className="object-cover"
                                 />
                             </div>
 

@@ -154,7 +154,7 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 							>
 								<form
 									onSubmit={submitPassword}
-									className="w-full max-w-sm flex flex-col gap-5"
+									className="w-full max-w-md flex flex-col gap-5"
 								>
 									<div className="flex flex-col gap-1.5">
 										<p
