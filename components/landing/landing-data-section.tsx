@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { LandingStatCard } from "./landing-stat-card";
 import { LandingInsightChart } from "./landing-insight-chart";
+import { LandingDotGrid } from "./landing-dot-grid";
 
 const STAT_CARDS = [
 	{
@@ -110,6 +111,9 @@ export function LandingDataSection() {
 			<div className="mt-6">
 				<LandingInsightChart />
 			</div>
+
+			{/* Dot grid — help-seeking gap */}
+			<LandingDotGrid />
 
 			{/* Bottom breathing room */}
 			<div className="pb-24 md:pb-32" />
