@@ -11,7 +11,6 @@ import {
 const EMPTY_STATE: LandingJourneyState = {
 	version: 1,
 	lastGuideSlug: null,
-	activeArc: null,
 	selectedSuburb: null,
 	lastTopic: null,
 	lifeMoment: null,
@@ -19,7 +18,6 @@ const EMPTY_STATE: LandingJourneyState = {
 	savedLocations: [],
 	topicHistory: [],
 	readGuides: [],
-	arcProgress: { day1: 0, week1: 0, month1: 0 },
 };
 
 function sentenceCase(value: string | null) {
