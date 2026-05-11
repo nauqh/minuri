@@ -45,7 +45,7 @@ export function LandingDataSection() {
 		>
 			{/* Constrained: heading + stat cards + lead-in */}
 			<div className="mx-auto w-full max-w-screen px-5 pb-0 pt-24 md:px-8 md:pt-32">
-				<div className="mx-auto max-w-7xl">
+				<div className="mx-auto max-w-[1400px]">
 					<div className="text-center">
 						<p className="landing-section-kicker">
 							The numbers behind your experience

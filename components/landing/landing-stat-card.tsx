@@ -62,11 +62,13 @@ export function LandingStatCard({
 			className="flex h-full"
 		>
 			<div className="group flex h-full w-full flex-col rounded-2xl bg-minuri-fog/60 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg md:p-8">
-				<div className={`mb-5 h-[3px] w-10 rounded-full ${accentClass}`} />
+				<div
+					className={`mb-5 h-[3px] w-10 rounded-full ${accentClass}`}
+				/>
 				<p className="text-[3.25rem] font-black leading-none tracking-tight text-minuri-ocean">
 					{displayStat}
 				</p>
-				<p className="mt-3 flex-1 text-sm leading-relaxed text-minuri-ocean/70">
+				<p className="mt-3 flex-1 leading-relaxed text-minuri-ocean/70">
 					{label}
 				</p>
 				<p className="mt-6 border-t border-minuri-silver/40 pt-4 text-[11px] uppercase tracking-wide text-minuri-ocean/40">

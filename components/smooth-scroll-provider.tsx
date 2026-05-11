@@ -15,6 +15,27 @@ function RouteScrollToTop() {
 	return null;
 }
 
+function InteractiveClickHandler() {
+	const lenis = useLenis();
+
+	useEffect(() => {
+		if (!lenis) return;
+
+		const handler = (e: PointerEvent) => {
+			const target = e.target as Element;
+			if (target.closest("button, a, [role='button'], [role='link']")) {
+				lenis.stop();
+				requestAnimationFrame(() => lenis.start());
+			}
+		};
+
+		document.addEventListener("pointerdown", handler);
+		return () => document.removeEventListener("pointerdown", handler);
+	}, [lenis]);
+
+	return null;
+}
+
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
 	const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -44,6 +65,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
 			}}
 		>
 			<RouteScrollToTop />
+			<InteractiveClickHandler />
 			{children}
 		</ReactLenis>
 	);
