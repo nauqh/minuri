@@ -14,26 +14,29 @@ type ServiceCard = {
 const serviceCards: ServiceCard[] = [
 	{
 		title: "First-time guides",
-		description: "We provide simple guides for daily independent life.",
+		description:
+			"Plain guides to Medicare, Myki, rental bonds, and more — before you need to ask.",
 		rotate: -4,
 		floatPhase: 0,
 	},
 	{
 		title: "Near-me support",
-		description: "We help you find nearby services quickly.",
+		description:
+			"GP, food bank, mental health services near you — with costs and eligibility.",
 		rotate: 3,
 		floatPhase: 0.8,
 	},
 	{
 		title: "Your next steps",
-		description: "We help you know what's the next step to take.",
+		description:
+			"We walk you through what comes next, step by step.",
 		rotate: -2,
 		floatPhase: 1.4,
 	},
 	{
 		title: "Your progress",
 		description:
-			"We help you track your progress and what you have achieved.",
+			"Track what's done. See what's still waiting.",
 		rotate: 4,
 		floatPhase: 0.4,
 	},
@@ -64,10 +67,10 @@ export function LandingServicesSection() {
 							ease: easeOut,
 						}}
 					>
-						Practical support you can use today
+						Everything you need to settle in
 					</motion.h2>
 					<p className="landing-section-subheading text-xs text-minuri-mint md:text-sm">
-						Tools and steps for independent life.
+						From your first GP visit to your first lease — the local knowledge you don't arrive with.
 					</p>
 					<div>
 						<Link
@@ -101,7 +104,7 @@ export function LandingServicesSection() {
 									style={{
 										rotate: card.rotate,
 									}}
-									className="relative rounded-2xl border border-minuri-mint/55 bg-minuri-ocean/70 p-5 text-left shadow-[0_16px_32px_-10px_rgba(2,24,25,0.35)] backdrop-blur-[1px] md:p-6"
+									className="relative flex h-40 flex-col justify-center rounded-2xl border border-minuri-mint/55 bg-minuri-ocean/70 p-5 text-left shadow-[0_16px_32px_-10px_rgba(2,24,25,0.35)] backdrop-blur-[1px] md:h-40 md:p-6"
 									animate={{ y: [0, -8, 0] }}
 									transition={{
 										duration: 3.2 + card.floatPhase * 0.28,
