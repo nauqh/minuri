@@ -575,6 +575,8 @@ a:focus-visible .minuri-link-underline::after,
 /* ── GUIDE FOOTER — dark editorial end-cap ── */
 .guide-footer-end {
 	position: relative;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
 	background: oklch(0.22 0.028 232);
 	padding: 5rem 2rem 4rem;
 	margin-top: 2rem;

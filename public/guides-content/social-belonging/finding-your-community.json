@@ -1,92 +1,102 @@
 {
-  "id": 13,
-  "slug": "finding-your-community",
-  "title": "Finding Your Community",
-  "summary": "Belonging isn't built by attending events — it's built by joining structures with recurring roles. Volunteer shifts, libraries, community gardens, sharehouses with intention — the infrastructure that holds you over time.",
-  "arc": "month-1",
-  "arcOrder": 4,
-  "topic": "social-belonging",
-  "readingTimeMin": 6,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/social-belonging/finding-your-community.json",
-  "nextGuideSlug": "homesickness-nobody-warns-you-about",
-  "searchTerms": [
-    "community centres",
-    "volunteering",
-    "clubs",
-    "libraries",
-    "community gardens",
-    "share house"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Time Out — Where to volunteer in Melbourne",
-      "href": "https://www.timeout.com/melbourne/things-to-do/where-to-volunteer-in-melbourne"
-    },
-    {
-      "label": "City of Melbourne — Community gardens and compost hubs",
-      "href": "https://www.melbourne.vic.gov.au/community-gardens-and-compost-hubs"
-    },
-    {
-      "label": "City of Melbourne — Libraries",
-      "href": "https://www.melbourne.vic.gov.au/libraries"
-    },
-    {
-      "label": "Youth Central — 5 tips for living in a share house",
-      "href": "https://www.youthcentral.vic.gov.au/housing/renting-and-sharehousing/tips-sharehouse-success"
+    "id": 13,
+    "slug": "finding-your-community",
+    "title": "Finding Your Community",
+    "summary": "Belonging isn't built by attending events — it's built by joining structures with recurring roles. Volunteer shifts, libraries, community gardens, sharehouses with intention — the infrastructure that holds you over time.",
+    "arc": "month-1",
+    "arcOrder": 4,
+    "topic": "social-belonging",
+    "readingTimeMin": 6,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/social-belonging/finding-your-community.json",
+    "nextGuideSlug": "homesickness-nobody-warns-you-about",
+    "searchTerms": [
+        "community centres",
+        "volunteering",
+        "clubs",
+        "libraries",
+        "community gardens",
+        "share house"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Time Out — Where to volunteer in Melbourne",
+            "href": "https://www.timeout.com/melbourne/things-to-do/where-to-volunteer-in-melbourne"
+        },
+        {
+            "label": "City of Melbourne — Community gardens and compost hubs",
+            "href": "https://www.melbourne.vic.gov.au/community-gardens-and-compost-hubs"
+        },
+        {
+            "label": "City of Melbourne — Libraries",
+            "href": "https://www.melbourne.vic.gov.au/libraries"
+        },
+        {
+            "label": "Youth Central — 5 tips for living in a share house",
+            "href": "https://www.youthcentral.vic.gov.au/housing/renting-and-sharehousing/tips-sharehouse-success"
+        }
+    ],
+    "thumbnailUrl": "https://picsum.photos/seed/minuri-finding-your-community/640/420",
+    "nearMeDeeplink": "/near-me?topic=social-belonging&from=finding-your-community",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "Three months in. You have friends now — actually a few. Saturday plans aren't the problem anymore. But there's still a thing missing that you can't quite name. Friendships, it turns out, aren't the same as *belonging*. You can have someone to text and still feel like a tourist in your own postcode. You'd quite like a *thing* — not a clique, just a context — that you're inside. You don't yet know what shape that takes."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "Most people in their first year confuse *friends* with *community* and are quietly surprised when one doesn't produce the other. Friends are people. Community is a structure. You can have a great group of friends and still feel un-rooted, because the friends rotate through their own lives and the structure that holds you across changes is somewhere else.\n\nThis is the layer of belonging that nobody talks about because it doesn't show up on Instagram. But it's the layer that turns *I live in Melbourne* into *I'm a Melburnian.*"
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "Belonging grows fastest in **recurring groups with shared roles**, not at events you attend passively. The volunteer shift, the local library, the community garden plot, the weekly choir, the housemates you actually share life with — these have *roles* attached. Roles are what convert *attendance* into *being part of*.\n\nOne high-frequency commitment beats five sporadic ones. Pick one. Show up at least three times before you decide it's not for you."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Pick one high-frequency anchor and commit to three visits.**\n\nThe single most useful filter: *will this happen again next week, at the same time, with roughly the same people?* If yes, it's a candidate. If no, it's an event, which is fine for fun but doesn't build belonging.\n\nAfter you pick, **commit to three visits before you decide**. The first visit will feel awkward. The second visit will feel uncertain. The third visit is where regulars start recognising you and the structure starts holding you. Most people quit at visit one or two and conclude *that wasn't for me*.\n\n**2. Volunteering: the highest-leverage option for newcomers.**\n\nVolunteering gives you a role, a context, and a reason for regulars to remember your name. Melbourne organisations always looking for volunteers:\n\n- **OzHarvest / Foodbank Victoria** — food rescue, flexible shifts.\n- **Sacred Heart Mission** (St Kilda) — meals and op-shops.\n- **Asylum Seeker Resource Centre** (Footscray) — admin, foodbank, mentoring.\n- **St Vincent de Paul / Vinnies** — op-shops in every suburb; soup vans.\n- **CERES** (Brunswick East) — gardening and environmental projects.\n- **Lost Dogs' Home** — animal care.\n- **Volunteering Victoria** — searchable database of registered opportunities.\n\nMost ask for one shift a week or fortnight. After 6–8 weeks you become *a regular*.\n\n**3. Use your local library as a base.**\n\nThe library system is one of the most underused sources of community in Melbourne. The City of Melbourne libraries (and most council libraries) offer **free** digital access to e-books, audiobooks, magazines (PressReader), films (Kanopy), language courses (Mango), and — quietly — a calendar of free in-person events, talks, kids' sessions, and English-conversation groups for new arrivals.\n\nMembership takes 10 minutes with proof of address. The dividend runs for years.\n\n**4. Community gardens — slow but durable.**\n\nThe City of Melbourne and most inner-suburban councils run **community gardens and compost hubs**. You can apply for a small plot or volunteer at the shared beds. The membership is small, the same people show up most weekends, and the structure is one of the most durable forms of low-pressure community Melbourne offers — built around plants, not personality.\n\n**5. Sharehouses with intention.**\n\nIf you're in a share house, the relationship with your housemates is *the* highest-frequency community you have, and most newcomers under-invest in it. Youth Central's share-house guide flags the basics: agree on rules early (cleaning, noise, guests, bills), have one shared monthly *house dinner* on a fixed night, split bills via Splitwise rather than ad-hoc transfers, and do quick check-ins when something is bothering you instead of letting resentment build.\n\nThree weeks of explicit small effort in the first month sets a tone that runs for the whole lease.\n\n**6. Cultural and religious communities.**\n\nIf you have a culture or faith from home, Melbourne almost certainly has a community for it — Sri Lankan, Sudanese, Vietnamese, Greek, Indian, Korean, Chinese, Filipino, Lebanese, Iranian, Ethiopian, and more. Cultural community centres, religious services, and language schools exist across the metro area and welcome new arrivals reliably.\n\nThis is not regression to *the safe option*. It's a layer of belonging that doesn't replace your new Australian community — it sits alongside it, and most newcomers who find both are noticeably steadier than those who try to go without one.\n\n**7. Prefer contribution over consumption.**\n\nThe environments where belonging grows fastest are the ones where you have something *to give* — a shift, a role, a skill, a job on a roster. Passive attendance (lectures, gigs, classes you watch) is fine for input but slow for community. If you have a choice between *attending* and *helping run*, pick helping run, even if it's awkward at first.\n\n### The bit nobody mentions\n\nBelonging in a new city isn't a feeling you wait for. It's a side effect of a *structure* you've put yourself inside, repeatedly, for long enough that it becomes one of the things that holds you. Friends are how you survive the first three months. Community is what makes Melbourne stop feeling like a place you live and start feeling like a place you're from."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find community centres, libraries, volunteer organisations and community gardens near you (opens Near Me → Social & Belonging, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "The Homesickness Nobody Warns You About — for the wave that hits even after the community is built."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Search for community organisations aligned with your culture or interests",
+            "estimateMin": 15
+        },
+        {
+            "label": "Attend one community event this month",
+            "estimateMin": 120
+        },
+        {
+            "label": "Volunteer once to meet people with shared values",
+            "estimateMin": 180
+        },
+        {
+            "label": "Follow up with one person you met and suggest a coffee",
+            "estimateMin": 5
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Recurring groups with shared roles build belonging faster than one-off social events.",
+            "One high-frequency commitment beats five sporadic ones — pick one and hold it.",
+            "Your local library runs free classes, language groups, and community events most people never find.",
+            "GoVolunteer.com.au lists hundreds of Melbourne opportunities filterable by suburb and interest."
+        ],
+        "headsUp": "Don't wait until you feel ready or confident. The belonging comes from showing up before it feels like yours.",
+        "goodToKnow": "Volunteering with organisations like OzHarvest, Sacred Heart Mission, or CERES gives you a role — and a reason to come back — immediately."
     }
-  ],
-  "thumbnailUrl": "https://picsum.photos/seed/minuri-finding-your-community/640/420",
-  "nearMeDeeplink": "/near-me?topic=social-belonging&from=finding-your-community",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "Three months in. You have friends now — actually a few. Saturday plans aren't the problem anymore. But there's still a thing missing that you can't quite name. Friendships, it turns out, aren't the same as *belonging*. You can have someone to text and still feel like a tourist in your own postcode. You'd quite like a *thing* — not a clique, just a context — that you're inside. You don't yet know what shape that takes."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "Most people in their first year confuse *friends* with *community* and are quietly surprised when one doesn't produce the other. Friends are people. Community is a structure. You can have a great group of friends and still feel un-rooted, because the friends rotate through their own lives and the structure that holds you across changes is somewhere else.\n\nThis is the layer of belonging that nobody talks about because it doesn't show up on Instagram. But it's the layer that turns *I live in Melbourne* into *I'm a Melburnian.*"
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "Belonging grows fastest in **recurring groups with shared roles**, not at events you attend passively. The volunteer shift, the local library, the community garden plot, the weekly choir, the housemates you actually share life with — these have *roles* attached. Roles are what convert *attendance* into *being part of*.\n\nOne high-frequency commitment beats five sporadic ones. Pick one. Show up at least three times before you decide it's not for you."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Pick one high-frequency anchor and commit to three visits.**\n\nThe single most useful filter: *will this happen again next week, at the same time, with roughly the same people?* If yes, it's a candidate. If no, it's an event, which is fine for fun but doesn't build belonging.\n\nAfter you pick, **commit to three visits before you decide**. The first visit will feel awkward. The second visit will feel uncertain. The third visit is where regulars start recognising you and the structure starts holding you. Most people quit at visit one or two and conclude *that wasn't for me*.\n\n**2. Volunteering: the highest-leverage option for newcomers.**\n\nVolunteering gives you a role, a context, and a reason for regulars to remember your name. Melbourne organisations always looking for volunteers:\n\n- **OzHarvest / Foodbank Victoria** — food rescue, flexible shifts.\n- **Sacred Heart Mission** (St Kilda) — meals and op-shops.\n- **Asylum Seeker Resource Centre** (Footscray) — admin, foodbank, mentoring.\n- **St Vincent de Paul / Vinnies** — op-shops in every suburb; soup vans.\n- **CERES** (Brunswick East) — gardening and environmental projects.\n- **Lost Dogs' Home** — animal care.\n- **Volunteering Victoria** — searchable database of registered opportunities.\n\nMost ask for one shift a week or fortnight. After 6–8 weeks you become *a regular*.\n\n**3. Use your local library as a base.**\n\nThe library system is one of the most underused sources of community in Melbourne. The City of Melbourne libraries (and most council libraries) offer **free** digital access to e-books, audiobooks, magazines (PressReader), films (Kanopy), language courses (Mango), and — quietly — a calendar of free in-person events, talks, kids' sessions, and English-conversation groups for new arrivals.\n\nMembership takes 10 minutes with proof of address. The dividend runs for years.\n\n**4. Community gardens — slow but durable.**\n\nThe City of Melbourne and most inner-suburban councils run **community gardens and compost hubs**. You can apply for a small plot or volunteer at the shared beds. The membership is small, the same people show up most weekends, and the structure is one of the most durable forms of low-pressure community Melbourne offers — built around plants, not personality.\n\n**5. Sharehouses with intention.**\n\nIf you're in a share house, the relationship with your housemates is *the* highest-frequency community you have, and most newcomers under-invest in it. Youth Central's share-house guide flags the basics: agree on rules early (cleaning, noise, guests, bills), have one shared monthly *house dinner* on a fixed night, split bills via Splitwise rather than ad-hoc transfers, and do quick check-ins when something is bothering you instead of letting resentment build.\n\nThree weeks of explicit small effort in the first month sets a tone that runs for the whole lease.\n\n**6. Cultural and religious communities.**\n\nIf you have a culture or faith from home, Melbourne almost certainly has a community for it — Sri Lankan, Sudanese, Vietnamese, Greek, Indian, Korean, Chinese, Filipino, Lebanese, Iranian, Ethiopian, and more. Cultural community centres, religious services, and language schools exist across the metro area and welcome new arrivals reliably.\n\nThis is not regression to *the safe option*. It's a layer of belonging that doesn't replace your new Australian community — it sits alongside it, and most newcomers who find both are noticeably steadier than those who try to go without one.\n\n**7. Prefer contribution over consumption.**\n\nThe environments where belonging grows fastest are the ones where you have something *to give* — a shift, a role, a skill, a job on a roster. Passive attendance (lectures, gigs, classes you watch) is fine for input but slow for community. If you have a choice between *attending* and *helping run*, pick helping run, even if it's awkward at first.\n\n### The bit nobody mentions\n\nBelonging in a new city isn't a feeling you wait for. It's a side effect of a *structure* you've put yourself inside, repeatedly, for long enough that it becomes one of the things that holds you. Friends are how you survive the first three months. Community is what makes Melbourne stop feeling like a place you live and start feeling like a place you're from."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find community centres, libraries, volunteer organisations and community gardens near you (opens Near Me → Social & Belonging, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "The Homesickness Nobody Warns You About — for the wave that hits even after the community is built."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Search for community organisations aligned with your culture or interests",
-      "estimateMin": 15
-    },
-    {
-      "label": "Attend one community event this month",
-      "estimateMin": 120
-    },
-    {
-      "label": "Volunteer once to meet people with shared values",
-      "estimateMin": 180
-    },
-    {
-      "label": "Follow up with one person you met and suggest a coffee",
-      "estimateMin": 5
-    }
-  ]
 }

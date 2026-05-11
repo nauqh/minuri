@@ -1,84 +1,94 @@
 {
-  "id": 26,
-  "slug": "your-pharmacist-is-the-cheapest-first-stop",
-  "title": "Your Pharmacist Is the Cheapest First Stop",
-  "summary": "Walk into any chemist and you can get free, qualified medical advice in the next ten minutes — no appointment, no Medicare card, no fee.",
-  "arc": "week-1",
-  "arcOrder": 7,
-  "topic": "health-wellbeing",
-  "readingTimeMin": 4,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/health-wellbeing/your-pharmacist-is-the-cheapest-first-stop.json",
-  "nextGuideSlug": "managing-your-prescriptions-in-a-new-city",
-  "searchTerms": [
-    "pharmacist",
-    "chemist",
-    "chemist warehouse",
-    "advice",
-    "over the counter",
-    "minor ailments"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Healthdirect — Getting the most out of your pharmacist",
-      "href": "https://www.healthdirect.gov.au/getting-the-most-out-of-your-pharmacist"
-    },
-    {
-      "label": "Better Health VIC — Chemist Care Now",
-      "href": "https://www.betterhealth.vic.gov.au/chemist-care-now"
+    "id": 26,
+    "slug": "your-pharmacist-is-the-cheapest-first-stop",
+    "title": "Your Pharmacist Is the Cheapest First Stop",
+    "summary": "Walk into any chemist and you can get free, qualified medical advice in the next ten minutes — no appointment, no Medicare card, no fee.",
+    "arc": "week-1",
+    "arcOrder": 7,
+    "topic": "health-wellbeing",
+    "readingTimeMin": 4,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/health-wellbeing/your-pharmacist-is-the-cheapest-first-stop.json",
+    "nextGuideSlug": "managing-your-prescriptions-in-a-new-city",
+    "searchTerms": [
+        "pharmacist",
+        "chemist",
+        "chemist warehouse",
+        "advice",
+        "over the counter",
+        "minor ailments"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Healthdirect — Getting the most out of your pharmacist",
+            "href": "https://www.healthdirect.gov.au/getting-the-most-out-of-your-pharmacist"
+        },
+        {
+            "label": "Better Health VIC — Chemist Care Now",
+            "href": "https://www.betterhealth.vic.gov.au/chemist-care-now"
+        }
+    ],
+    "thumbnailUrl": "/guides/thumbnails/your-pharmacist-is-the-cheapest-first-stop.jpg",
+    "nearMeDeeplink": "/near-me?topic=health-wellbeing&from=your-pharmacist-is-the-cheapest-first-stop",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "It's Tuesday night. You've had a sore throat for three days that's now becoming the kind of sore throat that interrupts sleep. The earliest GP appointment is Friday. You're standing in the cold-and-flu aisle of Chemist Warehouse staring at thirty different boxes of throat lozenges, none of which are obviously different from any of the others, with no real idea which one is the right one for what you actually have."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "Pharmacies are designed in a way that makes the help invisible. The shelf is loud — bright boxes, multiple brands of the same drug at different price points, \"new and improved\" stickers — and the actual expert is the person standing quietly at the dispensary counter at the back of the store, who you're not sure you're allowed to interrupt.\n\nYou are. That's literally what they're paid to do. And the conversation will probably take three minutes."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "**Australian pharmacists are qualified clinicians, and asking them for advice on a minor problem is free.**\n\nNo appointment. No booking fee. No Medicare card needed. You walk up to the counter, say *\"can I have a quick word with the pharmacist?\"*, and someone with a four-year degree in medicines and minor ailments will help you sort it out — for free.\n\nThey can: triage symptoms, recommend (or talk you out of) over-the-counter medication, flag drug interactions with anything you're already on, tell you whether you actually need a GP, and increasingly — under Victoria's expanded pharmacist scope — even prescribe for some conditions like UTIs, the contraceptive pill, and shingles."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Walk in. Ask for the pharmacist by name or just \"can I speak to the pharmacist?\"** — every store has at least one on duty during opening hours. They'll come to a quieter corner of the counter to talk.\n\n**2. Describe what's going on like you'd describe it to a doctor.** When did it start. What are the symptoms. What you've tried. What other medications you're on (including contraceptive pill, asthma puffer, anything regular).\n\n**3. They'll do one of three things:**\n- Recommend an over-the-counter medication and explain how to take it.\n- Tell you it's something they can prescribe for under the Victorian pharmacist prescribing pilot — and write the prescription on the spot.\n- Tell you it's beyond their scope and you need a GP — sometimes urgently. *\"That's a GP one, not a pharmacy one\"* is a sentence that will save you a wasted week.\n\n**4. Things to ask about that catch newcomers off guard:**\n- **Generic vs brand.** The $4.50 generic and the $18 branded version of the same drug have the same active ingredient. Ask.\n- **PBS price vs private price.** If your medication is on the PBS and you have a Medicare card, the price drops dramatically. Always show your card.\n- **Drug interactions.** Specifically tell the pharmacist if you're on the pill, antidepressants, blood thinners, or any regular prescription. The interaction with cold-and-flu meds is the kind of thing they're trained to catch and you weren't.\n\n**5. After-hours.** Most chemists close around 6–9pm, but Victoria has a network of late-opening and 24/7 pharmacies, often called *Pharmacy on Call* or branded as *Chemist Warehouse* / *My Chemist*. Better Health VIC's Chemist Care Now page lists current ones.\n\n### The bit nobody mentions\n\nThe pharmacist isn't a salesperson. They have no commission. If they tell you the home brand is fine, the home brand is fine. If they tell you you don't need anything, you don't need anything. The conversation is the most under-used free clinical resource in the country, and most people walk past it because nobody told them it was on offer."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find your closest pharmacy, including late-opening and 24/7 ones (opens Near Me, filtered to Health & Wellbeing → Pharmacy, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "Managing Your Prescriptions in a New City — once you're in the system, the next problem is keeping it running smoothly across moves, scripts, and refills."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Find your nearest pharmacy and note its opening hours",
+            "estimateMin": 5
+        },
+        {
+            "label": "Ask the pharmacist about over-the-counter options for your issue",
+            "estimateMin": 5
+        },
+        {
+            "label": "Check if your medication is on the PBS to reduce cost",
+            "estimateMin": 5
+        },
+        {
+            "label": "Sign up for the pharmacy loyalty card for future savings",
+            "estimateMin": 3
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Walk in and describe your symptoms — no appointment, no booking fee, no Medicare card needed.",
+            "Pharmacists are qualified clinicians who can recommend treatments or tell you when you need a GP.",
+            "Always ask: 'Is there a generic version?' — it can be $15–$40 cheaper than the branded option.",
+            "Most pharmacies stock over-the-counter treatments for 90% of minor health issues."
+        ],
+        "headsUp": "Pharmacists cannot prescribe — if you need a prescription medicine, you'll need a GP visit.",
+        "goodToKnow": "Ask about PBS pricing vs private pricing — the same medication can cost radically different amounts depending on how it's dispensed."
     }
-  ],
-  "thumbnailUrl": "/guides/thumbnails/your-pharmacist-is-the-cheapest-first-stop.jpg",
-  "nearMeDeeplink": "/near-me?topic=health-wellbeing&from=your-pharmacist-is-the-cheapest-first-stop",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "It's Tuesday night. You've had a sore throat for three days that's now becoming the kind of sore throat that interrupts sleep. The earliest GP appointment is Friday. You're standing in the cold-and-flu aisle of Chemist Warehouse staring at thirty different boxes of throat lozenges, none of which are obviously different from any of the others, with no real idea which one is the right one for what you actually have."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "Pharmacies are designed in a way that makes the help invisible. The shelf is loud — bright boxes, multiple brands of the same drug at different price points, \"new and improved\" stickers — and the actual expert is the person standing quietly at the dispensary counter at the back of the store, who you're not sure you're allowed to interrupt.\n\nYou are. That's literally what they're paid to do. And the conversation will probably take three minutes."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "**Australian pharmacists are qualified clinicians, and asking them for advice on a minor problem is free.**\n\nNo appointment. No booking fee. No Medicare card needed. You walk up to the counter, say *\"can I have a quick word with the pharmacist?\"*, and someone with a four-year degree in medicines and minor ailments will help you sort it out — for free.\n\nThey can: triage symptoms, recommend (or talk you out of) over-the-counter medication, flag drug interactions with anything you're already on, tell you whether you actually need a GP, and increasingly — under Victoria's expanded pharmacist scope — even prescribe for some conditions like UTIs, the contraceptive pill, and shingles."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Walk in. Ask for the pharmacist by name or just \"can I speak to the pharmacist?\"** — every store has at least one on duty during opening hours. They'll come to a quieter corner of the counter to talk.\n\n**2. Describe what's going on like you'd describe it to a doctor.** When did it start. What are the symptoms. What you've tried. What other medications you're on (including contraceptive pill, asthma puffer, anything regular).\n\n**3. They'll do one of three things:**\n- Recommend an over-the-counter medication and explain how to take it.\n- Tell you it's something they can prescribe for under the Victorian pharmacist prescribing pilot — and write the prescription on the spot.\n- Tell you it's beyond their scope and you need a GP — sometimes urgently. *\"That's a GP one, not a pharmacy one\"* is a sentence that will save you a wasted week.\n\n**4. Things to ask about that catch newcomers off guard:**\n- **Generic vs brand.** The $4.50 generic and the $18 branded version of the same drug have the same active ingredient. Ask.\n- **PBS price vs private price.** If your medication is on the PBS and you have a Medicare card, the price drops dramatically. Always show your card.\n- **Drug interactions.** Specifically tell the pharmacist if you're on the pill, antidepressants, blood thinners, or any regular prescription. The interaction with cold-and-flu meds is the kind of thing they're trained to catch and you weren't.\n\n**5. After-hours.** Most chemists close around 6–9pm, but Victoria has a network of late-opening and 24/7 pharmacies, often called *Pharmacy on Call* or branded as *Chemist Warehouse* / *My Chemist*. Better Health VIC's Chemist Care Now page lists current ones.\n\n### The bit nobody mentions\n\nThe pharmacist isn't a salesperson. They have no commission. If they tell you the home brand is fine, the home brand is fine. If they tell you you don't need anything, you don't need anything. The conversation is the most under-used free clinical resource in the country, and most people walk past it because nobody told them it was on offer."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find your closest pharmacy, including late-opening and 24/7 ones (opens Near Me, filtered to Health & Wellbeing → Pharmacy, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "Managing Your Prescriptions in a New City — once you're in the system, the next problem is keeping it running smoothly across moves, scripts, and refills."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Find your nearest pharmacy and note its opening hours",
-      "estimateMin": 5
-    },
-    {
-      "label": "Ask the pharmacist about over-the-counter options for your issue",
-      "estimateMin": 5
-    },
-    {
-      "label": "Check if your medication is on the PBS to reduce cost",
-      "estimateMin": 5
-    },
-    {
-      "label": "Sign up for the pharmacy loyalty card for future savings",
-      "estimateMin": 3
-    }
-  ]
 }

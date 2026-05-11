@@ -1,100 +1,110 @@
 {
-  "id": 22,
-  "slug": "finding-free-community-meals",
-  "title": "Finding Free Community Meals",
-  "summary": "Free meals in Melbourne aren't a last resort — they're a regular service, and using them when money is tight is exactly what they're for.",
-  "arc": "month-1",
-  "arcOrder": 2,
-  "topic": "food-eating",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/food-eating/finding-free-community-meals.json",
-  "nextGuideSlug": "renting-without-getting-burned",
-  "searchTerms": [
-    "free food",
-    "community meals",
-    "food relief",
-    "fareshare",
-    "foodbank",
-    "broke"
-  ],
-  "sourceLinks": [
-    {
-      "label": "City of Melbourne — Community Food Guide",
-      "href": "https://www.melbourne.vic.gov.au/community-food-guide"
-    },
-    {
-      "label": "Local Food Connect — Free community meals",
-      "href": "https://localfoodconnect.org.au/links/free-community-meals/"
-    },
-    {
-      "label": "Local Food Connect — Free community meals locations",
-      "href": "https://localfoodconnect.org.au/links/free-community-meals-locations/"
-    },
-    {
-      "label": "FareShare — Free meals Melbourne",
-      "href": "https://www.fareshare.net.au/melbourne/"
-    },
-    {
-      "label": "Just Food Collective — Cheap food resources",
-      "href": "https://www.justfood.org.au/resources/cheap-food"
-    },
-    {
-      "label": "City of Port Phillip — Free Food Directory",
-      "href": "https://www.portphillip.vic.gov.au/people-and-community/community-directory/free-food-directory-guide/"
+    "id": 22,
+    "slug": "finding-free-community-meals",
+    "title": "Finding Free Community Meals",
+    "summary": "Free meals in Melbourne aren't a last resort — they're a regular service, and using them when money is tight is exactly what they're for.",
+    "arc": "month-1",
+    "arcOrder": 2,
+    "topic": "food-eating",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/food-eating/finding-free-community-meals.json",
+    "nextGuideSlug": "renting-without-getting-burned",
+    "searchTerms": [
+        "free food",
+        "community meals",
+        "food relief",
+        "fareshare",
+        "foodbank",
+        "broke"
+    ],
+    "sourceLinks": [
+        {
+            "label": "City of Melbourne — Community Food Guide",
+            "href": "https://www.melbourne.vic.gov.au/community-food-guide"
+        },
+        {
+            "label": "Local Food Connect — Free community meals",
+            "href": "https://localfoodconnect.org.au/links/free-community-meals/"
+        },
+        {
+            "label": "Local Food Connect — Free community meals locations",
+            "href": "https://localfoodconnect.org.au/links/free-community-meals-locations/"
+        },
+        {
+            "label": "FareShare — Free meals Melbourne",
+            "href": "https://www.fareshare.net.au/melbourne/"
+        },
+        {
+            "label": "Just Food Collective — Cheap food resources",
+            "href": "https://www.justfood.org.au/resources/cheap-food"
+        },
+        {
+            "label": "City of Port Phillip — Free Food Directory",
+            "href": "https://www.portphillip.vic.gov.au/people-and-community/community-directory/free-food-directory-guide/"
+        }
+    ],
+    "thumbnailUrl": "/guides/thumbnails/finding-free-community-meals.jpg",
+    "nearMeDeeplink": "/near-me?topic=food-eating&from=finding-free-community-meals",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "It's the last Thursday of the month. Rent went out Monday. The card declined at the self-checkout this morning, quietly enough that the woman behind you didn't notice but loudly enough that you felt it for the rest of the walk home. There's pasta in the cupboard. There's pasta in the cupboard tomorrow too."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "Asking for free food carries a specific weight when you've never had to. There's the version of yourself you grew up imagining — capable, employed, not the kind of person who needs this — and then there's the actual Thursday you're standing in.\n\nThe shame is the worst part. It's louder than the hunger. It's the reason most young Australians who qualify for food relief never go.\n\nThis guide is for the version of you that needs to skip the shame step and go eat."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "**Free community meals in Melbourne aren't emergency-only and they're not means-tested at the door.**\n\nMost people picture food relief as a queue at a soup kitchen with a clipboard at the front. That's not how it works in 2026 in Melbourne. Many of the regular community meals — at neighbourhood houses, churches, community centres, even some libraries — operate as **drop-in shared meals** with no questions, no proof of income, no signup. You walk in. You eat. You can come back next week.\n\nThe people running them aren't trying to figure out if you \"deserve\" the meal. They're trying to fill the room. An empty hall is the failure; you eating is the success."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Three networks cover most of inner and middle Melbourne.**\n\n- **City of Melbourne's Community Food Guide** — a directory of free and low-cost meals across the LGA, updated regularly.\n- **Local Food Connect** — a community-run map of free meals in inner-north and inner-east suburbs, with locations, days, and times listed.\n- **City of Port Phillip's Free Food Directory** — for anyone living or studying around St Kilda, Southbank, South Melbourne.\n\n**2. FareShare and Foodbank Victoria are the bigger backstops.** FareShare cooks rescued food into hot meals that go out through over 700 charity partners across Melbourne. You generally don't access FareShare directly — you access one of the partners (a community centre, a youth service, a church kitchen) where the meal lands.\n\n**3. Most meals run on fixed days at fixed places.** Tuesday lunch at one centre. Thursday dinner at another. Saturday breakfast somewhere else. The trick is finding the two or three closest to you and sticking them in your phone calendar like any other appointment.\n\n**4. Some meals are pay-what-you-can rather than free.** That's still useful — you can throw $2 in if you have it, or nothing if you don't, and the social vibe is more \"shared dinner\" than \"food relief\".\n\n**5. If you need groceries, not a meal, that's a separate channel.** Foodbank Victoria runs supermarket-style food hubs you can register at; many universities also have student-run food pantries (often more discreet than you'd expect). Ask your student support office — they will know.\n\n### The bit nobody mentions\n\nThe people who use these services regularly are not who you think. Students between scholarships. Casuals between shifts. People whose Centrelink got delayed. Renters who got blindsided by a $400 power bill. The room is full of people who, on any other Thursday, would also have called themselves \"fine\".\n\nGoing once is the hard part. After that it's just dinner."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find a free community meal near you tonight or this week (opens Near Me, filtered to Food & Eating → Community meals, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "Renting Without Getting Burned — because the cheapest food in the world won't help if your rent is the part that's actually breaking the budget."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Search 'community meals [your suburb]' on Google",
+            "estimateMin": 5
+        },
+        {
+            "label": "Check your local council website for food relief programs",
+            "estimateMin": 10
+        },
+        {
+            "label": "Find a faith community near you that runs open meals",
+            "estimateMin": 10
+        },
+        {
+            "label": "Save one regular event in your calendar",
+            "estimateMin": 2
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Free community meals are drop-in — no means testing, no proof of income, no signup.",
+            "Most run on fixed days at fixed locations — check the schedule once and it's sorted.",
+            "FareShare and Foodbank Victoria are larger backstops if you need grocery support.",
+            "Some meals are pay-what-you-can, with $0 fully and quietly accepted."
+        ],
+        "headsUp": "Most free meal services don't advertise loudly — search 'community meals Melbourne' or ask at your local library.",
+        "goodToKnow": "Using these services when money is tight is exactly what they exist for. There's no shame in showing up."
     }
-  ],
-  "thumbnailUrl": "/guides/thumbnails/finding-free-community-meals.jpg",
-  "nearMeDeeplink": "/near-me?topic=food-eating&from=finding-free-community-meals",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "It's the last Thursday of the month. Rent went out Monday. The card declined at the self-checkout this morning, quietly enough that the woman behind you didn't notice but loudly enough that you felt it for the rest of the walk home. There's pasta in the cupboard. There's pasta in the cupboard tomorrow too."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "Asking for free food carries a specific weight when you've never had to. There's the version of yourself you grew up imagining — capable, employed, not the kind of person who needs this — and then there's the actual Thursday you're standing in.\n\nThe shame is the worst part. It's louder than the hunger. It's the reason most young Australians who qualify for food relief never go.\n\nThis guide is for the version of you that needs to skip the shame step and go eat."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "**Free community meals in Melbourne aren't emergency-only and they're not means-tested at the door.**\n\nMost people picture food relief as a queue at a soup kitchen with a clipboard at the front. That's not how it works in 2026 in Melbourne. Many of the regular community meals — at neighbourhood houses, churches, community centres, even some libraries — operate as **drop-in shared meals** with no questions, no proof of income, no signup. You walk in. You eat. You can come back next week.\n\nThe people running them aren't trying to figure out if you \"deserve\" the meal. They're trying to fill the room. An empty hall is the failure; you eating is the success."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Three networks cover most of inner and middle Melbourne.**\n\n- **City of Melbourne's Community Food Guide** — a directory of free and low-cost meals across the LGA, updated regularly.\n- **Local Food Connect** — a community-run map of free meals in inner-north and inner-east suburbs, with locations, days, and times listed.\n- **City of Port Phillip's Free Food Directory** — for anyone living or studying around St Kilda, Southbank, South Melbourne.\n\n**2. FareShare and Foodbank Victoria are the bigger backstops.** FareShare cooks rescued food into hot meals that go out through over 700 charity partners across Melbourne. You generally don't access FareShare directly — you access one of the partners (a community centre, a youth service, a church kitchen) where the meal lands.\n\n**3. Most meals run on fixed days at fixed places.** Tuesday lunch at one centre. Thursday dinner at another. Saturday breakfast somewhere else. The trick is finding the two or three closest to you and sticking them in your phone calendar like any other appointment.\n\n**4. Some meals are pay-what-you-can rather than free.** That's still useful — you can throw $2 in if you have it, or nothing if you don't, and the social vibe is more \"shared dinner\" than \"food relief\".\n\n**5. If you need groceries, not a meal, that's a separate channel.** Foodbank Victoria runs supermarket-style food hubs you can register at; many universities also have student-run food pantries (often more discreet than you'd expect). Ask your student support office — they will know.\n\n### The bit nobody mentions\n\nThe people who use these services regularly are not who you think. Students between scholarships. Casuals between shifts. People whose Centrelink got delayed. Renters who got blindsided by a $400 power bill. The room is full of people who, on any other Thursday, would also have called themselves \"fine\".\n\nGoing once is the hard part. After that it's just dinner."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find a free community meal near you tonight or this week (opens Near Me, filtered to Food & Eating → Community meals, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "Renting Without Getting Burned — because the cheapest food in the world won't help if your rent is the part that's actually breaking the budget."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Search 'community meals [your suburb]' on Google",
-      "estimateMin": 5
-    },
-    {
-      "label": "Check your local council website for food relief programs",
-      "estimateMin": 10
-    },
-    {
-      "label": "Find a faith community near you that runs open meals",
-      "estimateMin": 10
-    },
-    {
-      "label": "Save one regular event in your calendar",
-      "estimateMin": 2
-    }
-  ]
 }

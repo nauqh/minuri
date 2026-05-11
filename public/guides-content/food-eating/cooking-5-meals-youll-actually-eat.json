@@ -1,92 +1,102 @@
 {
-  "id": 10,
-  "slug": "cooking-5-meals-youll-actually-eat",
-  "title": "Cooking 5 Meals You'll Actually Eat",
-  "summary": "A small repeating menu beats endless variety. Pick five forgiving recipes with overlapping ingredients, prep once a week, and stop deciding what to cook every night.",
-  "arc": "week-1",
-  "arcOrder": 1,
-  "topic": "food-eating",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/food-eating/cooking-5-meals-youll-actually-eat.json",
-  "nextGuideSlug": "setting-up-utilities-without-overpaying",
-  "searchTerms": [
-    "meal prep",
-    "cooking for one",
-    "shopping list",
-    "batch cooking",
-    "freezer meals",
-    "student recipes"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Frugal & Thriving — Once-a-week budget meal prep",
-      "href": "https://www.frugalandthriving.com.au/meal-prepping-guide/"
-    },
-    {
-      "label": "ANU — 8 cheap and easy recipes for uni students",
-      "href": "https://study.anu.edu.au/stories/8-cheap-and-easy-recipes-uni-students"
-    },
-    {
-      "label": "myfoodbook — Easy budget one-pot recipes",
-      "href": "https://myfoodbook.com.au/collections/easy-budget-one-pot-recipes"
+    "id": 10,
+    "slug": "cooking-5-meals-youll-actually-eat",
+    "title": "Cooking 5 Meals You'll Actually Eat",
+    "summary": "A small repeating menu beats endless variety. Pick five forgiving recipes with overlapping ingredients, prep once a week, and stop deciding what to cook every night.",
+    "arc": "week-1",
+    "arcOrder": 1,
+    "topic": "food-eating",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/food-eating/cooking-5-meals-youll-actually-eat.json",
+    "nextGuideSlug": "setting-up-utilities-without-overpaying",
+    "searchTerms": [
+        "meal prep",
+        "cooking for one",
+        "shopping list",
+        "batch cooking",
+        "freezer meals",
+        "student recipes"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Frugal & Thriving — Once-a-week budget meal prep",
+            "href": "https://www.frugalandthriving.com.au/meal-prepping-guide/"
+        },
+        {
+            "label": "ANU — 8 cheap and easy recipes for uni students",
+            "href": "https://study.anu.edu.au/stories/8-cheap-and-easy-recipes-uni-students"
+        },
+        {
+            "label": "myfoodbook — Easy budget one-pot recipes",
+            "href": "https://myfoodbook.com.au/collections/easy-budget-one-pot-recipes"
+        }
+    ],
+    "thumbnailUrl": "https://picsum.photos/seed/minuri-cooking-5-meals-youll-actually-eat/640/420",
+    "nearMeDeeplink": "/near-me?topic=food-eating&from=cooking-5-meals-youll-actually-eat",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "It's a Tuesday in week three. The fridge holds half a bag of spinach you bought with good intentions, three eggs, a wedge of cheese, and a sad-looking capsicum. The pantry has rice, pasta, a curry paste you opened once, and a tin of chickpeas. You're standing in front of all of it knowing you have everything you need to cook something — and absolutely no idea what that something is. So you order Uber Eats. Again. The receipt says $24 and you've done this three times this week."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "It's not laziness. Decision fatigue is real, and *what should I cook tonight* is one of the most expensive open questions you can leave to a tired version of yourself at 7pm. The recipe apps don't help — they give you 800 options and ask you to choose, which is the opposite of what your brain is short on.\n\nWhat you actually need is fewer choices, not more inspiration."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "You don't need recipes. You need a **system of five repeat meals** that share ingredients, take less than 30 minutes each, and forgive substitutions. Once they're locked in, weekday dinner stops being a decision and starts being a default.\n\nThe people you envy — the ones who seem to cook for themselves without drama — almost never have a wide repertoire. They have five things they can do half-asleep, and they rotate. That's the whole trick."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Pick five meals that overlap.**\n\nThe goal is a starter pantry of maybe fifteen ingredients that becomes five different dinners depending on how you combine them. A workable starter set:\n\n- **One-pot pasta** — pasta, garlic, onion, tinned tomatoes, whatever vegetable is in the fridge, parmesan\n- **Egg fried rice** — leftover rice, eggs, garlic, soy sauce, frozen peas, spring onion\n- **Coconut chickpea curry** — onion, garlic, curry powder or paste, tinned chickpeas, coconut milk, frozen spinach, served on rice\n- **Stir-fried noodles** — noodles, soy sauce, garlic, whatever protein, whatever vegetable\n- **Loaded baked potato or sweet potato** — microwave 8 minutes, top with tinned tuna, cheese, beans, or leftover curry\n\nNotice the overlap: garlic, onion, soy sauce, rice and frozen vegetables work in four out of five. ANU's student cooking guide makes the same point — *most recipes can handle a missing or swapped ingredient*. Treat recipes like templates, not instructions.\n\n**2. Prep once, eat five times.**\n\nFrugal & Thriving's meal-prep guide describes three approaches that all work: **freezer meals** (cook large batches of curry/stew/bolognese, freeze in single portions, lasts ~3 months), **portioned meals** (cook protein, starch and vegetable separately, mix in containers), and **fresh prep** (chop and marinate ahead so weeknight cooking is just heat-and-combine). Pick one — usually fresh prep on a Sunday afternoon, takes 60–90 minutes — and the rest of the week becomes assembly, not cooking.\n\n**3. Build a base shop, not a meal-by-meal shop.**\n\nThe shopping list for those five meals is roughly:\n\n- Pasta · rice · noodles · oats\n- Eggs · cheese · milk\n- One protein (chicken, mince, tofu, or canned tuna)\n- Tinned tomatoes · tinned chickpeas · coconut milk\n- Onion · garlic · ginger · soy sauce · curry paste · olive oil\n- Frozen mixed vegetables · frozen spinach · frozen peas\n- One or two fresh vegetables (capsicum, broccoli, whatever's on special)\n\nThat's roughly $45–$60 at ALDI and feeds one person for a week with leftovers. Frozen vegetables matter — they don't rot, they're often nutritionally identical to fresh, and they cut food waste, which is where most one-person grocery budgets quietly leak money.\n\n**4. Optimise for tired-Tuesday-you, not aspirational-Sunday-you.**\n\nSunday-you wants to make a Thai green curry from scratch. Tuesday-you wants to eat something hot in fifteen minutes and go to bed. The five meals should be picked for Tuesday-you. If a recipe needs more than one pot, more than 30 minutes, or an ingredient you have to go out for, it doesn't belong on the list — at least not yet.\n\n**5. Add new meals slowly, one at a time.**\n\nOnce the five are stable for a few weeks, swap one out for something new. That's it. You're not building a cookbook in your head — you're building a small, reliable rotation that quietly absorbs new things over months, not weeks.\n\n### The bit nobody mentions\n\nMost people who say they 'can't cook' aren't bad cooks. They've just never given themselves permission to eat the same thing twice in a week. The pressure to make every dinner novel is a cultural inheritance from food media, and it's the single biggest reason fridges full of ingredients become Uber Eats orders.\n\nFive meals on rotation is not a failure of imagination. It's how almost everyone who feeds themselves well actually does it."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find supermarkets, butchers and fresh markets near you (opens Near Me → Food & Eating, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "Setting Up Utilities Without Overpaying — because the second-biggest leak in a one-person budget is the energy plan you didn't choose."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Pick 5 simple recipes you already know or that have 5 ingredients",
+            "estimateMin": 20
+        },
+        {
+            "label": "Write one combined shopping list for all 5 meals",
+            "estimateMin": 10
+        },
+        {
+            "label": "Buy all ingredients in a single trip",
+            "estimateMin": 45
+        },
+        {
+            "label": "Batch-cook the first two meals on Sunday",
+            "estimateMin": 60
+        },
+        {
+            "label": "Portion and label leftovers with date before storing",
+            "estimateMin": 5
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Pick five meals that share ingredients — not five separate ingredient lists.",
+            "Prep once a week, eat five times without daily decisions.",
+            "Start with meals that forgive substitutions: fried rice, pasta, stir-fry, soup, eggs.",
+            "Overlapping ingredients cut your grocery bill by 30–40%."
+        ],
+        "headsUp": "Don't buy ingredients for a recipe you've never cooked. Buy for your five known meals first.",
+        "goodToKnow": "The best cooking system is the one that works on a tired Tuesday with whatever's already in the fridge."
     }
-  ],
-  "thumbnailUrl": "https://picsum.photos/seed/minuri-cooking-5-meals-youll-actually-eat/640/420",
-  "nearMeDeeplink": "/near-me?topic=food-eating&from=cooking-5-meals-youll-actually-eat",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "It's a Tuesday in week three. The fridge holds half a bag of spinach you bought with good intentions, three eggs, a wedge of cheese, and a sad-looking capsicum. The pantry has rice, pasta, a curry paste you opened once, and a tin of chickpeas. You're standing in front of all of it knowing you have everything you need to cook something — and absolutely no idea what that something is. So you order Uber Eats. Again. The receipt says $24 and you've done this three times this week."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "It's not laziness. Decision fatigue is real, and *what should I cook tonight* is one of the most expensive open questions you can leave to a tired version of yourself at 7pm. The recipe apps don't help — they give you 800 options and ask you to choose, which is the opposite of what your brain is short on.\n\nWhat you actually need is fewer choices, not more inspiration."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "You don't need recipes. You need a **system of five repeat meals** that share ingredients, take less than 30 minutes each, and forgive substitutions. Once they're locked in, weekday dinner stops being a decision and starts being a default.\n\nThe people you envy — the ones who seem to cook for themselves without drama — almost never have a wide repertoire. They have five things they can do half-asleep, and they rotate. That's the whole trick."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Pick five meals that overlap.**\n\nThe goal is a starter pantry of maybe fifteen ingredients that becomes five different dinners depending on how you combine them. A workable starter set:\n\n- **One-pot pasta** — pasta, garlic, onion, tinned tomatoes, whatever vegetable is in the fridge, parmesan\n- **Egg fried rice** — leftover rice, eggs, garlic, soy sauce, frozen peas, spring onion\n- **Coconut chickpea curry** — onion, garlic, curry powder or paste, tinned chickpeas, coconut milk, frozen spinach, served on rice\n- **Stir-fried noodles** — noodles, soy sauce, garlic, whatever protein, whatever vegetable\n- **Loaded baked potato or sweet potato** — microwave 8 minutes, top with tinned tuna, cheese, beans, or leftover curry\n\nNotice the overlap: garlic, onion, soy sauce, rice and frozen vegetables work in four out of five. ANU's student cooking guide makes the same point — *most recipes can handle a missing or swapped ingredient*. Treat recipes like templates, not instructions.\n\n**2. Prep once, eat five times.**\n\nFrugal & Thriving's meal-prep guide describes three approaches that all work: **freezer meals** (cook large batches of curry/stew/bolognese, freeze in single portions, lasts ~3 months), **portioned meals** (cook protein, starch and vegetable separately, mix in containers), and **fresh prep** (chop and marinate ahead so weeknight cooking is just heat-and-combine). Pick one — usually fresh prep on a Sunday afternoon, takes 60–90 minutes — and the rest of the week becomes assembly, not cooking.\n\n**3. Build a base shop, not a meal-by-meal shop.**\n\nThe shopping list for those five meals is roughly:\n\n- Pasta · rice · noodles · oats\n- Eggs · cheese · milk\n- One protein (chicken, mince, tofu, or canned tuna)\n- Tinned tomatoes · tinned chickpeas · coconut milk\n- Onion · garlic · ginger · soy sauce · curry paste · olive oil\n- Frozen mixed vegetables · frozen spinach · frozen peas\n- One or two fresh vegetables (capsicum, broccoli, whatever's on special)\n\nThat's roughly $45–$60 at ALDI and feeds one person for a week with leftovers. Frozen vegetables matter — they don't rot, they're often nutritionally identical to fresh, and they cut food waste, which is where most one-person grocery budgets quietly leak money.\n\n**4. Optimise for tired-Tuesday-you, not aspirational-Sunday-you.**\n\nSunday-you wants to make a Thai green curry from scratch. Tuesday-you wants to eat something hot in fifteen minutes and go to bed. The five meals should be picked for Tuesday-you. If a recipe needs more than one pot, more than 30 minutes, or an ingredient you have to go out for, it doesn't belong on the list — at least not yet.\n\n**5. Add new meals slowly, one at a time.**\n\nOnce the five are stable for a few weeks, swap one out for something new. That's it. You're not building a cookbook in your head — you're building a small, reliable rotation that quietly absorbs new things over months, not weeks.\n\n### The bit nobody mentions\n\nMost people who say they 'can't cook' aren't bad cooks. They've just never given themselves permission to eat the same thing twice in a week. The pressure to make every dinner novel is a cultural inheritance from food media, and it's the single biggest reason fridges full of ingredients become Uber Eats orders.\n\nFive meals on rotation is not a failure of imagination. It's how almost everyone who feeds themselves well actually does it."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find supermarkets, butchers and fresh markets near you (opens Near Me → Food & Eating, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "Setting Up Utilities Without Overpaying — because the second-biggest leak in a one-person budget is the energy plan you didn't choose."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Pick 5 simple recipes you already know or that have 5 ingredients",
-      "estimateMin": 20
-    },
-    {
-      "label": "Write one combined shopping list for all 5 meals",
-      "estimateMin": 10
-    },
-    {
-      "label": "Buy all ingredients in a single trip",
-      "estimateMin": 45
-    },
-    {
-      "label": "Batch-cook the first two meals on Sunday",
-      "estimateMin": 60
-    },
-    {
-      "label": "Portion and label leftovers with date before storing",
-      "estimateMin": 5
-    }
-  ]
 }

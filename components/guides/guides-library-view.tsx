@@ -9,24 +9,34 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { ArrowLeft, ListFilter, Search, X } from "lucide-react";
+import {
+	ArrowLeft,
+	Compass,
+	HeartPulse,
+	Home,
+	ListFilter,
+	Sandwich,
+	Search,
+	Users,
+	X,
+	type LucideIcon,
+} from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { easeOut } from "@/components/landing/home-constants";
-import { GUIDE_ARCS, GUIDE_TOPICS, GUIDES } from "@/content/guides";
+import { GUIDE_TOPICS, GUIDES, type GuideTopicSlug } from "@/content/guides";
+import { PERSONAS } from "@/content/personas";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuidesShell } from "@/components/guides/guides-shell";
+import { GuidesTabNav } from "@/components/guides/guides-tab-nav";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import {
 	buildGuideHref,
 	filterGuides,
-	getArcProgress,
 	getGuidesFromSlugs,
-	parseGuideArcFilter,
 	parseGuideTopicFilter,
-	type GuideArcFilter,
 	type GuideOrigin,
 	type GuideTopicFilter,
 } from "@/lib/guides";
@@ -34,6 +44,14 @@ import { cn } from "@/lib/utils";
 
 type GuidesLibraryViewProps = {
 	mode: GuideOrigin;
+};
+
+const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
+	"food-eating": Sandwich,
+	"getting-around": Compass,
+	"health-wellbeing": HeartPulse,
+	"home-admin": Home,
+	"social-belonging": Users,
 };
 
 const STORY_BEATS = [
@@ -71,18 +89,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		duration: prefersReducedMotion ? 0.01 : 0.28,
 		ease: easeOut,
 	};
-
-	const effectiveArcFilter = parseGuideArcFilter(searchParams.get("arc"));
-
-	const libraryWideProgress = useMemo(() => {
-		const readCount = GUIDES.filter((g) =>
-			bookmarks.includes(g.slug),
-		).length;
-		const total = GUIDES.length;
-		const completionPercent =
-			total === 0 ? 0 : Math.round((readCount / total) * 100);
-		return { readCount, total, completionPercent };
-	}, [bookmarks]);
 	const activeTopicFilter = parseGuideTopicFilter(searchParams.get("topic"));
 	const rawQuery = searchParams.get("q") ?? "";
 	const storyMoment = searchParams.get("moments")?.trim() ?? "";
@@ -122,7 +128,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 
 	const baseVisibleGuides = filterGuides(
 		storyScopedGuides,
-		effectiveArcFilter,
 		activeTopicFilter,
 		filterQuery,
 	);
@@ -139,10 +144,16 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		});
 	}
 
-	const arcProgress = GUIDE_ARCS.map((arc) => ({
-		arc,
-		progress: getArcProgress(arc.slug, bookmarks),
-	}));
+	const topicStats = useMemo(() => {
+		const bookmarkSet = new Set(bookmarks);
+		return new Map(
+			GUIDE_TOPICS.map((topic) => {
+				const topicGuides = GUIDES.filter((g) => g.topic === topic.slug);
+				const saved = topicGuides.filter((g) => bookmarkSet.has(g.slug)).length;
+				return [topic.slug, { total: topicGuides.length, saved }];
+			}),
+		);
+	}, [bookmarks]);
 
 	const topicOptions = [
 		{ slug: "all" as GuideTopicFilter, name: "All topics" },
@@ -217,108 +228,76 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		};
 
 		return (
-			<>
-				<div>
+			<div className="space-y-2">
+				<button
+					type="button"
+					className={cn(
+						"w-full rounded-[0.85rem] border px-4 py-3 text-left transition-colors",
+						activeTopicFilter === "all" && !shouldApplyStoryNeedsFilter
+							? "border-minuri-teal/70 bg-minuri-mist"
+							: "border-minuri-silver/60 bg-minuri-white hover:bg-minuri-fog",
+					)}
+					onClick={() => {
+						updateParams((params) => params.delete("topic"));
+						afterSelect();
+					}}
+				>
 					<div className="flex items-center justify-between gap-3">
-						<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-							Moment progress
-						</h2>
+						<span className="text-sm font-semibold text-minuri-ocean">All guides</span>
+						<span className="text-xs tabular-nums text-minuri-slate">{GUIDES.length}</span>
 					</div>
-					<p className="mt-1 text-sm leading-snug text-minuri-slate">
-						Browse everything or focus on one timeline.
-					</p>
-					<div className="mt-5 flex flex-col gap-3">
+				</button>
+
+				{GUIDE_TOPICS.map((topic) => {
+					const stats = topicStats.get(topic.slug);
+					const total = stats?.total ?? 0;
+					const saved = stats?.saved ?? 0;
+					const percent = total === 0 ? 0 : Math.round((saved / total) * 100);
+					const isActive = isStoryTopicChipActive(topic.slug);
+					const Icon = TOPIC_ICONS[topic.slug];
+
+					return (
 						<button
+							key={topic.slug}
 							type="button"
 							className={cn(
-								"rounded-[0.85rem] border px-4 py-3.5 text-left transition-colors",
-								effectiveArcFilter === "all"
-									? "border-minuri-teal/70 bg-minuri-mist shadow-sm shadow-minuri-teal/10"
-									: "border-minuri-silver/70 bg-minuri-white hover:bg-minuri-fog",
+								"w-full rounded-[0.85rem] border px-4 py-3.5 text-left transition-colors",
+								isActive
+									? "border-minuri-teal/70 bg-minuri-mist"
+									: "border-minuri-silver/60 bg-minuri-white hover:bg-minuri-fog",
 							)}
 							onClick={() => {
-								updateParams((params) => {
-									params.delete("arc");
-								});
+								updateParams((params) => params.set("topic", topic.slug));
 								afterSelect();
 							}}
 						>
-							<p className="text-[11px] font-medium uppercase tracking-[0.16em] text-minuri-mid">
-								First day to first month
-							</p>
-							<p className="mt-1 text-[15px] font-semibold leading-snug text-minuri-ocean">
-								Give me everything I need
-							</p>
-							<p className="mt-2 text-xs text-minuri-slate">
-								{libraryWideProgress.readCount}/
-								{libraryWideProgress.total} saved ·{" "}
-								{libraryWideProgress.completionPercent}%
-							</p>
+							<div className="flex items-center gap-2.5">
+								<Icon
+									className={cn(
+										"size-4 shrink-0",
+										isActive ? "text-minuri-teal" : "text-minuri-mid",
+									)}
+									aria-hidden
+								/>
+								<span className="text-sm font-semibold text-minuri-ocean">
+									{topic.name}
+								</span>
+							</div>
+							<div className="mt-2.5 flex items-center gap-3">
+								<div className="h-1 flex-1 overflow-hidden rounded-full bg-minuri-silver/50">
+									<div
+										className="h-full rounded-full bg-minuri-teal transition-[width] duration-300"
+										style={{ width: `${percent}%` }}
+									/>
+								</div>
+								<span className="shrink-0 text-[11px] tabular-nums text-minuri-slate">
+									{saved}/{total}
+								</span>
+							</div>
 						</button>
-						{arcProgress.map(({ arc, progress }) => (
-							<button
-								key={arc.slug}
-								type="button"
-								className={cn(
-									"rounded-[0.85rem] border px-4 py-3.5 text-left transition-colors",
-									effectiveArcFilter === arc.slug
-										? "border-minuri-teal/70 bg-minuri-mist shadow-sm shadow-minuri-teal/10"
-										: "border-minuri-silver/70 bg-minuri-white hover:bg-minuri-fog",
-								)}
-								onClick={() => {
-									updateParams((params) => {
-										params.set("arc", arc.slug);
-									});
-									afterSelect();
-								}}
-							>
-								<p className="text-[11px] font-medium uppercase tracking-[0.16em] text-minuri-mid">
-									{arc.timeframeLabel}
-								</p>
-								<p className="mt-1 text-[15px] font-semibold leading-snug text-minuri-ocean">
-									{arc.name}
-								</p>
-								<p className="mt-2 text-xs text-minuri-slate">
-									{progress.readCount}/{progress.total} saved
-									· {progress.completionPercent}%
-								</p>
-							</button>
-						))}
-					</div>
-				</div>
-
-				<div className="mt-10">
-					<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-						Topics
-					</h2>
-					<div className="mt-4 flex flex-wrap gap-2">
-						{topicOptions.map((topic) => (
-							<button
-								key={topic.slug}
-								type="button"
-								className={cn(
-									"rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
-									isStoryTopicChipActive(topic.slug)
-										? "bg-minuri-teal text-primary-foreground"
-										: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist",
-								)}
-								onClick={() => {
-									updateParams((params) => {
-										if (topic.slug === "all") {
-											params.delete("topic");
-										} else {
-											params.set("topic", topic.slug);
-										}
-									});
-									afterSelect();
-								}}
-							>
-								{topic.name}
-							</button>
-						))}
-					</div>
-				</div>
-			</>
+					);
+				})}
+			</div>
 		);
 	}
 
@@ -380,7 +359,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 								id={`${mobileFiltersPanelId}-title`}
 								className="text-base font-semibold tracking-tight text-minuri-ocean"
 							>
-								Moments &amp; topics
+								Topics
 							</h2>
 							<button
 								type="button"
@@ -622,7 +601,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 							key={guide.slug}
 							guide={guide}
 							href={buildGuideHref(guide, {
-								arcFilter: effectiveArcFilter,
 								topicFilter: activeTopicFilter,
 								query: rawQuery,
 								from: mode,
@@ -676,8 +654,8 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			aria-controls={mobileFiltersPanelId}
 			aria-label={
 				mobileLibraryFiltersOpen
-					? "Moments and topics filters open"
-					: "Open moments and topics filters"
+					? "Topic filters open"
+					: "Open topic filters"
 			}
 			onClick={() => {
 				setMobileLibraryFiltersOpen(true);
@@ -691,10 +669,10 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		</button>
 	) : null;
 
-	const title = isBookmarksMode ? "My Bookmarks" : "Your Guides Journey";
+	const title = isBookmarksMode ? "My Bookmarks" : "Your Guides";
 	const description = isBookmarksMode
 		? "Saved chapters from every moment, all in one place."
-		: "Day 1 through your first month — every topic has a first step.";
+		: "Every topic, one guide at a time.";
 
 	const libraryBackHome = (
 		<Link
@@ -713,6 +691,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			headerStart={libraryBackHome}
 			headerEnd={libraryHeaderFiltersButton}
 		>
+			<GuidesTabNav />
 			{!isBookmarksMode ? (
 				<>
 					{storyOverlay}
@@ -721,6 +700,66 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 						{librarySidebar}
 						<div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1">
 							{storyContextBanner}
+
+							{/* Journey strip */}
+							<section>
+								<div className="mb-5 flex items-center justify-between">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
+										Follow a journey
+									</p>
+									<Link
+										href="/guides/journeys"
+										className="text-xs font-medium text-minuri-teal transition-colors hover:text-minuri-ocean"
+									>
+										Browse all →
+									</Link>
+								</div>
+								<div
+									className="grid grid-cols-3 gap-x-4 gap-y-3"
+									style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}
+								>
+									{PERSONAS.map((persona, index) => {
+										const mid = Math.ceil(persona.name.length / 2);
+										const first = persona.name.slice(0, mid);
+										const second = persona.name.slice(mid);
+
+										return (
+											<Link
+												key={persona.id}
+												href={`/guides/journeys?persona=${persona.id}`}
+												className="group inline-flex select-none items-end leading-[0.88]"
+											>
+												<motion.span
+													className="inline-flex items-end"
+													whileHover={{ y: -10 }}
+													transition={{ type: "spring", stiffness: 320, damping: 22 }}
+												>
+													<span
+														className="font-black"
+														style={{
+															fontFamily: "var(--font-hero-serif)",
+															color: persona.accentColor,
+														}}
+													>
+														{first}
+													</span>
+
+													<span
+														className="font-black"
+														style={{
+															fontFamily: "var(--font-hero-serif)",
+															color: persona.accentColor,
+														}}
+													>
+														{second}
+													</span>
+												</motion.span>
+											</Link>
+										);
+									})}
+								</div>
+							</section>
+
 							{!isBookmarksMode ? guideSearchField : null}
 							{guidesListBody}
 						</div>

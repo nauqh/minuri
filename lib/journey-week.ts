@@ -196,8 +196,6 @@ const GUIDE_TASKS: Partial<Record<string, string>> = {
         "Browse Seek Volunteer and save one opportunity that fits your schedule.",
 };
 
-const ARC_PRIORITY = { "day-1": 0, "week-1": 1, "month-1": 2 } as const;
-
 // Boost guide slugs based on keywords in the user's moment text
 function getKeywordBoosts(moment: string): Set<string> {
     const lower = moment.toLowerCase();
@@ -289,7 +287,7 @@ export function buildWeekPlan(
     );
     const boostedSlugs = getKeywordBoosts(yourMoment);
 
-    // Build per-topic guide queues sorted by boost → arc priority → arcOrder
+    // Build per-topic guide queues sorted by boost → title
     const topicQueues = new Map<GuideTopicSlug, Guide[]>();
     for (const topic of allTopics) {
         const guides = [...GUIDES]
@@ -298,8 +296,7 @@ export function buildWeekPlan(
                 const aBoosted = boostedSlugs.has(a.slug) ? 0 : 1;
                 const bBoosted = boostedSlugs.has(b.slug) ? 0 : 1;
                 if (aBoosted !== bBoosted) return aBoosted - bBoosted;
-                if (a.arc !== b.arc) return ARC_PRIORITY[a.arc] - ARC_PRIORITY[b.arc];
-                return a.arcOrder - b.arcOrder;
+                return a.title.localeCompare(b.title);
             });
         topicQueues.set(topic, guides);
     }

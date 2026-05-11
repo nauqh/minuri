@@ -1,88 +1,98 @@
 {
-  "id": 30,
-  "slug": "surviving-the-first-weekend-alone",
-  "title": "Surviving the First Weekend Alone",
-  "summary": "The first Saturday and Sunday in a new city are quieter than you expect. Here's how to spend them so the silence doesn't become the story.",
-  "arc": "day-1",
-  "arcOrder": 9,
-  "topic": "social-belonging",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/social-belonging/surviving-the-first-weekend-alone.json",
-  "nextGuideSlug": "when-you-dont-know-anyone-yet",
-  "searchTerms": [
-    "first weekend",
-    "alone",
-    "moving",
-    "homesickness",
-    "loneliness",
-    "settling in"
-  ],
-  "sourceLinks": [
-    {
-      "label": "ReachOut — Moving away to study",
-      "href": "https://au.reachout.com/challenges-and-coping/leaving-home/moving-away-to-study"
-    },
-    {
-      "label": "Allianz Care AU — Dealing with homesickness in Australia",
-      "href": "https://www.allianzcare.com.au/en/blog/dealing-with-homesickness.html"
-    },
-    {
-      "label": "Study Melbourne — Adapting to a new place",
-      "href": "https://studymelbourne.vic.gov.au/living-here/social-life/adapting-to-a-new-place"
+    "id": 30,
+    "slug": "surviving-the-first-weekend-alone",
+    "title": "Surviving the First Weekend Alone",
+    "summary": "The first Saturday and Sunday in a new city are quieter than you expect. Here's how to spend them so the silence doesn't become the story.",
+    "arc": "day-1",
+    "arcOrder": 9,
+    "topic": "social-belonging",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/social-belonging/surviving-the-first-weekend-alone.json",
+    "nextGuideSlug": "when-you-dont-know-anyone-yet",
+    "searchTerms": [
+        "first weekend",
+        "alone",
+        "moving",
+        "homesickness",
+        "loneliness",
+        "settling in"
+    ],
+    "sourceLinks": [
+        {
+            "label": "ReachOut — Moving away to study",
+            "href": "https://au.reachout.com/challenges-and-coping/leaving-home/moving-away-to-study"
+        },
+        {
+            "label": "Allianz Care AU — Dealing with homesickness in Australia",
+            "href": "https://www.allianzcare.com.au/en/blog/dealing-with-homesickness.html"
+        },
+        {
+            "label": "Study Melbourne — Adapting to a new place",
+            "href": "https://studymelbourne.vic.gov.au/living-here/social-life/adapting-to-a-new-place"
+        }
+    ],
+    "thumbnailUrl": "/guides/thumbnails/surviving-the-first-weekend-alone.jpg",
+    "nearMeDeeplink": "/near-me?topic=social-belonging&from=surviving-the-first-weekend-alone",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "It's Saturday morning. The boxes from yesterday are mostly unpacked. Your phone has been quiet for two hours in a way it never was at home. You've made a coffee. You've drunk it. You're sitting on your bed in a rental that doesn't quite smell like yours yet, and the entire weekend is in front of you, and there's nobody in this city you can text to fill it."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "The first weekend alone in a new city has a particular shape. The week is fine because it has structure — orientation, work, errands, things to do. The weekend is when the structure stops and the silence gets loud.\n\nAlmost everyone moves through this. The ones who came out the other side fastest weren't the ones with the biggest social calendars. They were the ones who had a small, kind plan for the first 48 hours that didn't require anyone else to show up."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "**The first weekend alone isn't a problem to solve. It's a thing to spend.**\n\nThe instinct most people have is to either (a) hide indoors and refresh Instagram until Sunday night, or (b) panic-message everyone they know back home. Both of those leave the weekend feeling worse, not better.\n\nThe move that works is smaller and stranger: **leave the house in the first three hours, walk somewhere within fifteen minutes, and let the city show you something**. You don't need an event. You don't need company. You need to make the place outside your front door feel like *yours* — and you do that by going through it on foot, alone, on the first day, before the loneliness has time to compound."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Saturday morning: leave by 10am.** Anywhere. The closest park, the closest cafe, the closest bookshop, the closest bakery. Walk there. Don't drive, don't tram. The walk is the point — it lays a track in your head between *home* and *somewhere familiar*.\n\n**2. Pick a low-stakes ritual you can repeat next weekend.** A coffee at the same place. A bench in the same park. A walk along the same stretch of river. The reason this matters: the second time you do it, that place is already \"yours\". Three repeats and you have a neighbourhood.\n\n**3. Saturday afternoon: do one thing that requires zero social interaction but gets you among people.** A free gallery (NGV, ACMI, State Library). A market (Queen Vic, South Melbourne). A long walk (the Tan, the Capital City Trail). The point isn't to make friends. The point is to be in the world rather than in your room.\n\n**4. Sunday: contact one person back home — once.** A long call to one parent, sibling, or close friend. Not a barrage of small messages. The grief of leaving home gets concentrated into a single conversation that actually fills you up, rather than spread across 30 hollow group-chat replies.\n\n**5. Sunday afternoon or evening: organise the upcoming week.** Open a notebook or note app. Write out the actual structure of the next seven days — class times, work shifts, when you'll cook, what you'll cook, when you'll go to the gym or for a walk. Loneliness on Saturday is amplified by formless time on Tuesday. Pre-deciding your week is what stops next weekend feeling like this one.\n\n**6. Sleep at a normal time.** The pull to stay up scrolling on a Sunday night when you're sad is real. It also guarantees Monday morning will be the worst day of the move. Phone away by 10:30. Light off by 11.\n\n### The bit nobody mentions\n\nThe people who settle into a new city well aren't the extroverts. They're the people who treat the first weekend like a Sunday at home with no internet — they just go outside. The brain learns a city through walking, not through Google Maps. By the third or fourth weekend, you'll have a route, a coffee place, a bench, a corner where you stop and check your phone — small claims you've made on the place. That's the start of belonging.\n\nNothing dramatic has to happen this weekend. The weekend is the dramatic thing."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find a park, library, or cafe within walking distance of your new place (opens Near Me, filtered to Social & Belonging → Public spaces, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "When You Don't Know Anyone Yet — what to do in week two, when the question shifts from *getting through* to *finding people*."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Make a loose plan for both days — doesn't need to be social",
+            "estimateMin": 10
+        },
+        {
+            "label": "Find one free event or market near you on Eventbrite or council website",
+            "estimateMin": 5
+        },
+        {
+            "label": "Plan a walk or short trip to a new part of the city",
+            "estimateMin": 5
+        },
+        {
+            "label": "Schedule a call or video chat with someone you love",
+            "estimateMin": 3
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Leave the house within the first three hours of Saturday morning — direction doesn't matter.",
+            "Pick one low-stakes destination within 15 minutes on foot and walk there.",
+            "Saturday afternoon: one thing that requires zero social performance.",
+            "Sunday: one specific call with someone who knows you, then organise the week ahead."
+        ],
+        "headsUp": "Don't spend the entire first weekend trying to be productive or social. Rest is also part of settling in.",
+        "goodToKnow": "The silence of the first weekend is normal, common, and temporary. It's not a signal about the decision you made."
     }
-  ],
-  "thumbnailUrl": "/guides/thumbnails/surviving-the-first-weekend-alone.jpg",
-  "nearMeDeeplink": "/near-me?topic=social-belonging&from=surviving-the-first-weekend-alone",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "It's Saturday morning. The boxes from yesterday are mostly unpacked. Your phone has been quiet for two hours in a way it never was at home. You've made a coffee. You've drunk it. You're sitting on your bed in a rental that doesn't quite smell like yours yet, and the entire weekend is in front of you, and there's nobody in this city you can text to fill it."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "The first weekend alone in a new city has a particular shape. The week is fine because it has structure — orientation, work, errands, things to do. The weekend is when the structure stops and the silence gets loud.\n\nAlmost everyone moves through this. The ones who came out the other side fastest weren't the ones with the biggest social calendars. They were the ones who had a small, kind plan for the first 48 hours that didn't require anyone else to show up."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "**The first weekend alone isn't a problem to solve. It's a thing to spend.**\n\nThe instinct most people have is to either (a) hide indoors and refresh Instagram until Sunday night, or (b) panic-message everyone they know back home. Both of those leave the weekend feeling worse, not better.\n\nThe move that works is smaller and stranger: **leave the house in the first three hours, walk somewhere within fifteen minutes, and let the city show you something**. You don't need an event. You don't need company. You need to make the place outside your front door feel like *yours* — and you do that by going through it on foot, alone, on the first day, before the loneliness has time to compound."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Saturday morning: leave by 10am.** Anywhere. The closest park, the closest cafe, the closest bookshop, the closest bakery. Walk there. Don't drive, don't tram. The walk is the point — it lays a track in your head between *home* and *somewhere familiar*.\n\n**2. Pick a low-stakes ritual you can repeat next weekend.** A coffee at the same place. A bench in the same park. A walk along the same stretch of river. The reason this matters: the second time you do it, that place is already \"yours\". Three repeats and you have a neighbourhood.\n\n**3. Saturday afternoon: do one thing that requires zero social interaction but gets you among people.** A free gallery (NGV, ACMI, State Library). A market (Queen Vic, South Melbourne). A long walk (the Tan, the Capital City Trail). The point isn't to make friends. The point is to be in the world rather than in your room.\n\n**4. Sunday: contact one person back home — once.** A long call to one parent, sibling, or close friend. Not a barrage of small messages. The grief of leaving home gets concentrated into a single conversation that actually fills you up, rather than spread across 30 hollow group-chat replies.\n\n**5. Sunday afternoon or evening: organise the upcoming week.** Open a notebook or note app. Write out the actual structure of the next seven days — class times, work shifts, when you'll cook, what you'll cook, when you'll go to the gym or for a walk. Loneliness on Saturday is amplified by formless time on Tuesday. Pre-deciding your week is what stops next weekend feeling like this one.\n\n**6. Sleep at a normal time.** The pull to stay up scrolling on a Sunday night when you're sad is real. It also guarantees Monday morning will be the worst day of the move. Phone away by 10:30. Light off by 11.\n\n### The bit nobody mentions\n\nThe people who settle into a new city well aren't the extroverts. They're the people who treat the first weekend like a Sunday at home with no internet — they just go outside. The brain learns a city through walking, not through Google Maps. By the third or fourth weekend, you'll have a route, a coffee place, a bench, a corner where you stop and check your phone — small claims you've made on the place. That's the start of belonging.\n\nNothing dramatic has to happen this weekend. The weekend is the dramatic thing."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find a park, library, or cafe within walking distance of your new place (opens Near Me, filtered to Social & Belonging → Public spaces, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "When You Don't Know Anyone Yet — what to do in week two, when the question shifts from *getting through* to *finding people*."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Make a loose plan for both days — doesn't need to be social",
-      "estimateMin": 10
-    },
-    {
-      "label": "Find one free event or market near you on Eventbrite or council website",
-      "estimateMin": 5
-    },
-    {
-      "label": "Plan a walk or short trip to a new part of the city",
-      "estimateMin": 5
-    },
-    {
-      "label": "Schedule a call or video chat with someone you love",
-      "estimateMin": 3
-    }
-  ]
 }

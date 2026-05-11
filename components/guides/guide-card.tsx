@@ -13,7 +13,7 @@ import {
 import { motion, useReducedMotion } from "motion/react";
 
 import type { Guide, GuideTopicSlug } from "@/content/guides";
-import { getArcMeta, getTopicMeta } from "@/lib/guides";
+import { getTopicMeta } from "@/lib/guides";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 
 const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
@@ -40,7 +40,6 @@ export function GuideCard({
 	animationDelay = 0,
 }: GuideCardProps) {
 	const topicMeta = getTopicMeta(guide.topic);
-	const arcMeta = getArcMeta(guide.arc);
 	const Icon = TOPIC_ICONS[guide.topic];
 	const prefersReducedMotion = useReducedMotion();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -91,8 +90,6 @@ export function GuideCard({
 
 			<div className="mt-3 flex items-center gap-2 text-xs text-minuri-slate">
 				<span>{guide.readingTimeMin} min read</span>
-				<span aria-hidden="true">·</span>
-				<span>{arcMeta?.timeframeLabel ?? guide.arc}</span>
 			</div>
 
 			<p className="mt-4 flex-1 text-base leading-7">

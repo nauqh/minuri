@@ -1,85 +1,95 @@
 {
-  "id": 18,
-  "slug": "your-first-48-hours-checklist",
-  "title": "Your First 48 Hours: The Checklist",
-  "summary": "Photograph everything, read the meters, test the alarms, return the condition report — what you record in the first two days is what protects your bond at the end.",
-  "arc": "day-1",
-  "arcOrder": 5,
-  "topic": "home-admin",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": true,
-  "markdownPath": "/guides-content/home-admin/your-first-48-hours-checklist.json",
-  "nextGuideSlug": "when-you-dont-know-anyone-yet",
-  "searchTerms": [
-    "condition report",
-    "rental",
-    "bond",
-    "utilities",
-    "moving in",
-    "meter readings",
-    "smoke alarms"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Tenants Victoria — Condition reports",
-      "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/condition-reports/"
-    },
-    {
-      "label": "Upmove — First time moving out guide",
-      "href": "https://www.upmove.com.au/post/first-time-moving-out-guide"
+    "id": 18,
+    "slug": "your-first-48-hours-checklist",
+    "title": "Your First 48 Hours: The Checklist",
+    "summary": "Photograph everything, read the meters, test the alarms, return the condition report — what you record in the first two days is what protects your bond at the end.",
+    "arc": "day-1",
+    "arcOrder": 5,
+    "topic": "home-admin",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": true,
+    "markdownPath": "/guides-content/home-admin/your-first-48-hours-checklist.json",
+    "nextGuideSlug": "when-you-dont-know-anyone-yet",
+    "searchTerms": [
+        "condition report",
+        "rental",
+        "bond",
+        "utilities",
+        "moving in",
+        "meter readings",
+        "smoke alarms"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Tenants Victoria — Condition reports",
+            "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/condition-reports/"
+        },
+        {
+            "label": "Upmove — First time moving out guide",
+            "href": "https://www.upmove.com.au/post/first-time-moving-out-guide"
+        }
+    ],
+    "thumbnailUrl": "https://picsum.photos/seed/minuri-first-48-hours/640/420",
+    "nearMeDeeplink": "/near-me?topic=home-admin&from=your-first-48-hours-checklist",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "Moving-in afternoon. The agent has handed over the keys, said something cheerful about *welcome home*, and left. You're standing in a flat full of cardboard boxes you don't have the energy to open. The kitchen smells slightly of someone else's last night. There's a stain on the carpet near the window you didn't notice at the inspection. The smoke alarm is silently blinking red, and you have no idea whether that's normal or a problem you've just inherited."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "The relief of finally being in collides with a formless overwhelm at exactly the wrong moment. Nobody hands you a manual for the first 48 hours. You're tired, the place is unfamiliar, and the urge to just sleep on the mattress and deal with it later is enormous.\n\nThe inconvenient truth: the next 48 hours are when *future-you* most needs *now-you* to do the boring, careful work."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "In Victoria, you have **5 business days** to add comments to the condition report and return it. What you record in that window is the legal evidence used at the end of the tenancy when the rental provider tries to claim cleaning, damage or repairs out of your bond.\n\nThe stain on the carpet you noticed but didn't write down? At the end of three years, that's *your* stain — unless the photos and the report from day one say otherwise."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Walk the condition report with a phone in your hand.**\n\nThe rental provider gives you a Consumer Affairs Victoria-template **condition report** at the start of the tenancy. Walk every room with it open and the camera ready. For each item — walls, floor, ceiling, windows, fittings, appliances — tick the box AND take a photo. Annotate every defect, however minor, in the *renter's comments* column.\n\nThings most people forget to record: the inside of the oven, behind the toilet, the back of the fridge, the tops of door frames, the seal around the bathtub, the condition of blinds and flyscreens, scratches on floorboards near doors. Photograph all of them.\n\n**2. Return the report within 5 business days.**\n\nThis deadline is the one that matters. Sign and return the report — usually by email — within 5 business days of moving in. Keep your sent copy. If you didn't get a report at all, complete the template yourself and submit it inside the same window. That document plus your photos becomes your evidence at the end.\n\n**3. Read the meters and write the numbers down.**\n\nElectricity, gas, water — find the meters (usually at the front of the building or in a cupboard) and photograph the readings on day one. If you've connected utilities the day you moved in, your retailer will sometimes ask for these to start your account on the right number. They also catch billing mistakes that can otherwise cost you $50–$200.\n\n**4. Test every smoke alarm.**\n\nPress the test button on each alarm. It should beep loudly. A blinking red light usually means *working*, but a chirp every minute means *flat battery*. By law, smoke alarms in Victorian rentals are the rental provider's responsibility — if any are dead, raise it in writing within the first week so it's on the record.\n\n**5. Connect the utilities and the internet, in this order.**\n\n- **Electricity** — 1–2 business days to connect, providers like AGL, Origin and Energy Australia. Avoid the first plan you're offered; we'll cover that in *Setting Up Utilities Without Overpaying*.\n- **Gas** — 3–5 business days to connect.\n- **Internet** — book the NBN technician early. Some buildings need a landlord-approved install, and the wait can be 1–2 weeks.\n- **Water** — usually paid by the rental provider in shared buildings, by you in standalone houses. Confirm before you assume.\n\n**6. Change the Wi-Fi password and check the locks.**\n\nIf the previous tenant left a router, change the Wi-Fi name and password on day one. Check that every external door lock and window latch works. If a lock feels loose or a window won't close, that's an *urgent repair* in Victoria — the rental provider must address it within 24 hours.\n\n**7. Update your address everywhere.**\n\nMedicare, your bank, the electoral roll, your driver's licence (within 14 days is the legal requirement in Victoria), the ATO via myGov, your employer, and any subscription that sends physical mail. Doing it all in one sitting, the day after moving in, takes about 30 minutes; doing it piecemeal over six weeks takes about three hours and you'll forget two of them.\n\n### The bit nobody mentions\n\nAlmost every bond dispute in Victoria turns on what was, or wasn't, recorded in the first 48 hours. The stain you didn't photograph. The chip you didn't write down. The meter reading you didn't take. None of these feel important on moving-in afternoon. All of them get expensive at move-out.\n\nGive the boring 90 minutes now. Future-you, getting the full bond back without a VCAT hearing, will thank you."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find locksmiths, hardware stores and rental support services near you (opens Near Me → Home & Admin, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "When You Don't Know Anyone Yet — for the quiet that hits once the boxes are unpacked and the flat feels suddenly silent."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Buy 2 days of essentials from the nearest supermarket",
+            "estimateMin": 30
+        },
+        {
+            "label": "Set up your phone SIM or connect to Wi-Fi",
+            "estimateMin": 15
+        },
+        {
+            "label": "Find your nearest pharmacy and 24-hour emergency room",
+            "estimateMin": 10
+        },
+        {
+            "label": "Write down your new address for future forms and deliveries",
+            "estimateMin": 2
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Walk the condition report with your phone before unpacking anything — photograph every defect, however minor.",
+            "Return the signed report within 5 business days of moving in. That window is your legal protection.",
+            "Photograph the electricity, gas and water meters on day one.",
+            "Update your address: Medicare, bank, ATO via myGov, electoral roll, driver's licence."
+        ],
+        "headsUp": "Miss the 5-day window and any defect you didn't note is legally yours at move-out — even if it was there when you arrived.",
+        "goodToKnow": "A 90-minute documentation session on day one is the single best investment toward getting your full bond back."
     }
-  ],
-  "thumbnailUrl": "https://picsum.photos/seed/minuri-first-48-hours/640/420",
-  "nearMeDeeplink": "/near-me?topic=home-admin&from=your-first-48-hours-checklist",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "Moving-in afternoon. The agent has handed over the keys, said something cheerful about *welcome home*, and left. You're standing in a flat full of cardboard boxes you don't have the energy to open. The kitchen smells slightly of someone else's last night. There's a stain on the carpet near the window you didn't notice at the inspection. The smoke alarm is silently blinking red, and you have no idea whether that's normal or a problem you've just inherited."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "The relief of finally being in collides with a formless overwhelm at exactly the wrong moment. Nobody hands you a manual for the first 48 hours. You're tired, the place is unfamiliar, and the urge to just sleep on the mattress and deal with it later is enormous.\n\nThe inconvenient truth: the next 48 hours are when *future-you* most needs *now-you* to do the boring, careful work."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "In Victoria, you have **5 business days** to add comments to the condition report and return it. What you record in that window is the legal evidence used at the end of the tenancy when the rental provider tries to claim cleaning, damage or repairs out of your bond.\n\nThe stain on the carpet you noticed but didn't write down? At the end of three years, that's *your* stain — unless the photos and the report from day one say otherwise."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Walk the condition report with a phone in your hand.**\n\nThe rental provider gives you a Consumer Affairs Victoria-template **condition report** at the start of the tenancy. Walk every room with it open and the camera ready. For each item — walls, floor, ceiling, windows, fittings, appliances — tick the box AND take a photo. Annotate every defect, however minor, in the *renter's comments* column.\n\nThings most people forget to record: the inside of the oven, behind the toilet, the back of the fridge, the tops of door frames, the seal around the bathtub, the condition of blinds and flyscreens, scratches on floorboards near doors. Photograph all of them.\n\n**2. Return the report within 5 business days.**\n\nThis deadline is the one that matters. Sign and return the report — usually by email — within 5 business days of moving in. Keep your sent copy. If you didn't get a report at all, complete the template yourself and submit it inside the same window. That document plus your photos becomes your evidence at the end.\n\n**3. Read the meters and write the numbers down.**\n\nElectricity, gas, water — find the meters (usually at the front of the building or in a cupboard) and photograph the readings on day one. If you've connected utilities the day you moved in, your retailer will sometimes ask for these to start your account on the right number. They also catch billing mistakes that can otherwise cost you $50–$200.\n\n**4. Test every smoke alarm.**\n\nPress the test button on each alarm. It should beep loudly. A blinking red light usually means *working*, but a chirp every minute means *flat battery*. By law, smoke alarms in Victorian rentals are the rental provider's responsibility — if any are dead, raise it in writing within the first week so it's on the record.\n\n**5. Connect the utilities and the internet, in this order.**\n\n- **Electricity** — 1–2 business days to connect, providers like AGL, Origin and Energy Australia. Avoid the first plan you're offered; we'll cover that in *Setting Up Utilities Without Overpaying*.\n- **Gas** — 3–5 business days to connect.\n- **Internet** — book the NBN technician early. Some buildings need a landlord-approved install, and the wait can be 1–2 weeks.\n- **Water** — usually paid by the rental provider in shared buildings, by you in standalone houses. Confirm before you assume.\n\n**6. Change the Wi-Fi password and check the locks.**\n\nIf the previous tenant left a router, change the Wi-Fi name and password on day one. Check that every external door lock and window latch works. If a lock feels loose or a window won't close, that's an *urgent repair* in Victoria — the rental provider must address it within 24 hours.\n\n**7. Update your address everywhere.**\n\nMedicare, your bank, the electoral roll, your driver's licence (within 14 days is the legal requirement in Victoria), the ATO via myGov, your employer, and any subscription that sends physical mail. Doing it all in one sitting, the day after moving in, takes about 30 minutes; doing it piecemeal over six weeks takes about three hours and you'll forget two of them.\n\n### The bit nobody mentions\n\nAlmost every bond dispute in Victoria turns on what was, or wasn't, recorded in the first 48 hours. The stain you didn't photograph. The chip you didn't write down. The meter reading you didn't take. None of these feel important on moving-in afternoon. All of them get expensive at move-out.\n\nGive the boring 90 minutes now. Future-you, getting the full bond back without a VCAT hearing, will thank you."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find locksmiths, hardware stores and rental support services near you (opens Near Me → Home & Admin, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "When You Don't Know Anyone Yet — for the quiet that hits once the boxes are unpacked and the flat feels suddenly silent."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Buy 2 days of essentials from the nearest supermarket",
-      "estimateMin": 30
-    },
-    {
-      "label": "Set up your phone SIM or connect to Wi-Fi",
-      "estimateMin": 15
-    },
-    {
-      "label": "Find your nearest pharmacy and 24-hour emergency room",
-      "estimateMin": 10
-    },
-    {
-      "label": "Write down your new address for future forms and deliveries",
-      "estimateMin": 2
-    }
-  ]
 }

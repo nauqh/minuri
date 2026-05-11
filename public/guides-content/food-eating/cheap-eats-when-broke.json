@@ -1,89 +1,99 @@
 {
-  "id": 2,
-  "slug": "cheap-eats-when-broke",
-  "title": "Cheap Eats When You're Broke",
-  "summary": "Melbourne has one of the deepest cheap-food ecosystems of any city its size — banh mi under $12, dumpling lunches under $15, food-court meals under $18 — once you know where the actual value lives.",
-  "arc": "month-1",
-  "arcOrder": 1,
-  "topic": "food-eating",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/food-eating/cheap-eats-when-broke.json",
-  "nextGuideSlug": "renting-without-getting-burned",
-  "searchTerms": [
-    "cheap eats",
-    "budget meals",
-    "food court",
-    "banh mi",
-    "dumplings",
-    "footscray",
-    "student discounts"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Time Out — 49 Best Cheap Eats in Melbourne",
-      "href": "https://www.timeout.com/melbourne/restaurants/cheap-eats-in-melbourne"
-    },
-    {
-      "label": "City of Melbourne — Community Food Guide",
-      "href": "https://www.melbourne.vic.gov.au/community-food-guide"
-    },
-    {
-      "label": "Youth Central — Student concessions and discounts",
-      "href": "https://www.youthcentral.vic.gov.au/study/financial-support/student-concessions-and-discounts"
+    "id": 2,
+    "slug": "cheap-eats-when-broke",
+    "title": "Cheap Eats When You're Broke",
+    "summary": "Melbourne has one of the deepest cheap-food ecosystems of any city its size — banh mi under $12, dumpling lunches under $15, food-court meals under $18 — once you know where the actual value lives.",
+    "arc": "month-1",
+    "arcOrder": 1,
+    "topic": "food-eating",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/food-eating/cheap-eats-when-broke.json",
+    "nextGuideSlug": "renting-without-getting-burned",
+    "searchTerms": [
+        "cheap eats",
+        "budget meals",
+        "food court",
+        "banh mi",
+        "dumplings",
+        "footscray",
+        "student discounts"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Time Out — 49 Best Cheap Eats in Melbourne",
+            "href": "https://www.timeout.com/melbourne/restaurants/cheap-eats-in-melbourne"
+        },
+        {
+            "label": "City of Melbourne — Community Food Guide",
+            "href": "https://www.melbourne.vic.gov.au/community-food-guide"
+        },
+        {
+            "label": "Youth Central — Student concessions and discounts",
+            "href": "https://www.youthcentral.vic.gov.au/study/financial-support/student-concessions-and-discounts"
+        }
+    ],
+    "thumbnailUrl": "https://picsum.photos/seed/minuri-cheap-eats-when-broke/640/420",
+    "nearMeDeeplink": "/near-me?topic=food-eating&from=cheap-eats-when-broke",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "Week two of the month. Rent has gone out, the bond receipt is somewhere on your desk, and the bank app is showing a number that won't stretch to nine more days of $22 sandwich shops. You're looking at the menu of the cafe everyone at work goes to and doing the maths on whether $19 for a flat white and an avocado toast is acceptable. You already know it isn't. You're going to say yes anyway, because the alternative — *I can't afford this* — is a sentence you don't yet know how to say in front of new colleagues."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "Money stress in a new city has a specific texture. It's not just *can I afford this* — it's *will being the one who suggests somewhere cheaper out me as the broke person*. So you overspend quietly, on $20 lunches you didn't really want, and by Thursday the panic has compounded.\n\nThe good news, if it helps: nobody in Melbourne thinks the inner-city cafe is the cheap option. Half the people sitting opposite you are doing the same maths in their head."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "Melbourne has one of the deepest cheap-food ecosystems of any city its size — and almost none of it lives in the cafes near your office. Banh mi at $10–$12. Pho at $14–$17. Dumplings at $12 for ten. Food courts in the CBD where a full plate is $14. Hand-pulled noodles in Carlton at $13. Falafel wraps in Brunswick at $10.\n\nThe pattern is consistent: the further you walk from the laneway-cafe district, the cheaper, more interesting, and more filling the food gets. Most of it is migrant-run, family-run, and has been there longer than the cafes have."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Build a fallback list of six places, not thirty.**\n\nDon't try to memorise a city's worth of cheap eats. Pick **three lunch spots near work** and **two dinner spots near home**, plus one emergency late-night option. Rotate them. Familiarity is what makes them stick — once a place is on your list, you don't have to make a decision when you're tired and hungry, and that's where most of the overspending happens.\n\n**2. Learn the price points to look for.**\n\nA quick mental scale for Melbourne in 2026:\n\n- **Under $12** — banh mi, falafel wrap, slice of pizza, basic noodle soup, food-court rice plate\n- **$12–$18** — pho, ramen, dumpling lunch, hand-pulled noodles, Korean rice bowl, kebab plate\n- **$18–$25** — laneway cafe lunch, table-service pasta, most pub meals\n- **$25+** — most CBD restaurants and the cafes everyone defaults to\n\nIf a meal is creeping toward $25 and isn't a special occasion, that's the signal to walk one block further.\n\n**3. The cheapest food clusters in specific suburbs.**\n\n- **Footscray** — Vietnamese, Ethiopian, African, every kind of grocer. A full meal here is consistently under $18.\n- **Springvale** and **Box Hill** — Vietnamese, Chinese, Thai. Worth the train ride once a fortnight.\n- **Brunswick** and **Coburg** — Lebanese, Turkish, Middle Eastern bakeries; pide and falafel under $12.\n- **Carlton (Lygon Street)** — hand-pulled noodles, dumplings, Sichuan; dinner under $20 if you avoid the tourist strip.\n- **CBD food courts** — Centre Place, Emporium basement, QV food court, Melbourne Central. Generally $13–$16.\n- **Richmond (Victoria Street)** — pho, banh mi, vermicelli bowls; consistently $14–$18.\n\n**4. Use student and concession discounts where they exist.**\n\nIf you're a student, your campus card unlocks more than transport. **UniDays** and **Student Edge** both offer ongoing food and grocery discounts. A full-time student concession card also gets you cheaper movie tickets, meaning the dinner-and-cinema night isn't off the table — it just costs $35 instead of $55.\n\n**5. Free food exists. It's not embarrassing to use it.**\n\nMelbourne has a real network of community meals and food relief services — **FareShare**, the City of Melbourne's **Community Food Guide**, **Local Food Connect**, and dozens of suburban food pantries. These were built for people in exactly the position of *I am between paydays and don't want to put groceries on a credit card*. Eligibility is broader than you'd think; many community meals are open to anyone who turns up. If money is genuinely tight this week, that's the option, not a moral failing.\n\n### The bit nobody mentions\n\nThe cafe near your office is not where Melbourne actually eats. It's where Melbourne goes for the meeting that someone else is paying for. The city's food culture — the part that's been here for thirty years and isn't going anywhere — lives in the suburbs people commute home to, the food courts office workers slip into between meetings, and the Vietnamese bakeries that sell out by 1pm because everyone in the know already arrived.\n\nLearning that map is the single biggest cost-of-living improvement most newcomers can make in their first three months."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find cheap eats, food courts and community meals near you (opens Near Me → Food & Eating, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "Renting Without Getting Burned — the other half of stretching a payday is not losing $200 a week to a rental that quietly overcharges you."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Map cheap-eat spots within 20 minutes of home",
+            "estimateMin": 10
+        },
+        {
+            "label": "Find one reliable meal under $10 near work or campus",
+            "estimateMin": 15
+        },
+        {
+            "label": "Check the Menulog or Uber Eats app for budget student deals",
+            "estimateMin": 5
+        },
+        {
+            "label": "Identify one free community meal in your area this week",
+            "estimateMin": 10
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Melbourne has banh mi for $10–12, pho for $14–17, and dumplings for $12 — once you know where to look.",
+            "Build a personal fallback list of six reliable cheap spots within 15 minutes of home.",
+            "Food courts in the CBD average $14–18 and are faster than any café queue.",
+            "Student discount cards often apply at restaurants — always ask before ordering."
+        ],
+        "headsUp": "The most expensive meals in Melbourne aren't in restaurants — they're the $22 sandwich shops near your campus.",
+        "goodToKnow": "The best cheap food clusters are in Richmond, Footscray, and Springvale — not the CBD."
     }
-  ],
-  "thumbnailUrl": "https://picsum.photos/seed/minuri-cheap-eats-when-broke/640/420",
-  "nearMeDeeplink": "/near-me?topic=food-eating&from=cheap-eats-when-broke",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "Week two of the month. Rent has gone out, the bond receipt is somewhere on your desk, and the bank app is showing a number that won't stretch to nine more days of $22 sandwich shops. You're looking at the menu of the cafe everyone at work goes to and doing the maths on whether $19 for a flat white and an avocado toast is acceptable. You already know it isn't. You're going to say yes anyway, because the alternative — *I can't afford this* — is a sentence you don't yet know how to say in front of new colleagues."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "Money stress in a new city has a specific texture. It's not just *can I afford this* — it's *will being the one who suggests somewhere cheaper out me as the broke person*. So you overspend quietly, on $20 lunches you didn't really want, and by Thursday the panic has compounded.\n\nThe good news, if it helps: nobody in Melbourne thinks the inner-city cafe is the cheap option. Half the people sitting opposite you are doing the same maths in their head."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "Melbourne has one of the deepest cheap-food ecosystems of any city its size — and almost none of it lives in the cafes near your office. Banh mi at $10–$12. Pho at $14–$17. Dumplings at $12 for ten. Food courts in the CBD where a full plate is $14. Hand-pulled noodles in Carlton at $13. Falafel wraps in Brunswick at $10.\n\nThe pattern is consistent: the further you walk from the laneway-cafe district, the cheaper, more interesting, and more filling the food gets. Most of it is migrant-run, family-run, and has been there longer than the cafes have."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Build a fallback list of six places, not thirty.**\n\nDon't try to memorise a city's worth of cheap eats. Pick **three lunch spots near work** and **two dinner spots near home**, plus one emergency late-night option. Rotate them. Familiarity is what makes them stick — once a place is on your list, you don't have to make a decision when you're tired and hungry, and that's where most of the overspending happens.\n\n**2. Learn the price points to look for.**\n\nA quick mental scale for Melbourne in 2026:\n\n- **Under $12** — banh mi, falafel wrap, slice of pizza, basic noodle soup, food-court rice plate\n- **$12–$18** — pho, ramen, dumpling lunch, hand-pulled noodles, Korean rice bowl, kebab plate\n- **$18–$25** — laneway cafe lunch, table-service pasta, most pub meals\n- **$25+** — most CBD restaurants and the cafes everyone defaults to\n\nIf a meal is creeping toward $25 and isn't a special occasion, that's the signal to walk one block further.\n\n**3. The cheapest food clusters in specific suburbs.**\n\n- **Footscray** — Vietnamese, Ethiopian, African, every kind of grocer. A full meal here is consistently under $18.\n- **Springvale** and **Box Hill** — Vietnamese, Chinese, Thai. Worth the train ride once a fortnight.\n- **Brunswick** and **Coburg** — Lebanese, Turkish, Middle Eastern bakeries; pide and falafel under $12.\n- **Carlton (Lygon Street)** — hand-pulled noodles, dumplings, Sichuan; dinner under $20 if you avoid the tourist strip.\n- **CBD food courts** — Centre Place, Emporium basement, QV food court, Melbourne Central. Generally $13–$16.\n- **Richmond (Victoria Street)** — pho, banh mi, vermicelli bowls; consistently $14–$18.\n\n**4. Use student and concession discounts where they exist.**\n\nIf you're a student, your campus card unlocks more than transport. **UniDays** and **Student Edge** both offer ongoing food and grocery discounts. A full-time student concession card also gets you cheaper movie tickets, meaning the dinner-and-cinema night isn't off the table — it just costs $35 instead of $55.\n\n**5. Free food exists. It's not embarrassing to use it.**\n\nMelbourne has a real network of community meals and food relief services — **FareShare**, the City of Melbourne's **Community Food Guide**, **Local Food Connect**, and dozens of suburban food pantries. These were built for people in exactly the position of *I am between paydays and don't want to put groceries on a credit card*. Eligibility is broader than you'd think; many community meals are open to anyone who turns up. If money is genuinely tight this week, that's the option, not a moral failing.\n\n### The bit nobody mentions\n\nThe cafe near your office is not where Melbourne actually eats. It's where Melbourne goes for the meeting that someone else is paying for. The city's food culture — the part that's been here for thirty years and isn't going anywhere — lives in the suburbs people commute home to, the food courts office workers slip into between meetings, and the Vietnamese bakeries that sell out by 1pm because everyone in the know already arrived.\n\nLearning that map is the single biggest cost-of-living improvement most newcomers can make in their first three months."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find cheap eats, food courts and community meals near you (opens Near Me → Food & Eating, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "Renting Without Getting Burned — the other half of stretching a payday is not losing $200 a week to a rental that quietly overcharges you."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Map cheap-eat spots within 20 minutes of home",
-      "estimateMin": 10
-    },
-    {
-      "label": "Find one reliable meal under $10 near work or campus",
-      "estimateMin": 15
-    },
-    {
-      "label": "Check the Menulog or Uber Eats app for budget student deals",
-      "estimateMin": 5
-    },
-    {
-      "label": "Identify one free community meal in your area this week",
-      "estimateMin": 10
-    }
-  ]
 }

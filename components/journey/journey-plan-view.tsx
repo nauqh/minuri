@@ -238,7 +238,7 @@ function GuideAccordionRow({
 									{guide.summary}
 								</p>
 								<Link
-									href={`/guides/${guide.arc}/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
+									href={`/guides/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
 									className="mt-3 inline-flex text-sm font-medium text-minuri-teal hover:underline"
 								>
 									Read guide →

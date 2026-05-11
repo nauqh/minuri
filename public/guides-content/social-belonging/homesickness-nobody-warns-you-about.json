@@ -1,83 +1,93 @@
 {
-  "id": 12,
-  "slug": "homesickness-nobody-warns-you-about",
-  "title": "The Homesickness Nobody Warns You About",
-  "summary": "Homesickness rarely peaks on day one — it peaks around month two or three, when the novelty fades and your old life isn't on hold anymore. Here's how to ride it without retreating.",
-  "arc": "month-1",
-  "arcOrder": 5,
-  "topic": "social-belonging",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/social-belonging/homesickness-nobody-warns-you-about.json",
-  "nextGuideSlug": "when-to-see-a-psych-counsellor-or-friend",
-  "searchTerms": [
-    "homesickness",
-    "loneliness",
-    "relocation",
-    "grief",
-    "international student"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Allianz Care — Dealing with homesickness in Australia",
-      "href": "https://www.allianzcare.com.au/en/blog/dealing-with-homesickness.html"
-    },
-    {
-      "label": "headspace — How to understand and deal with loneliness",
-      "href": "https://headspace.org.au/explore-topics/for-young-people/loneliness/"
+    "id": 12,
+    "slug": "homesickness-nobody-warns-you-about",
+    "title": "The Homesickness Nobody Warns You About",
+    "summary": "Homesickness rarely peaks on day one — it peaks around month two or three, when the novelty fades and your old life isn't on hold anymore. Here's how to ride it without retreating.",
+    "arc": "month-1",
+    "arcOrder": 5,
+    "topic": "social-belonging",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/social-belonging/homesickness-nobody-warns-you-about.json",
+    "nextGuideSlug": "when-to-see-a-psych-counsellor-or-friend",
+    "searchTerms": [
+        "homesickness",
+        "loneliness",
+        "relocation",
+        "grief",
+        "international student"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Allianz Care — Dealing with homesickness in Australia",
+            "href": "https://www.allianzcare.com.au/en/blog/dealing-with-homesickness.html"
+        },
+        {
+            "label": "headspace — How to understand and deal with loneliness",
+            "href": "https://headspace.org.au/explore-topics/for-young-people/loneliness/"
+        }
+    ],
+    "thumbnailUrl": "https://picsum.photos/seed/minuri-homesickness-nobody-warns-you-about/640/420",
+    "nearMeDeeplink": "/near-me?topic=social-belonging&from=homesickness-nobody-warns-you-about",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "It's a Sunday afternoon in your tenth week. You just got off a video call with your family — a good one, full of small jokes you'd missed — and the room feels suddenly, brutally quiet again. You catch the smell of something cooking next door that almost reminds you of home, and your eyes well up before you've fully registered why. Nothing is *wrong*. You have friends now. The job is going okay. But there's an ache that wasn't there last month, and it isn't going away."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "Everyone warns you about homesickness in week one. Almost nobody warns you about month two or three, when it actually arrives.\n\nIn the first few weeks, novelty does most of the emotional lifting — you're absorbing a new city, building rituals, busy. Then, somewhere around weeks 6–10, the novelty quietly drops out, and what's left is the realisation that the people back home have moved on slightly without you, that holidays back are not as easy as they sound, and that this is now your life. The ache that arrives at this point is grief, not regret. It's not a sign you should go home."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "**Homesickness arrives in waves**, not as a steady state — and it usually peaks **after** the novelty fades, not on the day you arrive. Allianz Care's research on relocation puts it plainly: *initial feelings often settle after a few weeks, but homesickness can pop up unpredictably, especially around special occasions or in moments you don't expect.*\n\nKnowing the wave is normal — and that it doesn't mean you chose wrong — is most of the work."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Schedule contact with home; don't live in it.**\n\nThe paradox of digital homesickness is that *more* contact with home doesn't make it better — sometimes it makes it worse, because every call is a fresh reminder of what you're missing. The fix is to **schedule** contact instead of doing it reactively.\n\nA good rhythm for most people:\n- One *long* family call per week, same time, same day.\n- One or two voice messages or texts to close friends mid-week.\n- Resist the *11pm doomscroll through old group chats* impulse. That's not contact, it's rumination.\n\nAllianz's homesickness guide notes that pulling back is *acceptable* if intense daily contact is making things worse. You're not abandoning home; you're protecting your capacity to build a life here.\n\n**2. Translate home rituals into local versions.**\n\nThe rituals from home don't have to disappear. Cook the dish you grew up with, on a Saturday, alone or with a new friend. Keep the morning tea ritual. Light the candle for the festival. Bring the music from home into your kitchen.\n\nNew rituals stack on top: a weekly walk, a Saturday market visit, a Sunday parkrun. Over months, the rituals interleave, and the new place stops feeling like a substitute for home and starts feeling like its own thing.\n\n**3. Build one ongoing community thread that's not your old one.**\n\nThe single most protective factor against month-two homesickness is *one recurring local commitment*. A volunteer shift. A team. A class. A weekly catch-up. (See *Finding Your Community* for the longer version.)\n\nThe reason it helps: homesickness gets worse when you're floating between two worlds without being anchored in either. A local recurring thread anchors you here without asking you to give up there.\n\n**4. Watch the warning signs that move it past homesickness.**\n\nMost homesickness fades over weeks as local life takes hold. Some doesn't. Signals that suggest you need more than time:\n\n- **Persistent low mood for more than two weeks**\n- **Sleep or appetite changes** that aren't easing\n- **Withdrawing** from people you'd normally see\n- **Substances or scrolling** as the main coping tool\n- **Anxiety or hopelessness** that don't budge\n\nAny of those, and the next move is a GP appointment. A Mental Health Care Plan unlocks 10 subsidised psychology sessions a year. **Lifeline (13 11 14)**, **Beyond Blue (1300 22 4636)** and **headspace (1800 650 890)** are 24/7 and free.\n\n**5. Don't make permanent decisions in the bad week.**\n\nHomesickness has a strong tendency to *narrow* the future — the *I should just go home* thought feels obvious in the bad hour and absurd by Wednesday. Decide, in advance, that big decisions about moving back are not made during a homesick wave. They're made on a calm week, with a flatmate or friend in the room, after at least three good days in a row.\n\nMost people who would have left after a bad week and didn't are glad they waited. Some people do go home, and that's a fine choice — but the version of it made during the wave is rarely the version of it that holds up later.\n\n**6. Talk about it. Specifically.**\n\nThe shame around homesickness — *I should be over this by now* — is part of what keeps it going. Tell one person, specifically: a housemate, a colleague, a new friend, a counsellor. *I've been homesick this week and I'm not sure what to do about it* is a complete sentence. The other person almost always says *yeah, me too at month three*, and the loneliness inside the homesickness drops by half.\n\n### The bit nobody mentions\n\nMost people who move cities never tell their family back home about the bad weeks. They don't want their parents to worry, and they don't want to confirm the *I told you so* the family didn't actually say. That silence is its own quiet weight.\n\nYou don't have to tell home everything. But telling *someone* — locally, where they can sit with you for an hour — is one of the most underrated forms of homesickness care there is."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find community centres, cultural groups and counselling services near you (opens Near Me → Social & Belonging and Health & Wellbeing)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "When to See a Psych, a Counsellor or a Friend — for the moments when the wave has lasted longer than waves usually do."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Write down what you actually miss — naming it helps more than avoiding it",
+            "estimateMin": 10
+        },
+        {
+            "label": "Schedule one regular call with someone from home (e.g. weekly)",
+            "estimateMin": 5
+        },
+        {
+            "label": "Find one local place that reminds you of home (cuisine, music, a park)",
+            "estimateMin": 20
+        },
+        {
+            "label": "Reach out to one person in your city just to say hi",
+            "estimateMin": 5
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Homesickness peaks at month 2–3, not on arrival day — plan for that, not just the first week.",
+            "Schedule regular calls with home on a fixed day — unscheduled calls spike anxiety rather than easing it.",
+            "Translate one home ritual to Melbourne: same food, same music, same Sunday morning activity.",
+            "Don't make permanent decisions — moving back, quitting — in a bad week. Wait for a neutral one."
+        ],
+        "headsUp": "Staying online with home 24/7 delays adjustment — some disconnection from your old life is part of building this one.",
+        "goodToKnow": "What you're feeling is one of the most common — and most temporary — experiences of moving anywhere new."
     }
-  ],
-  "thumbnailUrl": "https://picsum.photos/seed/minuri-homesickness-nobody-warns-you-about/640/420",
-  "nearMeDeeplink": "/near-me?topic=social-belonging&from=homesickness-nobody-warns-you-about",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "It's a Sunday afternoon in your tenth week. You just got off a video call with your family — a good one, full of small jokes you'd missed — and the room feels suddenly, brutally quiet again. You catch the smell of something cooking next door that almost reminds you of home, and your eyes well up before you've fully registered why. Nothing is *wrong*. You have friends now. The job is going okay. But there's an ache that wasn't there last month, and it isn't going away."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "Everyone warns you about homesickness in week one. Almost nobody warns you about month two or three, when it actually arrives.\n\nIn the first few weeks, novelty does most of the emotional lifting — you're absorbing a new city, building rituals, busy. Then, somewhere around weeks 6–10, the novelty quietly drops out, and what's left is the realisation that the people back home have moved on slightly without you, that holidays back are not as easy as they sound, and that this is now your life. The ache that arrives at this point is grief, not regret. It's not a sign you should go home."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "**Homesickness arrives in waves**, not as a steady state — and it usually peaks **after** the novelty fades, not on the day you arrive. Allianz Care's research on relocation puts it plainly: *initial feelings often settle after a few weeks, but homesickness can pop up unpredictably, especially around special occasions or in moments you don't expect.*\n\nKnowing the wave is normal — and that it doesn't mean you chose wrong — is most of the work."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Schedule contact with home; don't live in it.**\n\nThe paradox of digital homesickness is that *more* contact with home doesn't make it better — sometimes it makes it worse, because every call is a fresh reminder of what you're missing. The fix is to **schedule** contact instead of doing it reactively.\n\nA good rhythm for most people:\n- One *long* family call per week, same time, same day.\n- One or two voice messages or texts to close friends mid-week.\n- Resist the *11pm doomscroll through old group chats* impulse. That's not contact, it's rumination.\n\nAllianz's homesickness guide notes that pulling back is *acceptable* if intense daily contact is making things worse. You're not abandoning home; you're protecting your capacity to build a life here.\n\n**2. Translate home rituals into local versions.**\n\nThe rituals from home don't have to disappear. Cook the dish you grew up with, on a Saturday, alone or with a new friend. Keep the morning tea ritual. Light the candle for the festival. Bring the music from home into your kitchen.\n\nNew rituals stack on top: a weekly walk, a Saturday market visit, a Sunday parkrun. Over months, the rituals interleave, and the new place stops feeling like a substitute for home and starts feeling like its own thing.\n\n**3. Build one ongoing community thread that's not your old one.**\n\nThe single most protective factor against month-two homesickness is *one recurring local commitment*. A volunteer shift. A team. A class. A weekly catch-up. (See *Finding Your Community* for the longer version.)\n\nThe reason it helps: homesickness gets worse when you're floating between two worlds without being anchored in either. A local recurring thread anchors you here without asking you to give up there.\n\n**4. Watch the warning signs that move it past homesickness.**\n\nMost homesickness fades over weeks as local life takes hold. Some doesn't. Signals that suggest you need more than time:\n\n- **Persistent low mood for more than two weeks**\n- **Sleep or appetite changes** that aren't easing\n- **Withdrawing** from people you'd normally see\n- **Substances or scrolling** as the main coping tool\n- **Anxiety or hopelessness** that don't budge\n\nAny of those, and the next move is a GP appointment. A Mental Health Care Plan unlocks 10 subsidised psychology sessions a year. **Lifeline (13 11 14)**, **Beyond Blue (1300 22 4636)** and **headspace (1800 650 890)** are 24/7 and free.\n\n**5. Don't make permanent decisions in the bad week.**\n\nHomesickness has a strong tendency to *narrow* the future — the *I should just go home* thought feels obvious in the bad hour and absurd by Wednesday. Decide, in advance, that big decisions about moving back are not made during a homesick wave. They're made on a calm week, with a flatmate or friend in the room, after at least three good days in a row.\n\nMost people who would have left after a bad week and didn't are glad they waited. Some people do go home, and that's a fine choice — but the version of it made during the wave is rarely the version of it that holds up later.\n\n**6. Talk about it. Specifically.**\n\nThe shame around homesickness — *I should be over this by now* — is part of what keeps it going. Tell one person, specifically: a housemate, a colleague, a new friend, a counsellor. *I've been homesick this week and I'm not sure what to do about it* is a complete sentence. The other person almost always says *yeah, me too at month three*, and the loneliness inside the homesickness drops by half.\n\n### The bit nobody mentions\n\nMost people who move cities never tell their family back home about the bad weeks. They don't want their parents to worry, and they don't want to confirm the *I told you so* the family didn't actually say. That silence is its own quiet weight.\n\nYou don't have to tell home everything. But telling *someone* — locally, where they can sit with you for an hour — is one of the most underrated forms of homesickness care there is."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find community centres, cultural groups and counselling services near you (opens Near Me → Social & Belonging and Health & Wellbeing)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "When to See a Psych, a Counsellor or a Friend — for the moments when the wave has lasted longer than waves usually do."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Write down what you actually miss — naming it helps more than avoiding it",
-      "estimateMin": 10
-    },
-    {
-      "label": "Schedule one regular call with someone from home (e.g. weekly)",
-      "estimateMin": 5
-    },
-    {
-      "label": "Find one local place that reminds you of home (cuisine, music, a park)",
-      "estimateMin": 20
-    },
-    {
-      "label": "Reach out to one person in your city just to say hi",
-      "estimateMin": 5
-    }
-  ]
 }

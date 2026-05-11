@@ -1,96 +1,106 @@
 {
-  "id": 31,
-  "slug": "free-things-to-do-this-week",
-  "title": "Free Things to Do This Week",
-  "summary": "Melbourne is one of the cheapest world-class cities to live in *if* you know which spaces, events and museums never charge — and most people never find out.",
-  "arc": "week-1",
-  "arcOrder": 10,
-  "topic": "social-belonging",
-  "readingTimeMin": 5,
-  "isPublished": true,
-  "isFeatured": false,
-  "markdownPath": "/guides-content/social-belonging/free-things-to-do-this-week.json",
-  "nextGuideSlug": "making-friends-in-a-city-where-everyones-busy",
-  "searchTerms": [
-    "free things",
-    "events",
-    "ngv",
-    "library",
-    "markets",
-    "student discounts"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Lonely Planet — 19 best free things to do in Melbourne",
-      "href": "https://www.lonelyplanet.com/articles/top-free-things-to-do-in-melbourne"
-    },
-    {
-      "label": "Officer Travels — 40 free and budget-friendly things in Melbourne",
-      "href": "https://officertravels.com/40-great-free-budget-friendly-things-melbourne/"
-    },
-    {
-      "label": "Discover Melbourne — Free things in Melbourne 2026",
-      "href": "https://discovermelbourne.au/free-things-in-melbourne/"
-    },
-    {
-      "label": "What's On Melbourne — What's free in Melbourne this month",
-      "href": "https://whatson.melbourne.vic.gov.au/article/whats-free-in-melbourne-this-month"
-    },
-    {
-      "label": "What's On Melbourne — Best student discounts and freebies",
-      "href": "https://whatson.melbourne.vic.gov.au/article/melbournes-best-student-discounts-and-freebies"
+    "id": 31,
+    "slug": "free-things-to-do-this-week",
+    "title": "Free Things to Do This Week",
+    "summary": "Melbourne is one of the cheapest world-class cities to live in *if* you know which spaces, events and museums never charge — and most people never find out.",
+    "arc": "week-1",
+    "arcOrder": 10,
+    "topic": "social-belonging",
+    "readingTimeMin": 5,
+    "isPublished": true,
+    "isFeatured": false,
+    "markdownPath": "/guides-content/social-belonging/free-things-to-do-this-week.json",
+    "nextGuideSlug": "making-friends-in-a-city-where-everyones-busy",
+    "searchTerms": [
+        "free things",
+        "events",
+        "ngv",
+        "library",
+        "markets",
+        "student discounts"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Lonely Planet — 19 best free things to do in Melbourne",
+            "href": "https://www.lonelyplanet.com/articles/top-free-things-to-do-in-melbourne"
+        },
+        {
+            "label": "Officer Travels — 40 free and budget-friendly things in Melbourne",
+            "href": "https://officertravels.com/40-great-free-budget-friendly-things-melbourne/"
+        },
+        {
+            "label": "Discover Melbourne — Free things in Melbourne 2026",
+            "href": "https://discovermelbourne.au/free-things-in-melbourne/"
+        },
+        {
+            "label": "What's On Melbourne — What's free in Melbourne this month",
+            "href": "https://whatson.melbourne.vic.gov.au/article/whats-free-in-melbourne-this-month"
+        },
+        {
+            "label": "What's On Melbourne — Best student discounts and freebies",
+            "href": "https://whatson.melbourne.vic.gov.au/article/melbournes-best-student-discounts-and-freebies"
+        }
+    ],
+    "thumbnailUrl": "/guides/thumbnails/free-things-to-do-this-week.jpg",
+    "nearMeDeeplink": "/near-me?topic=social-belonging&from=free-things-to-do-this-week",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "It's Wednesday. A friend from back home messages: *what are you up to this weekend?* You stare at the question. You don't have plans. You also don't have $80 to spend on plans. You've been telling yourself you'll go out \"once you're more settled\", but the maths suggests *settled* is a thing money buys, and money is the thing you don't have."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "There's a particular kind of stuck that comes from confusing *cheap* and *boring*. People moving to Melbourne for the first time, especially from smaller towns, often assume the interesting parts of the city are gated — by ticket prices, by knowing-someone, by a kind of cool you have to earn first.\n\nNone of that is true. The world-class parts of Melbourne — the gallery the city is internationally known for, the arts library, the night markets, the parks, the lectures, the gigs — are mostly free, and the people in them are mostly other broke twenty-somethings. You just have to know they're there."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "**Most of Melbourne's actual cultural infrastructure is permanently free.**\n\nThe **NGV International** and **NGV Australia** — both world-class galleries, both always free for the permanent collection. **The State Library Victoria** — free, with the most beautiful reading room in the country, free events, exhibitions, and Wi-Fi. **ACMI** — free for the main exhibition. **Public lectures** at the University of Melbourne, RMIT, Monash, Deakin — most free, most open to the public. **Federation Square** — free outdoor screenings, festivals, and events nearly every weekend. **Markets** — Queen Vic, South Melbourne, Footscray — free to walk through and full of $4 dumplings.\n\nIf you went to one free thing every weekend, you wouldn't run out for two years. The trick is just *finding out what's on this week*."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Bookmark these three pages on your phone today:**\n- **What's On Melbourne** — the City of Melbourne's official events page, updated weekly with free events and exhibitions across the LGA.\n- **Time Out Melbourne / The Urban List Melbourne** — for curated week-ahead recommendations including free and cheap stuff.\n- **Discover Melbourne** — for monthly free-things roundups.\n\nOpen them every Wednesday or Thursday and pick *one thing* for the weekend.\n\n**2. The always-free anchors (memorise these five):**\n- **NGV International (St Kilda Rd)** — free permanent collection, $0 forever. Paid exhibitions exist; ignore them.\n- **State Library Victoria (Swanston St)** — free reading rooms, free chess room, free exhibitions, free Wi-Fi for hours.\n- **ACMI (Federation Square)** — free moving-image exhibition (the main *Story of the Moving Image*).\n- **Royal Botanic Gardens (South Yarra)** — free, enormous, perfect for a Sunday.\n- **Federation Square / Birrarung Marr** — free outdoor events almost every weekend.\n\n**3. Cheap (not free) but still worth knowing:**\n- **Cinema Nova in Carlton** — $7 movies all day Monday.\n- **Comedy Republic / Last Laugh** — $10–15 stand-up most nights of the week.\n- **Public ice skating** at O'Brien Group Arena — student rates.\n\n**4. Use your student card aggressively if you have one.** PTV concession (the single biggest discount you'll ever have access to). Discounts at NGV gift shop, ACMI, Cinema Nova, most theatres, and a long list of restaurants and shops. The What's On Melbourne student discount guide is the best one-stop list.\n\n**5. The library is a building you live in now.** Your local council library — Melbourne, Yarra, Moreland, Port Phillip, etc. — is free to join with proof of address. Borrow books. Use the free study spaces. Use the free Wi-Fi. Many host free language classes, free coding workshops, and free movie nights.\n\n**6. Free outdoor things that locals know about:**\n- **Sunday DJ at Naked for Satan rooftop in Fitzroy** (drinks aside, the rooftop is free entry).\n- **Brunswick Music Festival, Melbourne Fringe, MIFF, White Night, Open House Melbourne** — major festivals where most events are free.\n- **The Tan track** around the Botanic Gardens — runners and walkers, every morning and evening.\n- **St Kilda Pier penguins at sunset** — actual wild penguins, free, every night.\n\n### The bit nobody mentions\n\nThe people you'll eventually become friends with are the same people you're standing next to right now in the State Library reading room or the NGV's permanent collection. The free events aren't a substitute for going out — they *are* the going out. They're where the city actually happens.\n\nGo to one this weekend. Even alone. Especially alone. The friend group comes later — first you have to be a regular somewhere."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find free events, libraries, galleries and parks near you (opens Near Me, filtered to Social & Belonging → Free things, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "Making Friends in a City Where Everyone's Busy — because being out and about is step one, but moving from \"there\" to \"with people\" is its own skill."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Search 'free events Melbourne this week' on Eventbrite or Time Out",
+            "estimateMin": 5
+        },
+        {
+            "label": "Visit one public park, garden, or gallery this weekend",
+            "estimateMin": 60
+        },
+        {
+            "label": "Find your local library and see what it offers beyond books",
+            "estimateMin": 15
+        },
+        {
+            "label": "Identify one recurring free activity near you (market, cinema, run club)",
+            "estimateMin": 10
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "NGV International and NGV Australia are free, world-class, and open daily — permanent collection always free.",
+            "State Library of Victoria: free events, exhibitions, quiet study space, and a surprisingly good café.",
+            "Royal Botanic Gardens: free entry, 38 hectares, open daily, something different every season.",
+            "What's On Melbourne and Time Out Melbourne list updated free events every week."
+        ],
+        "headsUp": "Some NGV exhibitions are paid ticketed shows. The permanent collection is always free — the ticketed shows are optional.",
+        "goodToKnow": "Your student card unlocks 20–50% off most paid venues in Melbourne: ACMI, Cinema Nova, Melbourne Zoo, comedy shows."
     }
-  ],
-  "thumbnailUrl": "/guides/thumbnails/free-things-to-do-this-week.jpg",
-  "nearMeDeeplink": "/near-me?topic=social-belonging&from=free-things-to-do-this-week",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "It's Wednesday. A friend from back home messages: *what are you up to this weekend?* You stare at the question. You don't have plans. You also don't have $80 to spend on plans. You've been telling yourself you'll go out \"once you're more settled\", but the maths suggests *settled* is a thing money buys, and money is the thing you don't have."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "There's a particular kind of stuck that comes from confusing *cheap* and *boring*. People moving to Melbourne for the first time, especially from smaller towns, often assume the interesting parts of the city are gated — by ticket prices, by knowing-someone, by a kind of cool you have to earn first.\n\nNone of that is true. The world-class parts of Melbourne — the gallery the city is internationally known for, the arts library, the night markets, the parks, the lectures, the gigs — are mostly free, and the people in them are mostly other broke twenty-somethings. You just have to know they're there."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "**Most of Melbourne's actual cultural infrastructure is permanently free.**\n\nThe **NGV International** and **NGV Australia** — both world-class galleries, both always free for the permanent collection. **The State Library Victoria** — free, with the most beautiful reading room in the country, free events, exhibitions, and Wi-Fi. **ACMI** — free for the main exhibition. **Public lectures** at the University of Melbourne, RMIT, Monash, Deakin — most free, most open to the public. **Federation Square** — free outdoor screenings, festivals, and events nearly every weekend. **Markets** — Queen Vic, South Melbourne, Footscray — free to walk through and full of $4 dumplings.\n\nIf you went to one free thing every weekend, you wouldn't run out for two years. The trick is just *finding out what's on this week*."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Bookmark these three pages on your phone today:**\n- **What's On Melbourne** — the City of Melbourne's official events page, updated weekly with free events and exhibitions across the LGA.\n- **Time Out Melbourne / The Urban List Melbourne** — for curated week-ahead recommendations including free and cheap stuff.\n- **Discover Melbourne** — for monthly free-things roundups.\n\nOpen them every Wednesday or Thursday and pick *one thing* for the weekend.\n\n**2. The always-free anchors (memorise these five):**\n- **NGV International (St Kilda Rd)** — free permanent collection, $0 forever. Paid exhibitions exist; ignore them.\n- **State Library Victoria (Swanston St)** — free reading rooms, free chess room, free exhibitions, free Wi-Fi for hours.\n- **ACMI (Federation Square)** — free moving-image exhibition (the main *Story of the Moving Image*).\n- **Royal Botanic Gardens (South Yarra)** — free, enormous, perfect for a Sunday.\n- **Federation Square / Birrarung Marr** — free outdoor events almost every weekend.\n\n**3. Cheap (not free) but still worth knowing:**\n- **Cinema Nova in Carlton** — $7 movies all day Monday.\n- **Comedy Republic / Last Laugh** — $10–15 stand-up most nights of the week.\n- **Public ice skating** at O'Brien Group Arena — student rates.\n\n**4. Use your student card aggressively if you have one.** PTV concession (the single biggest discount you'll ever have access to). Discounts at NGV gift shop, ACMI, Cinema Nova, most theatres, and a long list of restaurants and shops. The What's On Melbourne student discount guide is the best one-stop list.\n\n**5. The library is a building you live in now.** Your local council library — Melbourne, Yarra, Moreland, Port Phillip, etc. — is free to join with proof of address. Borrow books. Use the free study spaces. Use the free Wi-Fi. Many host free language classes, free coding workshops, and free movie nights.\n\n**6. Free outdoor things that locals know about:**\n- **Sunday DJ at Naked for Satan rooftop in Fitzroy** (drinks aside, the rooftop is free entry).\n- **Brunswick Music Festival, Melbourne Fringe, MIFF, White Night, Open House Melbourne** — major festivals where most events are free.\n- **The Tan track** around the Botanic Gardens — runners and walkers, every morning and evening.\n- **St Kilda Pier penguins at sunset** — actual wild penguins, free, every night.\n\n### The bit nobody mentions\n\nThe people you'll eventually become friends with are the same people you're standing next to right now in the State Library reading room or the NGV's permanent collection. The free events aren't a substitute for going out — they *are* the going out. They're where the city actually happens.\n\nGo to one this weekend. Even alone. Especially alone. The friend group comes later — first you have to be a regular somewhere."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find free events, libraries, galleries and parks near you (opens Near Me, filtered to Social & Belonging → Free things, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "Making Friends in a City Where Everyone's Busy — because being out and about is step one, but moving from \"there\" to \"with people\" is its own skill."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Search 'free events Melbourne this week' on Eventbrite or Time Out",
-      "estimateMin": 5
-    },
-    {
-      "label": "Visit one public park, garden, or gallery this weekend",
-      "estimateMin": 60
-    },
-    {
-      "label": "Find your local library and see what it offers beyond books",
-      "estimateMin": 15
-    },
-    {
-      "label": "Identify one recurring free activity near you (market, cinema, run club)",
-      "estimateMin": 10
-    }
-  ]
 }

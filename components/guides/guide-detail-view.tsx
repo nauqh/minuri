@@ -4,12 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, ExternalLink, Map as MapIcon, X } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkCheck, Copy, Check, Download, ExternalLink, Map as MapIcon, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-import { GUIDE_ARCS, GUIDES, type Guide } from "@/content/guides";
+import { GUIDE_TOPICS, GUIDES, type Guide } from "@/content/guides";
 import type {
-	GuideArcFilter,
 	GuideOrigin,
 	GuideTopicFilter,
 } from "@/lib/guides";
@@ -19,17 +18,16 @@ import { GuideMarkdown } from "@/components/guides/guide-markdown";
 import { GuideSectionLabel } from "@/components/guides/guide-section-label";
 import {
 	buildGuideHref,
-	getArcMeta,
 	getNextGuide,
 	getTopicMeta,
 } from "@/lib/guides";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { cn } from "@/lib/utils";
+import { GuideShareModal } from "@/components/guides/guide-share-modal";
 
 type GuideDetailViewProps = {
 	guide: Guide;
 	backHref: string;
-	arcFilter: GuideArcFilter;
 	topicFilter: GuideTopicFilter;
 	query: string;
 	from: GuideOrigin;
@@ -155,7 +153,6 @@ function parseGuideJsonSections(rawContent: string): Guide["sections"] {
 export function GuideDetailView({
 	guide,
 	backHref,
-	arcFilter,
 	topicFilter,
 	query,
 	from,
@@ -164,7 +161,6 @@ export function GuideDetailView({
 	const { isBookmarked, toggleBookmark, bookmarks, hasHydrated } =
 		useGuideBookmarks();
 	const pathname = usePathname();
-	const arcMeta = getArcMeta(guide.arc);
 	const topicMeta = getTopicMeta(guide.topic);
 	const nextGuide = getNextGuide(guide);
 	const articleRef = useRef<HTMLElement | null>(null);
@@ -174,6 +170,7 @@ export function GuideDetailView({
 	const [headerVisible, setHeaderVisible] = useState(true);
 	const [sourcesOpen, setSourcesOpen] = useState(false);
 	const [copied, setCopied] = useState(false);
+	const [shareOpen, setShareOpen] = useState(false);
 	const lastScrollY = useRef(0);
 	const prefersReducedMotion = useReducedMotion();
 	const sectionAnim = {
@@ -276,38 +273,28 @@ export function GuideDetailView({
 	);
 	const nextChapterCardText = toPlainCardText(nextChapterSection?.body[0]);
 	const journeyGuides = useMemo(() => {
-		const arcSort = new Map(
-			GUIDE_ARCS.map((arc) => [arc.slug, arc.sortOrder]),
-		);
-		return [...GUIDES].sort((a, b) => {
-			const arcDelta =
-				(arcSort.get(a.arc) ?? Number.MAX_SAFE_INTEGER) -
-				(arcSort.get(b.arc) ?? Number.MAX_SAFE_INTEGER);
-			if (arcDelta !== 0) return arcDelta;
-			if (a.arcOrder !== b.arcOrder) return a.arcOrder - b.arcOrder;
-			return a.title.localeCompare(b.title);
-		});
+		return [...GUIDES].sort((a, b) => a.title.localeCompare(b.title));
 	}, []);
 	const currentGuideJourneyIndex = journeyGuides.findIndex(
 		(item) => item.slug === guide.slug,
 	);
-	const currentArcGuides = useMemo(() => {
-		return journeyGuides.filter((item) => item.arc === guide.arc);
-	}, [guide.arc, journeyGuides]);
-	const currentArcGuideIndex = currentArcGuides.findIndex(
+	const currentTopicGuides = useMemo(() => {
+		return journeyGuides.filter((item) => item.topic === guide.topic);
+	}, [guide.topic, journeyGuides]);
+	const currentTopicGuideIndex = currentTopicGuides.findIndex(
 		(item) => item.slug === guide.slug,
 	);
-	const arcJourneySummary = useMemo(() => {
-		return GUIDE_ARCS.map((arc) => {
-			const guidesInArc = journeyGuides.filter(
-				(item) => item.arc === arc.slug,
+	const topicJourneySummary = useMemo(() => {
+		return GUIDE_TOPICS.map((topic) => {
+			const guidesInTopic = journeyGuides.filter(
+				(item) => item.topic === topic.slug,
 			);
-			const completed = guidesInArc.filter((item) =>
+			const completed = guidesInTopic.filter((item) =>
 				isBookmarked(item.slug),
 			).length;
 			return {
-				arc,
-				total: guidesInArc.length,
+				topic,
+				total: guidesInTopic.length,
 				completed,
 			};
 		});
@@ -316,36 +303,33 @@ export function GuideDetailView({
 		<div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
 			<div className="rounded-[0.85rem] border border-minuri-silver/70 bg-minuri-fog/40 px-3.5 py-3">
 				<p className="text-xs text-minuri-slate">
-					{currentArcGuideIndex + 1} of {currentArcGuides.length} in{" "}
-					{arcMeta?.name ?? "this moment"}
+					{currentTopicGuideIndex + 1} of {currentTopicGuides.length} in{" "}
+					{topicMeta?.name ?? "this topic"}
 				</p>
 			</div>
 
 			<div className="grid gap-2.5">
-				{arcJourneySummary.map(({ arc, total, completed }) => {
-					const isCurrentArc = arc.slug === guide.arc;
-					const isDoneArc = completed === total && total > 0;
+				{topicJourneySummary.map(({ topic, total, completed }) => {
+					const isCurrentTopic = topic.slug === guide.topic;
+					const isDone = completed === total && total > 0;
 					return (
 						<div
-							key={arc.slug}
+							key={topic.slug}
 							className={cn(
 								"rounded-[0.85rem] border px-3.5 py-3",
-								isCurrentArc
+								isCurrentTopic
 									? "border-minuri-teal/70 bg-minuri-mist"
 									: "border-minuri-silver/70 bg-minuri-white",
 							)}
 						>
-							<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-								{arc.timeframeLabel}
-							</p>
 							<p className="mt-1 text-sm font-semibold text-minuri-ocean">
-								{arc.name}
+								{topic.name}
 							</p>
 							<p className="mt-1 text-xs text-minuri-slate">
 								{completed}/{total} saved{" "}
-								{isDoneArc
+								{isDone
 									? "· complete"
-									: isCurrentArc
+									: isCurrentTopic
 										? "· you are here"
 										: ""}
 							</p>
@@ -356,26 +340,18 @@ export function GuideDetailView({
 
 			<div>
 				<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-					Current moment steps
+					More in this topic
 				</p>
 				<ol className="mt-3 space-y-2">
-					{currentArcGuides.map((item, index) => {
+					{currentTopicGuides.map((item, index) => {
 						const isCurrent = item.slug === guide.slug;
 						const isSaved = isBookmarked(item.slug);
 						return (
 							<li key={item.slug}>
 								<Link
 									href={buildGuideHref(
-										{
-											arc: item.arc,
-											slug: item.slug,
-										},
-										{
-											arcFilter,
-											topicFilter,
-											query,
-											from,
-										},
+										{ slug: item.slug },
+										{ topicFilter, query, from },
 									)}
 									className={cn(
 										"flex items-center justify-between gap-3 rounded-[0.8rem] border px-3 py-2 text-sm transition-colors",
@@ -571,8 +547,7 @@ export function GuideDetailView({
 
 						<section className="mx-auto mt-6 w-full md:mt-8 md:max-w-3xl lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
 							<p className="text-xs uppercase tracking-[0.14em] text-minuri-slate">
-								{topicMeta?.name?.toUpperCase()} ·{" "}
-								{arcMeta?.timeframeLabel?.toUpperCase()}
+								{topicMeta?.name?.toUpperCase()}
 							</p>
 							<h1 className="mt-3 text-2xl font-black leading-tight text-minuri-ocean md:mt-4 md:text-4xl min-[1500px]:text-5xl">
 								{guide.title}
@@ -724,7 +699,7 @@ export function GuideDetailView({
 										</div>
 										{/* Index card */}
 										<Link
-											href={`/guides/${nextGuide.arc}/${nextGuide.slug}`}
+											href={`/guides/${nextGuide.slug}`}
 											className="guide-next-card group block overflow-hidden rounded-sm bg-[oklch(0.975_0.022_80)]"
 										>
 											{/* Polaroid thumbnail */}
@@ -815,32 +790,38 @@ export function GuideDetailView({
 						{/* Guide footer — full-bleed, content constrained to match sections above */}
 						<motion.footer
 							{...sectionAnim}
-							className="guide-footer-end -mx-4 md:-mx-8"
+							className="guide-footer-end"
 						>
 							<div className="relative z-10 mx-auto w-full px-4 text-center md:max-w-3xl md:px-8 lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
 
 									{/* Ornament + title */}
-									<p className="mb-5 text-xl text-minuri-seafoam/30">✦</p>
+									<p className="mb-5 text-lg text-minuri-seafoam/25">✦</p>
 									<h2
-										className="text-xl font-semibold leading-snug text-white/80"
+										className="text-xl font-semibold leading-snug text-white/75 md:text-2xl"
 										style={{ fontFamily: "var(--font-hero-serif)" }}
 									>
 										{guide.title}
 									</h2>
+									<p className="mt-2 text-xs uppercase tracking-widest text-white/25">
+										{topicMeta?.name} · {guide.readingTimeMin} min read
+									</p>
 
 									{/* Actions */}
-									<div className="mt-8 flex items-center justify-center gap-3">
+									<div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
 										<button
 											type="button"
 											onClick={() => toggleBookmark(guide.slug)}
 											className={cn(
-												"inline-flex items-center gap-2 rounded-sm border px-5 py-2.5 text-sm font-medium transition-colors",
+												"inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-200",
 												isBookmarked(guide.slug)
-													? "border-minuri-seafoam/60 bg-minuri-seafoam/15 text-minuri-seafoam"
-													: "border-white/20 bg-white/8 text-white/80 hover:bg-white/15 hover:text-white",
+													? "border-minuri-seafoam/50 bg-minuri-seafoam/10 text-minuri-seafoam"
+													: "border-white/15 text-white/60 hover:border-white/30 hover:text-white",
 											)}
 										>
-											{isBookmarked(guide.slug) ? "★ Saved" : "☆ Save"}
+											{isBookmarked(guide.slug)
+												? <><BookmarkCheck className="size-4" /> Saved</>
+												: <><Bookmark className="size-4" /> Save</>
+											}
 										</button>
 										<button
 											type="button"
@@ -849,23 +830,34 @@ export function GuideDetailView({
 												setCopied(true);
 												setTimeout(() => setCopied(false), 2000);
 											}}
-											className="inline-flex items-center gap-2 rounded-sm border border-white/20 bg-white/8 px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+											className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/60 transition-all duration-200 hover:border-white/30 hover:text-white"
 										>
-											{copied ? "✓ Copied" : "⎘ Share"}
+											{copied
+												? <><Check className="size-4" /> Copied</>
+												: <><Copy className="size-4" /> Copy link</>
+											}
+										</button>
+										<button
+											type="button"
+											onClick={() => setShareOpen(true)}
+											className="inline-flex items-center gap-2 rounded-full bg-minuri-seafoam/10 border border-minuri-seafoam/30 px-5 py-2.5 text-sm font-medium text-minuri-seafoam transition-all duration-200 hover:bg-minuri-seafoam/20"
+										>
+											<Download className="size-4" />
+											Download guide
 										</button>
 									</div>
 
 									{/* Bottom bar */}
-									<div className="mt-10 flex items-center justify-center gap-4 border-t border-white/10 pt-6">
+									<div className="mt-10 flex items-center justify-between border-t border-white/[0.07] pt-6">
 										<Link
 											href={backHref}
-											className="text-xs text-minuri-seafoam/50 transition-colors hover:text-minuri-seafoam"
+											className="inline-flex items-center gap-1.5 text-xs text-white/30 transition-colors hover:text-white/60"
 										>
-											← All guides
+											<ArrowLeft className="size-3.5" />
+											All guides
 										</Link>
-										<span className="text-white/15">·</span>
 										<p
-											className="text-sm font-black uppercase tracking-widest text-white/15"
+											className="text-xs font-black uppercase tracking-widest text-white/15"
 											style={{ fontFamily: "var(--font-hero-serif)" }}
 										>
 											Minuri
@@ -974,6 +966,12 @@ export function GuideDetailView({
 					</motion.div>
 				) : null}
 			</AnimatePresence>
+
+			<GuideShareModal
+				guide={guide}
+				isOpen={shareOpen}
+				onClose={() => setShareOpen(false)}
+			/>
 		</div>
 	);
 }

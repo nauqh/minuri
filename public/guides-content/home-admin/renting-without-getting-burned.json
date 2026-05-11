@@ -1,97 +1,107 @@
 {
-  "id": 6,
-  "slug": "renting-without-getting-burned",
-  "title": "Renting Without Getting Burned",
-  "summary": "Bond is capped at one month. The rental provider has 10 business days to lodge it. The condition report is your legal evidence. Knowing five rules turns the rental process from intimidating to navigable.",
-  "arc": "month-1",
-  "arcOrder": 2,
-  "topic": "home-admin",
-  "readingTimeMin": 6,
-  "isPublished": true,
-  "isFeatured": true,
-  "markdownPath": "/guides-content/home-admin/renting-without-getting-burned.json",
-  "nextGuideSlug": "building-a-local-routine",
-  "searchTerms": [
-    "lease",
-    "bond",
-    "condition report",
-    "rights",
-    "RTBA",
-    "VCAT",
-    "rental"
-  ],
-  "sourceLinks": [
-    {
-      "label": "Tenants Victoria — Bonds in private rental",
-      "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/bonds/private-rental/"
-    },
-    {
-      "label": "Tenants Victoria — Condition reports",
-      "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/condition-reports/"
-    },
-    {
-      "label": "Youth Central — Signing a lease",
-      "href": "https://www.youthcentral.vic.gov.au/housing/renting-and-sharehousing/signing-lease"
-    },
-    {
-      "label": "Study Melbourne — Your rights when renting",
-      "href": "https://studymelbourne.vic.gov.au/living-here/accommodation/your-rights-when-renting"
+    "id": 6,
+    "slug": "renting-without-getting-burned",
+    "title": "Renting Without Getting Burned",
+    "summary": "Bond is capped at one month. The rental provider has 10 business days to lodge it. The condition report is your legal evidence. Knowing five rules turns the rental process from intimidating to navigable.",
+    "arc": "month-1",
+    "arcOrder": 2,
+    "topic": "home-admin",
+    "readingTimeMin": 6,
+    "isPublished": true,
+    "isFeatured": true,
+    "markdownPath": "/guides-content/home-admin/renting-without-getting-burned.json",
+    "nextGuideSlug": "building-a-local-routine",
+    "searchTerms": [
+        "lease",
+        "bond",
+        "condition report",
+        "rights",
+        "RTBA",
+        "VCAT",
+        "rental"
+    ],
+    "sourceLinks": [
+        {
+            "label": "Tenants Victoria — Bonds in private rental",
+            "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/bonds/private-rental/"
+        },
+        {
+            "label": "Tenants Victoria — Condition reports",
+            "href": "https://tenantsvic.org.au/explore-topics/starting-your-tenancy/condition-reports/"
+        },
+        {
+            "label": "Youth Central — Signing a lease",
+            "href": "https://www.youthcentral.vic.gov.au/housing/renting-and-sharehousing/signing-lease"
+        },
+        {
+            "label": "Study Melbourne — Your rights when renting",
+            "href": "https://studymelbourne.vic.gov.au/living-here/accommodation/your-rights-when-renting"
+        }
+    ],
+    "thumbnailUrl": "https://picsum.photos/seed/minuri-renting-without-getting-burned/640/420",
+    "nearMeDeeplink": "/near-me?topic=home-admin&from=renting-without-getting-burned",
+    "sections": [
+        {
+            "sectionKey": "moment",
+            "title": "The Moment",
+            "value": "Inspection number four. You're standing in a one-bedroom in Brunswick with thirty-seven other people. Half of them have a folder with payslips, a cover letter and a printout of their rental ledger. You have a phone with a screenshot of your last bank balance and a vague idea that you're supposed to look 'professional'. The agent runs a five-minute tour, says 'apply on the app', and disappears. You leave with the sense that you've already lost."
+        },
+        {
+            "sectionKey": "feeling",
+            "title": "The Feeling",
+            "value": "Renting in Melbourne feels rigged toward people who already know the unwritten rules. The application platforms (2Apply, Snug, Ignite) want documents you've never been asked for. The agents are cordial but never tell you why your application failed. The successful tenants seem to materialise from a class you weren't invited to.\n\nThis isn't entirely in your head — but the gap is smaller than it looks, and most of it is closeable in one afternoon of preparation."
+        },
+        {
+            "sectionKey": "reveal",
+            "title": "What nobody told you",
+            "value": "Your application is essentially a product package. The agent has 30 to 60 to read through, and the cleaner, faster-to-skim package wins more often than the technically-stronger one.\n\nAnd once you're in: **bond is capped at one month's rent if rent is $900/week or less**. The rental provider must lodge it with the **RTBA within 10 business days**. Your condition report is your legal evidence. These three rules cover most of the way you can get burned."
+        },
+        {
+            "sectionKey": "how-it-works",
+            "title": "How it actually works",
+            "value": "**1. Build a single reusable application bundle.**\n\nBefore you go to your next inspection, prepare one PDF folder with:\n\n- Photo ID (passport or driver's licence)\n- Last 2–3 payslips OR a letter from your employer / scholarship / parent guarantor\n- Bank statement showing 4–8 weeks of rent saved\n- Two references (previous landlord, employer, or character reference)\n- A short cover note — three sentences: who you are, what you do, why this place\n\nUpload that bundle once into 2Apply or Snug, and from then on you're applying in 90 seconds while everyone else is still scanning their licence. The applications that get read first are the ones that don't make the agent chase missing documents.\n\n**2. Understand bond, properly.**\n\nIn Victoria:\n- **Maximum bond** = one month's rent (if weekly rent is $900 or less)\n- **Bond goes to the RTBA** (Residential Tenancies Bond Authority), not the rental provider's pocket\n- **Lodgement deadline** = 10 business days after they receive it\n- **You get an RTBA confirmation** with a bond number — if you don't get one within ~3 weeks, follow up. An unlodged bond is a serious breach.\n\nBetter still: pay your bond directly to the RTBA via BPAY rather than handing cash or a transfer to the agent. If you're short on bond, the **RentAssist Bond Loan** through Housing Victoria is interest-free for eligible tenants.\n\n**3. Treat the condition report like a legal document, because it is.**\n\nYou have **5 business days from move-in** to add your comments and return the report. Photograph everything, annotate every defect however minor, and send it back signed. (See *Your First 48 Hours: The Checklist* for the full walkthrough.) This document plus your photos is what protects your bond when you leave.\n\n**4. Read the lease before you sign.**\n\nThe Victorian standard residential tenancy agreement is the legal baseline — anything weird the rental provider has added (no pets, no painting, mandatory professional clean at exit) is in *additional terms*. Read those carefully; some of them aren't actually enforceable. If you break a fixed-term lease early, you're typically liable for rent until a new tenant is found, plus a *re-letting fee* — usually around two weeks' rent. Worth knowing before you sign a 12-month lease for a place you're not sure about.\n\n**5. Know what the rental provider can't do.**\n\n- **No rent increases** during a fixed-term lease, and only **once every 12 months** on continuing leases (with 60 days' written notice on the prescribed form).\n- **Urgent repairs** (no hot water, gas leak, blocked toilet, broken lock) — must be addressed within **24 hours**.\n- **Non-urgent repairs** — within **14 days** of written request.\n- **Inspections** — they need to give you **at least 7 days' written notice** and can only inspect once every 6 months.\n- **No rental bidding**, no fees for late rent payments, no discrimination based on race, age, sexuality, gender or background.\n\nIf any of these are breached, you can apply to **Rental Dispute Resolution Victoria (RDRV)** or escalate to **VCAT**. Most disputes are resolved at RDRV without a formal hearing.\n\n**6. Document everything in writing.**\n\nVerbal agreements with agents are worth nothing in a dispute. After every phone call, email a quick *just confirming we discussed X* summary. Keep a folder of everything — lease, condition report, RTBA bond receipt, repair requests, rent receipts, every email exchange. The folder is dull until the day it isn't.\n\n### The bit nobody mentions\n\nThe Victorian renting system is more tenant-protective than most newcomers expect — but the protections only activate if you use them. Tenants Victoria, **Victoria Legal Aid**, and the free **Renting Advice line (1300 137 164)** exist for the moments when something goes sideways. Calling them costs nothing. Most renters never do, then later wish they had."
+        },
+        {
+            "sectionKey": "bridge",
+            "title": "When you're ready",
+            "value": "→ Find rental support, legal aid and tenant advisory services near you (opens Near Me → Home & Admin, suburb pre-filled)"
+        },
+        {
+            "sectionKey": "next-chapter",
+            "title": "Up next",
+            "value": "Building a Local Routine That Feels Like Yours — once the housing is sorted, the work shifts from logistics to belonging."
+        }
+    ],
+    "firstSteps": [
+        {
+            "label": "Read your lease agreement in full before signing",
+            "estimateMin": 30
+        },
+        {
+            "label": "Confirm how your bond is lodged (RTBA in VIC)",
+            "estimateMin": 10
+        },
+        {
+            "label": "Know your maintenance rights and required notice periods",
+            "estimateMin": 10
+        },
+        {
+            "label": "Save Consumer Affairs Victoria as a contact for future disputes",
+            "estimateMin": 2
+        },
+        {
+            "label": "Set rent payment reminders in your calendar",
+            "estimateMin": 3
+        }
+    ],
+    "shareCard": {
+        "bullets": [
+            "Bond is capped at one month's rent if weekly rent is $900 or less.",
+            "Bond must be lodged with the RTBA within 10 business days — get your confirmation number.",
+            "Build one reusable application bundle: ID, payslips, bank statement, two references, a short cover note.",
+            "Rental providers must give 60 days' written notice before increasing rent, and only once every 12 months."
+        ],
+        "headsUp": "If your bond isn't lodged with the RTBA within 3 weeks, follow up in writing — an unlodged bond is a serious breach.",
+        "goodToKnow": "RentAssist Bond Loan through Housing Victoria is interest-free for eligible tenants who can't cover the full bond upfront."
     }
-  ],
-  "thumbnailUrl": "https://picsum.photos/seed/minuri-renting-without-getting-burned/640/420",
-  "nearMeDeeplink": "/near-me?topic=home-admin&from=renting-without-getting-burned",
-  "sections": [
-    {
-      "sectionKey": "moment",
-      "title": "The Moment",
-      "value": "Inspection number four. You're standing in a one-bedroom in Brunswick with thirty-seven other people. Half of them have a folder with payslips, a cover letter and a printout of their rental ledger. You have a phone with a screenshot of your last bank balance and a vague idea that you're supposed to look 'professional'. The agent runs a five-minute tour, says 'apply on the app', and disappears. You leave with the sense that you've already lost."
-    },
-    {
-      "sectionKey": "feeling",
-      "title": "The Feeling",
-      "value": "Renting in Melbourne feels rigged toward people who already know the unwritten rules. The application platforms (2Apply, Snug, Ignite) want documents you've never been asked for. The agents are cordial but never tell you why your application failed. The successful tenants seem to materialise from a class you weren't invited to.\n\nThis isn't entirely in your head — but the gap is smaller than it looks, and most of it is closeable in one afternoon of preparation."
-    },
-    {
-      "sectionKey": "reveal",
-      "title": "What nobody told you",
-      "value": "Your application is essentially a product package. The agent has 30 to 60 to read through, and the cleaner, faster-to-skim package wins more often than the technically-stronger one.\n\nAnd once you're in: **bond is capped at one month's rent if rent is $900/week or less**. The rental provider must lodge it with the **RTBA within 10 business days**. Your condition report is your legal evidence. These three rules cover most of the way you can get burned."
-    },
-    {
-      "sectionKey": "how-it-works",
-      "title": "How it actually works",
-      "value": "**1. Build a single reusable application bundle.**\n\nBefore you go to your next inspection, prepare one PDF folder with:\n\n- Photo ID (passport or driver's licence)\n- Last 2–3 payslips OR a letter from your employer / scholarship / parent guarantor\n- Bank statement showing 4–8 weeks of rent saved\n- Two references (previous landlord, employer, or character reference)\n- A short cover note — three sentences: who you are, what you do, why this place\n\nUpload that bundle once into 2Apply or Snug, and from then on you're applying in 90 seconds while everyone else is still scanning their licence. The applications that get read first are the ones that don't make the agent chase missing documents.\n\n**2. Understand bond, properly.**\n\nIn Victoria:\n- **Maximum bond** = one month's rent (if weekly rent is $900 or less)\n- **Bond goes to the RTBA** (Residential Tenancies Bond Authority), not the rental provider's pocket\n- **Lodgement deadline** = 10 business days after they receive it\n- **You get an RTBA confirmation** with a bond number — if you don't get one within ~3 weeks, follow up. An unlodged bond is a serious breach.\n\nBetter still: pay your bond directly to the RTBA via BPAY rather than handing cash or a transfer to the agent. If you're short on bond, the **RentAssist Bond Loan** through Housing Victoria is interest-free for eligible tenants.\n\n**3. Treat the condition report like a legal document, because it is.**\n\nYou have **5 business days from move-in** to add your comments and return the report. Photograph everything, annotate every defect however minor, and send it back signed. (See *Your First 48 Hours: The Checklist* for the full walkthrough.) This document plus your photos is what protects your bond when you leave.\n\n**4. Read the lease before you sign.**\n\nThe Victorian standard residential tenancy agreement is the legal baseline — anything weird the rental provider has added (no pets, no painting, mandatory professional clean at exit) is in *additional terms*. Read those carefully; some of them aren't actually enforceable. If you break a fixed-term lease early, you're typically liable for rent until a new tenant is found, plus a *re-letting fee* — usually around two weeks' rent. Worth knowing before you sign a 12-month lease for a place you're not sure about.\n\n**5. Know what the rental provider can't do.**\n\n- **No rent increases** during a fixed-term lease, and only **once every 12 months** on continuing leases (with 60 days' written notice on the prescribed form).\n- **Urgent repairs** (no hot water, gas leak, blocked toilet, broken lock) — must be addressed within **24 hours**.\n- **Non-urgent repairs** — within **14 days** of written request.\n- **Inspections** — they need to give you **at least 7 days' written notice** and can only inspect once every 6 months.\n- **No rental bidding**, no fees for late rent payments, no discrimination based on race, age, sexuality, gender or background.\n\nIf any of these are breached, you can apply to **Rental Dispute Resolution Victoria (RDRV)** or escalate to **VCAT**. Most disputes are resolved at RDRV without a formal hearing.\n\n**6. Document everything in writing.**\n\nVerbal agreements with agents are worth nothing in a dispute. After every phone call, email a quick *just confirming we discussed X* summary. Keep a folder of everything — lease, condition report, RTBA bond receipt, repair requests, rent receipts, every email exchange. The folder is dull until the day it isn't.\n\n### The bit nobody mentions\n\nThe Victorian renting system is more tenant-protective than most newcomers expect — but the protections only activate if you use them. Tenants Victoria, **Victoria Legal Aid**, and the free **Renting Advice line (1300 137 164)** exist for the moments when something goes sideways. Calling them costs nothing. Most renters never do, then later wish they had."
-    },
-    {
-      "sectionKey": "bridge",
-      "title": "When you're ready",
-      "value": "→ Find rental support, legal aid and tenant advisory services near you (opens Near Me → Home & Admin, suburb pre-filled)"
-    },
-    {
-      "sectionKey": "next-chapter",
-      "title": "Up next",
-      "value": "Building a Local Routine That Feels Like Yours — once the housing is sorted, the work shifts from logistics to belonging."
-    }
-  ],
-  "firstSteps": [
-    {
-      "label": "Read your lease agreement in full before signing",
-      "estimateMin": 30
-    },
-    {
-      "label": "Confirm how your bond is lodged (RTBA in VIC)",
-      "estimateMin": 10
-    },
-    {
-      "label": "Know your maintenance rights and required notice periods",
-      "estimateMin": 10
-    },
-    {
-      "label": "Save Consumer Affairs Victoria as a contact for future disputes",
-      "estimateMin": 2
-    },
-    {
-      "label": "Set rent payment reminders in your calendar",
-      "estimateMin": 3
-    }
-  ]
 }
