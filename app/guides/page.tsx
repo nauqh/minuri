@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 
-import { GuidesLibraryView } from "@/components/guides/guides-library-view";
+import { GuidesPageEntry } from "@/components/guides/guides-page-entry";
 import { ScrollToTopButton } from "@/components/landing/scroll-to-top-button";
 
 export default function GuidesPage() {
 	return (
 		<>
 			<Suspense fallback={null}>
-				<GuidesLibraryView mode="library" />
+				<GuidesPageEntry />
 			</Suspense>
 			<ScrollToTopButton />
 		</>

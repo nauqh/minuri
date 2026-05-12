@@ -120,7 +120,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		mode === "bookmarks" ? getGuidesFromSlugs(bookmarks) : GUIDES;
 	const shouldApplyStoryNeedsFilter =
 		!isBookmarksMode &&
-		isStoryReady &&
 		activeTopicFilter === "all" &&
 		storyNeedsSet.size > 0;
 	const storyScopedGuides = shouldApplyStoryNeedsFilter
@@ -632,7 +631,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		!isBookmarksMode && (storyMoment || storyNeedsLabels.length > 0) ? (
 			<section className="border-l-4 border-minuri-teal/60 px-4 py-2 md:px-5">
 				<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-minuri-mid">
-					Your story-guided path
+					{storyMoment ? "Your story-guided path" : "Filtered by topic"}
 				</p>
 				{storyMoment ? (
 					<p className="mt-2 text-sm leading-6 text-minuri-slate">
@@ -641,7 +640,7 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 				) : null}
 				{storyNeedsLabels.length > 0 ? (
 					<p className="mt-3 text-xs text-minuri-slate">
-						Prioritizing: {storyNeedsLabels.join(" • ")}
+						{storyMoment ? "Prioritizing:" : "Showing:"} {storyNeedsLabels.join(" • ")}
 					</p>
 				) : null}
 			</section>

@@ -188,6 +188,14 @@
 		scroll-behavior: auto;
 		overflow-x: hidden;
 	}
+
+	/* Global button hover scale — Framer Motion buttons override via inline style */
+	button:not([disabled]) {
+		transition: transform 120ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	button:not([disabled]):hover {
+		transform: scale(1.03);
+	}
 }
 
 /* Serif accent for hero (Next font sets --font-hero-serif on <html>) */
