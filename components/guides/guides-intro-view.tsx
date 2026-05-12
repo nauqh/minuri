@@ -23,42 +23,16 @@ import { cn } from "@/lib/utils";
 
 type TopicVisual = {
 	icon: LucideIcon;
-	heroBg: string;  // bright card color from landing hero
-	accent: string;  // icon/badge color when unselected
+	heroBg: string;
 	description: string;
 };
 
 const TOPIC_VISUALS: Record<GuideTopicSlug, TopicVisual> = {
-	"food-eating": {
-		icon: Sandwich,
-		heroBg: "#00f5c8",
-		accent: "#007a64",
-		description: "Eat well on any budget",
-	},
-	"getting-around": {
-		icon: Compass,
-		heroBg: "#5dd6ff",
-		accent: "#0077a8",
-		description: "Navigate the city with confidence",
-	},
-	"health-wellbeing": {
-		icon: HeartPulse,
-		heroBg: "#fcf300",
-		accent: "#7a7100",
-		description: "Stay healthy and supported",
-	},
-	"home-admin": {
-		icon: Home,
-		heroBg: "#ffc2d1",
-		accent: "#b04070",
-		description: "Handle rent, bills and admin",
-	},
-	"social-belonging": {
-		icon: Users,
-		heroBg: "#cae9ff",
-		accent: "#2a6fa8",
-		description: "Build connections from scratch",
-	},
+	"food-eating":      { icon: Sandwich,   heroBg: "#00f5c8", description: "Eat well on any budget" },
+	"getting-around":   { icon: Compass,    heroBg: "#5dd6ff", description: "Navigate the city with confidence" },
+	"health-wellbeing": { icon: HeartPulse, heroBg: "#fcf300", description: "Stay healthy and supported" },
+	"home-admin":       { icon: Home,       heroBg: "#ffc2d1", description: "Handle rent, bills and admin" },
+	"social-belonging": { icon: Users,      heroBg: "#cae9ff", description: "Build connections from scratch" },
 };
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -98,10 +72,7 @@ export function GuidesIntroView() {
 	}
 
 	return (
-		<div
-			className="min-h-screen"
-			style={{ backgroundColor: "#faf9f7" }}
-		>
+		<div className="min-h-screen bg-minuri-white">
 			{/* ── Header ── */}
 			<div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-4">
 				<Link
@@ -170,7 +141,7 @@ export function GuidesIntroView() {
 								aria-pressed={isSelected}
 								className={cn(
 									"group relative flex min-h-[10rem] flex-col gap-3 rounded-2xl border-2 p-5 text-left outline-none transition-shadow duration-200",
-									"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#faf9f7]",
+									"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white",
 									isSelected
 										? "shadow-md"
 										: "border-minuri-silver/50 bg-white hover:border-minuri-silver hover:shadow-sm",
@@ -178,9 +149,9 @@ export function GuidesIntroView() {
 								style={
 									isSelected
 										? {
-												backgroundColor: visual.heroBg,
-												borderColor: "#05292a30",
-												boxShadow: `0 6px 28px -6px ${visual.heroBg}cc`,
+												backgroundColor: `${visual.heroBg}26`,
+												borderColor: visual.heroBg,
+												boxShadow: `0 4px 20px -6px ${visual.heroBg}55`,
 											}
 										: undefined
 								}
@@ -198,42 +169,36 @@ export function GuidesIntroView() {
 								<AnimatePresence>
 									{isSelected && (
 										<motion.div
-											className="absolute right-3 top-3 flex size-6 items-center justify-center rounded-full"
-											style={{ backgroundColor: "#05292a" }}
+											className="absolute right-3 top-3 flex size-6 items-center justify-center rounded-full border border-[#05292a30]"
+											style={{ backgroundColor: visual.heroBg }}
 											initial={{ scale: 0, opacity: 0 }}
 											animate={{ scale: 1, opacity: 1 }}
 											exit={{ scale: 0, opacity: 0 }}
 											transition={{ type: "spring", stiffness: 420, damping: 22 }}
 										>
-											<Check className="size-3.5 text-white" strokeWidth={2.5} aria-hidden />
+											<Check className="size-3.5 text-[#05292a]" strokeWidth={2.5} aria-hidden />
 										</motion.div>
 									)}
 								</AnimatePresence>
 
 								<Icon
 									className="size-9 shrink-0 transition-transform duration-200 group-hover:scale-110"
-									style={{ color: isSelected ? "#05292a" : visual.accent }}
+									style={{ color: isSelected ? visual.heroBg : visual.heroBg }}
 									aria-hidden
 								/>
 
 								<div className="flex-1">
-									<h3
-										className="font-semibold leading-tight text-minuri-ocean"
-										style={{ color: isSelected ? "#05292a" : undefined }}
-									>
+									<h3 className="font-semibold leading-tight text-minuri-ocean">
 										{topic.name}
 									</h3>
-									<p
-										className="mt-1 text-xs leading-snug text-minuri-slate"
-										style={{ color: isSelected ? "#05292ab0" : undefined }}
-									>
+									<p className="mt-1 text-xs leading-snug text-minuri-slate">
 										{visual.description}
 									</p>
 								</div>
 
 								<span
 									className="mt-auto text-xs font-semibold"
-									style={{ color: isSelected ? "#05292a" : visual.accent }}
+									style={{ color: isSelected ? visual.heroBg : visual.heroBg }}
 								>
 									{count} {count === 1 ? "guide" : "guides"}
 								</span>

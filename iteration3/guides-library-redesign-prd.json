@@ -1,0 +1,84 @@
+[
+  {
+    "category": "cleanup",
+    "description": "Remove persona strip ('Follow a Journey') from GuidesLibraryView — it belongs exclusively in the Journeys tab",
+    "steps": [
+      "Open components/guides/guides-library-view.tsx",
+      "Delete the entire `<section>` block that renders the persona grid (the one with label 'Follow a journey', 'Browse all →' link, and the PERSONAS.map grid)",
+      "Delete the PERSONAS import from the top of the file if it is no longer used elsewhere in the component",
+      "Verify the Library tab renders with no persona photos and no 'Follow a journey' label",
+      "Verify the Journeys tab (/guides/journeys) is completely unaffected"
+    ],
+    "passes": false
+  },
+  {
+    "category": "cleanup",
+    "description": "Fix sidebar topic buttons — replace bookmark progress bar and saved/total count with a plain guide count per topic",
+    "steps": [
+      "Open components/guides/guides-library-view.tsx",
+      "In the `renderLibraryFilters` function, locate the per-topic button block inside GUIDE_TOPICS.map",
+      "Remove the `<div className='mt-2.5 flex items-center gap-3'>` block that contains the progress bar div and the `{saved}/{total}` span",
+      "Replace it with a single `<span>` showing `{total} guides` in `text-xs tabular-nums text-minuri-slate` placed inside the existing `<div className='flex items-center gap-2.5'>` after the topic name span",
+      "The `topicStats` map still computes saved+total; only the saved value is no longer rendered — do NOT remove topicStats computation",
+      "Verify sidebar shows topic icon + name + plain count (e.g. '7 guides') with no progress bar",
+      "Verify mobile filter sheet shows the same change"
+    ],
+    "passes": false
+  },
+  {
+    "category": "topic-picker",
+    "description": "Derive `topicPickerVisible` boolean — true when no topic filter and no search query are active (library mode only)",
+    "steps": [
+      "Open components/guides/guides-library-view.tsx",
+      "After the existing `const isBookmarksMode = mode === 'bookmarks'` line, add: `const topicPickerVisible = !isBookmarksMode && activeTopicFilter === 'all' && !rawQuery`",
+      "This derivation uses only existing variables — no new state or URL params needed",
+      "Verify the value is true on /guides with no params, false on /guides?topic=food-eating, false on /guides?q=myki"
+    ],
+    "passes": false
+  },
+  {
+    "category": "topic-picker",
+    "description": "Build topic picker card grid (State A) — five large topic entry cards shown when topicPickerVisible is true",
+    "steps": [
+      "Open components/guides/guides-library-view.tsx",
+      "Create a `topicPickerGrid` const (JSX) above the return statement",
+      "Render `<section className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>` containing GUIDE_TOPICS.map",
+      "Each card is a `<button type='button'>` with onClick calling `updateParams(params => params.set('topic', topic.slug))`",
+      "Card className: `flex flex-col gap-3 rounded-[1.5rem] border border-minuri-silver/60 bg-minuri-white p-6 text-left transition-colors hover:bg-minuri-fog`",
+      "Card contents: (1) Icon row — `<div className='flex size-10 items-center justify-center rounded-full bg-minuri-mist'>` with the topic's LucideIcon at size-5 text-minuri-teal; (2) Topic name — `<p className='font-semibold text-minuri-ocean'>{topic.name}</p>`; (3) Count — `<p className='text-xs text-minuri-slate'>{topicStats.get(topic.slug)?.total ?? 0} guides</p>`",
+      "Use the existing TOPIC_ICONS map for the icon lookup",
+      "In the main return, inside the library (non-bookmarks) branch, replace the current `<div className='min-w-0 space-y-8 ...'>` children with: `{topicPickerVisible ? topicPickerGrid : (<>{storyContextBanner}{guideSearchField}{guidesListBody}</>)}`",
+      "Verify: /guides with no params shows five topic cards; clicking a card navigates to guide list for that topic"
+    ],
+    "passes": false
+  },
+  {
+    "category": "topic-picker",
+    "description": "Add breadcrumb back chip (State B) — 'All topics' button above the guide list that clears the topic filter",
+    "steps": [
+      "Open components/guides/guides-library-view.tsx",
+      "Create a `topicBreadcrumb` const: a `<button type='button'>` rendered only when `!topicPickerVisible && !isBookmarksMode && activeTopicFilter !== 'all'`",
+      "Button onClick: `updateParams(params => params.delete('topic'))`",
+      "Button className: `inline-flex items-center gap-1.5 text-xs font-medium text-minuri-teal hover:text-minuri-ocean transition-colors`",
+      "Button contents: `<ArrowLeft className='size-3.5' aria-hidden />` + text `All topics`",
+      "ArrowLeft is already imported at the top of the file",
+      "Render `topicBreadcrumb` as the first child inside the State B branch (before storyContextBanner)",
+      "Verify: chip appears when a topic is active, clicking it returns to topic picker, chip is absent when no topic is selected"
+    ],
+    "passes": false
+  },
+  {
+    "category": "topic-picker",
+    "description": "Hide sidebar in State A (topic picker) — sidebar should only show when guide list is visible",
+    "steps": [
+      "Open components/guides/guides-library-view.tsx",
+      "Locate the `librarySidebar` const",
+      "Wrap the `<motion.aside>` in a conditional: only render when `!topicPickerVisible`",
+      "Change: `const librarySidebar = !isBookmarksMode ? (<motion.aside>...</motion.aside>) : null`",
+      "To: `const librarySidebar = !isBookmarksMode && !topicPickerVisible ? (<motion.aside>...</motion.aside>) : null`",
+      "Verify: sidebar is absent on /guides (no params), present on /guides?topic=food-eating",
+      "Verify: mobile filter button (libraryHeaderFiltersButton) is similarly hidden in State A by applying the same `&& !topicPickerVisible` guard to that const"
+    ],
+    "passes": false
+  }
+]

@@ -138,15 +138,21 @@ export function NearMeEntry() {
 		<div className="flex h-screen flex-col overflow-hidden lg:flex-row">
 			{/* ── Brand panel ── */}
 			<div className="hidden h-full lg:flex lg:w-[42%] xl:w-[44%] flex-col justify-between bg-minuri-ocean px-10 py-8 xl:px-14 xl:py-12">
-				<Link
-					href="/"
-					className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-white/60 transition hover:border-white/30 hover:text-white/80"
-				>
-					<ArrowLeft className="size-3.5" aria-hidden />
-					Back to home
-				</Link>
+				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+					<Link
+						href="/"
+						className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-white/60 transition hover:border-white/30 hover:text-white/80"
+					>
+						<ArrowLeft className="size-3.5" aria-hidden />
+						Back to home
+					</Link>
+				</motion.div>
 
-				<div>
+				<motion.div
+					initial={{ opacity: 0, y: 24 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT }}
+				>
 					<p className="mb-4 text-xs font-semibold uppercase tracking-widest text-minuri-teal/70 2xl:text-sm">
 						Near Me
 					</p>
@@ -189,11 +195,16 @@ export function NearMeEntry() {
 						transport, health, admin, and community, all mapped to
 						your suburb.
 					</p>
-				</div>
+				</motion.div>
 
-				<p className="text-[0.65rem] tracking-wide text-white/20">
+				<motion.p
+					className="text-[0.65rem] tracking-wide text-white/20"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.4, delay: 0.4 }}
+				>
 					Suburb-aware · No sign-up required · Melbourne
-				</p>
+				</motion.p>
 			</div>
 
 			{/* ── Form panel ── */}
@@ -208,7 +219,12 @@ export function NearMeEntry() {
 
 				<div className="w-full max-w-[460px] 2xl:max-w-[560px]">
 					{/* Topic selection */}
-					<div className="mb-3">
+					<motion.div
+						className="mb-3"
+						initial={{ opacity: 0, y: 16 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.5, delay: 0.05, ease: EASE_OUT }}
+					>
 						<h1 className="text-xl font-black tracking-tight text-minuri-ocean md:text-2xl 2xl:text-3xl">
 							What&apos;s on your mind?
 						</h1>
@@ -216,9 +232,14 @@ export function NearMeEntry() {
 							Pick what fits — we&apos;ll find what&apos;s near
 							you.
 						</p>
-					</div>
+					</motion.div>
 
-					<div className="overflow-hidden rounded-2xl border border-minuri-silver/40 bg-minuri-white shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]">
+					<motion.div
+						className="overflow-hidden rounded-2xl border border-minuri-silver/40 bg-minuri-white shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]"
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.55, delay: 0.15, ease: EASE_OUT }}
+					>
 						{ALL_TOPICS.map((t, i) => {
 							const isSelected = selectedTopic === t.slug;
 							const color = ENTRY_COLORS[t.slug];
@@ -310,19 +331,29 @@ export function NearMeEntry() {
 								</motion.button>
 							);
 						})}
-					</div>
+					</motion.div>
 
 					{/* Divider */}
-					<div className="my-3 flex items-center gap-3 px-1">
+					<motion.div
+						className="my-3 flex items-center gap-3 px-1"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 0.4, delay: 0.32 }}
+					>
 						<div className="h-px flex-1 bg-minuri-silver/50" />
 						<span className="text-xs font-medium text-minuri-slate/40 2xl:text-sm">
 							then
 						</span>
 						<div className="h-px flex-1 bg-minuri-silver/50" />
-					</div>
+					</motion.div>
 
 					{/* Suburb form */}
-					<div className="rounded-2xl border border-minuri-silver/40 bg-minuri-white px-6 py-4 shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]">
+					<motion.div
+						className="rounded-2xl border border-minuri-silver/40 bg-minuri-white px-6 py-4 shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]"
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.55, delay: 0.36, ease: EASE_OUT }}
+					>
 						<p className="mb-3 text-sm font-semibold text-minuri-mid 2xl:text-base">
 							Which suburb are you in?
 						</p>
@@ -512,11 +543,16 @@ export function NearMeEntry() {
 								{submitLabel}
 							</button>
 						</form>
-					</div>
+					</motion.div>
 
-					<p className="mt-3 text-center text-[0.7rem] text-minuri-slate/40">
-						Your location stays on your device · No account needed
-					</p>
+					<motion.p
+						className="mt-3 text-center text-[0.7rem] text-minuri-slate/40"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 0.4, delay: 0.5 }}
+					>
+							Your location stays on your device · No account needed
+					</motion.p>
 				</div>
 			</div>
 		</div>

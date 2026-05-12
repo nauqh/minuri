@@ -1,0 +1,124 @@
+[
+  {
+    "category": "geodata",
+    "description": "Download and prepare Melbourne tram and train route GeoJSON files for Getting Around overlay",
+    "steps": [
+      "Go to data.vic.gov.au and search 'PTV Metro Tram Routes' — download the Shapefile (.shp) package; repeat for 'PTV Metro Train Routes'",
+      "Convert each Shapefile to GeoJSON using ogr2ogr (part of GDAL): `ogr2ogr -f GeoJSON melbourne-trams-raw.geojson <input>.shp -t_srs EPSG:4326` — the -t_srs flag reprojects to WGS84 (lat/lng) which MapLibre requires",
+      "Simplify geometry to reduce file size using mapshaper (npm install -g mapshaper): `mapshaper melbourne-trams-raw.geojson -simplify 15% -o melbourne-trams.geojson`; target is under 150KB per file",
+      "Verify the GeoJSON is valid: open in geojson.io and confirm tram/train lines render correctly over Melbourne",
+      "Commit both files to public/geodata/melbourne-trams.geojson and public/geodata/melbourne-trains.geojson",
+      "Verify: fetch('/geodata/melbourne-trams.geojson') in browser DevTools returns a FeatureCollection with LineString features"
+    ],
+    "passes": null
+  },
+  {
+    "category": "geodata",
+    "description": "Download and prepare Melbourne open space GeoJSON for Social & Belonging overlay",
+    "steps": [
+      "Go to data.melbourne.vic.gov.au and search 'Open Space' — download the GeoJSON directly (it is available without conversion)",
+      "Filter to keep only named parks with area > 2 hectares using mapshaper: `mapshaper melbourne-open-space-raw.geojson -filter 'AREAHA > 2 && PARK_NAME != null' -simplify 20% -o melbourne-parks.geojson`",
+      "Verify the filtered file is under 400KB and renders correctly in geojson.io — should show major parks (Royal Botanic Gardens, Fitzroy Gardens, Princes Park, etc.) but not every tiny median strip",
+      "Commit to public/geodata/melbourne-parks.geojson",
+      "Verify the GeoJSON FeatureCollection has Polygon/MultiPolygon geometry with a PARK_NAME property on each feature"
+    ],
+    "passes": null
+  },
+  {
+    "category": "overlay-module",
+    "description": "Create lib/near-me-overlays.ts with module skeleton, GeoJSON cache, and the two public functions removeTopicOverlays and addTopicOverlay",
+    "steps": [
+      "Create lib/near-me-overlays.ts — import maplibregl from 'maplibre-gl' and import type { NearMeTopic } from '@/lib/near-me'",
+      "Declare a module-level cache: `const geoCache = new Map<string, GeoJSON.FeatureCollection>()` — this prevents refetching GeoJSON on every topic switch",
+      "Implement fetchGeoJSON(path: string): Promise<GeoJSON.FeatureCollection> — checks cache first, fetches and caches on miss; throws on non-ok response",
+      "Implement removeTopicOverlays(map: maplibregl.Map): void — calls map.getStyle().layers to find all layers whose id starts with 'nm-overlay-', removes them with map.removeLayer(id), then removes their sources with map.removeSource(id) for any source whose id starts with 'nm-overlay-'",
+      "Implement addTopicOverlay(map: maplibregl.Map, topic: NearMeTopic, signal: AbortSignal): Promise<void> — switches on topic: 'getting-around' → addGettingAroundOverlay, 'health-wellbeing' → addHealthOverlay, 'social-belonging' → addSocialOverlay, 'food-eating' → addFoodOverlay, default → return (no overlay for home-admin)",
+      "The signal parameter is an AbortSignal — check signal.aborted after each await and return early if true, preventing stale overlay additions when the topic changes before a fetch completes",
+      "All internal addXxxOverlay functions are async and accept (map, signal) — they must check signal.aborted after every await"
+    ],
+    "passes": null
+  },
+  {
+    "category": "overlay-module",
+    "description": "Implement Getting Around overlay — Melbourne tram lines and train lines",
+    "steps": [
+      "In addGettingAroundOverlay(map, signal): fetch both GeoJSON files in parallel: `const [trams, trains] = await Promise.all([fetchGeoJSON('/geodata/melbourne-trams.geojson'), fetchGeoJSON('/geodata/melbourne-trains.geojson')])`",
+      "After the await, check `if (signal.aborted) return` before touching the map",
+      "Add tram source: `map.addSource('nm-overlay-trams', { type: 'geojson', data: trams })`",
+      "Add tram line layer: `map.addLayer({ id: 'nm-overlay-tram-lines', type: 'line', source: 'nm-overlay-trams', paint: { 'line-color': '#c0392b', 'line-width': 2.5, 'line-opacity': 0.65 } }, 'road-label')` — the third argument 'road-label' inserts the layer below MapTiler's road labels so labels remain readable",
+      "Add train source: `map.addSource('nm-overlay-trains', { type: 'geojson', data: trains })`",
+      "Add train line layer: `map.addLayer({ id: 'nm-overlay-train-lines', type: 'line', source: 'nm-overlay-trains', paint: { 'line-color': '#1a5276', 'line-width': 3, 'line-opacity': 0.65 } }, 'road-label')`",
+      "If 'road-label' does not exist in the current style (check with map.getLayer('road-label')), add the layers without the beforeId argument rather than throwing",
+      "Verify: switching to Getting Around topic shows red tram lines and dark blue train lines over Melbourne; switching away removes them cleanly"
+    ],
+    "passes": null
+  },
+  {
+    "category": "overlay-module",
+    "description": "Implement Health & Wellbeing overlay — major Melbourne public hospital markers",
+    "steps": [
+      "Define HOSPITALS_GEOJSON inline in near-me-overlays.ts as a GeoJSON.FeatureCollection const — do not fetch from file, this is small enough to inline",
+      "Include these 15 major public hospitals as Point features with a 'name' property (verify coordinates on Google Maps before committing — approximate coords given here as reference): Royal Melbourne Hospital [-37.7994, 144.9558], The Alfred [-37.8459, 144.9798], St Vincent's Hospital [-37.8069, 144.9783], Royal Children's Hospital [-37.7976, 144.9498], Monash Medical Centre [-37.9262, 145.1257], Austin Hospital [-37.7546, 145.0609], Box Hill Hospital [-37.8216, 145.1209], Footscray Hospital [-37.8007, 144.8957], Dandenong Hospital [-37.9874, 145.2205], Frankston Hospital [-38.1464, 145.1274], Sunshine Hospital [-37.7819, 144.8289], The Northern Hospital [-37.6613, 145.0137], Casey Hospital [-38.0636, 145.2993], Maroondah Hospital [-37.8119, 145.2242], Werribee Mercy Hospital [-37.9065, 144.6597]",
+      "In addHealthOverlay(map, signal): add source `map.addSource('nm-overlay-hospitals', { type: 'geojson', data: HOSPITALS_GEOJSON })`",
+      "Add circle layer for hospital markers: `map.addLayer({ id: 'nm-overlay-hospital-markers', type: 'circle', source: 'nm-overlay-hospitals', paint: { 'circle-radius': 8, 'circle-color': '#ef4444', 'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff', 'circle-opacity': 0.9 } })`",
+      "Add symbol layer for hospital name labels: `map.addLayer({ id: 'nm-overlay-hospital-labels', type: 'symbol', source: 'nm-overlay-hospitals', layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-offset': [0, 1.5], 'text-anchor': 'top' }, paint: { 'text-color': '#991b1b', 'text-halo-color': '#ffffff', 'text-halo-width': 1 } })`",
+      "Verify: Health & Wellbeing topic shows red hospital markers with white border and name labels across the Melbourne metro area"
+    ],
+    "passes": null
+  },
+  {
+    "category": "overlay-module",
+    "description": "Implement Social & Belonging overlay — named Melbourne park fills and labels",
+    "steps": [
+      "In addSocialOverlay(map, signal): fetch parks GeoJSON: `const parks = await fetchGeoJSON('/geodata/melbourne-parks.geojson')`; check signal.aborted before proceeding",
+      "Add parks source: `map.addSource('nm-overlay-parks', { type: 'geojson', data: parks })`",
+      "Add park fill layer inserted below road labels: `map.addLayer({ id: 'nm-overlay-park-fills', type: 'fill', source: 'nm-overlay-parks', paint: { 'fill-color': '#2d6a4f', 'fill-opacity': 0.22 } }, 'road-label')`",
+      "Add park outline layer: `map.addLayer({ id: 'nm-overlay-park-outlines', type: 'line', source: 'nm-overlay-parks', paint: { 'line-color': '#1b4332', 'line-width': 1, 'line-opacity': 0.35 } }, 'road-label')`",
+      "Add park name label layer — only show labels at zoom >= 13 to avoid clutter at city level: `map.addLayer({ id: 'nm-overlay-park-labels', type: 'symbol', source: 'nm-overlay-parks', minzoom: 13, layout: { 'text-field': ['get', 'PARK_NAME'], 'text-size': 11, 'text-anchor': 'center' }, paint: { 'text-color': '#1b4332', 'text-halo-color': '#ffffff', 'text-halo-width': 1.5 } })`",
+      "NOTE: adjust the 'PARK_NAME' property key to match the actual property name in the downloaded GeoJSON — inspect a feature in geojson.io first",
+      "Verify: Social & Belonging topic shows deeper green park fills with name labels at zoom 13+; labels do not appear when zoomed out to city level"
+    ],
+    "passes": null
+  },
+  {
+    "category": "overlay-module",
+    "description": "Implement Food & Eating overlay — major Melbourne market markers",
+    "steps": [
+      "Define MARKETS_GEOJSON inline in near-me-overlays.ts as a GeoJSON.FeatureCollection const with Point features, each with 'name' and 'schedule' properties",
+      "Include these 8 markets (verify coordinates on Google Maps before committing — approximate coords given here as reference): Queen Victoria Market [-37.8065, 144.9568], South Melbourne Market [-37.8330, 144.9567], Prahran Market [-37.8497, 144.9943], Preston Market [-37.7413, 145.0104], Dandenong Market [-37.9889, 145.2175], Footscray Market [-37.8000, 144.8990], Camberwell Sunday Market [-37.8443, 145.0651], Coburg Farmers Market [-37.7437, 144.9660]",
+      "In addFoodOverlay(map, signal): add source `map.addSource('nm-overlay-markets', { type: 'geojson', data: MARKETS_GEOJSON })`",
+      "Add market circle markers — use the food topic colour to distinguish from search result pins: `map.addLayer({ id: 'nm-overlay-market-markers', type: 'circle', source: 'nm-overlay-markets', paint: { 'circle-radius': 9, 'circle-color': '#e07b39', 'circle-stroke-width': 2.5, 'circle-stroke-color': '#ffffff', 'circle-opacity': 0.85 } })`",
+      "Add market name labels: `map.addLayer({ id: 'nm-overlay-market-labels', type: 'symbol', source: 'nm-overlay-markets', layout: { 'text-field': ['get', 'name'], 'text-size': 10, 'text-offset': [0, 1.6], 'text-anchor': 'top', 'text-max-width': 10 }, paint: { 'text-color': '#7c3a11', 'text-halo-color': '#ffffff', 'text-halo-width': 1.5 } })`",
+      "Verify: Food & Eating topic shows orange market circles distinct from the search result pins; Queen Victoria Market, South Melbourne Market, and Prahran Market are all visible at default zoom 13"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-integration",
+    "description": "Wire overlay useEffect into near-me-map.tsx with AbortController cancellation and style-loaded guard",
+    "steps": [
+      "In near-me-map.tsx, add import: `import { addTopicOverlay, removeTopicOverlays } from '@/lib/near-me-overlays'`",
+      "Add a useEffect keyed on [topic] — this must run after the map init effect, which is guaranteed because mapRef.current is set synchronously in the init effect's callback before any state updates",
+      "Inside the effect, get `const map = mapRef.current; if (!map) return`",
+      "Create an AbortController: `const controller = new AbortController()`",
+      "Define applyOverlay: `const applyOverlay = () => { removeTopicOverlays(map); addTopicOverlay(map, topic, controller.signal).catch(console.error); }`",
+      "Guard for style load: `if (map.isStyleLoaded()) { applyOverlay() } else { map.once('load', applyOverlay) }`",
+      "Return cleanup: `return () => { controller.abort(); map.off('load', applyOverlay) }` — aborting prevents stale GeoJSON additions if the topic changes before the fetch completes; off('load') prevents double-fire if the effect re-runs before the style has loaded",
+      "Verify: rapidly switching topics in the browser does not leave stale overlay layers from a previous topic"
+    ],
+    "passes": null
+  },
+  {
+    "category": "cleanup",
+    "description": "End-to-end verification of all overlays and edge cases",
+    "steps": [
+      "Smoke test each topic in the browser: Getting Around shows red tram + dark blue train lines; Health shows red hospital markers with labels; Social shows deeper green park fills; Food shows orange market circles; Home & Admin shows clean map with no overlay",
+      "Verify layer ordering: overlay layers render above the basemap fill but below road and POI labels — tram lines should not cover street names",
+      "Verify AbortController cancellation: rapidly click through all 5 topic tabs — no console errors, no overlays from previous topics bleeding through",
+      "Verify GeoJSON cache: open Network tab in DevTools, switch to Getting Around, switch away, switch back — the second visit to Getting Around should show zero new network requests for the GeoJSON files",
+      "Verify on mobile viewport: overlays render correctly at mobile zoom levels; park labels do not appear below zoom 13",
+      "Run npm run build and confirm zero TypeScript errors and no missing-module warnings"
+    ],
+    "passes": null
+  }
+]
