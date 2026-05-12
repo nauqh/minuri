@@ -750,38 +750,52 @@ export function GuideDetailView({
 										<span className="text-minuri-silver">{sourcesOpen ? "↑" : "↓"}</span>
 									</button>
 
-									{sourcesOpen && (
-										<div className="mt-4 divide-y divide-minuri-silver/30 rounded-sm border border-minuri-silver/40 bg-minuri-fog/30">
-											{guide.sourceLinks.map((link, i) => {
-												let domain = "";
-												try { domain = new URL(link.href).hostname.replace("www.", ""); } catch {}
-												return (
-													<a
-														key={link.href}
-														href={link.href}
-														target="_blank"
-														rel="noreferrer"
-														className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-minuri-fog/60"
-													>
-														<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-minuri-teal/10 text-[10px] font-bold text-minuri-teal">
-															{i + 1}
-														</span>
-														<div className="min-w-0 flex-1">
-															<p className="text-sm font-medium text-minuri-ink group-hover:text-minuri-teal">
-																{link.label}
-															</p>
-															{domain && (
-																<p className="mt-0.5 text-xs text-minuri-slate">
-																	{domain}
-																</p>
-															)}
-														</div>
-														<ExternalLink className="mt-0.5 size-3.5 shrink-0 text-minuri-silver group-hover:text-minuri-teal" />
-													</a>
-												);
-											})}
-										</div>
-									)}
+									<AnimatePresence initial={false}>
+										{sourcesOpen && (
+											<motion.div
+												key="sources-list"
+												initial={{ height: 0, opacity: 0 }}
+												animate={{ height: "auto", opacity: 1 }}
+												exit={{ height: 0, opacity: 0 }}
+												transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+												style={{ overflow: "hidden" }}
+											>
+												<div className="mt-4 divide-y divide-minuri-silver/30 rounded-sm border border-minuri-silver/40 bg-minuri-fog/30">
+													{guide.sourceLinks.map((link, i) => {
+														let domain = "";
+														try { domain = new URL(link.href).hostname.replace("www.", ""); } catch {}
+														return (
+															<motion.a
+																key={link.href}
+																href={link.href}
+																target="_blank"
+																rel="noreferrer"
+																initial={{ opacity: 0, x: -8 }}
+																animate={{ opacity: 1, x: 0 }}
+																transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, delay: prefersReducedMotion ? 0 : i * 0.04 }}
+																className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-minuri-fog/60"
+															>
+																<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-minuri-teal/10 text-[10px] font-bold text-minuri-teal">
+																	{i + 1}
+																</span>
+																<div className="min-w-0 flex-1">
+																	<p className="text-sm font-medium text-minuri-ink group-hover:text-minuri-teal">
+																		{link.label}
+																	</p>
+																	{domain && (
+																		<p className="mt-0.5 text-xs text-minuri-slate">
+																			{domain}
+																		</p>
+																	)}
+																</div>
+																<ExternalLink className="mt-0.5 size-3.5 shrink-0 text-minuri-silver group-hover:text-minuri-teal" />
+															</motion.a>
+														);
+													})}
+												</div>
+											</motion.div>
+										)}
+									</AnimatePresence>
 								</motion.section>
 							) : null}
 
