@@ -3,6 +3,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, CheckCircle2, Loader2, MapPin, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -11,26 +12,45 @@ import {
 	rankAndFilterSuburbs,
 	type SuburbOption,
 } from "@/lib/suburbs";
+import { getAllTopicsMeta, type NearMeTopic } from "@/lib/near-me";
+
+const ALL_TOPICS = getAllTopicsMeta();
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+// Match landing hero section colors exactly
+const ENTRY_COLORS: Record<NearMeTopic, string> = {
+	"food-eating": "#00f5c8",
+	"getting-around": "#5dd6ff",
+	"health-wellbeing": "#fcf300",
+	"home-admin": "#ffc2d1",
+	"social-belonging": "#cae9ff",
+};
+
+const TOPIC_WORDS: Record<NearMeTopic, string> = {
+	"food-eating": "eat",
+	"getting-around": "travel",
+	"health-wellbeing": "heal",
+	"home-admin": "settle",
+	"social-belonging": "belong",
+};
 
 export function NearMeEntry() {
 	const router = useRouter();
+	const [selectedTopic, setSelectedTopic] =
+		useState<NearMeTopic>("food-eating");
 	const [query, setQuery] = useState("");
 	const [options, setOptions] = useState<SuburbOption[]>([]);
 	const [selected, setSelected] = useState<SuburbOption | null>(null);
 	const [activeIndex, setActiveIndex] = useState(-1);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const skipNextSearchRef = useRef(false);
 	const listboxId = useId();
 	const [debouncedQuery, setDebouncedQuery] = useState("");
 
 	useEffect(() => {
-		const timer = window.setTimeout(() => {
-			setDebouncedQuery(query);
-		}, 250);
-		return () => {
-			window.clearTimeout(timer);
-		};
+		const t = window.setTimeout(() => setDebouncedQuery(query), 250);
+		return () => window.clearTimeout(t);
 	}, [query]);
 
 	useEffect(() => {
@@ -44,14 +64,7 @@ export function NearMeEntry() {
 			return;
 		}
 
-		if (!normalizedQuery) {
-			setOptions([]);
-			setLoading(false);
-			setError("");
-			return;
-		}
-
-		if (normalizedQuery.length < 3) {
+		if (!normalizedQuery || normalizedQuery.length < 3) {
 			setOptions([]);
 			setLoading(false);
 			setError("");
@@ -62,29 +75,18 @@ export function NearMeEntry() {
 			setLoading(true);
 			setError("");
 			try {
-				const suburbsParams = new URLSearchParams({
-					q: normalizedQuery,
-				});
-				const suburbsResponse = await fetch(
-					`/api/suburbs?${suburbsParams.toString()}`,
+				const res = await fetch(
+					`/api/suburbs?q=${encodeURIComponent(normalizedQuery)}`,
 				);
-				if (!suburbsResponse.ok) {
-					throw new Error("Failed to fetch suburb data");
-				}
-				const suburbsPayload = (await suburbsResponse.json()) as {
+				if (!res.ok) throw new Error("Failed");
+				const payload = (await res.json()) as {
 					suburbs?: SuburbOption[];
 				};
-				if (!cancelled) {
-					setOptions(suburbsPayload.suburbs ?? []);
-				}
+				if (!cancelled) setOptions(payload.suburbs ?? []);
 			} catch {
-				if (!cancelled) {
-					setError("Could not load suburbs right now.");
-				}
+				if (!cancelled) setError("Could not load suburbs right now.");
 			} finally {
-				if (!cancelled) {
-					setLoading(false);
-				}
+				if (!cancelled) setLoading(false);
 			}
 		}
 
@@ -121,78 +123,213 @@ export function NearMeEntry() {
 	function submitWithSuburb(value: string) {
 		const normalized = normalizeSuburbName(value);
 		if (!normalized) return;
-		const params = new URLSearchParams({
-			suburb: normalized,
-			category: "food-eating",
-		});
-		router.push(`/near-me?${params.toString()}`);
+		router.push(
+			`/near-me?suburb=${encodeURIComponent(normalized)}&category=${selectedTopic}`,
+		);
 	}
 
+	const topicMeta = ALL_TOPICS.find((t) => t.slug === selectedTopic)!;
+	const suburbLabel = selected?.locality ?? "";
+	const submitLabel = suburbLabel
+		? `Find ${topicMeta.label} near ${suburbLabel}`
+		: `Find ${topicMeta.label} near me`;
+
 	return (
-		<div className="flex min-h-screen flex-col lg:flex-row">
-			{/* ── Brand panel (desktop only) ── */}
-			<div className="hidden lg:flex lg:w-[42%] xl:w-[45%] flex-col justify-between bg-minuri-ocean px-6 py-14 xl:px-6">
+		<div className="flex h-screen flex-col overflow-hidden lg:flex-row">
+			{/* ── Brand panel ── */}
+			<div className="hidden h-full lg:flex lg:w-[42%] xl:w-[44%] flex-col justify-between bg-minuri-ocean px-10 py-8 xl:px-14 xl:py-12">
 				<Link
 					href="/"
-					className="inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
+					className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-white/60 transition hover:border-white/30 hover:text-white/80"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
 					Back to home
 				</Link>
+
 				<div>
-					<h2 className="text-[2.6rem] xl:text-[3rem] font-black leading-[1.08] tracking-tight text-minuri-white">
-						Find what you need,{" "}
-						<span className="text-minuri-mint">where you are.</span>
-					</h2>
-					<p className="mt-5 text-[0.93rem] leading-relaxed text-minuri-white/55">
-						Essential services near your suburb — food, transport,
-						health, and more.
+					<p className="mb-4 text-xs font-semibold uppercase tracking-widest text-minuri-teal/70 2xl:text-sm">
+						Near Me
 					</p>
-					<div className="mt-8 flex flex-wrap gap-2">
-						{[
-							"🍜 Food & Eating",
-							"🚌 Getting Around",
-							"🏥 Health",
-							"🏠 Home & Admin",
-							"👥 Social",
-						].map((t) => (
-							<span
-								key={t}
-								className="rounded-full border border-minuri-white/35 bg-minuri-white/8 px-3 py-1.5 text-[0.72rem] font-semibold text-minuri-white/90"
-							>
-								{t}
-							</span>
-						))}
+					<h2 className="text-[2.75rem] xl:text-[3.25rem] 2xl:text-[4rem] font-black leading-[1.06] tracking-tight text-white">
+						What you need, <br />
+						<span className="text-white/40">
+							right where you are.
+						</span>
+					</h2>
+
+					{/* Animated topic word */}
+					<div className="mt-8 flex items-baseline gap-3">
+						<span className="text-sm text-white/35 2xl:text-base">
+							Right now, you need to
+						</span>
+						<div className="relative h-9 overflow-hidden 2xl:h-11">
+							<AnimatePresence mode="wait">
+								<motion.span
+									key={selectedTopic}
+									initial={{ y: 20, opacity: 0 }}
+									animate={{ y: 0, opacity: 1 }}
+									exit={{ y: -20, opacity: 0 }}
+									transition={{
+										duration: 0.28,
+										ease: EASE_OUT,
+									}}
+									className="block text-[1.65rem] font-black leading-none 2xl:text-[2.1rem]"
+									style={{
+										color: ENTRY_COLORS[selectedTopic],
+									}}
+								>
+									{TOPIC_WORDS[selectedTopic]}
+								</motion.span>
+							</AnimatePresence>
+						</div>
 					</div>
+
+					<p className="mt-10 max-w-xs text-sm leading-relaxed text-white/40 2xl:text-base 2xl:max-w-sm">
+						Essential services for newcomers in Melbourne — food,
+						transport, health, admin, and community, all mapped to
+						your suburb.
+					</p>
 				</div>
-				<p className="text-[0.65rem] text-minuri-white/25">
-					Suburb-aware · No sign-up · Melbourne
+
+				<p className="text-[0.65rem] tracking-wide text-white/20">
+					Suburb-aware · No sign-up required · Melbourne
 				</p>
 			</div>
 
 			{/* ── Form panel ── */}
-			<div className="flex flex-1 flex-col items-center justify-center bg-minuri-fog px-5 py-12 md:px-8">
+			<div className="flex h-full flex-1 flex-col items-center justify-center overflow-y-auto bg-minuri-fog px-5 py-6 md:px-8">
 				<Link
 					href="/"
-					className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105 lg:hidden"
+					className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition hover:scale-105 lg:hidden"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
 					Back to home
 				</Link>
 
-				<div className="w-full max-w-md">
-					<div className="rounded-2xl border border-minuri-silver/40 bg-minuri-white p-7 shadow-[0_12px_36px_-18px_rgba(4,30,43,0.16)] md:p-8">
-						<h1 className="text-2xl font-bold tracking-tight text-minuri-mid md:text-[1.7rem]">
-							Where do you live?
+				<div className="w-full max-w-[460px] 2xl:max-w-[560px]">
+					{/* Topic selection */}
+					<div className="mb-3">
+						<h1 className="text-xl font-black tracking-tight text-minuri-ocean md:text-2xl 2xl:text-3xl">
+							What&apos;s on your mind?
 						</h1>
-						<p className="mt-2.5 text-sm leading-relaxed text-minuri-slate">
-							We&apos;ll show nearby essentials based on your
-							suburb.
+						<p className="mt-1.5 text-sm text-minuri-slate 2xl:text-base">
+							Pick what fits — we&apos;ll find what&apos;s near
+							you.
+						</p>
+					</div>
+
+					<div className="overflow-hidden rounded-2xl border border-minuri-silver/40 bg-minuri-white shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]">
+						{ALL_TOPICS.map((t, i) => {
+							const isSelected = selectedTopic === t.slug;
+							const color = ENTRY_COLORS[t.slug];
+							return (
+								<motion.button
+									key={t.slug}
+									type="button"
+									onClick={() => setSelectedTopic(t.slug)}
+									className={cn(
+										"group relative flex w-full items-center gap-4 px-5 py-4 text-left 2xl:px-6 2xl:py-5",
+										i < ALL_TOPICS.length - 1 &&
+											"border-b border-minuri-silver/30",
+									)}
+									initial={false}
+									animate={{
+										backgroundColor: isSelected
+											? `${color}30`
+											: "rgba(0,0,0,0)",
+									}}
+									whileHover={
+										!isSelected
+											? {
+													boxShadow:
+														"inset 0 0 0 1px rgba(4,30,43,0.08)",
+												}
+											: {}
+									}
+									transition={{
+										duration: 0.22,
+										ease: [0.22, 1, 0.36, 1],
+									}}
+								>
+									{/* Left accent bar */}
+									<motion.div
+										className="absolute left-0 top-0 h-full w-[3px]"
+										style={{ backgroundColor: color }}
+										initial={false}
+										animate={{
+											scaleY: isSelected ? 1 : 0,
+											opacity: isSelected ? 1 : 0,
+										}}
+										transition={{
+											duration: 0.2,
+											ease: EASE_OUT,
+										}}
+									/>
+
+									{/* Text */}
+									<div className="min-w-0 flex-1 pl-1">
+										<p
+											className={cn(
+												"font-hero-serif text-[1rem] leading-snug transition-colors duration-150 2xl:text-[1.15rem]",
+												isSelected
+													? "text-minuri-ocean"
+													: "text-minuri-mid/70",
+											)}
+										>
+											&ldquo;{t.tagline}&rdquo;
+										</p>
+										<p
+											className={cn(
+												"mt-0.5 text-xs font-medium transition-colors duration-150 2xl:text-sm",
+												isSelected
+													? "text-minuri-mid"
+													: "text-minuri-slate/60",
+											)}
+										>
+											{t.label}
+										</p>
+									</div>
+
+									{/* Radio dot */}
+									<div
+										className={cn(
+											"size-4 shrink-0 rounded-full border-2 transition-all duration-200",
+											isSelected
+												? "border-transparent"
+												: "border-minuri-silver/60 group-hover:border-minuri-silver",
+										)}
+										style={
+											isSelected
+												? {
+														backgroundColor: color,
+														borderColor: color,
+													}
+												: {}
+										}
+									/>
+								</motion.button>
+							);
+						})}
+					</div>
+
+					{/* Divider */}
+					<div className="my-3 flex items-center gap-3 px-1">
+						<div className="h-px flex-1 bg-minuri-silver/50" />
+						<span className="text-xs font-medium text-minuri-slate/40 2xl:text-sm">
+							then
+						</span>
+						<div className="h-px flex-1 bg-minuri-silver/50" />
+					</div>
+
+					{/* Suburb form */}
+					<div className="rounded-2xl border border-minuri-silver/40 bg-minuri-white px-6 py-4 shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]">
+						<p className="mb-3 text-sm font-semibold text-minuri-mid 2xl:text-base">
+							Which suburb are you in?
 						</p>
 
 						<form
-							onSubmit={(event) => {
-								event.preventDefault();
+							onSubmit={(e) => {
+								e.preventDefault();
 								const nextSuburb =
 									selected?.locality ??
 									activeOption?.locality ??
@@ -200,48 +337,42 @@ export function NearMeEntry() {
 									query;
 								submitWithSuburb(nextSuburb);
 							}}
-							className="mt-6"
 						>
 							<div className="relative">
 								<Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-minuri-silver" />
 								<input
 									value={query}
 									disabled={hasConfirmedSelection}
-									onChange={(event) => {
-										setQuery(event.target.value);
+									onChange={(e) => {
+										setQuery(e.target.value);
 										setSelected(null);
 										setActiveIndex(-1);
 									}}
-									onKeyDown={(event) => {
-										if (event.key === "ArrowDown") {
-											event.preventDefault();
-											setActiveIndex((prev) => {
-												if (suggestions.length === 0)
-													return -1;
-												return Math.min(
-													prev + 1,
-													suggestions.length - 1,
-												);
-											});
-											return;
-										}
-										if (event.key === "ArrowUp") {
-											event.preventDefault();
-											setActiveIndex((prev) =>
-												Math.max(prev - 1, 0),
+									onKeyDown={(e) => {
+										if (e.key === "ArrowDown") {
+											e.preventDefault();
+											setActiveIndex((p) =>
+												suggestions.length === 0
+													? -1
+													: Math.min(
+															p + 1,
+															suggestions.length -
+																1,
+														),
 											);
-											return;
-										}
-										if (event.key === "Escape") {
-											event.preventDefault();
+										} else if (e.key === "ArrowUp") {
+											e.preventDefault();
+											setActiveIndex((p) =>
+												Math.max(p - 1, 0),
+											);
+										} else if (e.key === "Escape") {
+											e.preventDefault();
 											setActiveIndex(-1);
-											return;
-										}
-										if (
-											event.key === "Enter" &&
+										} else if (
+											e.key === "Enter" &&
 											activeOption
 										) {
-											event.preventDefault();
+											e.preventDefault();
 											setSelected(activeOption);
 											skipNextSearchRef.current = true;
 											setQuery(activeOption.locality);
@@ -266,7 +397,7 @@ export function NearMeEntry() {
 									className={cn(
 										"h-12 w-full rounded-xl border pl-10 pr-4 text-sm outline-none transition",
 										hasConfirmedSelection
-											? "cursor-not-allowed border-minuri-teal/70 bg-minuri-teal/5 focus:border-minuri-teal"
+											? "cursor-not-allowed border-minuri-teal/60 bg-minuri-teal/5"
 											: "border-minuri-silver bg-minuri-fog/50 focus:border-minuri-teal focus:ring-2 focus:ring-minuri-teal/15",
 									)}
 								/>
@@ -279,18 +410,18 @@ export function NearMeEntry() {
 											className="size-3.5"
 											aria-hidden
 										/>
-										Suburb set to {selected?.locality}
+										{selected?.locality}
 									</span>
 									<button
 										type="button"
 										onClick={resetSelection}
-										className="rounded-full border border-minuri-silver/80 bg-minuri-white px-2.5 py-1 text-[0.68rem] font-semibold text-minuri-slate transition-colors hover:border-minuri-teal/45 hover:text-minuri-teal"
+										className="rounded-full border border-minuri-silver/70 px-2.5 py-1 text-[0.68rem] font-semibold text-minuri-slate transition hover:border-minuri-teal/40 hover:text-minuri-teal"
 									>
-										Reset
+										Change
 									</button>
 								</div>
 							) : (
-								<p className="mt-2 text-[0.75rem] text-minuri-slate/60">
+								<p className="mt-2 text-[0.72rem] text-minuri-slate/50">
 									Type at least 3 characters to see matches.
 								</p>
 							)}
@@ -299,12 +430,12 @@ export function NearMeEntry() {
 								<div
 									id={listboxId}
 									role="listbox"
-									className="mt-3 max-h-64 overflow-y-auto rounded-xl border border-minuri-silver/40 bg-minuri-white shadow-sm"
+									className="mt-3 max-h-56 overflow-y-auto rounded-xl border border-minuri-silver/40 bg-minuri-white shadow-sm"
 								>
 									{loading && (
 										<div className="flex items-center gap-2 px-4 py-3 text-sm text-minuri-slate">
 											<Loader2 className="size-4 animate-spin text-minuri-teal" />
-											<span>Loading suburbs...</span>
+											Loading suburbs…
 										</div>
 									)}
 									{!loading && error && (
@@ -316,54 +447,52 @@ export function NearMeEntry() {
 										!error &&
 										suggestions.length === 0 && (
 											<div className="px-4 py-3 text-sm text-minuri-slate">
-												{normalizedQuery.length > 0 &&
-												normalizedQuery.length < 3
-													? "Keep typing to search suburbs."
-													: "No matching suburb yet."}
+												{normalizedQuery.length < 3
+													? "Keep typing…"
+													: "No matching suburb."}
 											</div>
 										)}
 									{!loading &&
 										!error &&
-										suggestions.map((option) => (
+										suggestions.map((opt) => (
 											<button
-												key={option.id}
+												key={opt.id}
 												type="button"
 												role="option"
-												id={`suburb-option-${option.id}`}
+												id={`suburb-option-${opt.id}`}
 												aria-selected={
-													selected?.id === option.id ||
-													activeOption?.id === option.id
+													selected?.id === opt.id ||
+													activeOption?.id === opt.id
 												}
-												onMouseDown={(event) => {
-													event.preventDefault();
-												}}
+												onMouseDown={(e) =>
+													e.preventDefault()
+												}
 												onClick={() => {
-													setSelected(option);
-													skipNextSearchRef.current =
-														true;
-													setQuery(option.locality);
+													setSelected(opt);
+													skipNextSearchRef.current = true;
+													setQuery(opt.locality);
 													setActiveIndex(-1);
 												}}
 												className={cn(
 													"flex w-full items-start gap-3 px-4 py-3 text-left text-sm transition hover:bg-minuri-fog",
-													selected?.id === option.id ||
+													selected?.id === opt.id ||
 														activeOption?.id ===
-															option.id
+															opt.id
 														? "bg-minuri-teal/8 ring-1 ring-inset ring-minuri-teal/30"
-														: "bg-transparent",
+														: "",
 												)}
 											>
 												<MapPin className="mt-0.5 size-3.5 shrink-0 text-minuri-teal" />
 												<span>
 													<span className="font-medium text-minuri-mid">
-														{option.locality}
+														{opt.locality}
 													</span>
 													<span className="ml-1.5 text-xs text-minuri-slate">
-														{option.state}{" "}
-														{option.postcode}
+														{opt.state}{" "}
+														{opt.postcode}
 													</span>
 													<span className="block text-xs text-minuri-slate/60">
-														{option.largerRegion}
+														{opt.largerRegion}
 													</span>
 												</span>
 											</button>
@@ -378,14 +507,14 @@ export function NearMeEntry() {
 									!selected &&
 									suggestions.length === 0
 								}
-								className="mt-5 flex h-12 w-full items-center justify-center rounded-xl bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-5 text-sm font-semibold text-minuri-white shadow-[0_8px_20px_-10px_color-mix(in_oklch,var(--minuri-mid)_40%,transparent)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+								className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-[linear-gradient(120deg,color-mix(in_oklch,var(--minuri-seafoam)_58%,var(--minuri-teal))_0%,color-mix(in_oklch,var(--minuri-teal)_78%,var(--minuri-seafoam))_100%)] px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-10px_color-mix(in_oklch,var(--minuri-mid)_40%,transparent)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
 							>
-								Continue to nearby services
+								{submitLabel}
 							</button>
 						</form>
 					</div>
 
-					<p className="mt-5 text-center text-[0.72rem] text-minuri-slate/50">
+					<p className="mt-3 text-center text-[0.7rem] text-minuri-slate/40">
 						Your location stays on your device · No account needed
 					</p>
 				</div>

@@ -5,17 +5,29 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { haversineKm, type NearMePlace, type NearMeTopic } from "@/lib/near-me";
+import { haversineKm, TOPIC_COLORS, type NearMePlace, type NearMeTopic } from "@/lib/near-me";
+import { addTopicOverlay, removeTopicOverlays } from "@/lib/near-me-overlays";
 
-// ── Topic colours ──
+// ── Overlay legend config ──
 
-const TOPIC_COLORS: Record<NearMeTopic, string> = {
-	"food-eating": "#e07b39",
-	"health-wellbeing": "#3a8a5a",
-	"getting-around": "#3a6aaa",
-	"home-admin": "#2a8a7a",
-	"social-belonging": "#7a6aaa",
+type LegendItem = { color: string; shape: "circle" | "line" | "square"; label: string };
+
+const OVERLAY_LEGENDS: Partial<Record<NearMeTopic, LegendItem[]>> = {
+	"getting-around": [
+		{ color: "#c0392b", shape: "line",   label: "Tram lines"    },
+		{ color: "#1a5276", shape: "line",   label: "Train lines"   },
+	],
+	"health-wellbeing": [
+		{ color: "#ef4444", shape: "circle", label: "Major hospitals" },
+	],
+	"social-belonging": [
+		{ color: "#2d6a4f", shape: "square", label: "Parks"          },
+	],
+	"food-eating": [
+		{ color: "#e07b39", shape: "circle", label: "Markets"        },
+	],
 };
+
 
 function darkenColor(hex: string): string {
 	const r = Math.max(0, parseInt(hex.slice(1, 3), 16) - 40);
@@ -278,6 +290,30 @@ export function NearMeMap({
 		};
 	}, []);
 
+	// Topic-sensitive map overlays (tram/train lines, hospitals, parks, markets)
+	useEffect(() => {
+		const map = mapRef.current;
+		if (!map) return;
+
+		const controller = new AbortController();
+
+		const applyOverlay = () => {
+			removeTopicOverlays(map);
+			addTopicOverlay(map, topic, controller.signal).catch(console.error);
+		};
+
+		if (map.isStyleLoaded()) {
+			applyOverlay();
+		} else {
+			map.once("load", applyOverlay);
+		}
+
+		return () => {
+			controller.abort();
+			map.off("load", applyOverlay);
+		};
+	}, [topic]);
+
 	// Recreate markers when places or topic changes (plays stagger animation)
 	useEffect(() => {
 		const map = mapRef.current;
@@ -368,9 +404,41 @@ export function NearMeMap({
 		onSearchArea({ lat: center.lat, lng: center.lng });
 	}
 
+	const legendItems = OVERLAY_LEGENDS[topic];
+
 	return (
 		<div className="relative h-full w-full">
 			<div ref={containerRef} className="h-full w-full" />
+
+			{/* Overlay legend */}
+			{legendItems && (
+				<div className="absolute top-3 left-3 z-[800] flex flex-col gap-2.5 rounded-xl bg-white/95 px-4 py-3 shadow-md backdrop-blur-sm 2xl:gap-3 2xl:px-5 2xl:py-4">
+					{legendItems.map((item) => (
+						<div key={item.label} className="flex items-center gap-2.5 2xl:gap-3">
+							{item.shape === "circle" && (
+								<span
+									className="inline-block size-3.5 flex-shrink-0 rounded-full 2xl:size-4"
+									style={{ backgroundColor: item.color }}
+								/>
+							)}
+							{item.shape === "line" && (
+								<span
+									className="inline-block h-[3px] w-5 flex-shrink-0 rounded-full 2xl:h-1 2xl:w-6"
+									style={{ backgroundColor: item.color }}
+								/>
+							)}
+							{item.shape === "square" && (
+								<span
+									className="inline-block size-3.5 flex-shrink-0 rounded-sm 2xl:size-4"
+									style={{ backgroundColor: item.color, opacity: 0.75 }}
+								/>
+							)}
+							<span className="text-sm font-medium leading-none text-gray-700 2xl:text-base">{item.label}</span>
+						</div>
+					))}
+				</div>
+			)}
+
 			{showSearchArea && onSearchArea && (
 				<button
 					type="button"

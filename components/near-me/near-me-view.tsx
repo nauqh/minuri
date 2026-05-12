@@ -454,7 +454,7 @@ export function NearMeView({
 		<div className="flex h-screen flex-col overflow-hidden bg-minuri-fog">
 			{/* ═══ Layer 1: Location context strip ═══ */}
 			<div className="shrink-0 border-b border-minuri-silver/50 bg-minuri-white px-4 py-2.5 md:px-6">
-				<div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3">
+				<div className="mx-auto flex max-w-[1440px] items-center justify-between gap-3 2xl:max-w-none">
 					<div ref={locationRef} className="relative">
 						<button
 							type="button"
@@ -549,7 +549,7 @@ export function NearMeView({
 
 			{/* ═══ Layer 2: Topic tabs ═══ */}
 			<div className="shrink-0 border-b border-minuri-silver/50 bg-minuri-white">
-				<div className="mx-auto max-w-[1440px]">
+				<div className="mx-auto max-w-[1440px] 2xl:max-w-none">
 					<nav className="flex gap-0 overflow-x-auto px-2 md:px-3">
 						{allTopics.map((t) => {
 							const active = topic === t.slug;
@@ -561,7 +561,7 @@ export function NearMeView({
 									onClick={() => switchTopic(t.slug)}
 									disabled={!isEnabled}
 									className={cn(
-										"relative flex shrink-0 flex-col items-center gap-0.5 px-4 py-3 text-xs font-medium transition md:flex-row md:gap-1.5 md:px-5",
+										"relative flex shrink-0 flex-col items-center gap-0.5 px-4 py-3 text-xs font-medium transition md:flex-row md:gap-1.5 md:px-5 2xl:text-sm 2xl:px-6",
 										active ? "text-minuri-teal" : "text-minuri-slate",
 										isEnabled
 											? "cursor-pointer hover:text-minuri-mid"
@@ -618,10 +618,10 @@ export function NearMeView({
 					<div className="shrink-0 px-4 pb-3 pt-4 shadow-sm md:px-6">
 						<div className="flex flex-wrap items-end justify-between gap-2">
 							<div>
-								<h1 className="text-lg font-semibold tracking-tight text-minuri-mid md:text-xl">
+								<h1 className="text-lg font-semibold tracking-tight text-minuri-mid md:text-xl 2xl:text-2xl">
 									{heading}
 								</h1>
-								<p className="mt-0.5 text-xs text-minuri-slate">
+								<p className="mt-0.5 text-xs text-minuri-slate 2xl:text-sm">
 									{topicMeta.tagline}
 									{status === "success" &&
 										` · ${places.length} result${places.length !== 1 ? "s" : ""}`}
@@ -665,7 +665,7 @@ export function NearMeView({
 								type="button"
 								onClick={() => setActiveSubtype(null)}
 								className={cn(
-									"shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition",
+									"shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition 2xl:px-5 2xl:py-2 2xl:text-sm",
 									activeSubtype === null
 										? "bg-minuri-teal text-minuri-white"
 										: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist hover:text-minuri-mid",
@@ -679,7 +679,7 @@ export function NearMeView({
 									type="button"
 									onClick={() => setActiveSubtype(sub.slug)}
 									className={cn(
-										"shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition",
+										"shrink-0 cursor-pointer rounded-full px-3.5 py-1.5 text-xs font-medium transition 2xl:px-5 2xl:py-2 2xl:text-sm",
 										activeSubtype === sub.slug
 											? "bg-minuri-teal text-minuri-white"
 											: "bg-minuri-fog text-minuri-slate hover:bg-minuri-mist hover:text-minuri-mid",
@@ -689,6 +689,18 @@ export function NearMeView({
 								</button>
 							))}
 						</div>
+					</div>
+
+					{/* Topic intro + map context strip */}
+					<div className="shrink-0 border-b border-minuri-silver/30 bg-minuri-fog/50 px-4 py-3 md:px-6">
+						<p className="text-sm leading-relaxed text-minuri-mid 2xl:text-base">
+							{topicMeta.intro}
+						</p>
+						{topicMeta.mapNote && (
+							<p className="mt-1 text-xs text-minuri-slate 2xl:text-sm">
+								🗺 {topicMeta.mapNote}
+							</p>
+						)}
 					</div>
 
 					{/* Scrollable results */}

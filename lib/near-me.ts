@@ -20,6 +20,8 @@ export type TopicMeta = {
 	layout: TopicLayout;
 	heading: string;
 	emptyPrompt: string;
+	intro: string;
+	mapNote?: string;
 };
 
 const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
@@ -34,6 +36,8 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		layout: "card-grid",
 		heading: "Cheap eats & groceries near {suburb}",
 		emptyPrompt: "Nothing matched — try broadening your search.",
+		intro: "Supermarkets, cheap eats, and local food options near you — including spots that work on a student or new-arrival budget.",
+		mapNote: "Major markets marked on map",
 	},
 	"getting-around": {
 		label: "Getting Around",
@@ -46,6 +50,8 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		layout: "map-focus",
 		heading: "Getting around {suburb}",
 		emptyPrompt: "No stops found — try a different suburb.",
+		intro: "Tram stops, train stations, and transport options near you — use the map to see which lines pass through your area.",
+		mapNote: "Tram and train lines shown on map",
 	},
 	"health-wellbeing": {
 		label: "Health & Wellbeing",
@@ -58,6 +64,8 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		layout: "list-focus",
 		heading: "Clinics & GPs near {suburb}",
 		emptyPrompt: "No clinics found here — try a neighbouring suburb.",
+		intro: "Bulk-billing GPs, pharmacies, and mental health services near you — places you can access without paying upfront.",
+		mapNote: "Major hospitals marked on map",
 	},
 	"home-admin": {
 		label: "Home & Admin",
@@ -70,6 +78,7 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		layout: "list-focus",
 		heading: "Services & support near {suburb}",
 		emptyPrompt: "No services found here yet — try a nearby suburb.",
+		intro: "Libraries, council offices, and settlement services near you — places that can help with forms, ID, tenancy, and paperwork.",
 	},
 	"social-belonging": {
 		label: "Social & Belonging",
@@ -82,7 +91,19 @@ const TOPIC_META: Record<NearMeTopic, TopicMeta> = {
 		layout: "card-grid",
 		heading: "Places to hang out near {suburb}",
 		emptyPrompt: "Nothing here yet — try a nearby suburb.",
+		intro: "Community spaces, cultural clubs, and social venues near you — low-pressure places to meet people and feel less alone.",
+		mapNote: "Parks highlighted on map",
 	},
+};
+
+// ── Topic colours ──
+
+export const TOPIC_COLORS: Record<NearMeTopic, string> = {
+	"food-eating":      "#e07b39",
+	"health-wellbeing": "#3a8a5a",
+	"getting-around":   "#3a6aaa",
+	"home-admin":       "#2a8a7a",
+	"social-belonging": "#7a6aaa",
 };
 
 // ── Places ──
