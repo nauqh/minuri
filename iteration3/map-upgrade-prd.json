@@ -73,9 +73,8 @@
     "description": "Port fit-bounds on new results using maplibregl.LngLatBounds with [lng, lat] coordinate order",
     "steps": [
       "Replace the L.latLngBounds() block with: const bounds = new maplibregl.LngLatBounds(); places.forEach(p => bounds.extend([p.lng, p.lat]))",
-      "Replace map.fitBounds(group, { padding: [40, 40], maxZoom: 15 }) with map.fitBounds(bounds, { padding: 40, maxZoom: 15 })",
-      "Reset originalCenterRef.current = null and setShowSearchArea(false) before fitBounds, same as before",
-      "Capture new center after bounds settle — ORDERING CRITICAL: attach the once listener BEFORE calling fitBounds, otherwise the moveend event may fire before the listener is registered: `map.once('moveend', () => { originalCenterRef.current = map.getCenter() }); map.fitBounds(bounds, { padding: 40, maxZoom: 15 })`",
+      "Reset originalCenterRef.current = null and setShowSearchArea(false) before calling fitBounds, same as before",
+      "ORDERING CRITICAL — attach the moveend listener BEFORE fitBounds or the event may fire before the listener is registered: `map.once('moveend', () => { originalCenterRef.current = map.getCenter() }); map.fitBounds(bounds, { padding: 40, maxZoom: 15 })` — note padding is now a single number (uniform), not [40, 40]",
       "Verify the map reframes to show all result pins with visible padding on both desktop and mobile viewports"
     ],
     "passes": null

@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import type { NearMePlace, NearMeTopic } from "@/lib/near-me";
+import { haversineKm, type NearMePlace, type NearMeTopic } from "@/lib/near-me";
 
 // ── Topic colours ──
 
@@ -50,7 +50,7 @@ function makePinIcon(
 	hovered: boolean,
 	color: string,
 	animDelay: number | false,
-) {
+): HTMLElement {
 	const bgColor = active ? darkenColor(color) : color;
 	const size = active ? 34 : hovered ? 32 : 30;
 
@@ -116,12 +116,9 @@ function makePinIcon(
 		</div>,
 	);
 
-	return L.divIcon({
-		html: iconMarkup,
-		className: "",
-		iconSize: [size, size + 10],
-		iconAnchor: [size / 2, size + 10],
-	});
+	const el = document.createElement("div");
+	el.innerHTML = iconMarkup;
+	return el;
 }
 
 // ── Popup HTML ──
@@ -211,12 +208,12 @@ export function NearMeMap({
 	userLng,
 }: NearMeMapProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const mapRef = useRef<L.Map | null>(null);
+	const mapRef = useRef<maplibregl.Map | null>(null);
 	const markerMapRef = useRef<
-		Map<string, { marker: L.Marker; index: number }>
+		Map<string, { marker: maplibregl.Marker; el: HTMLElement; index: number }>
 	>(new Map());
-	const userDotRef = useRef<L.Marker | null>(null);
-	const originalCenterRef = useRef<L.LatLng | null>(null);
+	const userDotRef = useRef<maplibregl.Marker | null>(null);
+	const originalCenterRef = useRef<{ lat: number; lng: number } | null>(null);
 	const [showSearchArea, setShowSearchArea] = useState(false);
 
 	// Inject shared CSS once
@@ -234,12 +231,11 @@ export function NearMeMap({
         100% { transform: translate(-50%,-50%) scale(1.8); opacity: 0;   }
       }
       .nm-gps-pulse { animation: nmGpsPulse 2s ease-out infinite; }
-      .near-me-popup .leaflet-popup-content-wrapper {
+      .near-me-popup .maplibregl-popup-content {
         border-radius: 12px; padding: 0; overflow: hidden;
         box-shadow: 0 8px 32px -8px rgba(0,0,0,0.22);
       }
-      .near-me-popup .leaflet-popup-content { margin: 0; }
-      .near-me-popup .leaflet-popup-tip-container { display: none; }
+      .near-me-popup .maplibregl-popup-tip { display: none; }
       @media (prefers-reduced-motion: reduce) {
         .nm-marker-anim { animation: none !important; }
         .nm-gps-pulse   { animation: none !important; }
@@ -248,30 +244,29 @@ export function NearMeMap({
 		document.head.appendChild(el);
 	}, []);
 
-	// Initialize map with CartoDB Positron tiles
+	// Initialize map with MapTiler Streets v2
 	useEffect(() => {
 		if (!containerRef.current || mapRef.current) return;
 
-		const map = L.map(containerRef.current, {
-			zoomControl: false,
-			attributionControl: true,
-		}).setView([-37.813, 144.963], 14);
+		const map = new maplibregl.Map({
+			container: containerRef.current,
+			style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`,
+			center: [144.963, -37.813],
+			zoom: 13,
+		});
 
-		L.tileLayer(
-			"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-			{
-				maxZoom: 19,
-				subdomains: ["a", "b", "c", "d"],
-				attribution:
-					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-			},
-		).addTo(map);
-
-		L.control.zoom({ position: "topright" }).addTo(map);
+		map.addControl(new maplibregl.NavigationControl(), "top-right");
 
 		map.on("moveend", () => {
 			if (!originalCenterRef.current) return;
-			const dist = map.getCenter().distanceTo(originalCenterRef.current);
+			const c = map.getCenter();
+			const dist =
+				haversineKm(
+					c.lat,
+					c.lng,
+					originalCenterRef.current.lat,
+					originalCenterRef.current.lng,
+				) * 1000;
 			setShowSearchArea(dist > 800);
 		});
 
@@ -294,47 +289,48 @@ export function NearMeMap({
 		if (!places.length) return;
 
 		const color = TOPIC_COLORS[topic];
-		const group = L.latLngBounds(
-			places.map((p) => [p.lat, p.lng] as L.LatLngTuple),
-		);
+		const bounds = new maplibregl.LngLatBounds();
+		places.forEach((p) => bounds.extend([p.lng, p.lat]));
 		setShowSearchArea(false);
 		originalCenterRef.current = null;
-		map.fitBounds(group, { padding: [40, 40], maxZoom: 15 });
 		map.once("moveend", () => {
-			originalCenterRef.current = map.getCenter();
+			const c = map.getCenter();
+			originalCenterRef.current = { lat: c.lat, lng: c.lng };
 		});
+		map.fitBounds(bounds, { padding: 40, maxZoom: 15 });
 
 		for (let i = 0; i < places.length; i++) {
 			const place = places[i];
 			const active = place.id === selectedPlaceId;
 			const hovered = place.id === hoveredPlaceId;
-			const marker = L.marker([place.lat, place.lng], {
-				icon: makePinIcon(i, active, hovered, color, i * 40),
-				zIndexOffset: active ? 1000 : hovered ? 500 : 0,
-			});
-			marker.on("click", () => onSelectPlace(place.id));
-			marker.on("mouseover", () => onHoverPlace(place.id));
-			marker.on("mouseout", () => onHoverPlace(null));
-			marker.bindPopup(makePopupContent(place, i, color), {
+			const el = makePinIcon(i, active, hovered, color, i * 40);
+			el.style.zIndex = active ? "1000" : hovered ? "500" : "0";
+			const popup = new maplibregl.Popup({
 				closeButton: true,
-				autoPan: true,
-				maxWidth: 300,
+				maxWidth: "300px",
 				className: "near-me-popup",
-			});
-			marker.addTo(map);
-			markerMapRef.current.set(place.id, { marker, index: i });
+			}).setHTML(makePopupContent(place, i, color));
+			const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
+				.setLngLat([place.lng, place.lat])
+				.setPopup(popup)
+				.addTo(map);
+			el.addEventListener("click", () => onSelectPlace(place.id));
+			el.addEventListener("mouseover", () => onHoverPlace(place.id));
+			el.addEventListener("mouseout", () => onHoverPlace(null));
+			markerMapRef.current.set(place.id, { marker, el, index: i });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [places, topic]);
 
-	// Update icons only when selected/hovered changes (no animation replay)
+	// Update pin state without replaying drop animation
 	useEffect(() => {
 		const color = TOPIC_COLORS[topic];
-		for (const [placeId, { marker, index }] of markerMapRef.current) {
+		for (const [placeId, { el, index }] of markerMapRef.current) {
 			const active = placeId === selectedPlaceId;
 			const hovered = placeId === hoveredPlaceId;
-			marker.setIcon(makePinIcon(index, active, hovered, color, false));
-			marker.setZIndexOffset(active ? 1000 : hovered ? 500 : 0);
+			const updated = makePinIcon(index, active, hovered, color, false);
+			el.innerHTML = updated.innerHTML;
+			el.style.zIndex = active ? "1000" : hovered ? "500" : "0";
 		}
 	}, [selectedPlaceId, hoveredPlaceId, topic]);
 
@@ -343,7 +339,7 @@ export function NearMeMap({
 		const map = mapRef.current;
 		if (!map || !selectedPlaceId) return;
 		const place = places.find((p) => p.id === selectedPlaceId);
-		if (place) map.panTo([place.lat, place.lng], { animate: true, duration: 0.4 });
+		if (place) map.flyTo({ center: [place.lng, place.lat], speed: 1.2 });
 	}, [selectedPlaceId, places]);
 
 	// GPS user dot
@@ -355,15 +351,11 @@ export function NearMeMap({
 		}
 		if (!map || userLat == null || userLng == null) return;
 
-		const dot = L.marker([userLat, userLng], {
-			icon: L.divIcon({
-				className: "",
-				html: `<div style="position:relative;width:40px;height:40px"><div class="nm-gps-pulse" style="position:absolute;width:32px;height:32px;background:#3b82f633;border-radius:50%;top:50%;left:50%"></div><div style="position:absolute;width:16px;height:16px;background:#3b82f6;border:2.5px solid white;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(59,130,246,0.35)"></div></div>`,
-				iconSize: [40, 40],
-				iconAnchor: [20, 20],
-			}),
-			zIndexOffset: 2000,
-		}).addTo(map);
+		const el = document.createElement("div");
+		el.innerHTML = `<div style="position:relative;width:40px;height:40px"><div class="nm-gps-pulse" style="position:absolute;width:32px;height:32px;background:#3b82f633;border-radius:50%;top:50%;left:50%"></div><div style="position:absolute;width:16px;height:16px;background:#3b82f6;border:2.5px solid white;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(59,130,246,0.35)"></div></div>`;
+		const dot = new maplibregl.Marker({ element: el, anchor: "center" })
+			.setLngLat([userLng, userLat])
+			.addTo(map);
 		userDotRef.current = dot;
 	}, [userLat, userLng]);
 
@@ -372,7 +364,7 @@ export function NearMeMap({
 		if (!map || !onSearchArea) return;
 		const center = map.getCenter();
 		setShowSearchArea(false);
-		originalCenterRef.current = center;
+		originalCenterRef.current = { lat: center.lat, lng: center.lng };
 		onSearchArea({ lat: center.lat, lng: center.lng });
 	}
 
