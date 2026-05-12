@@ -1,0 +1,128 @@
+[
+  {
+    "category": "map-engine",
+    "description": "Install maplibre-gl and register a MapTiler API key via environment variable",
+    "steps": [
+      "Run: npm install maplibre-gl",
+      "Create a free MapTiler account at maptiler.com and generate an API key — REQUIRED: add domain restrictions in the MapTiler dashboard (add your production domain AND localhost) before using the key anywhere; an unrestricted key baked into a NEXT_PUBLIC_ env var is freely usable by anyone who reads the JS bundle",
+      "Add NEXT_PUBLIC_MAPTILER_KEY=<your_key> to .env.local",
+      "Add NEXT_PUBLIC_MAPTILER_KEY=YOUR_MAPTILER_KEY_HERE to .env.example as a placeholder",
+      "Verify process.env.NEXT_PUBLIC_MAPTILER_KEY is non-empty inside the map component before proceeding to the next item"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-engine",
+    "description": "Replace Leaflet map initialisation with MapLibre GL JS pointed at MapTiler Streets v2 style URL",
+    "steps": [
+      "SSR CHECK FIRST: find where near-me-map.tsx is imported and confirm it uses `dynamic(() => import('./near-me-map'), { ssr: false })` — MapLibre accesses window/document and will crash next build if rendered server-side; add the dynamic import if missing",
+      "In near-me-map.tsx, replace `import L from 'leaflet'` and `import 'leaflet/dist/leaflet.css'` with `import maplibregl from 'maplibre-gl'` and `import 'maplibre-gl/dist/maplibre-gl.css'`",
+      "Replace the L.map() init block with: const map = new maplibregl.Map({ container: containerRef.current, style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`, center: [144.963, -37.813], zoom: 13, attributionControl: true })",
+      "IMPORTANT: MapLibre uses [lng, lat] ordering everywhere — all coordinate pairs must be swapped from the Leaflet [lat, lng] pattern",
+      "Remove the L.tileLayer(...).addTo(map) call entirely — the style URL already encodes the tile source and visual style",
+      "Replace L.control.zoom({ position: 'topright' }).addTo(map) with map.addControl(new maplibregl.NavigationControl(), 'top-right')",
+      "Change mapRef type from L.Map | null to maplibregl.Map | null",
+      "Change originalCenterRef type from L.LatLng | null to { lat: number; lng: number } | null — MapLibre's getCenter() returns a plain object, not a LatLng with distanceTo()",
+      "In the useEffect cleanup (return function), call map.remove() to destroy the MapLibre instance on unmount — omitting this leaks WebGL contexts and event listeners",
+      "Verify the map renders green parks, labeled streets, building footprints, and blue water at zoom 13 over Melbourne"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-markers",
+    "description": "Port numbered pin icons from Leaflet DivIcon to MapLibre Marker using a custom DOM element",
+    "steps": [
+      "Add import: `import { renderToStaticMarkup } from 'react-dom/server'` — required for makePinIcon() and the state-update effect in item 4",
+      "Change makePinIcon() to return an HTMLElement instead of L.DivIcon: create a wrapper via document.createElement('div'), set innerHTML = renderToStaticMarkup(<PinMarkup ... />), and return the element",
+      "Change markerMapRef type from Map<string, { marker: L.Marker; index: number }> to Map<string, { marker: maplibregl.Marker; el: HTMLElement; index: number }>",
+      "In the places useEffect, for each place: const el = makePinIcon(i, active, hovered, color, i * 40); const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' }).setLngLat([place.lng, place.lat]).addTo(map)",
+      "Confirm coordinate order: setLngLat([place.lng, place.lat]) — longitude first, latitude second",
+      "Attach click and hover listeners on the DOM element: el.addEventListener('click', () => onSelectPlace(place.id)); el.addEventListener('mouseover', () => onHoverPlace(place.id)); el.addEventListener('mouseout', () => onHoverPlace(null))",
+      "Store { marker, el, index } in markerMapRef.current.set(place.id, { marker, el, index })",
+      "To clear markers between result sets, call marker.remove() for each entry before clearing markerMapRef",
+      "Verify numbered pins appear at correct coordinates and the stagger drop animation plays on initial result load"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-markers",
+    "description": "Port active/hovered pin state updates to direct DOM mutation on the marker element, avoiding animation replay",
+    "steps": [
+      "In the selectedPlaceId/hoveredPlaceId useEffect, replace marker.setIcon() (Leaflet API, does not exist in MapLibre) with direct DOM mutation: el.innerHTML = renderToStaticMarkup(<PinMarkup index={index} active={active} hovered={hovered} color={color} animDelay={false} />)",
+      "Manage z-order via el.style.zIndex: active → '1000', hovered → '500', default → '0'",
+      "Verify switching the selected list row enlarges the pin and dims others without replaying the drop animation"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-popups",
+    "description": "Port popup card from Leaflet bindPopup to a MapLibre Popup set on each marker with updated CSS selectors",
+    "steps": [
+      "Replace marker.bindPopup(html, options) with: const popup = new maplibregl.Popup({ closeButton: true, maxWidth: '300px', className: 'near-me-popup' }).setHTML(makePopupContent(place, i, color)); marker.setPopup(popup)",
+      "The makePopupContent() function and its HTML output are unchanged — maplibregl.Popup.setHTML() accepts the same string",
+      "Update the injected CSS in nm-map-styles: replace .near-me-popup .leaflet-popup-content-wrapper with .near-me-popup .maplibregl-popup-content",
+      "Replace .near-me-popup .leaflet-popup-content { margin: 0 } with .near-me-popup .maplibregl-popup-content { padding: 0 }",
+      "Replace .near-me-popup .leaflet-popup-tip-container { display: none } with .near-me-popup .maplibregl-popup-tip { display: none }",
+      "Verify popup opens on marker click showing thumbnail, rating, open status, Directions and Call buttons",
+      "Verify popup closes when clicking another marker or the map background"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-interactions",
+    "description": "Port fit-bounds on new results using maplibregl.LngLatBounds with [lng, lat] coordinate order",
+    "steps": [
+      "Replace the L.latLngBounds() block with: const bounds = new maplibregl.LngLatBounds(); places.forEach(p => bounds.extend([p.lng, p.lat]))",
+      "Replace map.fitBounds(group, { padding: [40, 40], maxZoom: 15 }) with map.fitBounds(bounds, { padding: 40, maxZoom: 15 })",
+      "Reset originalCenterRef.current = null and setShowSearchArea(false) before fitBounds, same as before",
+      "Capture new center after bounds settle — ORDERING CRITICAL: attach the once listener BEFORE calling fitBounds, otherwise the moveend event may fire before the listener is registered: `map.once('moveend', () => { originalCenterRef.current = map.getCenter() }); map.fitBounds(bounds, { padding: 40, maxZoom: 15 })`",
+      "Verify the map reframes to show all result pins with visible padding on both desktop and mobile viewports"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-interactions",
+    "description": "Port selected-place pan from Leaflet map.panTo to MapLibre map.flyTo with [lng, lat] coordinate order",
+    "steps": [
+      "Replace map.panTo([place.lat, place.lng], { animate: true, duration: 0.4 }) with map.flyTo({ center: [place.lng, place.lat], speed: 1.2 })",
+      "Confirm coordinate order: center takes [lng, lat]",
+      "Verify clicking a list row smoothly animates the map to centre on the matching pin"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-interactions",
+    "description": "Port Search this area button using MapLibre map.on('moveend') and haversineKm distance check",
+    "steps": [
+      "Keep map.on('moveend', ...) — MapLibre uses the same event name",
+      "Replace map.getCenter().distanceTo(originalCenterRef.current) with: const c = map.getCenter(); haversineKm(c.lat, c.lng, originalCenterRef.current.lat, originalCenterRef.current.lng) * 1000 > 800",
+      "haversineKm is already imported from lib/near-me.ts and returns kilometres — multiply by 1000 to get metres",
+      "In handleSearchAreaClick, replace map.getCenter() usage: const { lat, lng } = map.getCenter(); pass { lat, lng } to onSearchArea",
+      "Verify panning more than ~800 m shows the Search this area pill and clicking it fires onSearchArea with correct lat/lng"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-gps",
+    "description": "Port GPS user location dot to MapLibre Marker with a custom pulsing DOM element",
+    "steps": [
+      "Replace the L.marker GPS dot with: const el = document.createElement('div'); el.innerHTML = the existing pulsing ring + blue dot HTML string from the Leaflet divIcon",
+      "Create the marker: const dot = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([userLng, userLat]).addTo(map)",
+      "Confirm coordinate order: setLngLat([userLng, userLat]) — longitude first",
+      "Store in userDotRef.current; call dot.remove() at the top of the effect and on cleanup, same as the Leaflet pattern",
+      "The nmGpsPulse CSS animation in nm-map-styles is unchanged — verify the pulsing blue dot renders correctly at the user's GPS position"
+    ],
+    "passes": null
+  },
+  {
+    "category": "map-cleanup",
+    "description": "Remove leaflet and react-leaflet from package.json after MapLibre migration is verified end-to-end",
+    "steps": [
+      "Run: npm uninstall leaflet react-leaflet @types/leaflet",
+      "Search the codebase for any remaining `from 'leaflet'`, `from 'react-leaflet'`, or `leaflet/dist/leaflet.css` imports and remove them",
+      "Run npm run build and confirm zero TypeScript errors and no missing-module warnings",
+      "Smoke-test the near-me map in the browser: results load, markers appear, popup opens, hover bridge works, GPS dot shows, Search this area button appears on pan"
+    ],
+    "passes": null
+  }
+]

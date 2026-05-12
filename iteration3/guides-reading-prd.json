@@ -1,0 +1,235 @@
+[
+  {
+    "category": "foundation",
+    "description": "Add stripMarkdown utility to lib/guides.ts for stripping markdown syntax before rendering in plain-text contexts (e.g. GuideRevealBlock)",
+    "steps": [
+      "Open lib/guides.ts",
+      "Add: `export function stripMarkdown(str: string): string { return str.replace(/\\*\\*(.*?)\\*\\*/g, '$1').replace(/\\*(.*?)\\*/g, '$1').replace(/`(.*?)`/g, '$1').replace(/_{1,2}(.*?)_{1,2}/g, '$1').trim() }`",
+      "Test: stripMarkdown('**Bulk-billing** means you pay *nothing*') === 'Bulk-billing means you pay nothing'"
+    ],
+    "passes": true
+  },
+  {
+    "category": "schema",
+    "description": "Extend Guide type in content/guides.ts with video?, table?, keyTerms? fields and body? on GuideFirstStep",
+    "steps": [
+      "Open content/guides.ts",
+      "Add body?: string to GuideFirstStep type",
+      "Add: `type GuideTableBlock = { caption?: string; headers: string[]; rows: string[][]; placement: 'after-reveal' | 'in-how-it-works' }`",
+      "Add: `type GuideVideo = { youtubeId: string; caption?: string }`",
+      "Add: `type GuideKeyTerm = { term: string; definition: string }`",
+      "Add video?: GuideVideo, table?: GuideTableBlock, keyTerms?: GuideKeyTerm[] to Guide interface",
+      "Verify TypeScript compiles with no errors"
+    ],
+    "passes": true
+  },
+  {
+    "category": "primitive",
+    "description": "Create GuideSectionLabel component — uppercase label + short teal underrule, used at the top of every section",
+    "steps": [
+      "Create components/guides/guide-section-label.tsx",
+      "Props: `{ label: string; className?: string }`",
+      "Render a <header> with a <p> for the label and a <div> for the rule",
+      "Label: `text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-center mb-1`",
+      "Rule: `mx-auto w-16 border-t-2 border-minuri-teal/60 mt-1`",
+      "Wrap in `<header className={cn('mb-6', className)}>`",
+      "Verify it renders as a centered label with a short teal underrule below"
+    ],
+    "passes": false
+  },
+  {
+    "category": "reveal",
+    "description": "Create GuideRevealBlock — full-width deep teal-navy dark block with centered white bold insight text and ✦ icon",
+    "steps": [
+      "Create components/guides/guide-reveal-block.tsx",
+      "Props: `{ value: string }`",
+      "Import stripMarkdown from lib/guides",
+      "Outer div: `w-full rounded-2xl bg-[#0d2a2e] py-14 px-8 md:py-16 md:px-14`",
+      "Icon: `<span className='block text-center text-minuri-seafoam text-lg mb-5' aria-hidden>✦</span>`",
+      "Text: `<p className='text-white text-xl md:text-2xl font-semibold text-center leading-relaxed max-w-[38rem] mx-auto'>{stripMarkdown(value)}</p>`",
+      "In guide-detail-view.tsx, replace reveal motion.section contents with: `<GuideSectionLabel label='The Reveal' /><GuideRevealBlock value={revealSection.value} />`",
+      "Remove old border-l-2 reveal styles from globals.css",
+      "Verify: dark full-bleed block renders, ✦ icon above text, no border or rule needed"
+    ],
+    "passes": false
+  },
+  {
+    "category": "steps",
+    "description": "Create useGuideSteps hook that persists step completion as a bitmask integer in localStorage",
+    "steps": [
+      "Create hooks/use-guide-steps.ts",
+      "Constant: `const STORAGE_PREFIX = 'minuri:guide:steps:'`",
+      "Signature: `function useGuideSteps(slug: string, count: number): { isChecked: (i: number) => boolean; toggle: (i: number) => void; checkedCount: number; reset: () => void }`",
+      "useState(0) for mask",
+      "useEffect on mount: read localStorage key, parseInt, setMask if !isNaN",
+      "isChecked(i): `Boolean(mask & (1 << i))`",
+      "toggle(i): `const next = mask ^ (1 << i); setMask(next); localStorage.setItem(key, String(next))`",
+      "checkedCount: count set bits up to count",
+      "Supports up to 30 steps (JS bitwise ops are 32-bit)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "steps",
+    "description": "Create GuideStepPillars component — two-column pillar layout (desktop) / accordion (mobile) with tap-to-check completion",
+    "steps": [
+      "Create components/guides/guide-step-pillars.tsx",
+      "Props: `{ guideSlug: string; steps: GuideFirstStep[] }`",
+      "Import useGuideSteps hook",
+      "useState<number>(0) for activeIndex",
+      "Desktop layout (md+): flex row. Left column w-52 border-r border-minuri-silver/20 pr-6. Right panel flex-1 pl-6",
+      "Left: render each step as a button. Default style: `text-sm text-left py-2 px-3 rounded-lg w-full text-muted-foreground hover:text-minuri-ink hover:bg-minuri-fog/50`. Active style: `bg-minuri-teal/10 text-minuri-teal font-semibold border-l-2 border-minuri-teal`. Checked label: add `line-through opacity-50`",
+      "Each button has a step number badge: `size-5 rounded-full bg-minuri-teal/15 text-minuri-teal text-[10px] font-bold mr-2 inline-flex items-center justify-center`",
+      "Right panel: show activeIndex step heading, body text, estimateMin, and a 'Mark as done' / 'Unmark' toggle button (calls toggle(activeIndex))",
+      "Mobile layout (<md): vertical accordion. Each step button expands body below on tap, same checked state",
+      "Show counter when checkedCount > 0: `<p className='text-xs text-muted-foreground mt-4'>{checkedCount} of {steps.length} done</p>`",
+      "In guide-detail-view.tsx, inside how-it-works motion.section after GuideMarkdown prose, add: `{guide.firstSteps?.length > 0 && <GuideStepPillars guideSlug={guide.slug} steps={guide.firstSteps} />}`",
+      "Remove the old standalone first-steps motion.section (lines ~669-708)",
+      "Verify desktop: left pillar list + right content panel. Verify mobile: vertical accordion. Verify localStorage persistence on refresh"
+    ],
+    "passes": false
+  },
+  {
+    "category": "progress",
+    "description": "Add data-section-key attributes to six section wrappers and create GuideSectionProgress component with IntersectionObserver fill-forward dots",
+    "steps": [
+      "In guide-detail-view.tsx, ensure six separate motion.section elements each have data-section-key: 'moment', 'feeling', 'reveal', 'how-it-works', 'bridge', 'next-chapter'",
+      "Split moment and feeling into separate motion.section wrappers if currently combined",
+      "Create components/guides/guide-section-progress.tsx",
+      "Constant: `const SECTION_KEYS = ['moment', 'feeling', 'reveal', 'how-it-works', 'bridge', 'next-chapter'] as const`",
+      "Constant: `const SECTION_LABELS: Record<string, string> = { moment: 'The Moment', feeling: 'The Feeling', reveal: 'The Reveal', 'how-it-works': 'How It Works', bridge: 'Near You', 'next-chapter': 'Up Next' }`",
+      "useState<Set<string>>(new Set()) for seenSections",
+      "useEffect: create IntersectionObserver threshold 0.1, observe all [data-section-key] elements, add key to seenSections on intersect (never remove), disconnect on unmount",
+      "Render: `<div className='flex items-center gap-2 justify-center py-3'>` with 6 span elements",
+      "Filled dot: `size-2 rounded-full bg-minuri-teal transition-colors duration-300`; outline: `size-2 rounded-full border border-minuri-silver/50`",
+      "Each dot: title={SECTION_LABELS[key]} aria-label={SECTION_LABELS[key]}",
+      "Place GuideSectionProgress directly below guide hero image, above The Moment section",
+      "Verify: dots fill forward as sections scroll into view, do not unfill on scroll-up"
+    ],
+    "passes": false
+  },
+  {
+    "category": "section-style",
+    "description": "Add GuideSectionLabel to each section and apply guide-section-moment / guide-section-feeling CSS classes",
+    "steps": [
+      "Open app/globals.css",
+      "Add .guide-section-moment: centered italic text, minuri-mist/45 background, seafoam border-top, rounded padding, font-size 1.1rem, line-height 1.7",
+      "Add .guide-section-feeling: left seafoam border 2px, opacity 0.85, padding-left 1.5rem, font-size 0.95rem",
+      "Add mobile overrides: reduced padding and font-size for .guide-section-moment at max-width 640px",
+      "In guide-detail-view.tsx, add className='guide-section-moment' to moment motion.section",
+      "Add className='guide-section-feeling' to feeling motion.section",
+      "Add <GuideSectionLabel label='The Moment' /> as first child of moment section",
+      "Add <GuideSectionLabel label='The Feeling' /> as first child of feeling section",
+      "Add <GuideSectionLabel label='How It Works' /> as first child of how-it-works section",
+      "Verify: Moment = warm italic centered editorial. Feeling = left-bordered muted. Both have uppercase label above."
+    ],
+    "passes": false
+  },
+  {
+    "category": "table",
+    "description": "Create GuideDataTable component for guide.table field — teal header, alternating fog rows, mobile horizontal scroll",
+    "steps": [
+      "Create components/guides/guide-data-table.tsx",
+      "Props: `{ table: GuideTableBlock }`",
+      "Wrapper: `<div className='w-full overflow-x-auto my-6'>`",
+      "Caption if present: `<p className='text-xs text-muted-foreground mb-2'>{table.caption}</p>`",
+      "Table: `<table className='w-full text-sm border-collapse'>`",
+      "thead: each th `className='bg-minuri-teal/10 text-left font-semibold px-3 py-2 border-b border-minuri-silver/40 text-xs uppercase tracking-wide'`",
+      "tbody: each tr `className='even:bg-minuri-fog/30'`; each td `className='px-3 py-2 border-b border-minuri-silver/20 align-top'`",
+      "In guide-detail-view.tsx, in how-it-works section after GuideStepPillars: `{guide.table?.placement === 'in-how-it-works' && <GuideDataTable table={guide.table} />}`",
+      "After reveal section: `{guide.table?.placement === 'after-reveal' && <GuideDataTable table={guide.table} />}`",
+      "Verify: teal header row, alternating fog rows, scrolls horizontally on mobile"
+    ],
+    "passes": true
+  },
+  {
+    "category": "video",
+    "description": "Create GuideYouTubeEmbed component — lazy-loaded aspect-video iframe with caption",
+    "steps": [
+      "Create components/guides/guide-youtube-embed.tsx",
+      "Props: `{ video: GuideVideo }`",
+      "Outer: `<div className='my-8'>`",
+      "Inner: `<div className='relative aspect-video w-full overflow-hidden rounded-xl bg-minuri-fog'>`",
+      "iframe: src=`https://www.youtube.com/embed/${video.youtubeId}?rel=0`, allowFullScreen, loading='lazy', className='absolute inset-0 h-full w-full border-0'",
+      "Caption if present: `<p className='mt-2 text-xs text-muted-foreground text-center'>{video.caption}</p>`",
+      "In how-it-works section after GuideDataTable: `{guide.video && <GuideYouTubeEmbed video={guide.video} />}`",
+      "Verify: 16:9 ratio, no autoplay, caption below when present"
+    ],
+    "passes": true
+  },
+  {
+    "category": "bridge",
+    "description": "Create GuideBridgeSection — editorial terminus with border-t, NEAR YOU section label, topic headline, description text, pill CTA link",
+    "steps": [
+      "Create components/guides/guide-bridge-section.tsx",
+      "Props: `interface GuideBridgeSectionProps { topic: GuideTopicSlug; nearMeDeeplink: string; suburb?: string }`",
+      "Define NEARBY_DESCRIPTIONS map per topic slug (one-line description of what the map shows)",
+      "Render a section: `<section className='mt-16 pt-10 border-t border-minuri-silver/25'>`",
+      "First: `<GuideSectionLabel label='Near You' />`",
+      "Eyebrow: topic icon + name in `text-xs uppercase tracking-wide text-muted-foreground mb-1`",
+      "Headline: suburb ? 'Health & Wellbeing services in {suburb}' : 'Health & Wellbeing services near you' — `font-semibold text-minuri-ocean text-lg`",
+      "Description from NEARBY_DESCRIPTIONS: `text-sm text-muted-foreground mt-2 mb-5 max-w-md`",
+      "Pill link: `<Link href={nearMeDeeplink} className='inline-block rounded-full border border-minuri-teal/50 px-5 py-2 text-sm font-medium text-minuri-teal hover:bg-minuri-teal hover:text-white transition-colors'>Open map →</Link>`",
+      "No card background, no rounded container — border-t is the only separator",
+      "Replace bridge motion.section in guide-detail-view.tsx with GuideBridgeSection",
+      "Verify: reads as natural article terminus, pill link routes correctly, suburb substitution works"
+    ],
+    "passes": false
+  },
+  {
+    "category": "next-chapter",
+    "description": "Create GuideNextChapterRow — full-width aspect-[16/7] thumbnail card with gradient overlay, arc label, title + read time footer",
+    "steps": [
+      "Create components/guides/guide-next-chapter-row.tsx",
+      "Props: `{ guide: Guide }`",
+      "Import Guide from content/guides, getArcMeta from lib/guides, next/image, next/link",
+      "Compute arcMeta = getArcMeta(guide.arc)",
+      "Outer: `<Link href={/guides/${guide.slug}} className='group block overflow-hidden rounded-xl border border-minuri-silver/20 mt-8'>`",
+      "Image wrapper: `<div className='relative aspect-[16/7] overflow-hidden bg-minuri-fog'>`",
+      "Next Image: fill, objectFit cover, className='group-hover:scale-[1.02] transition-transform duration-500'",
+      "Gradient overlay: `<div className='absolute inset-0 bg-gradient-to-t from-black/55 to-transparent' />`",
+      "Arc label in image: `<p className='absolute bottom-3 left-4 text-white/70 text-xs uppercase tracking-wide'>Up next · {arcMeta.name}</p>`",
+      "Footer: `<div className='px-4 py-3 flex items-center justify-between gap-2'>`",
+      "Left stack: title `font-medium text-sm truncate` + read time `text-xs text-muted-foreground`",
+      "Right: chevron `text-muted-foreground group-hover:translate-x-0.5 transition-transform`",
+      "Replace nextGuide section in guide-detail-view.tsx: `{nextGuide && <GuideNextChapterRow guide={nextGuide} />}`",
+      "Remove GuideCard import if no longer used elsewhere in the file",
+      "Verify: full-width card, gradient overlay, scale on hover, routes correctly"
+    ],
+    "passes": false
+  },
+  {
+    "category": "content",
+    "description": "Populate table, video, keyTerms, and firstSteps[].body for Medicare and Myki guide JSON files",
+    "steps": [
+      "Open public/guides-content/health-wellbeing/medicare-bulk-billing-and-mental-health-care-plans.json",
+      "Add table field: caption 'What Medicare pays per session (2026)', placement 'in-how-it-works', headers ['Provider type', 'Medicare rebate', 'Typical fee', 'Your gap'], 3 data rows for clinical psychologist / registered psychologist / social worker OT",
+      "Remove rebate amounts paragraph from how-it-works section.value (avoid duplication)",
+      "Add keyTerms for bulk-billing, Medicare rebate, Mental Health Care Plan",
+      "Add body to each firstStep entry (1 sentence Melbourne-specific elaboration)",
+      "Open public/guides-content/getting-around/getting-myki-and-surviving-ptv.json",
+      "Add table field: caption 'PTV service frequency (2026)', placement 'in-how-it-works', headers ['Mode', 'Peak', 'Off-peak', 'Night Network (Fri/Sat)'], 3 rows for train / tram / bus",
+      "Remove service frequency sentences from how-it-works prose",
+      "Add body to each Myki firstStep entry",
+      "Verify both JSON files parse without errors and app renders without TypeScript errors"
+    ],
+    "passes": true
+  },
+  {
+    "category": "video-content",
+    "description": "Add YouTube video IDs to all 8 health-wellbeing guide JSON files",
+    "steps": [
+      "Add video: { youtubeId, caption } to each of the 8 health-wellbeing guides after nearMeDeeplink",
+      "crisis-lines-you-can-actually-call → youtubeId: 'Y-TZjfOTezQ', caption: 'Beyond Blue — Looking after your mental health'",
+      "emergency-vs-urgent-care-in-melbourne → youtubeId: 'P4G8gO6dtY0', caption: 'What do Medicare Urgent Care Clinics offer?'",
+      "finding-a-gp-before-you-need-one → youtubeId: 'ta1ypMxfc8I', caption: 'What is Medicare? Australian healthcare system explained'",
+      "managing-your-prescriptions-in-a-new-city → youtubeId: 'lkMZGIvL_qU', caption: 'What is the Pharmaceutical Benefits Scheme (PBS)?'",
+      "sustaining-yourself-sleep-movement-and-disconnecting → youtubeId: 'fk-_SwHhLLc', caption: 'Sleep Hygiene: Train Your Brain to Fall Asleep and Sleep Better'",
+      "when-to-see-a-psych-counsellor-or-friend → youtubeId: 'vchq_lB8dbs', caption: 'How to get a Mental Health Treatment Plan in Australia'",
+      "your-pharmacist-is-the-cheapest-first-stop → youtubeId: 'p8KCIwQWERM', caption: 'Australian pharmacy — going the extra mile'",
+      "medicare-bulk-billing-and-mental-health-care-plans → youtubeId: 'WlnnFZaZ2Ug', caption: 'Bulk Billing for all Australians explained'",
+      "Verify all 8 files have valid video fields and JSON remains valid"
+    ],
+    "passes": true
+  }
+]
