@@ -7,7 +7,7 @@ import Lenis from "lenis";
 import { useLenis } from "lenis/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { PERSONAS, type Persona } from "@/content/personas";
 import { getGuidesFromSlugs } from "@/lib/guides";
@@ -81,7 +81,7 @@ function PersonaPickerCard({
     );
 }
 
-function PersonaDetailFullscreen({
+export function PersonaDetailFullscreen({
     persona,
     onBack,
 }: {
@@ -171,11 +171,18 @@ function PersonaDetailFullscreen({
     return (
         <motion.div
             className="fixed inset-0 z-50 overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0.01 : 0.3 }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }}
         >
+            {/* Background — fades in separately so layoutId image morphs at full opacity */}
+            <motion.div
+                className="pointer-events-none absolute inset-0"
+                style={{ backgroundColor: "#f0ede8" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: prefersReducedMotion ? 0.01 : 0.32, ease: [0.22, 1, 0.36, 1] }}
+            />
+
             {/* Sticky close button */}
             <button
                 type="button"
@@ -205,7 +212,12 @@ function PersonaDetailFullscreen({
                             style={{ backgroundColor: "#f0ede8" }}
                         >
                             {/* Far left — huge vertical name */}
-                            <div className="flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6">
+                            <motion.div
+                                className="flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6"
+                                initial={{ y: prefersReducedMotion ? 0 : 70, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.6, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                            >
                                 <span
                                     className="select-none font-black leading-none text-gray-900"
                                     style={{
@@ -219,10 +231,14 @@ function PersonaDetailFullscreen({
                                 >
                                     {persona.name}
                                 </span>
-                            </div>
+                            </motion.div>
 
-                            {/* Center — persona photo */}
-                            <div className="relative w-[42%] shrink-0 overflow-hidden">
+                            {/* Center — persona photo (layoutId shared element from intro card) */}
+                            <motion.div
+                                className="relative w-[42%] shrink-0"
+                                layoutId={`persona-photo-${persona.id}`}
+                                transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+                            >
                                 <Image
                                     src={persona.imageUrl}
                                     alt={persona.name}
@@ -231,12 +247,15 @@ function PersonaDetailFullscreen({
                                     priority
                                     className="object-cover"
                                 />
-                            </div>
+                            </motion.div>
 
                             {/* Right — role / hint / quote */}
-                            <div
+                            <motion.div
                                 className="flex flex-1 flex-col justify-between px-8 py-10 lg:px-10 lg:py-12"
                                 style={{ backgroundColor: "#f0ede8" }}
+                                initial={{ x: prefersReducedMotion ? 0 : 55, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{ duration: 0.55, delay: 0.48, ease: [0.22, 1, 0.36, 1] }}
                             >
                                 <div className="flex items-start">
                                     <p
@@ -268,7 +287,7 @@ function PersonaDetailFullscreen({
                                         {persona.name}, {persona.age} · {persona.origin}
                                     </p>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
                         {/* ── Panels 1–N: One full-screen panel per day ── */}
@@ -331,20 +350,12 @@ function PersonaDetailFullscreen({
     );
 }
 
-export function PersonaJourneyView() {
-    const searchParams = useSearchParams();
+export function PersonaJourneyView({ initialPersonaId }: { initialPersonaId: string | null }) {
     const router = useRouter();
-
-    const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
+    const [selectedPersona, setSelectedPersona] = useState<Persona | null>(() =>
+        initialPersonaId ? (PERSONAS.find((p) => p.id === initialPersonaId) ?? null) : null,
+    );
     const prefersReducedMotion = useReducedMotion();
-
-    useEffect(() => {
-        const personaId = searchParams.get("persona");
-        if (personaId && selectedPersona === null) {
-            const match = PERSONAS.find((p) => p.id === personaId);
-            if (match) setSelectedPersona(match);
-        }
-    }, [searchParams, selectedPersona]);
 
     function handleBack() {
         setSelectedPersona(null);

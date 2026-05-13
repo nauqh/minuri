@@ -7,7 +7,7 @@ export default function BookmarksPage() {
 	return (
 		<>
 			<Suspense fallback={null}>
-				<GuidesLibraryView mode="bookmarks" />
+				<GuidesLibraryView />
 			</Suspense>
 			<ScrollToTopButton />
 		</>

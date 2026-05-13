@@ -14,5 +14,5 @@ export function GuidesPageEntry() {
 		params.has("story") ||
 		params.has("needs");
 
-	return isReady ? <GuidesLibraryView mode="library" /> : <GuidesIntroView />;
+	return isReady ? <GuidesLibraryView /> : <GuidesIntroView />;
 }

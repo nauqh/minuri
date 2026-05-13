@@ -11,13 +11,14 @@ import {
 	Users,
 	type LucideIcon,
 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { GUIDE_TOPICS, GUIDES, type GuideTopicSlug } from "@/content/guides";
-import { PERSONAS } from "@/content/personas";
+import { PERSONAS, type Persona } from "@/content/personas";
+import { PersonaDetailFullscreen } from "@/components/guides/persona-journey-view";
 import { cn } from "@/lib/utils";
 
 type TopicVisual = {
@@ -60,6 +61,8 @@ export function GuidesIntroView() {
 	const router = useRouter();
 	const prefersReducedMotion = useReducedMotion();
 	const [selected, setSelected] = useState<Set<GuideTopicSlug>>(new Set());
+	const [activating, setActivating] = useState<Persona | null>(null);
+	const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
 
 	const guideCounts = new Map(
 		GUIDE_TOPICS.map((t) => [
@@ -91,6 +94,19 @@ export function GuidesIntroView() {
 
 	function handleSkip() {
 		router.push("/guides?ready=1");
+	}
+
+	function handlePersonaClick(persona: Persona) {
+		if (activating) return;
+		setActivating(persona);
+		setTimeout(() => {
+			setSelectedPersona(persona);
+			setActivating(null);
+		}, 150);
+	}
+
+	function handlePersonaBack() {
+		setSelectedPersona(null);
 	}
 
 	return (
@@ -297,73 +313,108 @@ export function GuidesIntroView() {
 								opacity: 0,
 								y: prefersReducedMotion ? 0 : 14,
 							}}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{
-								duration: 0.4,
-								delay: prefersReducedMotion
-									? 0
-									: 0.28 + i * 0.06,
-								ease: EASE,
-							}}
+							animate={
+								(activating && activating.id !== persona.id) || (selectedPersona && selectedPersona.id !== persona.id)
+									? { opacity: 0, scale: 0.93, y: 0, filter: "blur(6px)" }
+									: activating?.id === persona.id
+										? { opacity: 1, scale: 1.05, y: -8, filter: "blur(0px)" }
+										: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+							}
+							transition={
+								activating || selectedPersona
+									? { duration: 0.28, ease: EASE }
+									: {
+											duration: 0.4,
+											delay: prefersReducedMotion ? 0 : 0.28 + i * 0.06,
+											ease: EASE,
+										}
+							}
 						>
-							<Link
-								href={`/guides/journeys?persona=${persona.id}`}
-								className="group relative block overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50"
+							<button
+								type="button"
+								onClick={() => handlePersonaClick(persona)}
+								className={cn(
+									"group relative block w-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50",
+									activating?.id !== persona.id && "overflow-hidden",
+								)}
 							>
 								<div className="relative aspect-[3/4]">
-									<Image
-										src={persona.imageUrl}
-										alt={persona.name}
-										fill
-										sizes="(max-width: 640px) 50vw, 33vw"
-										className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-									/>
+									{/* Image — layoutId for shared-element morph into fullscreen */}
+									<motion.div
+										layoutId={`persona-photo-${persona.id}`}
+										className="absolute inset-0"
+										style={{ borderRadius: 16 }}
+										transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+									>
+										<Image
+											src={persona.imageUrl}
+											alt={persona.name}
+											fill
+											sizes="(max-width: 640px) 50vw, 33vw"
+											className="object-cover"
+										/>
+									</motion.div>
 
-									{/* Top: role badge + age · origin */}
-									<div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3 sm:p-4">
-										<span className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-white backdrop-blur-sm sm:text-xs">
-											{persona.role}
-										</span>
-										<span className="text-[10px] tabular-nums text-white/55 sm:text-xs">
-											{persona.age} · {persona.origin}
-										</span>
-									</div>
+									{/* Overlays — fade out instantly when this card activates */}
+									<div
+										className={cn(
+											"pointer-events-none absolute inset-0 transition-opacity duration-100",
+											activating?.id === persona.id && "opacity-0",
+										)}
+									>
+										{/* Top: role badge + age · origin */}
+										<div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3 sm:p-4">
+											<span className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-white backdrop-blur-sm sm:text-xs">
+												{persona.role}
+											</span>
+											<span className="text-[10px] tabular-nums text-white/55 sm:text-xs">
+												{persona.age} · {persona.origin}
+											</span>
+										</div>
 
-									{/* Bottom: name + tagline + reveal */}
-									<div className="absolute inset-x-0 bottom-0 p-3 sm:p-5">
-										<h3
-											className="text-xl font-bold leading-tight text-white sm:text-2xl"
-											style={{
-												fontFamily:
-													"var(--font-hero-serif)",
-											}}
-										>
-											{persona.name}
-										</h3>
-										<p className="mt-1.5 line-clamp-2 text-xs italic leading-snug text-white/80 sm:text-sm">
-											&ldquo;{persona.tagline}&rdquo;
-										</p>
-
-										{/* Situation + CTA — slides in on hover */}
-										<div className="mt-0 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:mt-3 group-hover:max-h-32 group-hover:opacity-100">
-											<p className="line-clamp-3 text-xs leading-relaxed text-white/70 sm:text-sm">
-												{persona.situation}
+										{/* Bottom: name + tagline + reveal */}
+										<div className="absolute inset-x-0 bottom-0 p-3 sm:p-5">
+											<h3
+												className="text-xl font-bold leading-tight text-white sm:text-2xl"
+												style={{
+													fontFamily: "var(--font-hero-serif)",
+												}}
+											>
+												{persona.name}
+											</h3>
+											<p className="mt-1.5 line-clamp-2 text-xs italic leading-snug text-white/80 sm:text-sm">
+												&ldquo;{persona.tagline}&rdquo;
 											</p>
-											<p className="mt-2 flex items-center gap-1 text-xs font-semibold text-white sm:text-sm">
-												Follow journey
-												<ArrowRight
-													className="size-3.5"
-													aria-hidden
-												/>
-											</p>
+
+											{/* Situation + CTA — slides in on hover */}
+											<div className="mt-0 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:mt-3 group-hover:max-h-32 group-hover:opacity-100">
+												<p className="line-clamp-3 text-xs leading-relaxed text-white/70 sm:text-sm">
+													{persona.situation}
+												</p>
+												<p className="mt-2 flex items-center gap-1 text-xs font-semibold text-white sm:text-sm">
+													Follow journey
+													<ArrowRight className="size-3.5" aria-hidden />
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>
-							</Link>
+							</button>
 						</motion.div>
 					))}
 				</div>
 			</div>
+
+			{/* Persona fullscreen overlay — mounted on this page, no navigation */}
+			<AnimatePresence>
+				{selectedPersona && (
+					<PersonaDetailFullscreen
+						key={selectedPersona.id}
+						persona={selectedPersona}
+						onBack={handlePersonaBack}
+					/>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 }

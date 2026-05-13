@@ -152,10 +152,10 @@ export function LandingServicesSection() {
 						From your first GP visit to your first lease — the local
 						knowledge you don&apos;t arrive with.
 					</p>
-					<div>
+					<div className="group relative inline-flex overflow-hidden rounded-full">
 						<Link
 							href="/journey"
-							className="group inline-flex h-11 items-center gap-1.5 rounded-full border border-minuri-white/70 px-5 text-sm font-medium text-minuri-white transition-colors duration-200 hover:bg-minuri-white hover:text-minuri-ocean"
+							className="relative z-10 inline-flex h-11 items-center gap-1.5 rounded-full border border-minuri-white/70 px-5 text-sm font-medium text-minuri-white transition-colors duration-300 group-hover:text-minuri-ocean"
 						>
 							Start your journey
 							<ChevronRight
@@ -163,12 +163,13 @@ export function LandingServicesSection() {
 								aria-hidden
 							/>
 						</Link>
+						<span className="absolute inset-0 translate-y-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 					</div>
 				</div>
 			</div>
 
 			{/* ── Split-screen showcase ── */}
-			<div className="flex flex-col overflow-hidden md:flex-row md:min-h-[82vh]">
+			<div className="flex flex-col overflow-hidden md:flex-row md:min-h-[100vh] pb-24 md:pb-32">
 				{/* ─── GUIDES panel ─── */}
 				<div
 					className="relative flex min-h-[60vh] flex-col justify-end overflow-hidden md:min-h-0"
@@ -397,7 +398,7 @@ export function LandingServicesSection() {
 			</div>
 
 			{/* ── Original 4-card grid ── */}
-			<div className="mx-auto w-full max-w-screen px-5 py-16 md:px-8 md:py-20">
+			{/* <div className="mx-auto w-full max-w-screen px-5 py-16 md:px-8 md:py-20">
 				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
 					{serviceCards.map((card, index) => (
 						<motion.div
@@ -432,7 +433,7 @@ export function LandingServicesSection() {
 						</motion.div>
 					))}
 				</div>
-			</div>
+			</div> */}
 		</section>
 	);
 }
