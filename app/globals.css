@@ -355,6 +355,11 @@ a:focus-visible .minuri-link-underline::after,
 	height: 0;
 }
 
+/* Hide native search clear button in type=search inputs */
+input[type="search"]::-webkit-search-cancel-button {
+	display: none;
+}
+
 /* ── Guide Scrapbook / Sticky-note UI ── */
 
 /* Moment section — lined journal paper with handwriting font */

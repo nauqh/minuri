@@ -78,19 +78,81 @@ export function LandingDataSection() {
 					</div>
 
 					<div className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5 md:mt-16">
-						{STAT_CARDS.map((card, i) => (
-							<LandingStatCard
-								key={card.stat}
-								stat={card.stat}
-								label={card.label}
-								source={card.source}
-								fullCitation={card.fullCitation}
-								accentClass={card.accentClass}
-								countTo={card.countTo}
-								countSuffix={card.countSuffix}
-								delay={i * 0.1}
-							/>
-						))}
+						{/* Insight text — spans 2 cols on sm+ */}
+						<motion.div
+							className="flex flex-col justify-between rounded-2xl bg-minuri-ocean p-8 sm:col-span-2 md:p-10"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, amount: 0.3 }}
+							transition={{ duration: 0.5, ease: easeOut }}
+						>
+							<p className="text-xs font-medium uppercase tracking-widest text-white/40">
+								The reality
+							</p>
+							<p className="mt-6 text-2xl font-bold leading-snug text-white md:text-3xl lg:text-[2.25rem]">
+								The systems that support you assume you already
+								know how they work.
+							</p>
+							<p className="mt-6 text-sm leading-relaxed text-white/50">
+								For young Australians stepping into independent
+								life — this gap is real, and it&apos;s
+								measurable.
+							</p>
+						</motion.div>
+
+						{/* 1 in 4 */}
+						<LandingStatCard
+							key={STAT_CARDS[0].stat}
+							stat={STAT_CARDS[0].stat}
+							label={STAT_CARDS[0].label}
+							source={STAT_CARDS[0].source}
+							fullCitation={STAT_CARDS[0].fullCitation}
+							accentClass={STAT_CARDS[0].accentClass}
+							delay={0.1}
+						/>
+
+						{/* 98% */}
+						<LandingStatCard
+							key={STAT_CARDS[1].stat}
+							stat={STAT_CARDS[1].stat}
+							label={STAT_CARDS[1].label}
+							source={STAT_CARDS[1].source}
+							fullCitation={STAT_CARDS[1].fullCitation}
+							accentClass={STAT_CARDS[1].accentClass}
+							countTo={STAT_CARDS[1].countTo}
+							countSuffix={STAT_CARDS[1].countSuffix}
+							delay={0.15}
+						/>
+
+						{/* Quote cell */}
+						<motion.div
+							className="flex items-center rounded-2xl bg-minuri-teal/10 p-8 md:p-10"
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, amount: 0.3 }}
+							transition={{
+								duration: 0.5,
+								delay: 0.2,
+								ease: easeOut,
+							}}
+						>
+							<p className="text-xl font-bold leading-snug text-minuri-ocean md:text-2xl">
+								Loneliness. Anxiety. Financial stress. These
+								aren&apos;t personal failures — they&apos;re
+								systemic gaps.
+							</p>
+						</motion.div>
+
+						{/* #1 */}
+						<LandingStatCard
+							key={STAT_CARDS[2].stat}
+							stat={STAT_CARDS[2].stat}
+							label={STAT_CARDS[2].label}
+							source={STAT_CARDS[2].source}
+							fullCitation={STAT_CARDS[2].fullCitation}
+							accentClass={STAT_CARDS[2].accentClass}
+							delay={0.25}
+						/>
 					</div>
 
 					<motion.div

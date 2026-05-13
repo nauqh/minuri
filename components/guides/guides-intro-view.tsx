@@ -357,10 +357,10 @@ export function GuidesIntroView() {
 
 									{/* Overlays — fade out instantly when this card activates */}
 									<div
-										className={cn(
-											"pointer-events-none absolute inset-0 transition-opacity duration-100",
-											activating?.id === persona.id && "opacity-0",
-										)}
+									className={cn(
+										"pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/15 transition-opacity duration-100",
+										activating?.id === persona.id && "opacity-0",
+									)}
 									>
 										{/* Top: role badge + age · origin */}
 										<div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3 sm:p-4">
@@ -375,25 +375,21 @@ export function GuidesIntroView() {
 										{/* Bottom: name + tagline + reveal */}
 										<div className="absolute inset-x-0 bottom-0 p-3 sm:p-5">
 											<h3
-												className="text-xl font-bold leading-tight text-white sm:text-2xl"
+												className="text-left text-xl font-bold leading-tight text-white sm:text-2xl"
 												style={{
 													fontFamily: "var(--font-hero-serif)",
 												}}
 											>
 												{persona.name}
 											</h3>
-											<p className="mt-1.5 line-clamp-2 text-xs italic leading-snug text-white/80 sm:text-sm">
+											<p className="mt-1.5 line-clamp-2 text-left text-xs italic leading-snug text-white/80 sm:text-sm">
 												&ldquo;{persona.tagline}&rdquo;
 											</p>
 
 											{/* Situation + CTA — slides in on hover */}
 											<div className="mt-0 max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:mt-3 group-hover:max-h-32 group-hover:opacity-100">
-												<p className="line-clamp-3 text-xs leading-relaxed text-white/70 sm:text-sm">
+												<p className="line-clamp-3 text-left text-xs leading-relaxed text-white/70 sm:text-sm">
 													{persona.situation}
-												</p>
-												<p className="mt-2 flex items-center gap-1 text-xs font-semibold text-white sm:text-sm">
-													Follow journey
-													<ArrowRight className="size-3.5" aria-hidden />
 												</p>
 											</div>
 										</div>
