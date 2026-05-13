@@ -5,30 +5,20 @@ import {
 	startTransition,
 	useDeferredValue,
 	useEffect,
-	useId,
 	useMemo,
 	useState,
 } from "react";
 import {
 	ArrowLeft,
-	Compass,
-	HeartPulse,
-	Home,
-	ListFilter,
-	Sandwich,
-	Search,
-	Users,
+	ArrowRight,
 	X,
-	type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { easeOut } from "@/components/landing/home-constants";
 import { GUIDE_TOPICS, GUIDES, type GuideTopicSlug } from "@/content/guides";
-import { PERSONAS } from "@/content/personas";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuidesShell } from "@/components/guides/guides-shell";
 import { GuidesTabNav } from "@/components/guides/guides-tab-nav";
@@ -45,14 +35,6 @@ import { cn } from "@/lib/utils";
 
 type GuidesLibraryViewProps = {
 	mode: GuideOrigin;
-};
-
-const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
-	"food-eating": Sandwich,
-	"getting-around": Compass,
-	"health-wellbeing": HeartPulse,
-	"home-admin": Home,
-	"social-belonging": Users,
 };
 
 const STORY_BEATS = [
@@ -137,7 +119,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		startTransition(() => {
 			const nextParams = new URLSearchParams(searchParams.toString());
 			updater(nextParams);
-
 			const nextQuery = nextParams.toString();
 			const nextHref = nextQuery ? `${pathname}?${nextQuery}` : pathname;
 			window.history.replaceState(null, "", nextHref);
@@ -175,32 +156,14 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			? topicSlug !== "all" && storyNeedsSet.has(topicSlug)
 			: activeTopicFilter === topicSlug;
 
-	const mobileFiltersPanelId = useId();
-	const [mobileLibraryFiltersOpen, setMobileLibraryFiltersOpen] =
-		useState(false);
-
 	useEffect(() => {
-		const shouldLockBody = mobileLibraryFiltersOpen || showStoryOverlay;
-		if (!shouldLockBody) return;
+		if (!showStoryOverlay) return;
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
 		return () => {
 			document.body.style.overflow = previousOverflow;
 		};
-	}, [mobileLibraryFiltersOpen, showStoryOverlay]);
-
-	useEffect(() => {
-		if (!mobileLibraryFiltersOpen) return;
-		function onKeyDown(event: KeyboardEvent) {
-			if (event.key === "Escape") {
-				setMobileLibraryFiltersOpen(false);
-			}
-		}
-		document.addEventListener("keydown", onKeyDown);
-		return () => {
-			document.removeEventListener("keydown", onKeyDown);
-		};
-	}, [mobileLibraryFiltersOpen]);
+	}, [showStoryOverlay]);
 
 	function onToggleStoryNeed(topicSlug: string) {
 		setStoryNeedsDraft((current) =>
@@ -213,7 +176,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 	function onSubmitStory(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		if (!canContinueStory) return;
-
 		const nextParams = new URLSearchParams(searchParams.toString());
 		nextParams.set("story", "ready");
 		nextParams.set("moments", storyMomentDraft.trim());
@@ -222,166 +184,181 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		router.replace(`${pathname}?${nextParams.toString()}`);
 	}
 
-	function renderLibraryFilters(onSelect?: () => void) {
-		const afterSelect = () => {
-			onSelect?.();
-		};
-
-		return (
-			<div className="space-y-2">
-				<button
-					type="button"
-					className={cn(
-						"w-full rounded-[0.85rem] border px-4 py-3 text-left transition-colors",
-						activeTopicFilter === "all" && !shouldApplyStoryNeedsFilter
-							? "border-minuri-teal/70 bg-minuri-mist"
-							: "border-minuri-silver/60 bg-minuri-white hover:bg-minuri-fog",
-					)}
-					onClick={() => {
-						updateParams((params) => params.delete("topic"));
-						afterSelect();
-					}}
-				>
-					<div className="flex items-center justify-between gap-3">
-						<span className="text-sm font-semibold text-minuri-ocean">All guides</span>
-						<span className="text-xs tabular-nums text-minuri-slate">{GUIDES.length}</span>
-					</div>
-				</button>
-
-				{GUIDE_TOPICS.map((topic) => {
-					const stats = topicStats.get(topic.slug);
-					const total = stats?.total ?? 0;
-					const saved = stats?.saved ?? 0;
-					const percent = total === 0 ? 0 : Math.round((saved / total) * 100);
-					const isActive = isStoryTopicChipActive(topic.slug);
-					const Icon = TOPIC_ICONS[topic.slug];
-
-					return (
-						<button
-							key={topic.slug}
-							type="button"
-							className={cn(
-								"w-full rounded-[0.85rem] border px-4 py-3.5 text-left transition-colors",
-								isActive
-									? "border-minuri-teal/70 bg-minuri-mist"
-									: "border-minuri-silver/60 bg-minuri-white hover:bg-minuri-fog",
-							)}
-							onClick={() => {
-								updateParams((params) => params.set("topic", topic.slug));
-								afterSelect();
-							}}
-						>
-							<div className="flex items-center gap-2.5">
-								<Icon
-									className={cn(
-										"size-4 shrink-0",
-										isActive ? "text-minuri-teal" : "text-minuri-mid",
-									)}
-									aria-hidden
-								/>
-								<span className="text-sm font-semibold text-minuri-ocean">
-									{topic.name}
-								</span>
-							</div>
-							<div className="mt-2.5 flex items-center gap-3">
-								<div className="h-1 flex-1 overflow-hidden rounded-full bg-minuri-silver/50">
-									<div
-										className="h-full rounded-full bg-minuri-teal transition-[width] duration-300"
-										style={{ width: `${percent}%` }}
-									/>
-								</div>
-								<span className="shrink-0 text-[11px] tabular-nums text-minuri-slate">
-									{saved}/{total}
-								</span>
-							</div>
-						</button>
-					);
-				})}
-			</div>
-		);
-	}
-
-	const librarySidebar = !isBookmarksMode ? (
-		<motion.aside
-			className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-8 lg:self-start"
-			aria-label="Moment progress and topics"
-			initial={{
-				opacity: 0,
-				x: prefersReducedMotion ? 0 : 18,
-			}}
-			animate={{ opacity: 1, x: 0 }}
-			transition={{
-				duration: prefersReducedMotion ? 0.01 : 0.5,
-				delay: prefersReducedMotion ? 0 : 0.06,
-				ease: easeOut,
-			}}
-		>
-			{renderLibraryFilters()}
-		</motion.aside>
-	) : null;
-
-	const mobileLibraryFiltersPortal = !isBookmarksMode ? (
-		<AnimatePresence>
-			{mobileLibraryFiltersOpen ? (
-				<motion.div
-					key="guides-library-filters-sheet"
-					className="fixed inset-0 z-60 flex justify-end lg:hidden"
-					role="presentation"
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-					transition={backdropTransition}
-				>
+	// ── Combined search + topic filter bar ──
+	const guidesSearchFilter = (
+		<div className="overflow-hidden rounded-2xl bg-minuri-white">
+			{/* Search row */}
+			<div className="flex items-center gap-6 px-8 py-6 xl:px-10 xl:py-8 2xl:px-14 2xl:py-10">
+				<input
+					id="guide-search"
+					type="search"
+					value={rawQuery}
+					placeholder="Search"
+					className="flex-1 bg-transparent text-[2.5rem] font-normal leading-none text-minuri-ocean outline-none placeholder:text-minuri-ocean/30 xl:text-[3.5rem] 2xl:text-[4.5rem]"
+					onChange={(e) =>
+						updateParams((params) => {
+							const v = e.target.value.trimStart();
+							if (v) params.set("q", v);
+							else params.delete("q");
+						})
+					}
+				/>
+				{rawQuery ? (
 					<button
 						type="button"
-						className="absolute inset-0 bg-minuri-ocean/40 backdrop-blur-[2px]"
-						aria-label="Close filters"
-						onClick={() => {
-							setMobileLibraryFiltersOpen(false);
-						}}
-					/>
-					<motion.div
-						id={mobileFiltersPanelId}
-						role="dialog"
-						aria-modal="true"
-						aria-labelledby={`${mobileFiltersPanelId}-title`}
-						className="relative z-10 flex h-full w-[min(100%,22rem)] flex-col border-l border-minuri-silver/70 bg-minuri-white shadow-[-12px_0_40px_-20px_color-mix(in_oklch,var(--minuri-ocean)_45%,transparent)]"
-						initial={{ x: "100%" }}
-						animate={{ x: 0 }}
-						exit={{ x: "100%" }}
-						transition={drawerTransition}
-						onClick={(event) => {
-							event.stopPropagation();
-						}}
+						aria-label="Clear search"
+						onClick={() => updateParams((params) => params.delete("q"))}
+						className="flex h-14 shrink-0 items-center justify-center rounded-2xl border border-minuri-silver/50 px-6 text-minuri-slate transition hover:bg-minuri-fog xl:h-16 xl:px-8 2xl:h-20 2xl:px-10"
 					>
-						<div className="flex shrink-0 items-center justify-between gap-3 border-b border-minuri-silver/70 px-4 py-3">
-							<h2
-								id={`${mobileFiltersPanelId}-title`}
-								className="text-base font-semibold tracking-tight text-minuri-ocean"
-							>
-								Topics
-							</h2>
-							<button
-								type="button"
-								className="flex size-9 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate transition-colors hover:bg-minuri-mist"
-								aria-label="Close side panel"
-								onClick={() => {
-									setMobileLibraryFiltersOpen(false);
-								}}
-							>
-								<X className="size-4" aria-hidden="true" />
-							</button>
-						</div>
-						<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5">
-							{renderLibraryFilters(() => {
-								setMobileLibraryFiltersOpen(false);
+						<X className="size-5 xl:size-6" />
+					</button>
+				) : (
+					<div className="flex h-14 shrink-0 items-center justify-center rounded-2xl bg-minuri-ocean px-8 text-white xl:h-16 xl:px-10 2xl:h-20 2xl:px-12">
+						<ArrowRight className="size-6 xl:size-7 2xl:size-8" />
+					</div>
+				)}
+			</div>
+
+			{/* Divider — full width */}
+			<div className="mx-8 h-px bg-minuri-silver/30 xl:mx-10 2xl:mx-14" />
+
+			{/* Topic filter row */}
+			<div className="flex items-center gap-4 overflow-x-auto px-8 py-4 scrollbar-none xl:gap-6 xl:px-10 xl:py-5 2xl:gap-8 2xl:px-14 2xl:py-6">
+				<button
+					type="button"
+					onClick={() => updateParams((params) => params.delete("topic"))}
+					className={cn(
+						"shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
+						activeTopicFilter === "all" && !shouldApplyStoryNeedsFilter
+							? "bg-minuri-ocean text-white"
+							: "text-minuri-slate/50 hover:bg-minuri-fog hover:text-minuri-ocean",
+					)}
+				>
+					All
+				</button>
+				{GUIDE_TOPICS.map((topic) => (
+					<button
+						key={topic.slug}
+						type="button"
+						onClick={() => updateParams((params) => params.set("topic", topic.slug))}
+						className={cn(
+							"shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
+							isStoryTopicChipActive(topic.slug)
+								? "bg-minuri-ocean text-white"
+								: "text-minuri-slate/50 hover:bg-minuri-fog hover:text-minuri-ocean",
+						)}
+					>
+						{topic.name}
+					</button>
+				))}
+			</div>
+		</div>
+	);
+
+	const bookmarksSearchAndFilters = (
+		<div className="overflow-hidden rounded-2xl bg-minuri-white">
+			<div className="flex items-center gap-6 px-8 py-6 xl:px-10 xl:py-8 2xl:px-14 2xl:py-10">
+				<input
+					type="search"
+					value={rawQuery}
+					placeholder="Search"
+					className="flex-1 bg-transparent text-[2.5rem] font-normal leading-none text-minuri-ocean outline-none placeholder:text-minuri-ocean/30 xl:text-[3.5rem] 2xl:text-[4.5rem]"
+					onChange={(e) =>
+						updateParams((params) => {
+							const v = e.target.value.trimStart();
+							if (v) params.set("q", v);
+							else params.delete("q");
+						})
+					}
+				/>
+				{rawQuery ? (
+					<button
+						type="button"
+						aria-label="Clear search"
+						onClick={() => updateParams((params) => params.delete("q"))}
+						className="flex h-14 shrink-0 items-center justify-center rounded-2xl border border-minuri-silver/50 px-6 text-minuri-slate transition hover:bg-minuri-fog xl:h-16 xl:px-8 2xl:h-20 2xl:px-10"
+					>
+						<X className="size-5 xl:size-6" />
+					</button>
+				) : (
+					<div className="flex h-14 shrink-0 items-center justify-center rounded-2xl bg-minuri-ocean px-8 text-white xl:h-16 xl:px-10 2xl:h-20 2xl:px-12">
+						<ArrowRight className="size-6 xl:size-7 2xl:size-8" />
+					</div>
+				)}
+			</div>
+			<div className="mx-8 h-px bg-minuri-silver/30 xl:mx-10 2xl:mx-14" />
+			<div className="flex items-center gap-4 overflow-x-auto px-8 py-4 xl:gap-6 xl:px-10 xl:py-5 2xl:gap-8 2xl:px-14 2xl:py-6">
+				{topicOptions.map((topic) => (
+					<button
+						key={topic.slug}
+						type="button"
+						onClick={() =>
+							updateParams((params) => {
+								if (topic.slug === "all") params.delete("topic");
+								else params.set("topic", topic.slug);
+							})
+						}
+						className={cn(
+							"shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
+							activeTopicFilter === topic.slug
+								? "bg-minuri-ocean text-white"
+								: "text-minuri-slate/50 hover:bg-minuri-fog hover:text-minuri-ocean",
+						)}
+					>
+						{topic.name}
+					</button>
+				))}
+			</div>
+		</div>
+	);
+
+	const guidesListBody =
+		isBookmarksMode && !hasHydrated ? (
+			<section className="rounded-[2rem] bg-minuri-white p-6 shadow-sm ring-1 ring-minuri-silver/40">
+				<p className="text-sm leading-6 text-minuri-slate">
+					Loading bookmarks...
+				</p>
+			</section>
+		) : visibleGuides.length > 0 ? (
+			<section>
+				{!isBookmarksMode ? (
+					<div className="mb-8">
+						<h2 className="text-2xl font-bold tracking-tight text-minuri-ocean xl:text-3xl">
+							{activeTopicLabel}
+						</h2>
+					</div>
+				) : null}
+				<div className="grid grid-cols-1 gap-x-4 gap-y-12 sm:grid-cols-2">
+					{visibleGuides.map((guide, index) => (
+						<GuideCard
+							key={guide.slug}
+							guide={guide}
+							href={buildGuideHref(guide, {
+								topicFilter: activeTopicFilter,
+								query: rawQuery,
+								from: mode,
 							})}
-						</div>
-					</motion.div>
-				</motion.div>
-			) : null}
-		</AnimatePresence>
-	) : null;
+							bookmarked={isBookmarked(guide.slug)}
+							onToggleBookmark={toggleBookmark}
+							animationDelay={(index % 3) * 0.06}
+						/>
+					))}
+				</div>
+			</section>
+		) : (
+			<section className="rounded-[2rem] bg-minuri-white p-8 text-center shadow-sm ring-1 ring-minuri-silver/40">
+				<h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
+					No guides found
+				</h2>
+				<p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-minuri-slate">
+					{isBookmarksMode
+						? "Try another topic or a different search."
+						: rawQuery.trim()
+							? "Try a different search, or adjust your topic or moment filters."
+							: "Try another moment or topic."}
+				</p>
+			</section>
+		);
 
 	const storyOverlay = showStoryOverlay ? (
 		<AnimatePresence>
@@ -416,17 +393,13 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 							Your moment
 							<textarea
 								value={storyMomentDraft}
-								onChange={(event) =>
-									setStoryMomentDraft(event.target.value)
-								}
+								onChange={(e) => setStoryMomentDraft(e.target.value)}
 								placeholder="Example: I arrived this week, still figuring out transport, and I am worried about affordable food and settling in."
 								className="mt-3 h-36 w-full resize-none overflow-y-auto rounded-[1rem] border border-minuri-silver/80 bg-minuri-white p-4 text-sm leading-6 text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate/65 focus:border-minuri-teal"
 							/>
 							<p className="mt-2 text-xs font-normal text-minuri-slate">
 								{remainingStoryChars > 0
-									? `Add ${remainingStoryChars} more character${
-											remainingStoryChars === 1 ? "" : "s"
-										} to continue.`
+									? `Add ${remainingStoryChars} more character${remainingStoryChars === 1 ? "" : "s"} to continue.`
 									: "Great, your moment is long enough."}
 							</p>
 						</label>
@@ -435,21 +408,16 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 								What do you need most right now?
 							</p>
 							<p className="mt-2 text-xs text-minuri-slate">
-								Choose one or more areas so we can prioritize
-								your guide path.
+								Choose one or more areas so we can prioritize your guide path.
 							</p>
 							<div className="mt-4 flex flex-wrap gap-2">
 								{GUIDE_TOPICS.map((topic) => {
-									const selected = storyNeedsDraft.includes(
-										topic.slug,
-									);
+									const selected = storyNeedsDraft.includes(topic.slug);
 									return (
 										<button
 											key={topic.slug}
 											type="button"
-											onClick={() =>
-												onToggleStoryNeed(topic.slug)
-											}
+											onClick={() => onToggleStoryNeed(topic.slug)}
 											className={cn(
 												"min-h-10 rounded-full px-4 py-2 text-xs font-medium transition-colors",
 												selected
@@ -499,176 +467,6 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 		</AnimatePresence>
 	) : null;
 
-	const guideSearchField = (
-		<div className="relative">
-			<label htmlFor="guide-search" className="sr-only">
-				Search guides
-			</label>
-			<Search
-				className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-minuri-slate"
-				aria-hidden="true"
-			/>
-			<input
-				id="guide-search"
-				type="search"
-				value={rawQuery}
-				placeholder="Search topics like bulk billing, Myki or rent"
-				className="h-12 w-full rounded-[0.85rem] border border-minuri-silver/80 bg-minuri-white pl-12 pr-12 text-sm text-minuri-ocean outline-none ring-0 placeholder:text-minuri-slate focus:border-minuri-teal"
-				onChange={(event) =>
-					updateParams((params) => {
-						const nextValue = event.target.value.trimStart();
-						if (nextValue) {
-							params.set("q", nextValue);
-						} else {
-							params.delete("q");
-						}
-					})
-				}
-			/>
-			{rawQuery ? (
-				<button
-					type="button"
-					className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate hover:bg-minuri-mist"
-					aria-label="Clear search"
-					onClick={() =>
-						updateParams((params) => {
-							params.delete("q");
-						})
-					}
-				>
-					<X className="size-4" aria-hidden="true" />
-				</button>
-			) : null}
-		</div>
-	);
-
-	const bookmarksSearchAndFilters = (
-		<section className="rounded-[1.5rem] bg-minuri-white p-6 md:p-8">
-			<div className="grid gap-6">
-				{guideSearchField}
-
-				<div className="flex flex-wrap gap-2">
-					{topicOptions.map((topic) => (
-						<button
-							key={topic.slug}
-							type="button"
-							className={cn(
-								"min-h-10 rounded-full px-4 py-2 text-xs font-medium transition-colors",
-								activeTopicFilter === topic.slug
-									? "bg-minuri-teal text-primary-foreground"
-									: "bg-minuri-mist text-minuri-slate hover:bg-minuri-ice",
-							)}
-							onClick={() =>
-								updateParams((params) => {
-									if (topic.slug === "all") {
-										params.delete("topic");
-									} else {
-										params.set("topic", topic.slug);
-									}
-								})
-							}
-						>
-							{topic.name}
-						</button>
-					))}
-				</div>
-			</div>
-		</section>
-	);
-
-	const guidesListBody =
-		isBookmarksMode && !hasHydrated ? (
-			<section className="rounded-[2rem] bg-minuri-white p-6 shadow-sm ring-1 ring-minuri-silver/40">
-				<p className="text-sm leading-6 text-minuri-slate">
-					Loading bookmarks...
-				</p>
-			</section>
-		) : visibleGuides.length > 0 ? (
-			<section>
-				{!isBookmarksMode ? (
-					<div className="mb-5 flex flex-col gap-1 border-b border-minuri-silver/70 pb-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
-						<h2 className="text-lg font-semibold tracking-tight text-minuri-ocean">
-							{activeTopicLabel}
-						</h2>
-						<p className="text-xs text-minuri-slate">
-							Read in sequence, one step at a time
-						</p>
-					</div>
-				) : null}
-				<div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-					{visibleGuides.map((guide, index) => (
-						<GuideCard
-							key={guide.slug}
-							guide={guide}
-							href={buildGuideHref(guide, {
-								topicFilter: activeTopicFilter,
-								query: rawQuery,
-								from: mode,
-							})}
-							bookmarked={isBookmarked(guide.slug)}
-							onToggleBookmark={toggleBookmark}
-							animationDelay={(index % 3) * 0.06}
-						/>
-					))}
-				</div>
-			</section>
-		) : (
-			<section className="rounded-[2rem] bg-minuri-white p-8 text-center shadow-sm ring-1 ring-minuri-silver/40">
-				<h2 className="text-xl font-semibold tracking-tight text-minuri-ocean">
-					No guides found
-				</h2>
-				<p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-minuri-slate">
-					{isBookmarksMode
-						? "Try another topic or a different search."
-						: rawQuery.trim()
-							? "Try a different search, or adjust your topic or moment filters."
-							: "Try another moment or topic."}
-				</p>
-			</section>
-		);
-
-	const storyContextBanner =
-		!isBookmarksMode && (storyMoment || storyNeedsLabels.length > 0) ? (
-			<section className="border-l-4 border-minuri-teal/60 px-4 py-2 md:px-5">
-				<p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-minuri-mid">
-					{storyMoment ? "Your story-guided path" : "Filtered by topic"}
-				</p>
-				{storyMoment ? (
-					<p className="mt-2 text-sm leading-6 text-minuri-slate">
-						{storyMoment}
-					</p>
-				) : null}
-				{storyNeedsLabels.length > 0 ? (
-					<p className="mt-3 text-xs text-minuri-slate">
-						{storyMoment ? "Prioritizing:" : "Showing:"} {storyNeedsLabels.join(" • ")}
-					</p>
-				) : null}
-			</section>
-		) : null;
-
-	const libraryHeaderFiltersButton = !isBookmarksMode ? (
-		<button
-			type="button"
-			className="relative z-50 flex size-10 items-center justify-center rounded-full border border-minuri-silver/70 bg-minuri-white text-minuri-ocean shadow-[0_1px_2px_color-mix(in_oklch,var(--minuri-ocean)_12%,transparent)] transition-colors hover:bg-minuri-fog focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/45 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white lg:hidden"
-			aria-expanded={mobileLibraryFiltersOpen}
-			aria-controls={mobileFiltersPanelId}
-			aria-label={
-				mobileLibraryFiltersOpen
-					? "Topic filters open"
-					: "Open topic filters"
-			}
-			onClick={() => {
-				setMobileLibraryFiltersOpen(true);
-			}}
-		>
-			<ListFilter
-				className="size-[1.15rem] shrink-0"
-				strokeWidth={2}
-				aria-hidden
-			/>
-		</button>
-	) : null;
-
 	const title = isBookmarksMode ? "My Bookmarks" : "Your Guides";
 	const description = isBookmarksMode
 		? "Saved chapters from every moment, all in one place."
@@ -689,60 +487,14 @@ export function GuidesLibraryView({ mode }: GuidesLibraryViewProps) {
 			title={title}
 			description={description}
 			headerStart={libraryBackHome}
-			headerEnd={libraryHeaderFiltersButton}
 		>
 			<GuidesTabNav />
 			{!isBookmarksMode ? (
 				<>
 					{storyOverlay}
-					{mobileLibraryFiltersPortal}
-					<div className="grid items-start gap-x-10 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] xl:gap-x-14">
-						{librarySidebar}
-						<div className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1">
-							{storyContextBanner}
-
-							{/* Journey strip */}
-							<section>
-								<div className="mb-5 flex items-center justify-between">
-									<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-										Follow a journey
-									</p>
-									<Link
-										href="/guides/journeys"
-										className="text-xs font-medium text-minuri-teal transition-colors hover:text-minuri-ocean"
-									>
-										Browse all →
-									</Link>
-								</div>
-								<div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-									{PERSONAS.map((persona) => (
-										<Link
-											key={persona.id}
-											href={`/guides/journeys?persona=${persona.id}`}
-											className="group relative block overflow-hidden rounded-xl"
-										>
-											<div className="relative aspect-[3/4]">
-												<Image
-													src={persona.imageUrl}
-													alt={persona.name}
-													fill
-													sizes="(max-width: 640px) 33vw, 16vw"
-													className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-												/>
-												<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-												<div className="absolute bottom-0 left-0 right-0 p-2.5">
-													<p className="text-xs font-bold text-white">{persona.name}</p>
-													<p className="mt-0.5 text-[10px] text-white/60">{persona.role}</p>
-												</div>
-											</div>
-										</Link>
-									))}
-								</div>
-							</section>
-
-							{!isBookmarksMode ? guideSearchField : null}
-							{guidesListBody}
-						</div>
+					<div className="space-y-8">
+						{guidesSearchFilter}
+						{guidesListBody}
 					</div>
 				</>
 			) : (

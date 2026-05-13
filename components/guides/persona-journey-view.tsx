@@ -7,7 +7,7 @@ import Lenis from "lenis";
 import { useLenis } from "lenis/react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { PERSONAS, type Persona } from "@/content/personas";
 import { getGuidesFromSlugs } from "@/lib/guides";
@@ -334,7 +334,7 @@ function PersonaDetailFullscreen({
 export function PersonaJourneyView() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const pathname = usePathname();
+
     const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
     const prefersReducedMotion = useReducedMotion();
 
@@ -348,10 +348,7 @@ export function PersonaJourneyView() {
 
     function handleBack() {
         setSelectedPersona(null);
-        const nextParams = new URLSearchParams(searchParams.toString());
-        nextParams.delete("persona");
-        const nextHref = nextParams.size > 0 ? `${pathname}?${nextParams}` : pathname;
-        router.replace(nextHref);
+        router.push("/guides");
     }
 
     const headerStart = (

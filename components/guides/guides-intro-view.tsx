@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
-	Check,
 	Compass,
 	HeartPulse,
 	Home,
@@ -12,7 +11,7 @@ import {
 	Users,
 	type LucideIcon,
 } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,11 +27,31 @@ type TopicVisual = {
 };
 
 const TOPIC_VISUALS: Record<GuideTopicSlug, TopicVisual> = {
-	"food-eating":      { icon: Sandwich,   heroBg: "#00f5c8", description: "Eat well on any budget" },
-	"getting-around":   { icon: Compass,    heroBg: "#5dd6ff", description: "Navigate the city with confidence" },
-	"health-wellbeing": { icon: HeartPulse, heroBg: "#fcf300", description: "Stay healthy and supported" },
-	"home-admin":       { icon: Home,       heroBg: "#ffc2d1", description: "Handle rent, bills and admin" },
-	"social-belonging": { icon: Users,      heroBg: "#cae9ff", description: "Build connections from scratch" },
+	"food-eating": {
+		icon: Sandwich,
+		heroBg: "#00f5c8",
+		description: "Eat well on any budget",
+	},
+	"getting-around": {
+		icon: Compass,
+		heroBg: "#5dd6ff",
+		description: "Navigate the city with confidence",
+	},
+	"health-wellbeing": {
+		icon: HeartPulse,
+		heroBg: "#fcf300",
+		description: "Stay healthy and supported",
+	},
+	"home-admin": {
+		icon: Home,
+		heroBg: "#ffc2d1",
+		description: "Handle rent, bills and admin",
+	},
+	"social-belonging": {
+		icon: Users,
+		heroBg: "#cae9ff",
+		description: "Build connections from scratch",
+	},
 };
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -43,7 +62,10 @@ export function GuidesIntroView() {
 	const [selected, setSelected] = useState<Set<GuideTopicSlug>>(new Set());
 
 	const guideCounts = new Map(
-		GUIDE_TOPICS.map((t) => [t.slug, GUIDES.filter((g) => g.topic === t.slug).length]),
+		GUIDE_TOPICS.map((t) => [
+			t.slug,
+			GUIDES.filter((g) => g.topic === t.slug).length,
+		]),
 	);
 
 	const totalSelected = [...selected].reduce(
@@ -92,7 +114,7 @@ export function GuidesIntroView() {
 			</div>
 
 			{/* ── Hero ── */}
-			<div className="mx-auto max-w-screen-2xl px-6 pb-10 pt-6 text-center">
+			<div className="mx-auto max-w-full px-6 pb-10 pt-6 text-center">
 				<motion.span
 					className="landing-section-kicker"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
@@ -103,19 +125,18 @@ export function GuidesIntroView() {
 				</motion.span>
 
 				<motion.h1
-					className="mt-4 text-4xl font-black uppercase tracking-tight text-minuri-ocean md:text-5xl lg:text-6xl"
-					style={{ fontFamily: "var(--font-hero-serif)" }}
+					className="landing-section-heading"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, delay: 0.06, ease: EASE }}
 				>
 					What do you need
 					<br />
-					<span className="text-minuri-teal">most right now?</span>
+					most right now?
 				</motion.h1>
 
 				<motion.p
-					className="mx-auto mt-4 max-w-md text-sm font-medium text-minuri-slate"
+					className="landing-section-subheading mt-4"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, delay: 0.16, ease: EASE }}
@@ -126,7 +147,7 @@ export function GuidesIntroView() {
 
 			{/* ── Topic cards ── */}
 			<div className="mx-auto max-w-screen-2xl px-6 pb-8">
-				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
 					{GUIDE_TOPICS.map((topic, i) => {
 						const visual = TOPIC_VISUALS[topic.slug];
 						const Icon = visual.icon;
@@ -140,66 +161,52 @@ export function GuidesIntroView() {
 								onClick={() => toggle(topic.slug)}
 								aria-pressed={isSelected}
 								className={cn(
-									"group relative flex min-h-[10rem] flex-col gap-3 rounded-2xl border-2 p-5 text-left outline-none transition-shadow duration-200",
+									"group relative flex min-h-[10rem] flex-col gap-3 rounded-2xl border p-5 text-left outline-none",
 									"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2 focus-visible:ring-offset-minuri-white",
 									isSelected
-										? "shadow-md"
-										: "border-minuri-silver/50 bg-white hover:border-minuri-silver hover:shadow-sm",
+										? "ring-[2.5px] ring-[#05292a]/30 ring-offset-2 shadow-[0_16px_32px_-12px_rgba(2,24,25,0.28)]"
+										: "hover:shadow-sm",
 								)}
-								style={
-									isSelected
-										? {
-												backgroundColor: `${visual.heroBg}26`,
-												borderColor: visual.heroBg,
-												boxShadow: `0 4px 20px -6px ${visual.heroBg}55`,
-											}
-										: undefined
-								}
-								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{
-									duration: 0.45,
-									delay: prefersReducedMotion ? 0 : i * 0.07,
-									ease: EASE,
+								style={{
+									backgroundColor: visual.heroBg,
+									borderColor: visual.heroBg,
 								}}
-								whileHover={{ scale: prefersReducedMotion ? 1 : 1.02 }}
-								whileTap={{ scale: prefersReducedMotion ? 1 : 0.97 }}
+								initial={{
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : 20,
+								}}
+								animate={{
+									opacity: 1,
+									y: 0,
+									scale: isSelected && !prefersReducedMotion ? 1.03 : 1,
+								}}
+								transition={{
+									opacity: { duration: 0.45, delay: prefersReducedMotion ? 0 : i * 0.07, ease: EASE },
+									y: { duration: 0.45, delay: prefersReducedMotion ? 0 : i * 0.07, ease: EASE },
+									scale: { type: "spring", stiffness: 380, damping: 26 },
+								}}
+								whileHover={{
+									scale: prefersReducedMotion ? 1 : isSelected ? 1.03 : 1.02,
+								}}
+								whileTap={{
+									scale: prefersReducedMotion ? 1 : 0.97,
+								}}
 							>
-								{/* Checkmark badge */}
-								<AnimatePresence>
-									{isSelected && (
-										<motion.div
-											className="absolute right-3 top-3 flex size-6 items-center justify-center rounded-full border border-[#05292a30]"
-											style={{ backgroundColor: visual.heroBg }}
-											initial={{ scale: 0, opacity: 0 }}
-											animate={{ scale: 1, opacity: 1 }}
-											exit={{ scale: 0, opacity: 0 }}
-											transition={{ type: "spring", stiffness: 420, damping: 22 }}
-										>
-											<Check className="size-3.5 text-[#05292a]" strokeWidth={2.5} aria-hidden />
-										</motion.div>
-									)}
-								</AnimatePresence>
-
 								<Icon
-									className="size-9 shrink-0 transition-transform duration-200 group-hover:scale-110"
-									style={{ color: isSelected ? visual.heroBg : visual.heroBg }}
+									className="size-9 shrink-0 text-[#05292a] transition-transform duration-200 group-hover:scale-110"
 									aria-hidden
 								/>
 
 								<div className="flex-1">
-									<h3 className="font-semibold leading-tight text-minuri-ocean">
+									<h3 className="font-semibold leading-tight text-[#05292a]">
 										{topic.name}
 									</h3>
-									<p className="mt-1 text-xs leading-snug text-minuri-slate">
+									<p className="mt-1 text-xs leading-snug text-[#163a3a]">
 										{visual.description}
 									</p>
 								</div>
 
-								<span
-									className="mt-auto text-xs font-semibold"
-									style={{ color: isSelected ? visual.heroBg : visual.heroBg }}
-								>
+								<span className="mt-auto text-xs font-semibold text-[#05292a]">
 									{count} {count === 1 ? "guide" : "guides"}
 								</span>
 							</motion.button>
@@ -219,15 +226,29 @@ export function GuidesIntroView() {
 								? "cursor-pointer bg-minuri-teal text-white shadow-lg hover:shadow-xl"
 								: "cursor-not-allowed bg-minuri-silver/40 text-minuri-slate",
 						)}
-						whileHover={{ scale: selected.size > 0 && !prefersReducedMotion ? 1.05 : 1 }}
-						whileTap={{ scale: selected.size > 0 && !prefersReducedMotion ? 0.97 : 1 }}
-						transition={{ duration: 0.12, ease: [0.22, 1, 0.36, 1] }}
+						whileHover={{
+							scale:
+								selected.size > 0 && !prefersReducedMotion
+									? 1.05
+									: 1,
+						}}
+						whileTap={{
+							scale:
+								selected.size > 0 && !prefersReducedMotion
+									? 0.97
+									: 1,
+						}}
+						transition={{
+							duration: 0.12,
+							ease: [0.22, 1, 0.36, 1],
+						}}
 					>
 						{selected.size === 0 ? (
 							"Select a topic to continue"
 						) : (
 							<>
-								Explore {totalSelected} {totalSelected === 1 ? "guide" : "guides"}
+								Explore {totalSelected}{" "}
+								{totalSelected === 1 ? "guide" : "guides"}
 								<ArrowRight className="size-4" aria-hidden />
 							</>
 						)}
@@ -258,7 +279,8 @@ export function GuidesIntroView() {
 			<div className="mx-auto max-w-screen-2xl px-6 pb-16">
 				<div className="mb-6 flex items-end justify-between">
 					<p className="text-sm text-minuri-slate">
-						Choose someone like you — we&apos;ll open their curated week of guides.
+						Choose someone like you — we&apos;ll open their curated
+						week of guides.
 					</p>
 					<Link
 						href="/guides/journeys"
@@ -271,11 +293,16 @@ export function GuidesIntroView() {
 					{PERSONAS.map((persona, i) => (
 						<motion.div
 							key={persona.id}
-							initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 14 }}
+							initial={{
+								opacity: 0,
+								y: prefersReducedMotion ? 0 : 14,
+							}}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{
 								duration: 0.4,
-								delay: prefersReducedMotion ? 0 : 0.28 + i * 0.06,
+								delay: prefersReducedMotion
+									? 0
+									: 0.28 + i * 0.06,
 								ease: EASE,
 							}}
 						>
@@ -292,11 +319,6 @@ export function GuidesIntroView() {
 										className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
 									/>
 
-									{/* Base gradient */}
-									<div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
-									{/* Extra darkness on hover */}
-									<div className="absolute inset-0 bg-black/0 transition-[background-color] duration-300 group-hover:bg-black/15" />
-
 									{/* Top: role badge + age · origin */}
 									<div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3 sm:p-4">
 										<span className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-white backdrop-blur-sm sm:text-xs">
@@ -311,7 +333,10 @@ export function GuidesIntroView() {
 									<div className="absolute inset-x-0 bottom-0 p-3 sm:p-5">
 										<h3
 											className="text-xl font-bold leading-tight text-white sm:text-2xl"
-											style={{ fontFamily: "var(--font-hero-serif)" }}
+											style={{
+												fontFamily:
+													"var(--font-hero-serif)",
+											}}
 										>
 											{persona.name}
 										</h3>
@@ -326,7 +351,10 @@ export function GuidesIntroView() {
 											</p>
 											<p className="mt-2 flex items-center gap-1 text-xs font-semibold text-white sm:text-sm">
 												Follow journey
-												<ArrowRight className="size-3.5" aria-hidden />
+												<ArrowRight
+													className="size-3.5"
+													aria-hidden
+												/>
 											</p>
 										</div>
 									</div>
