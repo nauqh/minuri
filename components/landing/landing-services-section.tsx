@@ -4,8 +4,7 @@ import Link from "next/link";
 import { ChevronRight, MapPin, BookOpen } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { NearMeMap } from "@/components/near-me/near-me-map";
-import type { NearMePlace } from "@/lib/near-me";
+import Image from "next/image";
 
 // ─── Guide note cards (left panel) ────────────────────────────────────────
 
@@ -45,65 +44,6 @@ const GUIDE_NOTES = [
 		],
 		rotate: -3,
 		floatPhase: 1.6,
-	},
-];
-
-// ─── Showcase map data (right panel) ──────────────────────────────────────
-
-const SHOWCASE_PLACES: NearMePlace[] = [
-	{
-		id: "showcase-rmh",
-		name: "Royal Melbourne Hospital",
-		address: "300 Grattan St, Parkville VIC 3050",
-		lat: -37.7995,
-		lng: 144.955,
-		topic: "health-wellbeing",
-		subtype: "hospital",
-		type: "Public Hospital",
-		rating: 3.9,
-		reviewCount: 1240,
-		openNow: true,
-	},
-	{
-		id: "showcase-headspace",
-		name: "headspace Melbourne",
-		address: "Level 2, 13-15 Batman St, West Melbourne VIC 3003",
-		lat: -37.8118,
-		lng: 144.949,
-		topic: "health-wellbeing",
-		subtype: "mental-health",
-		type: "Mental Health Service",
-		rating: 4.2,
-		reviewCount: 89,
-		openNow: true,
-		price: "Free",
-	},
-	{
-		id: "showcase-cbd-medical",
-		name: "Melbourne CBD Medical Centre",
-		address: "197 Elizabeth St, Melbourne VIC 3000",
-		lat: -37.8132,
-		lng: 144.961,
-		topic: "health-wellbeing",
-		subtype: "gp",
-		type: "General Practitioner",
-		rating: 4.0,
-		reviewCount: 312,
-		openNow: true,
-	},
-	{
-		id: "showcase-carlton",
-		name: "Carlton Clinic",
-		address: "186 Faraday St, Carlton VIC 3053",
-		lat: -37.802,
-		lng: 144.966,
-		topic: "health-wellbeing",
-		subtype: "gp",
-		type: "General Practitioner",
-		rating: 4.5,
-		reviewCount: 156,
-		openNow: false,
-		hours: "Closes 5 pm",
 	},
 ];
 
@@ -397,17 +337,15 @@ export function LandingServicesSection() {
 					onMouseEnter={() => setHovered("nearby")}
 					onMouseLeave={() => setHovered(null)}
 				>
-					{/* Real NearMeMap fills entire panel */}
-					<div className="absolute inset-0">
-						<NearMeMap
-							places={SHOWCASE_PLACES}
-							selectedPlaceId={null}
-							onSelectPlace={() => {}}
-							topic="health-wellbeing"
-							hoveredPlaceId={null}
-							onHoverPlace={() => {}}
-						/>
-					</div>
+					{/* Pre-saved map screenshot — zero credits, no resize lag */}
+					<Image
+						src="/map-preview.png"
+						alt=""
+						fill
+						className="object-cover"
+						quality={100}
+						priority={false}
+					/>
 
 					{/* Gradient: map fades into content below */}
 					<div
