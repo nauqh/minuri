@@ -121,7 +121,7 @@ function HeroTopicCard({
 					</span>
 				</div>
 
-				<p className="text-[0.7rem] leading-snug text-[#163a3a]/70 md:text-[0.75rem]">
+				<p className="text-[0.8rem] leading-snug text-[#163a3a]">
 					{card.desc}
 				</p>
 			</motion.div>

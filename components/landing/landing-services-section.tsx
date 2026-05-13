@@ -306,7 +306,7 @@ export function LandingServicesSection() {
 						</h3>
 						<Link
 							href="/guides"
-							className="group/cta mt-7 inline-flex items-center gap-2 rounded-full border border-minuri-white/30 bg-minuri-white/10 px-5 py-2.5 text-sm font-semibold text-minuri-white transition-colors duration-200 hover:bg-minuri-white hover:text-minuri-ocean"
+							className="group/cta mt-7 inline-flex items-center gap-2 rounded-full border border-minuri-white/30 bg-minuri-white/10 px-5 py-2.5 text-sm font-semibold text-minuri-white transition-colors duration-200 hover:bg-minuri-white hover:text-minuri-ocean hover:scale-105 transition-transform duration-200 ease-out"
 						>
 							Explore guides
 							<ChevronRight
@@ -384,7 +384,7 @@ export function LandingServicesSection() {
 						</h3>
 						<Link
 							href="/near-me"
-							className="group/cta mt-7 inline-flex items-center gap-2 rounded-full border border-minuri-ocean/25 bg-minuri-ocean px-5 py-2.5 text-sm font-semibold text-minuri-white transition-colors duration-200 hover:bg-minuri-mid"
+							className="group/cta mt-7 inline-flex items-center gap-2 rounded-full border border-minuri-ocean/25 bg-minuri-ocean px-5 py-2.5 text-sm font-semibold text-minuri-white transition-colors duration-200 hover:bg-minuri-mid hover:scale-105 transition-transform duration-200 ease-out"
 						>
 							Find nearby support
 							<ChevronRight
