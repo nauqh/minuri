@@ -393,7 +393,7 @@ export function LandingHeroSectionV2({
 										restartCycle();
 									}}
 									entranceEase={entranceEase}
-									className="hidden md:block md:absolute right-[calc(100%+10px)] top-[calc(50%+5px)] h-[calc(50%-5px)] w-[calc(50%-5px)]"
+									className="hidden md:block md:absolute right-[calc(100%+20px)] top-[calc(50%+5px)] h-[calc(50%-5px)] w-[calc(50%-5px)]"
 								/>
 							</div>
 						</div>
