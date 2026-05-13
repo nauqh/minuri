@@ -12,51 +12,47 @@ const HERO_TOPIC_CARDS: {
 	title: string;
 	desc: string;
 	bg: string;
-	rotate: number;
 	floatPhase: number;
 	word: string;
 }[] = [
 	{
 		title: "Food & Eating",
-		desc: "Groceries, cheap meals & cooking basics.",
+		desc: "Eat well on any budget",
 		bg: "#00f5c8",
-		rotate: -6,
 		floatPhase: 0,
 		word: "eat",
 	},
 	{
 		title: "Getting Around",
-		desc: "Trams, buses & cycling Melbourne.",
+		desc: "Navigate with confidence",
 		bg: "#5dd6ff",
-		rotate: 5,
 		floatPhase: 1.1,
 		word: "travel",
 	},
 	{
 		title: "Health & Wellbeing",
-		desc: "GPs, Medicare & mental health.",
+		desc: "Stay healthy and supported",
 		bg: "#fcf300",
-		rotate: -2,
 		floatPhase: 0.5,
 		word: "heal",
 	},
 	{
 		title: "Home & Admin",
-		desc: "Renting, utilities & paperwork.",
+		desc: "Handle rent, bills & utilities",
 		bg: "#ffc2d1",
-		rotate: 6,
 		floatPhase: 0.8,
 		word: "settle",
 	},
 	{
 		title: "Social & Belonging",
-		desc: "Community, friendships & finding your place.",
+		desc: "Build connection & community",
 		bg: "#cae9ff",
-		rotate: -3,
 		floatPhase: 1.4,
 		word: "belong",
 	},
 ];
+
+const STICKY_ROTATE = [-1.5, 0.8, -0.6, 1.2];
 
 function HeroTopicCard({
 	card,
@@ -95,8 +91,11 @@ function HeroTopicCard({
 			onHoverStart={onHover}
 		>
 			<motion.div
-				style={{ rotate: card.rotate, backgroundColor: card.bg }}
-				className="flex h-full flex-col rounded-2xl p-4 shadow-md md:p-5"
+				style={{
+					rotate: STICKY_ROTATE[index % 4],
+					backgroundColor: card.bg,
+				}}
+				className="guide-sticky flex h-full flex-col"
 				animate={{ y: [0, -7, 0] }}
 				transition={{
 					duration: 3.2 + card.floatPhase * 0.28,
@@ -105,12 +104,10 @@ function HeroTopicCard({
 					delay: card.floatPhase,
 				}}
 			>
-				{/* Label */}
-				<p className="text-sm font-black uppercase tracking-[0.18em] text-[#05292a]">
+				<p className="text-xs font-black uppercase tracking-[0.18em] text-[#05292a]">
 					{card.title}
 				</p>
 
-				{/* Big editorial word */}
 				<div className="flex flex-1 items-center py-1">
 					<span
 						className="font-hero-serif italic leading-none transition-opacity duration-300 text-5xl md:text-5xl min-[1500px]:text-6xl"
@@ -124,8 +121,7 @@ function HeroTopicCard({
 					</span>
 				</div>
 
-				{/* Description */}
-				<p className="text-[0.7rem] leading-snug text-[#163a3a]/60 md:text-[0.75rem]">
+				<p className="text-[0.7rem] leading-snug text-[#163a3a]/70 md:text-[0.75rem]">
 					{card.desc}
 				</p>
 			</motion.div>
@@ -368,7 +364,7 @@ export function LandingHeroSectionV2({
 
 						<div className="relative z-10 flex w-full flex-col md:ml-auto md:pb-4 md:max-w-[460px] min-[1500px]:max-w-[600px]">
 							<div
-								className="relative grid grid-cols-2 gap-2.5 md:gap-3 h-[350px] min-[1500px]:h-[380px]"
+								className="relative grid grid-cols-2 gap-4 md:gap-5 h-[350px] min-[1500px]:h-[380px]"
 								style={{ gridAutoRows: "1fr" }}
 							>
 								{HERO_TOPIC_CARDS.slice(0, 4).map((card, i) => (

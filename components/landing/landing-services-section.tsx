@@ -342,8 +342,8 @@ export function LandingServicesSection() {
 						src="/map-preview.png"
 						alt=""
 						fill
+						sizes="(max-width: 768px) 100vw, 50vw"
 						className="object-cover"
-						quality={100}
 						priority={false}
 					/>
 
