@@ -2,20 +2,30 @@
 
 import { startTransition, useDeferredValue } from "react";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { LayoutGroup, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
 
 import { GUIDE_TOPICS, GUIDES } from "@/content/guides";
-import { GuideCard } from "@/components/guides/guide-card";
+import { BookmarkButton } from "@/components/guides/bookmark-button";
 import { GuidesShell } from "@/components/guides/guides-shell";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import {
 	buildGuideHref,
 	filterGuides,
+	getTopicMeta,
 	parseGuideTopicFilter,
 } from "@/lib/guides";
 import { cn } from "@/lib/utils";
+
+const TOPIC_COLORS: Record<string, string> = {
+	"food-eating": "#00f5c8",
+	"getting-around": "#5dd6ff",
+	"health-wellbeing": "#fcf300",
+	"home-admin": "#ffc2d1",
+	"social-belonging": "#cae9ff",
+};
 
 export function GuidesLibraryView() {
 	const pathname = usePathname();
@@ -131,25 +141,92 @@ export function GuidesLibraryView() {
 		</div>
 	);
 
+	const getBentoClass = (i: number) => {
+		const p = i % 5;
+		if (p === 0) return "md:col-span-2 md:row-span-2";
+		if (p === 4) return "md:col-span-2";
+		return "";
+	};
+
 	const guidesListBody =
 		visibleGuides.length > 0 ? (
-			<section>
-				<div className="grid grid-cols-1 gap-x-4 gap-y-12 sm:grid-cols-2">
-					{visibleGuides.map((guide, index) => (
-						<GuideCard
+			<section
+				className="grid grid-cols-1 gap-5 md:grid-cols-3 md:[grid-auto-rows:220px]"
+			>
+				{visibleGuides.map((guide, i) => {
+					const meta = getTopicMeta(guide.topic);
+					const accent = TOPIC_COLORS[guide.topic] ?? "#00f5c8";
+					const href = buildGuideHref(guide, { topicFilter: activeTopicFilter, query: rawQuery, from: "library" });
+					const isLarge = i % 5 === 0;
+					const isWide = i % 5 === 4;
+
+					return (
+						<motion.article
 							key={guide.slug}
-							guide={guide}
-							href={buildGuideHref(guide, {
-								topicFilter: activeTopicFilter,
-								query: rawQuery,
-								from: "library",
-							})}
-							bookmarked={isBookmarked(guide.slug)}
-							onToggleBookmark={toggleBookmark}
-							animationDelay={(index % 3) * 0.06}
-						/>
-					))}
-				</div>
+							className={cn(
+								"group relative h-52 overflow-hidden rounded-2xl bg-minuri-fog md:h-auto",
+								getBentoClass(i),
+							)}
+							initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.96 }}
+							whileInView={{ opacity: 1, scale: 1 }}
+							viewport={{ once: true, amount: 0.1 }}
+							transition={{
+								duration: prefersReducedMotion ? 0.01 : 0.4,
+								delay: prefersReducedMotion ? 0 : (i % 3) * 0.07,
+								ease: entranceEase,
+							}}
+						>
+							<Link
+								href={href}
+								className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60"
+								aria-label={`Read guide: ${guide.title}`}
+							/>
+							<Image
+								src={guide.thumbnailUrl}
+								alt={guide.title}
+								fill
+								sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+								className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+								priority={i < 3}
+							/>
+							<div className="absolute inset-0 bg-gradient-to-t from-[#021819]/90 via-[#021819]/30 to-transparent" />
+
+							<div className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 p-4 md:p-5">
+								<div className="mb-2 flex items-center gap-2">
+									<span
+										className="rounded-full px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.18em]"
+										style={{ backgroundColor: accent, color: "#021819" }}
+									>
+										{meta?.name ?? guide.topic}
+									</span>
+									<span className="text-[10px] text-white/50">{guide.readingTimeMin} min</span>
+								</div>
+								<h3
+									className={cn(
+										"font-black leading-tight text-white",
+										isLarge ? "text-xl md:text-2xl" : "text-sm md:text-base",
+									)}
+									style={{ fontFamily: "var(--font-hero-serif)" }}
+								>
+									{guide.title}
+								</h3>
+								{(isLarge || isWide) && (
+									<p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/60 md:text-sm">
+										{guide.summary}
+									</p>
+								)}
+							</div>
+
+							<div className="absolute right-3 top-3 z-20">
+								<BookmarkButton
+									active={isBookmarked(guide.slug)}
+									onToggle={() => toggleBookmark(guide.slug)}
+									className="bg-black/30 backdrop-blur-sm border-white/25 text-white hover:bg-black/50"
+								/>
+							</div>
+						</motion.article>
+					);
+				})}
 			</section>
 		) : (
 			<section className="rounded-[2rem] bg-minuri-white p-8 text-center shadow-sm ring-1 ring-minuri-silver/40">
@@ -182,7 +259,9 @@ export function GuidesLibraryView() {
 		>
 			<div className="space-y-8">
 				{guidesSearchFilter}
-				{guidesListBody}
+				<div className="px-12">
+					{guidesListBody}
+				</div>
 			</div>
 		</GuidesShell>
 	);
