@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { CornerDownRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
@@ -138,8 +139,18 @@ export function LandingHeroSectionV2({
 }) {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [hasStartedWordCycle, setHasStartedWordCycle] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const lenis = useLenis();
+	const router = useRouter();
+
+	const handleStartClick = () => {
+		if (showConfirm) {
+			router.push("/start");
+			return;
+		}
+		setShowConfirm(true);
+	};
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 	const headlineWord = hasStartedWordCycle
 		? HERO_TOPIC_CARDS[activeIndex].word
@@ -304,7 +315,7 @@ export function LandingHeroSectionV2({
 								</p>
 								{/* Mobile CTAs only */}
 								<motion.div
-									className="flex flex-wrap items-center gap-4 max-md:flex-col max-md:items-stretch pt-2 md:hidden"
+									className="flex flex-row items-center gap-5 pt-2 md:hidden"
 									variants={{
 										hidden: { opacity: 0, y: 10 },
 										visible: {
@@ -318,26 +329,62 @@ export function LandingHeroSectionV2({
 										},
 									}}
 								>
-									<Link
-										href="/near-me"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
-									>
-										Find nearby support
-										<ChevronRight
-											aria-hidden
-											className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
+									{/* Primary: Let's get started */}
+									<div className="group relative mb-2 mr-2">
+										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
+										<div
+											className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px]"
+											style={{
+												backgroundColor:
+													"oklch(0.38 0.07 228)",
+											}}
 										/>
-									</Link>
-									<Link
-										href="/guides"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-xl border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
-									>
-										Start with guides
-										<ChevronRight
-											aria-hidden
-											className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
-										/>
-									</Link>
+										<button
+											onClick={handleStartClick}
+											className="relative z-10 inline-flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+										>
+											<AnimatePresence
+												mode="wait"
+												initial={false}
+											>
+												<motion.span
+													key={
+														showConfirm
+															? "confirm"
+															: "start"
+													}
+													initial={{
+														opacity: 0,
+														y: 8,
+													}}
+													animate={{
+														opacity: 1,
+														y: 0,
+													}}
+													exit={{ opacity: 0, y: -8 }}
+													transition={{
+														duration: 0.18,
+													}}
+												>
+													{showConfirm
+														? "Are you sure?"
+														: "Let’s get started"}
+												</motion.span>
+											</AnimatePresence>
+										</button>
+									</div>
+
+									{/* Secondary: About us */}
+									<div className="group relative mb-2 mr-2">
+										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl bg-minuri-ocean/10" />
+										<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px] bg-minuri-ocean/25" />
+										<Link
+											href="/about"
+											className="relative z-10 inline-flex h-12 items-center justify-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+										>
+											About us
+										</Link>
+									</div>
 								</motion.div>
 
 								{/* Desktop subheading */}
@@ -361,7 +408,7 @@ export function LandingHeroSectionV2({
 
 								{/* Desktop CTAs — 3-layer press */}
 								<motion.div
-									className="hidden md:flex items-center gap-5 pt-2"
+									className="relative hidden md:flex items-center gap-5 pt-2"
 									variants={{
 										hidden: { opacity: 0, y: 10 },
 										visible: {
@@ -376,34 +423,84 @@ export function LandingHeroSectionV2({
 									}}
 								>
 									{/* Primary: Let's get started */}
-									<div className="group relative">
-										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
+									<div className="group relative mb-2 mr-2">
+										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
 										<div
-											className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px]"
+											className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px]"
 											style={{
 												backgroundColor:
 													"oklch(0.38 0.07 228)",
 											}}
 										/>
-										<Link
-											href="/start"
-											className="relative z-10 inline-flex h-12 items-center gap-2 rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[8px] group-hover:translate-y-[8px]"
+										<button
+											onClick={handleStartClick}
+											className="relative z-10 inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
 										>
-											Let&apos;s get started
-										</Link>
+											<AnimatePresence
+												mode="wait"
+												initial={false}
+											>
+												<motion.span
+													key={
+														showConfirm
+															? "confirm"
+															: "start"
+													}
+													initial={{
+														opacity: 0,
+														y: 8,
+													}}
+													animate={{
+														opacity: 1,
+														y: 0,
+													}}
+													exit={{ opacity: 0, y: -8 }}
+													transition={{
+														duration: 0.18,
+													}}
+												>
+													{showConfirm
+														? "Are you sure?"
+														: "Let’s get started"}
+												</motion.span>
+											</AnimatePresence>
+										</button>
 									</div>
 
 									{/* Secondary: About us */}
-									<div className="group relative">
-										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/10" />
-										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/25" />
+									<div className="group relative mb-2 mr-2">
+										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl bg-minuri-ocean/10" />
+										<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px] bg-minuri-ocean/25" />
 										<Link
 											href="/about"
-											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-semibold text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[8px] group-hover:translate-y-[8px]"
+											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
 										>
 											About us
 										</Link>
 									</div>
+
+									<AnimatePresence>
+										{showConfirm && (
+											<motion.div
+												className="hidden md:flex absolute top-full left-0 items-center gap-1.5 pt-2 text-minuri-ocean/50"
+												initial={{ opacity: 0, y: -6 }}
+												animate={{ opacity: 1, y: 0 }}
+												exit={{ opacity: 0, y: -4 }}
+												transition={{
+													duration: 0.22,
+													ease: "easeOut",
+												}}
+											>
+												<CornerDownRight
+													className="size-4"
+													strokeWidth={2}
+												/>
+												<span className="text-xs font-semibold uppercase tracking-widest">
+													or scroll to explore first
+												</span>
+											</motion.div>
+										)}
+									</AnimatePresence>
 								</motion.div>
 							</motion.div>
 						</div>
@@ -457,7 +554,7 @@ export function LandingHeroSectionV2({
 				{/* Same max-width constraint as the content div above */}
 				<div className="relative mx-auto flex w-full max-w-screen items-end px-6 md:px-6 min-[1500px]:max-w-[1600px] min-[1500px]:px-8">
 					{/* Scroll indicator — centered within the constrained container */}
-					<div
+					<motion.div
 						className="absolute bottom-0 left-1/2 -translate-x-1/2 flex cursor-pointer flex-col items-center gap-2"
 						onClick={() =>
 							lenis?.scrollTo(
@@ -468,19 +565,21 @@ export function LandingHeroSectionV2({
 								},
 							)
 						}
+						animate={
+							showConfirm
+								? { scale: [1, 1.13, 0.97, 1.1, 1] }
+								: { scale: 1 }
+						}
+						transition={{
+							duration: 2.5,
+							ease: "easeInOut",
+							times: [0, 0.25, 0.5, 0.75, 1],
+						}}
 						aria-label="Scroll down"
 					>
-						<motion.span
-							className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60"
-							animate={{ opacity: [0.5, 1, 0.5] }}
-							transition={{
-								duration: 2,
-								repeat: Infinity,
-								ease: "easeInOut",
-							}}
-						>
+						<span className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60">
 							Scroll to explore
-						</motion.span>
+						</span>
 						<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
 							<motion.div
 								className="h-1.5 w-1 rounded-full bg-minuri-teal"
@@ -492,7 +591,7 @@ export function LandingHeroSectionV2({
 								}}
 							/>
 						</div>
-					</div>
+					</motion.div>
 				</div>
 			</motion.div>
 		</section>
