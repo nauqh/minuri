@@ -37,7 +37,7 @@ export function LandingServicesSection() {
 						Belong.
 					</h2>
 
-					<p className="mx-auto mt-6 max-w-3xl text-xl leading-relaxed text-minuri-white font-semibold">
+					<p className="mx-auto mt-12 max-w-3xl text-xl leading-relaxed text-minuri-white font-semibold">
 						Minuri is the first friend you make in a new city — the
 						one who knows where to go, what to bring, and what it
 						actually costs.
