@@ -340,7 +340,7 @@ export function LandingHeroSectionV2({
 								>
 									<Link
 										href="/near-me"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105"
 									>
 										Find nearby support
 										<ChevronRight
@@ -350,7 +350,7 @@ export function LandingHeroSectionV2({
 									</Link>
 									<Link
 										href="/guides"
-										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
+										className="group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-xl border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105"
 									>
 										Start with guides
 										<ChevronRight
@@ -410,37 +410,6 @@ export function LandingHeroSectionV2({
 			>
 				{/* Same max-width constraint as the content div above */}
 				<div className="relative mx-auto flex w-full max-w-screen items-end px-6 md:px-6 min-[1500px]:max-w-[1600px] min-[1500px]:px-8">
-					{/* Text + CTAs stacked on the left */}
-					<div className="flex flex-col gap-4 min-[1500px]:gap-5">
-						<p className="max-w-xl text-base leading-relaxed text-minuri-ocean font-medium min-[1500px]:text-lg">
-							Get instructive guides, find nearby services, and
-							follow clear next steps for day-to-day independent
-							life.
-						</p>
-						<div className="flex items-center gap-3 min-[1500px]:gap-5">
-							<Link
-								href="/near-me"
-								className="group inline-flex h-12 items-center gap-1.5 rounded-full bg-minuri-teal px-7 text-base font-medium text-primary-foreground transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-14 min-[1500px]:px-8 min-[1500px]:text-lg"
-							>
-								Find nearby support
-								<ChevronRight
-									aria-hidden
-									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
-								/>
-							</Link>
-							<Link
-								href="/guides"
-								className="group inline-flex h-12 items-center gap-1.5 rounded-full border border-minuri-ocean bg-minuri-white px-7 text-base font-medium text-minuri-ocean transition-transform duration-200 ease-out hover:scale-105 min-[1500px]:h-14 min-[1500px]:px-8 min-[1500px]:text-lg"
-							>
-								Start with guides
-								<ChevronRight
-									aria-hidden
-									className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
-								/>
-							</Link>
-						</div>
-					</div>
-
 					{/* Scroll indicator — centered within the constrained container */}
 					<div
 						className="absolute bottom-0 left-1/2 -translate-x-1/2 flex cursor-pointer flex-col items-center gap-2"

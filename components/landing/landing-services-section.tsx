@@ -93,6 +93,17 @@ export function LandingServicesSection() {
 	const [hovered, setHovered] = useState<"guides" | "nearby" | null>(null);
 	const [isMobile, setIsMobile] = useState(false);
 	const rafRef = useRef<number | null>(null);
+	const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const handlePanelEnter = (panel: "guides" | "nearby") => {
+		if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+		hoverTimerRef.current = setTimeout(() => setHovered(panel), 250);
+	};
+
+	const handlePanelLeave = () => {
+		if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+		setHovered(null);
+	};
 
 	useEffect(() => {
 		const check = () => setIsMobile(window.innerWidth < 768);
@@ -129,13 +140,13 @@ export function LandingServicesSection() {
 	return (
 		<section
 			id="services"
-			className="scroll-mt-24 bg-minuri-ocean text-minuri-white md:scroll-mt-28"
+			className="flex min-h-[115vh] flex-col justify-between scroll-mt-24 bg-minuri-ocean text-minuri-white md:scroll-mt-28"
 			aria-labelledby="services-heading"
 		>
 			{/* ── Original header ── */}
-			<div className="mx-auto w-full max-w-screen px-5 py-24 md:px-8 md:py-32">
+			<div className="mx-auto w-full max-w-screen px-5 py-14 md:px-8 md:py-20">
 				<div className="mx-auto max-w-7xl space-y-6 text-center md:space-y-7">
-					<p className="mx-auto inline-flex rounded-lg bg-minuri-white/90 px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-minuri-ocean">
+					<p className="mx-auto inline-flex rounded-sm bg-minuri-white/90 px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-minuri-ocean">
 						What Minuri provides
 					</p>
 					<motion.h2
@@ -152,253 +163,98 @@ export function LandingServicesSection() {
 						From your first GP visit to your first lease — the local
 						knowledge you don&apos;t arrive with.
 					</p>
-					<div className="group relative inline-flex overflow-hidden rounded-full">
+				</div>
+			</div>
+
+			{/* ── Marquee + CTA ── */}
+			<div className="relative flex flex-col items-center gap-0 overflow-hidden py-4">
+				{/* Marquee row 1 → */}
+				<div className="flex w-full overflow-hidden py-4 md:py-6">
+					<motion.div
+						className="flex shrink-0 gap-10 md:gap-16"
+						animate={{ x: ["0%", "-50%"] }}
+						transition={{ duration: 22, ease: "linear", repeat: Infinity }}
+					>
+						{[
+							"Medicare",
+							"Myki",
+							"Rental Bond",
+							"GP Visits",
+							"Bank Account",
+							"Community",
+							"Medicare",
+							"Myki",
+							"Rental Bond",
+							"GP Visits",
+							"Bank Account",
+							"Community",
+						].map((t, i) => (
+							<span
+								key={i}
+								className="whitespace-nowrap text-[clamp(2rem,4vw,3.5rem)] font-black uppercase tracking-tight text-minuri-white/10"
+							>
+								{t}
+								<span className="ml-10 md:ml-16 text-minuri-teal/30">·</span>
+							</span>
+						))}
+					</motion.div>
+				</div>
+
+				{/* CTA */}
+				<div className="relative z-10 flex flex-col items-center gap-4 py-6">
+					<p className="text-xs font-black uppercase tracking-[0.18em] text-minuri-teal/70">
+						Your settlement journey
+					</p>
+					<div className="group relative inline-flex overflow-hidden rounded-sm">
 						<Link
-							href="/journey"
-							className="relative z-10 inline-flex h-11 items-center gap-1.5 rounded-full border border-minuri-white/70 px-5 text-sm font-medium text-minuri-white transition-colors duration-300 group-hover:text-minuri-ocean"
+							href="/start"
+							className="relative z-10 inline-flex h-16 items-center gap-3 rounded-sm border border-minuri-white/70 px-12 text-lg font-semibold text-minuri-white shadow-md transition-colors duration-300 group-hover:text-minuri-ocean md:h-20 md:px-16 md:text-xl"
 						>
 							Start your journey
 							<ChevronRight
-								className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
+								className="size-5 transition-transform duration-200 ease-out group-hover:translate-x-1"
 								aria-hidden
 							/>
 						</Link>
 						<span className="absolute inset-0 translate-y-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 					</div>
 				</div>
-			</div>
 
-			{/* ── Split-screen showcase ── */}
-			<div className="flex flex-col overflow-hidden md:flex-row md:min-h-[100vh] pb-24 md:pb-32">
-				{/* ─── GUIDES panel ─── */}
-				<div
-					className="relative flex min-h-[60vh] flex-col justify-end overflow-hidden md:min-h-0"
-					style={{ width: guidesWidth, transition: panelTransition }}
-					onMouseEnter={() => setHovered("guides")}
-					onMouseLeave={() => setHovered(null)}
-				>
-					{/* Dark bg + grid texture */}
-					<div
-						className="absolute inset-0"
-						style={{ background: "oklch(0.14 0.042 228)" }}
-					/>
-					<div
-						aria-hidden
-						className="pointer-events-none absolute inset-0"
-						style={{
-							backgroundImage: [
-								"linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px)",
-								"linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
-							].join(", "),
-							backgroundSize: "72px 72px",
-						}}
-					/>
-
-					{/* Ghost word */}
-					<span
-						aria-hidden
-						className="pointer-events-none absolute bottom-0 left-0 select-none font-black uppercase leading-none text-minuri-white"
-						style={{
-							fontSize: "clamp(5rem, 18vw, 16rem)",
-							opacity: 0.04,
-							letterSpacing: "-0.02em",
-						}}
+				{/* Marquee row 2 ← */}
+				<div className="flex w-full overflow-hidden py-4 md:py-6">
+					<motion.div
+						className="flex shrink-0 gap-10 md:gap-16"
+						animate={{ x: ["-50%", "0%"] }}
+						transition={{ duration: 26, ease: "linear", repeat: Infinity }}
 					>
-						GUIDES
-					</span>
-
-					{/* Note cards — floating in right half of panel */}
-					<div className="pointer-events-none absolute inset-0 overflow-hidden">
-						{GUIDE_NOTES.map((note, i) => (
-							<motion.div
-								key={note.title}
-								className="absolute w-52 overflow-hidden rounded-xl shadow-2xl md:w-60"
-								style={{
-									rotate: note.rotate,
-									left: `${4 + i * 30}%`,
-									top: `${8 + (i === 1 ? 0 : i * 10)}%`,
-								}}
-								animate={{ y: [0, -8, 0] }}
-								transition={{
-									duration: 3.6 + note.floatPhase * 0.3,
-									repeat: Infinity,
-									ease: "easeInOut",
-									delay: note.floatPhase,
-								}}
+						{[
+							"Transport",
+							"Food Banks",
+							"Housing",
+							"Utilities",
+							"Mental Health",
+							"Education",
+							"Transport",
+							"Food Banks",
+							"Housing",
+							"Utilities",
+							"Mental Health",
+							"Education",
+						].map((t, i) => (
+							<span
+								key={i}
+								className="whitespace-nowrap text-[clamp(2rem,4vw,3.5rem)] font-black uppercase tracking-tight text-minuri-white/10"
 							>
-								{/* Colored header strip */}
-								<div
-									className="px-4 py-3"
-									style={{
-										backgroundColor: note.accentColor,
-									}}
-								>
-									<p
-										className="text-[9px] font-black uppercase tracking-[0.14em]"
-										style={{ color: "rgba(2,18,20,0.55)" }}
-									>
-										{note.topic}
-									</p>
-									<p
-										className="mt-1 text-sm font-black leading-snug"
-										style={{ color: "#021214" }}
-									>
-										{note.title}
-									</p>
-								</div>
-
-								{/* White body with steps */}
-								<div className="bg-white px-4 py-3 space-y-1.5">
-									{note.steps.map((step, j) => (
-										<div
-											key={j}
-											className="flex items-start gap-2"
-										>
-											<span
-												className="mt-px flex size-4 flex-shrink-0 items-center justify-center rounded-full text-[9px] font-black"
-												style={{
-													backgroundColor:
-														note.accentColor + "55",
-													color: "#021214",
-												}}
-											>
-												{j + 1}
-											</span>
-											<p className="text-[11px] leading-snug text-[#1e3a4a]/75">
-												{step}
-											</p>
-										</div>
-									))}
-								</div>
-							</motion.div>
+								{t}
+								<span className="ml-10 md:ml-16 text-minuri-teal/30">·</span>
+							</span>
 						))}
-					</div>
-
-					{/* Gradient: note cards fade into content below */}
-					<div
-						aria-hidden
-						className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
-						style={{
-							background:
-								"linear-gradient(to top, oklch(0.14 0.042 228) 45%, oklch(0.14 0.042 228 / 0.75) 70%, transparent 100%)",
-						}}
-					/>
-
-					{/* Content */}
-					<motion.div
-						className="relative z-10 p-8 md:p-14"
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true, amount: 0.4 }}
-						transition={{ duration: 0.7, ease: easeOut }}
-					>
-						<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-white/15 px-3.5 py-1.5">
-							<BookOpen
-								className="size-3.5 text-minuri-white"
-								aria-hidden
-							/>
-							<span className="text-xs font-black uppercase tracking-widest text-minuri-white">
-								Guides
-							</span>
-						</div>
-						<h3 className="mt-1 max-w-lg text-xl font-semibold leading-snug text-minuri-white md:text-2xl">
-							Guides to Medicare, Myki, rental bonds — before you
-							need to ask.
-						</h3>
-						<Link
-							href="/guides"
-							className="group/cta mt-7 inline-flex items-center gap-2 rounded-full border border-minuri-white/30 bg-minuri-white/10 px-5 py-2.5 text-sm font-semibold text-minuri-white transition-colors duration-200 hover:bg-minuri-white hover:text-minuri-ocean hover:scale-105 transition-transform duration-200 ease-out"
-						>
-							Explore guides
-							<ChevronRight
-								className="size-4 transition-transform duration-200 group-hover/cta:translate-x-0.5"
-								aria-hidden
-							/>
-						</Link>
-					</motion.div>
-				</div>
-
-				{/* ─── Seam ─── */}
-				<div
-					className="relative z-20 hidden items-stretch md:flex"
-					aria-hidden
-				>
-					<div className="w-px bg-minuri-white/10" />
-					<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex size-9 items-center justify-center rounded-full border border-minuri-white/15 bg-minuri-ocean shadow-xl">
-						<span className="text-[10px] font-black uppercase tracking-widest text-minuri-white/50">
-							&
-						</span>
-					</div>
-				</div>
-
-				{/* ─── NEAR ME panel ─── */}
-				<div
-					className="relative flex min-h-[60vh] flex-col justify-end overflow-hidden md:min-h-0"
-					style={{ width: nearbyWidth, transition: panelTransition }}
-					onMouseEnter={() => setHovered("nearby")}
-					onMouseLeave={() => setHovered(null)}
-				>
-					{/* Pre-saved map screenshot — zero credits, no resize lag */}
-					<Image
-						src="/map-preview.png"
-						alt=""
-						fill
-						sizes="(max-width: 768px) 100vw, 50vw"
-						className="object-cover"
-						priority={false}
-					/>
-
-					{/* Gradient: map fades into content below */}
-					<div
-						aria-hidden
-						className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
-						style={{
-							background:
-								"linear-gradient(to top, oklch(0.96 0.012 210) 45%, oklch(0.96 0.012 210 / 0.75) 70%, transparent 100%)",
-						}}
-					/>
-
-					{/* Content */}
-					<motion.div
-						className="relative z-10 p-8 md:p-14"
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true, amount: 0.4 }}
-						transition={{
-							duration: 0.7,
-							ease: easeOut,
-							delay: 0.08,
-						}}
-					>
-						<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-ocean/12 px-3.5 py-1.5 backdrop-blur-sm">
-							<MapPin
-								className="size-3.5 text-minuri-teal"
-								aria-hidden
-							/>
-							<span className="text-xs font-black uppercase tracking-widest text-minuri-ocean">
-								Near Me
-							</span>
-						</div>
-						<h3 className="mt-1 max-w-lg text-xl font-semibold leading-snug text-minuri-ocean md:text-2xl">
-							Support services near you — with costs and
-							eligibility.
-						</h3>
-						<Link
-							href="/near-me"
-							className="group/cta mt-7 inline-flex items-center gap-2 rounded-full border border-minuri-ocean/25 bg-minuri-ocean px-5 py-2.5 text-sm font-semibold text-minuri-white transition-colors duration-200 hover:bg-minuri-mid hover:scale-105 transition-transform duration-200 ease-out"
-						>
-							Find nearby support
-							<ChevronRight
-								className="size-4 transition-transform duration-200 group-hover/cta:translate-x-0.5"
-								aria-hidden
-							/>
-						</Link>
 					</motion.div>
 				</div>
 			</div>
 
 			{/* ── Original 4-card grid ── */}
-			{/* <div className="mx-auto w-full max-w-screen px-5 py-16 md:px-8 md:py-20">
+			<div className="mx-auto w-full max-w-screen px-5 py-16 md:px-8 md:py-20">
 				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
 					{serviceCards.map((card, index) => (
 						<motion.div
@@ -433,7 +289,7 @@ export function LandingServicesSection() {
 						</motion.div>
 					))}
 				</div>
-			</div> */}
+			</div>
 		</section>
 	);
 }

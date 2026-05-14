@@ -94,7 +94,7 @@ export function LandingHeader({
 						<span className="uppercase">Minuri</span>
 					</Link>
 
-					<nav className="hidden items-center gap-10 text-base min-[1500px]:gap-14 min-[1500px]:text-lg font-medium text-minuri-ocean md:flex">
+					<nav className="hidden items-center gap-10 text-base min-[1500px]:gap-14 min-[1500px]:text-lg font-medium text-minuri-ocean">
 						<Link
 							href="#services"
 							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
@@ -133,7 +133,7 @@ export function LandingHeader({
 					}}
 				>
 					<motion.div
-						className="hidden rounded-full md:inline-flex"
+						className="hidden rounded-sm md:inline-flex"
 						animate={
 							ctaHighlighted
 								? { scale: [1, 1.13, 0.97, 1.1, 1] }
@@ -146,10 +146,10 @@ export function LandingHeader({
 						}}
 					>
 						<Link
-							href="/journey"
-							className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-1.5 rounded-full bg-minuri-ocean px-6 min-[1500px]:px-8 text-base min-[1500px]:text-lg font-medium text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
+							href="/about"
+							className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-1.5 rounded-sm bg-minuri-ocean px-6 min-[1500px]:px-8 text-base min-[1500px]:text-lg font-medium text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
 						>
-							Start your journey
+							Meet the team
 							<ChevronRight
 								className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 								strokeWidth={2.25}
@@ -275,7 +275,7 @@ export function LandingHeader({
 									<Link
 										href="/journey"
 										onClick={closeMobileMenu}
-										className="flex h-14 items-center justify-center gap-2 rounded-full bg-minuri-teal text-base font-semibold text-primary-foreground transition-transform duration-200 ease-out active:scale-[0.97]"
+										className="flex h-14 items-center justify-center gap-2 rounded-sm bg-minuri-teal text-base font-semibold text-primary-foreground transition-transform duration-200 ease-out active:scale-[0.97]"
 									>
 										Start your journey
 										<ArrowRight
