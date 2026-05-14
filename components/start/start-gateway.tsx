@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ChevronRight, BookOpen, MapPin } from "lucide-react";
+import {
+	ArrowLeft,
+	ChevronRight,
+	ChevronDown,
+	BookOpen,
+	MapPin,
+} from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
@@ -294,7 +300,7 @@ export function StartGateway() {
 					<p className="text-[10px] font-black uppercase tracking-[0.2em] text-minuri-white/30">
 						Two ways in
 					</p>
-					<h2 className="mt-4 text-2xl font-black leading-snug text-minuri-white md:text-3xl">
+					<h2 className="mt-4 text-2xl font-black tracking-wide leading-snug text-minuri-white md:text-3xl">
 						Start with what you need right now —
 						<br className="hidden md:block" />
 						<span className="text-minuri-ice"> Guides</span> or{" "}
@@ -487,7 +493,10 @@ export function StartGateway() {
 					</div>
 
 					{/* ─── Divider ─── */}
-					<div className="h-6 w-full md:h-full md:w-px md:shrink-0" style={{ background: "oklch(0.18 0.042 228)" }} />
+					<div
+						className="h-6 w-full md:h-full md:w-px md:shrink-0"
+						style={{ background: "oklch(0.18 0.042 228)" }}
+					/>
 
 					{/* ─── Near Me panel ─── */}
 					<div
@@ -561,9 +570,25 @@ export function StartGateway() {
 					viewport={{ once: true, amount: 0.5 }}
 					transition={{ duration: 0.7, ease: easeOut }}
 				>
-					<h2 className="mt-20 text-2xl font-black leading-snug text-minuri-white md:text-3xl">
-						or, want us to do the thinking for you?{" "}
+					<h2 className="mt-20 text-2xl tracking-wide font-black leading-snug text-minuri-white md:text-3xl">
+						or, want us to design the{" "}
+						<span className="text-minuri-ice">Journey</span> for
+						you?
 					</h2>
+					<motion.div
+						animate={{ y: [0, 6, 0] }}
+						transition={{
+							duration: 1.5,
+							repeat: Infinity,
+							ease: "easeInOut",
+						}}
+						className="mt-4 flex justify-center"
+					>
+						<ChevronDown
+							className="size-10 text-minuri-white"
+							aria-hidden
+						/>
+					</motion.div>
 				</motion.div>
 			</section>
 
@@ -670,7 +695,7 @@ export function StartGateway() {
 						Your personal starter kit
 					</h2>
 
-					<p className="mt-6 max-w-2xl text-base leading-relaxed text-minuri-ocean/65 md:text-lg">
+					<p className="mt-6 max-w-2xl text-base leading-relaxed text-minuri-ocean md:text-lg">
 						A curated 7-day plan — guides + nearby services — built
 						around your moment, your suburb, and what you still need
 						to sort.
