@@ -1,105 +1,136 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Plus, Minus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useRef, useState } from "react";
+import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
+
+const QUOTE = "Me and you are incredible - (Minuri)".split(" ");
+
+function Word({
+	word,
+	progress,
+	index,
+	total,
+}: {
+	word: string;
+	progress: ReturnType<typeof useScroll>["scrollYProgress"];
+	index: number;
+	total: number;
+}) {
+	const start = index / total;
+	const end = Math.min((index + 1) / total, 1);
+	const opacity = useTransform(progress, [start, end], [0.12, 1]);
+	return (
+		<motion.span className="inline" style={{ opacity }}>
+			{word}{" "}
+		</motion.span>
+	);
+}
+
+function ScrollHighlightQuote() {
+	const ref = useRef<HTMLDivElement>(null);
+	const { scrollYProgress } = useScroll({
+		target: ref,
+		offset: ["start 0.5", "start 0"],
+	});
+
+	return (
+		<div ref={ref} className="px-6 pt-28 pb-64 md:px-12 md:pt-40 md:pb-96">
+			<p className="mx-auto max-w-2xl text-center text-[clamp(4rem,10vw,9rem)] font-black uppercase leading-[0.95] tracking-tight text-minuri-ocean">
+				{QUOTE.map((word, i) => (
+					<Word
+						key={i}
+						word={word}
+						progress={scrollYProgress}
+						index={i}
+						total={QUOTE.length}
+					/>
+				))}
+			</p>
+		</div>
+	);
+}
 
 const TEAM = [
 	{
 		name: "Quan",
 		fullName: "Do Minh Quan",
-		role: "Full-Stack Engineer",
+		tags: ["Full-Stack", "Engineering"],
 		animated: "/team/Quan.png",
 		photo: "/team/Quan0.jpeg",
-		bio: "Add bio here.",
 	},
 	{
 		name: "Shawn",
 		fullName: "Shawn Han",
-		role: "Product & Research",
+		tags: ["Product", "Research"],
 		animated: "/team/Shawn.jpeg",
 		photo: "/team/Shawn0.jpeg",
-		bio: "Add bio here.",
 	},
 	{
 		name: "Minh",
 		fullName: "Minh Nguyen",
-		role: "Frontend Engineer",
+		tags: ["Frontend", "Engineering"],
 		animated: "/team/Minh.jpeg",
 		photo: "/team/Minh0.png",
-		bio: "Add bio here.",
 	},
 	{
 		name: "Chon",
 		fullName: "Chon Lam",
-		role: "Backend Engineer",
+		tags: ["Backend", "Engineering"],
 		animated: "/team/Chon.jpeg",
 		photo: "/team/Chon0.jpeg",
-		bio: "Add bio here.",
 	},
 	{
 		name: "Jiaxin",
 		fullName: "Jiaxin Chen",
-		role: "UI/UX Design",
+		tags: ["Design", "UX"],
 		animated: "/team/Jiaxin.png",
 		photo: "/team/Jiaxin0.jpeg",
-		bio: "Add bio here.",
 	},
 	{
 		name: "Chengmin",
 		fullName: "Chengmin Chang",
-		role: "Data Analyst",
+		tags: ["Data", "Analytics"],
 		animated: "/team/Chengmin.png",
 		photo: "/team/Chengmin0.jpeg",
-		bio: "Add bio here.",
 	},
 ] as const;
 
+const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export function AboutView() {
-	const prefersReducedMotion = useReducedMotion();
-	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-	const [introPhase, setIntroPhase] = useState<
-		"animated" | "original" | "done"
-	>("animated");
-	const [imageHovered, setImageHovered] = useState(false);
 	const [teamHovered, setTeamHovered] = useState(false);
-	const t1 = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const t2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+	const [showReal, setShowReal] = useState(false);
+	const introTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	const clearTimers = () => {
-		if (t1.current) clearTimeout(t1.current);
-		if (t2.current) clearTimeout(t2.current);
+	const handleRowEnter = (index: number) => {
+		if (introTimer.current) clearTimeout(introTimer.current);
+		setHoveredIndex(index);
+		setShowReal(false);
+		introTimer.current = setTimeout(() => setShowReal(true), 1400);
 	};
 
-	const toggle = (index: number) => {
-		clearTimers();
-		const isOpening = expandedIndex !== index;
-		setExpandedIndex(isOpening ? index : null);
-		setImageHovered(false);
-		setIntroPhase("animated");
-		if (isOpening && !prefersReducedMotion) {
-			t1.current = setTimeout(() => setIntroPhase("original"), 1400);
-			t2.current = setTimeout(() => setIntroPhase("done"), 3200);
-		} else if (isOpening) {
-			setIntroPhase("done");
-		}
+	const handleRowLeave = () => {
+		if (introTimer.current) clearTimeout(introTimer.current);
+		setHoveredIndex(null);
+		setShowReal(false);
 	};
-
-	useEffect(() => () => clearTimers(), []);
-
-	const showOriginal =
-		introPhase === "original" || (introPhase === "done" && imageHovered);
 
 	return (
-		<div className="min-h-screen bg-minuri-white text-minuri-ink">
-			{/* Hero */}
-			<section className="relative flex min-h-[52vh] flex-col justify-end overflow-hidden px-6 pb-14 pt-32 md:px-12 md:pb-20">
-				<div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.035]">
+		<motion.div
+			className="mx-auto min-h-screen w-full max-w-[1600px] bg-minuri-white text-minuri-ink"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.4, ease }}
+		>
+			{/* Hero + Story — merged so illustration spans both */}
+			<section className="relative px-6 pt-32 pb-16 md:px-12 md:pt-40 md:pb-24">
+				<div className="pointer-events-none absolute inset-0 opacity-[0.035]">
 					<svg
 						viewBox="0 0 800 400"
 						className="h-full w-full"
+						preserveAspectRatio="xMidYMid slice"
 						fill="none"
 						stroke="currentColor"
 						strokeWidth="0.6"
@@ -116,218 +147,60 @@ export function AboutView() {
 						))}
 					</svg>
 				</div>
-				<h1
+				<motion.h1
 					className="relative z-10 text-[clamp(4rem,14vw,11rem)] font-black uppercase leading-none tracking-tight text-minuri-ocean"
 					style={{ fontFamily: "var(--font-sans)" }}
+					initial={{ opacity: 0, y: 40 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.7, ease, delay: 0.1 }}
 				>
-					Our Team
-				</h1>
-				<p className="relative z-10 mt-6 max-w-sm text-base leading-relaxed text-minuri-slate md:text-lg">
-					A dedicated team, driven by the common goal of helping
-					newcomers feel at home in Melbourne.
-				</p>
-			</section>
-
-			{/* Divider */}
-			<div className="border-t border-minuri-silver/60" />
-
-			{/* Team list */}
-			<section>
-				<ol>
-					{TEAM.map((member, index) => {
-						const isExpanded = expandedIndex === index;
-						return (
-							<li key={member.name}>
-								{/* Row header */}
-								<button
-									type="button"
-									onClick={() => toggle(index)}
-									className={cn(
-										"group flex w-full cursor-pointer items-center justify-between gap-6 px-6 py-9 transition-colors duration-200 md:px-12 md:py-11",
-										isExpanded
-											? "bg-minuri-fog/60"
-											: "hover:bg-minuri-fog/40",
-									)}
-								>
-									<div className="flex items-center">
-										<span className="text-2xl font-bold leading-none tracking-tight text-minuri-ocean md:text-4xl">
-											{member.name}
-										</span>
-									</div>
-									<div className="flex items-center gap-4">
-										<span className="text-sm font-medium text-minuri-slate md:text-base">
-											{member.role}
-										</span>
-										<span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-minuri-silver/60 text-minuri-slate transition-colors duration-200 group-hover:border-minuri-teal/50 group-hover:text-minuri-teal">
-											{isExpanded ? (
-												<Minus
-													className="size-3"
-													aria-hidden="true"
-												/>
-											) : (
-												<Plus
-													className="size-3"
-													aria-hidden="true"
-												/>
-											)}
-										</span>
-									</div>
-								</button>
-
-								{/* Expandable panel */}
-								<AnimatePresence initial={false}>
-									{isExpanded && (
-										<motion.div
-											key="panel"
-											initial={{ height: 0 }}
-											animate={{ height: "auto" }}
-											exit={{ height: 0 }}
-											transition={{
-												duration: prefersReducedMotion
-													? 0
-													: 0.6,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											style={{ overflow: "hidden" }}
-										>
-											<motion.div
-												initial={{ opacity: 0, y: 14 }}
-												animate={{ opacity: 1, y: 0 }}
-												transition={{
-													duration:
-														prefersReducedMotion
-															? 0
-															: 0.55,
-													delay: prefersReducedMotion
-														? 0
-														: 0.28,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="grid grid-cols-1 gap-10 px-6 pb-14 pt-4 md:grid-cols-[300px_1fr_1.4fr] md:gap-12 md:px-12 md:pb-16"
-											>
-												{/* Portrait */}
-												<div
-													className="relative h-72 w-56 shrink-0 cursor-crosshair overflow-hidden md:h-[360px] md:w-full"
-													onMouseEnter={() =>
-														setImageHovered(true)
-													}
-													onMouseLeave={() =>
-														setImageHovered(false)
-													}
-												>
-													{/* Animated base */}
-													<Image
-														src={member.animated}
-														alt={member.name}
-														fill
-														className="object-cover"
-														sizes="(max-width: 768px) 176px, 180px"
-														priority
-													/>
-													{/* Original — shown during intro, then again on hover */}
-													<motion.div
-														className="absolute inset-0"
-														initial={{ opacity: 0 }}
-														animate={{
-															opacity:
-																showOriginal
-																	? 1
-																	: 0,
-														}}
-														transition={{
-															duration:
-																prefersReducedMotion
-																	? 0
-																	: 0.9,
-															ease: [
-																0.25, 0.46,
-																0.45, 0.94,
-															],
-														}}
-													>
-														<Image
-															src={member.photo}
-															alt={member.name}
-															fill
-															className="object-cover"
-															sizes="(max-width: 768px) 176px, 180px"
-														/>
-													</motion.div>
-												</div>
-
-												{/* Name + role */}
-												<div className="flex flex-col justify-start pt-1">
-													<h2
-														className="text-3xl font-black leading-tight text-minuri-ocean md:text-4xl"
-														style={{
-															fontFamily:
-																"var(--font-sans)",
-														}}
-													>
-														{member.fullName}
-													</h2>
-													<p className="mt-2 text-sm font-medium text-minuri-slate">
-														{member.role}
-													</p>
-												</div>
-
-												{/* Bio */}
-												<div className="flex flex-col justify-start pt-1">
-													<p className="text-base leading-relaxed text-minuri-ink">
-														{member.bio}
-													</p>
-												</div>
-											</motion.div>
-										</motion.div>
-									)}
-								</AnimatePresence>
-
-								<div className="border-t border-minuri-silver/50" />
-							</li>
-						);
-					})}
-				</ol>
-			</section>
-
-			{/* About section */}
-			<section className="border-t border-minuri-silver/60 px-6 py-20 md:px-12 md:py-28">
-				<div className="mx-auto max-w-2xl space-y-6">
-					<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
-						Minuri is built by a small team of international
-						students who know firsthand what it feels like to arrive
-						in a new city and not know where to start. We met at
-						university in Melbourne, and this app grew out of the
-						questions we kept asking each other.
+					About Minuri
+				</motion.h1>
+				<motion.div
+					className="relative z-10 mt-16 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-[140px_1fr] md:gap-10"
+					initial={{ opacity: 0, y: 28 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.7, ease, delay: 0.28 }}
+				>
+					<p className="text-xs font-black uppercase tracking-[0.12em] text-minuri-teal md:pt-3">
+						(Our Story)
 					</p>
-					<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
-						At the heart of our work is a simple belief — settling
-						in should not be a solo project. By mapping the real
-						steps people take, from opening a bank account to
-						finding a GP, we make the invisible path visible.
-					</p>
-					<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
-						Every guide we write is shaped by lived experience. We
-						ask questions — of the city, of each other, and of the
-						people we talk to along the way. The answers become the
-						content you read here.
-					</p>
-					<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
-						We care about precision. Not just the right suburb or
-						the right form to fill in, but the right framing — the
-						kind that makes a task feel manageable rather than
-						overwhelming.
-					</p>
-					<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
-						If you're new to Melbourne, or you know someone who is —
-						this is for you.
-					</p>
-				</div>
+					<div>
+						<h2 className="text-[clamp(2rem,5vw,4rem)] font-black leading-[1.05] tracking-tight text-minuri-ocean">
+							Settling in shouldn't be a solo project
+						</h2>
+						<div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-14">
+							<p className="text-base leading-loose text-minuri-ink md:text-lg">
+								Minuri grew out of the questions we kept asking
+								each other after arriving in Melbourne. Where do
+								I get a Medicare card? How does Myki work? What
+								does a rental bond actually mean? Good answers
+								were scattered, buried, or assumed. So we built
+								the guide we wished existed.
+							</p>
+							<div className="space-y-8">
+								<p className="text-base leading-loose text-minuri-ink md:text-lg">
+									At the heart of our work is a simple belief
+									— by mapping the real steps people take,
+									from opening a bank account to finding a GP,
+									we make the invisible path visible.
+								</p>
+								<p className="text-base leading-loose text-minuri-ink md:text-lg">
+									We care about precision. Not just the right
+									suburb or the right form to fill in, but the
+									right framing — the kind that makes a task
+									feel manageable rather than overwhelming.
+								</p>
+							</div>
+						</div>
+					</div>
+				</motion.div>
 			</section>
 
 			{/* Team photo */}
-			<section className="px-6 pb-20 md:px-12 md:pb-28">
+			<section className="px-6 md:px-12">
 				<div
-					className="relative mx-auto max-w-5xl cursor-crosshair overflow-hidden"
+					className="relative cursor-crosshair overflow-hidden"
 					onMouseEnter={() => setTeamHovered(true)}
 					onMouseLeave={() => setTeamHovered(false)}
 				>
@@ -359,6 +232,144 @@ export function AboutView() {
 					</motion.div>
 				</div>
 			</section>
+
+			{/* Team description */}
+			<section className="px-6 py-16 md:px-12 md:py-24">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-[140px_1fr] md:gap-10">
+					<p className="text-xs font-black uppercase tracking-[0.12em] text-minuri-teal md:pt-3">
+						(The Team)
+					</p>
+					<div>
+						<h2 className="text-[clamp(2rem,5vw,4rem)] font-black leading-[1.05] tracking-tight text-minuri-ocean">
+							We met at university in Melbourne and built the
+							guide we wished we&apos;d had
+						</h2>
+						<div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-14">
+							<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
+								Minuri is built by a small team of international
+								students who know firsthand what it feels like
+								to arrive in a new city and not know where to
+								start. We care about people and the process just
+								as much as the product — and we truly do mean
+								that.
+							</p>
+							<div className="space-y-5">
+								<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
+									Every guide we write is shaped by lived
+									experience. We ask questions — of the city,
+									of each other, and of the people we talk to
+									along the way. The answers become the
+									content you read here.
+								</p>
+								<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
+									If you&apos;re new to Melbourne, or you know
+									someone who is — this is for you.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{/* Team list */}
+			<section className="relative" onMouseLeave={handleRowLeave}>
+				<div className="mx-6 border-t border-minuri-ocean/30 md:mx-12" />
+				{/* Floating portrait — absolute in center column, overlaps rows */}
+				<AnimatePresence mode="wait">
+					{hoveredIndex !== null && (
+						<motion.div
+							key={hoveredIndex}
+							className="pointer-events-none absolute z-20 hidden overflow-hidden rounded-xl md:block"
+							style={{
+								width: 460,
+								height: 600,
+								left: "42%",
+								top: "50%",
+								translateX: "-50%",
+								translateY: "-50%",
+							}}
+							initial={{ opacity: 0, scale: 0.94 }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: 0.96 }}
+							transition={{ duration: 0.18, ease }}
+						>
+							{/* Tinted bg rect behind photo */}
+							<div className="absolute inset-0 bg-minuri-teal/20" />
+							{/* Animated base */}
+							<Image
+								src={TEAM[hoveredIndex].animated}
+								alt={TEAM[hoveredIndex].name}
+								fill
+								className="object-cover object-top"
+								sizes="460px"
+							/>
+							{/* Real photo crossfades in after delay */}
+							<motion.div
+								className="absolute inset-0"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: showReal ? 1 : 0 }}
+								transition={{
+									duration: 0.9,
+									ease: [0.25, 0.46, 0.45, 0.94],
+								}}
+							>
+								<Image
+									src={TEAM[hoveredIndex].photo}
+									alt={TEAM[hoveredIndex].name}
+									fill
+									className="object-cover object-top"
+									sizes="460px"
+								/>
+							</motion.div>
+						</motion.div>
+					)}
+				</AnimatePresence>
+
+				<ol>
+					{TEAM.map((member, index) => {
+						const isHovered = hoveredIndex === index;
+						return (
+							<li
+								key={member.name}
+								className="group"
+								onMouseEnter={() => handleRowEnter(index)}
+							>
+								<div className="grid grid-cols-[1fr_auto] items-center gap-4 px-6 py-8 md:grid-cols-[22%_44%_1fr] md:gap-0 md:px-12 md:py-10">
+									{/* Left: tags */}
+									<div className="flex flex-wrap items-center gap-2">
+										{member.tags.map((tag, tagIndex) => (
+											<div
+												key={tag}
+												className={`relative inline-flex overflow-hidden border border-minuri-ocean shadow-md transition-colors duration-300 group-hover:border-minuri-teal ${tagIndex === 1 ? "rounded-2xl" : "rounded-sm"}`}
+											>
+												<span className="relative z-10 px-6 py-2 text-sm font-medium text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white">
+													{tag}
+												</span>
+												<span className="absolute inset-x-0 -bottom-px top-0 translate-y-[105%] bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+											</div>
+										))}
+									</div>
+
+									{/* Center: spacer for the floating photo (desktop) */}
+									<div className="hidden md:block" />
+
+									{/* Right: full name */}
+									<div className="flex items-center justify-end md:justify-start">
+										<span className="text-2xl font-medium leading-none tracking-tight text-minuri-ocean md:text-4xl">
+											{member.fullName}
+										</span>
+									</div>
+								</div>
+								{/* Indented divider */}
+								<div className="mx-6 border-t border-minuri-ocean/30 md:mx-12" />
+							</li>
+						);
+					})}
+				</ol>
+			</section>
+
+			{/* Scroll highlight quote */}
+			<ScrollHighlightQuote />
 		</div>
 	);
 }
