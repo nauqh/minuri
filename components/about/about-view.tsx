@@ -68,14 +68,14 @@ const TEAM = [
 	},
 	{
 		name: "Minh",
-		fullName: "Minh Nguyen",
+		fullName: "Minh Vu",
 		tags: ["Frontend", "Engineering"],
 		animated: "/team/Minh.jpeg",
 		photo: "/team/Minh0.png",
 	},
 	{
 		name: "Chon",
-		fullName: "Chon Lam",
+		fullName: "Chon Ngai Lam",
 		tags: ["Backend", "Engineering"],
 		animated: "/team/Chon.jpeg",
 		photo: "/team/Chon0.jpeg",
@@ -159,8 +159,9 @@ export function AboutView() {
 				<motion.div
 					className="relative z-10 mt-16 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-[140px_1fr] md:gap-10"
 					initial={{ opacity: 0, y: 28 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.7, ease, delay: 0.28 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, amount: 0.3 }}
+					transition={{ duration: 0.7, ease }}
 				>
 					<p className="text-xs font-black uppercase tracking-[0.12em] text-minuri-teal md:pt-3">
 						(Our Story)
@@ -198,7 +199,13 @@ export function AboutView() {
 			</section>
 
 			{/* Team photo */}
-			<section className="px-6 md:px-12">
+			<motion.section
+				className="px-6 md:px-12"
+				initial={{ opacity: 0, y: 24 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, amount: 0.2 }}
+				transition={{ duration: 0.7, ease }}
+			>
 				<div
 					className="relative cursor-crosshair overflow-hidden"
 					onMouseEnter={() => setTeamHovered(true)}
@@ -231,10 +238,16 @@ export function AboutView() {
 						/>
 					</motion.div>
 				</div>
-			</section>
+			</motion.section>
 
 			{/* Team description */}
-			<section className="px-6 py-16 md:px-12 md:py-24">
+			<motion.section
+				className="px-6 py-16 md:px-12 md:py-24"
+				initial={{ opacity: 0, y: 24 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, amount: 0.2 }}
+				transition={{ duration: 0.7, ease, delay: 0.05 }}
+			>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-[140px_1fr] md:gap-10">
 					<p className="text-xs font-black uppercase tracking-[0.12em] text-minuri-teal md:pt-3">
 						(The Team)
@@ -269,10 +282,18 @@ export function AboutView() {
 						</div>
 					</div>
 				</div>
-			</section>
+			</motion.section>
 
 			{/* Team list */}
-			<section className="relative" onMouseLeave={handleRowLeave}>
+			<motion.section
+				className="relative"
+				onMouseLeave={handleRowLeave}
+				onClick={handleRowLeave}
+				initial={{ opacity: 0, y: 24 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, amount: 0.1 }}
+				transition={{ duration: 0.7, ease, delay: 0.05 }}
+			>
 				<div className="mx-6 border-t border-minuri-ocean/30 md:mx-12" />
 				{/* Floating portrait — absolute in center column, overlaps rows */}
 				<AnimatePresence mode="wait">
@@ -293,8 +314,6 @@ export function AboutView() {
 							exit={{ opacity: 0, scale: 0.96 }}
 							transition={{ duration: 0.18, ease }}
 						>
-							{/* Tinted bg rect behind photo */}
-							<div className="absolute inset-0 bg-minuri-teal/20" />
 							{/* Animated base */}
 							<Image
 								src={TEAM[hoveredIndex].animated}
@@ -334,8 +353,69 @@ export function AboutView() {
 								className="group"
 								onMouseEnter={() => handleRowEnter(index)}
 							>
-								<div className="grid grid-cols-[1fr_auto] items-center gap-4 px-6 py-8 md:grid-cols-[22%_44%_1fr] md:gap-0 md:px-12 md:py-10">
-									{/* Left: tags */}
+								{/* ── Mobile layout ── */}
+								<div className="flex items-start justify-between gap-4 px-6 py-6 md:hidden">
+									<div className="flex-1">
+										<span className="mb-4 block text-2xl font-medium leading-none tracking-tight text-minuri-ocean">
+											{member.fullName}
+										</span>
+										<div className="flex flex-col gap-2">
+											{member.tags.map(
+												(tag, tagIndex) => (
+													<div
+														key={tag}
+														className={`relative inline-flex self-start overflow-hidden border border-minuri-ocean shadow-md transition-colors duration-300 group-hover:border-minuri-teal ${tagIndex === 1 ? "rounded-2xl" : "rounded-sm"}`}
+													>
+														<span className="relative z-10 px-6 py-2 text-sm font-medium text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white">
+															{tag}
+														</span>
+														<span className="absolute inset-x-0 -bottom-px top-0 translate-y-[105%] bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+													</div>
+												),
+											)}
+										</div>
+									</div>
+									<div
+										className="relative h-32 w-32 flex-shrink-0 cursor-pointer overflow-hidden rounded-xl"
+										onClick={(e) => {
+											e.stopPropagation();
+											handleRowEnter(index);
+										}}
+									>
+										<Image
+											src={member.animated}
+											alt={member.name}
+											fill
+											className="object-cover object-top"
+											sizes="128px"
+										/>
+										<motion.div
+											className="absolute inset-0"
+											animate={{
+												opacity:
+													showReal &&
+													hoveredIndex === index
+														? 1
+														: 0,
+											}}
+											transition={{
+												duration: 0.9,
+												ease: [0.25, 0.46, 0.45, 0.94],
+											}}
+										>
+											<Image
+												src={member.photo}
+												alt={member.name}
+												fill
+												className="object-cover object-top"
+												sizes="128px"
+											/>
+										</motion.div>
+									</div>
+								</div>
+
+								{/* ── Desktop layout ── */}
+								<div className="hidden md:grid md:grid-cols-[22%_44%_1fr] md:items-center md:px-12 md:py-10">
 									<div className="flex flex-wrap items-center gap-2">
 										{member.tags.map((tag, tagIndex) => (
 											<div
@@ -349,13 +429,9 @@ export function AboutView() {
 											</div>
 										))}
 									</div>
-
-									{/* Center: spacer for the floating photo (desktop) */}
-									<div className="hidden md:block" />
-
-									{/* Right: full name */}
-									<div className="flex items-center justify-end md:justify-start">
-										<span className="text-2xl font-medium leading-none tracking-tight text-minuri-ocean md:text-4xl">
+									<div />
+									<div className="flex items-center justify-start">
+										<span className="text-4xl font-medium leading-none tracking-tight text-minuri-ocean">
 											{member.fullName}
 										</span>
 									</div>
@@ -366,7 +442,7 @@ export function AboutView() {
 						);
 					})}
 				</ol>
-			</section>
+			</motion.section>
 
 			{/* Scroll highlight quote */}
 			<ScrollHighlightQuote />
