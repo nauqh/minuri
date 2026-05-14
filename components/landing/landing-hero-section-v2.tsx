@@ -192,7 +192,7 @@ export function LandingHeroSectionV2({
 				/>
 			</div>
 
-			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-8 pt-4 sm:px-10 md:px-6 md:pt-0 md:pb-40 min-[1500px]:max-w-[1600px] min-[1500px]:pb-48">
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-4 pt-4 sm:px-6 md:px-6 md:pt-0 md:pb-40 min-[1500px]:max-w-[1600px] min-[1500px]:pb-48">
 				<LandingHeader
 					headerVisible={headerVisible}
 					onHeroReveal={onHeroReveal}

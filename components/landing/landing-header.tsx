@@ -65,7 +65,7 @@ export function LandingHeader({
 	return (
 		<div className="relative">
 			<motion.header
-				className="-mx-6 flex w-[calc(100%+3rem)] max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-24 min-[1500px]:min-h-32 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
+				className="flex w-full max-w-none items-stretch overflow-hidden bg-transparent md:mx-auto md:w-full md:max-w-full md:min-h-24 min-[1500px]:min-h-32 md:items-center md:justify-between md:overflow-visible md:rounded-full md:bg-minuri-white md:py-0"
 				initial={{ opacity: 0, y: -18 }}
 				animate={
 					headerVisible
@@ -78,7 +78,7 @@ export function LandingHeader({
 				}}
 			>
 				<motion.div
-					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-6 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12 min-[1500px]:gap-16"
+					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-0 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12 min-[1500px]:gap-16"
 					initial={{ opacity: 0, y: 12 }}
 					animate={{ opacity: headerVisible ? 1 : 0, y: 0 }}
 					transition={{
