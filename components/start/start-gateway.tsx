@@ -476,10 +476,10 @@ export function StartGateway() {
 								Guides to Medicare, Myki, rental bonds — before
 								you need to ask.
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-full">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm">
 								<Link
 									href="/guides"
-									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-full border border-minuri-ocean px-7 text-sm font-black uppercase tracking-wide text-minuri-ocean transition-colors duration-200 group-hover:text-minuri-white"
+									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-sm border border-minuri-ocean px-7 text-sm font-black uppercase tracking-wide text-minuri-ocean transition-colors duration-200 group-hover:text-minuri-white"
 								>
 									Explore guides
 									<ChevronRight
@@ -544,10 +544,10 @@ export function StartGateway() {
 								Support services near you — with costs and
 								eligibility.
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-full">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm">
 								<Link
 									href="/near-me"
-									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-full border border-minuri-white px-7 text-sm font-black uppercase tracking-wide text-minuri-white transition-colors duration-200 group-hover:text-minuri-ocean"
+									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-sm border border-minuri-white px-7 text-sm font-black uppercase tracking-wide text-minuri-white transition-colors duration-200 group-hover:text-minuri-ocean"
 								>
 									Find nearby support
 									<ChevronRight
@@ -701,16 +701,12 @@ export function StartGateway() {
 						to sort.
 					</p>
 
-					<div className="group relative mt-10 inline-flex overflow-hidden rounded-full">
+					<div className="group relative mt-10 inline-flex overflow-hidden rounded-sm">
 						<Link
 							href="/journey"
-							className="relative z-10 inline-flex h-14 items-center gap-2 rounded-full border border-minuri-ocean/70 px-8 text-base font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
+							className="relative z-10 inline-flex h-16 items-center rounded-sm border border-minuri-ocean/70 px-14 text-lg font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
 						>
 							Build my plan
-							<ChevronRight
-								className="size-5 transition-transform duration-200 ease-out group-hover:translate-x-1"
-								aria-hidden
-							/>
 						</Link>
 						<span className="absolute inset-0 translate-y-full bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 					</div>
