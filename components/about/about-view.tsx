@@ -370,6 +370,6 @@ export function AboutView() {
 
 			{/* Scroll highlight quote */}
 			<ScrollHighlightQuote />
-		</div>
+		</motion.div>
 	);
 }
