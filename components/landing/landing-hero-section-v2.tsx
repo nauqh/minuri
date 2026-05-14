@@ -367,39 +367,42 @@ export function LandingHeroSectionV2({
 										visible: {
 											opacity: 1,
 											y: 0,
-											transition: { duration: 0.5, ease: entranceEase, delay: 0.12 },
+											transition: {
+												duration: 0.5,
+												ease: entranceEase,
+												delay: 0.12,
+											},
 										},
 									}}
 								>
 									{/* Primary: Let's get started */}
 									<div className="group relative">
-										<div className="absolute inset-0 translate-x-[7px] translate-y-[7px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
-										<div className="absolute inset-0 translate-x-[3.5px] translate-y-[3.5px] rounded-xl" style={{ backgroundColor: "oklch(0.38 0.07 228)" }} />
+										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
+										<div
+											className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px]"
+											style={{
+												backgroundColor:
+													"oklch(0.38 0.07 228)",
+											}}
+										/>
 										<Link
 											href="/start"
-											className="relative z-10 inline-flex h-12 items-center gap-2 rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-150 ease-out group-hover:translate-x-[3.5px] group-hover:translate-y-[3.5px]"
+											className="relative z-10 inline-flex h-12 items-center gap-2 rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[8px] group-hover:translate-y-[8px]"
 										>
 											Let&apos;s get started
-											<ChevronRight className="size-4" aria-hidden />
 										</Link>
 									</div>
 
 									{/* Secondary: About us */}
 									<div className="group relative">
-										<div className="absolute inset-0 translate-x-[7px] translate-y-[7px] rounded-xl bg-minuri-ocean/10" />
-										<div className="absolute inset-0 translate-x-[3.5px] translate-y-[3.5px] rounded-xl bg-minuri-ocean/25" />
-										<button
-											type="button"
-											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-semibold text-minuri-ocean transition-transform duration-150 ease-out group-hover:translate-x-[3.5px] group-hover:translate-y-[3.5px]"
-											onClick={() =>
-												lenis?.scrollTo(window.scrollY + window.innerHeight, {
-													duration: 1.4,
-													easing: (t) => 1 - Math.pow(1 - t, 4),
-												})
-											}
+										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/10" />
+										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/25" />
+										<Link
+											href="/about"
+											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-semibold text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[8px] group-hover:translate-y-[8px]"
 										>
 											About us
-										</button>
+										</Link>
 									</div>
 								</motion.div>
 							</motion.div>
