@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 
@@ -35,8 +37,11 @@ function ScrollHighlightQuote() {
 	});
 
 	return (
-		<div ref={ref} className="px-6 pt-28 pb-64 md:px-12 md:pt-40 md:pb-96">
-			<p className="mx-auto max-w-2xl text-center text-[clamp(4rem,10vw,9rem)] font-black uppercase leading-[0.95] tracking-tight text-minuri-ocean">
+		<div
+			ref={ref}
+			className="flex min-h-screen w-full items-center justify-center px-6 py-28 md:px-12 md:py-40"
+		>
+			<p className="w-full text-center text-[clamp(4rem,10vw,9rem)] font-black uppercase leading-[0.95] tracking-tight text-minuri-ocean">
 				{QUOTE.map((word, i) => (
 					<Word
 						key={i}
@@ -446,6 +451,35 @@ export function AboutView() {
 
 			{/* Scroll highlight quote */}
 			<ScrollHighlightQuote />
+
+			{/* CTA footer */}
+			<motion.section
+				className="flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center md:px-12 md:py-36"
+				initial={{ opacity: 0, y: 24 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, amount: 0.3 }}
+				transition={{ duration: 0.7, ease }}
+			>
+				<h2 className="mx-auto max-w-full text-[clamp(2.5rem,6vw,5rem)] font-black uppercase leading-[1.05] tracking-tight text-minuri-teal">
+					Ready to feel at home?
+				</h2>
+				<p className="mx-auto mt-6 max-w-full text-base leading-relaxed text-minuri-ink md:text-lg">
+					Everything you need to settle into Melbourne — in one place.
+				</p>
+				<div className="group relative mt-10 inline-flex overflow-hidden rounded-sm">
+					<Link
+						href="/start"
+						className="relative z-10 inline-flex h-14 items-center gap-2 rounded-sm border border-minuri-ocean px-10 text-base font-medium text-minuri-ocean shadow-md transition-colors duration-300 group-hover:text-minuri-white md:text-lg"
+					>
+						Let&apos;s get started with Minuri
+						<ChevronRight
+							className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
+							aria-hidden
+						/>
+					</Link>
+					<span className="absolute inset-0 translate-y-full bg-minuri-ocean transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+				</div>
+			</motion.section>
 		</motion.div>
 	);
 }
