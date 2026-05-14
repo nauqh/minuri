@@ -4,6 +4,7 @@ import { startTransition, useDeferredValue } from "react";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 
 import { GUIDE_TOPICS, GUIDES } from "@/content/guides";
 import { GuideCard } from "@/components/guides/guide-card";
@@ -20,6 +21,10 @@ export function GuidesLibraryView() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const { isBookmarked, toggleBookmark } = useGuideBookmarks();
+
+	const prefersReducedMotion = useReducedMotion();
+	const springTransition = { type: "spring" as const, bounce: 0.15, duration: prefersReducedMotion ? 0 : 0.35 };
+	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 	const activeTopicFilter = parseGuideTopicFilter(searchParams.get("topic"));
 	const rawQuery = searchParams.get("q") ?? "";
@@ -66,41 +71,63 @@ export function GuidesLibraryView() {
 			<div className="mx-8 h-px bg-minuri-silver/30 xl:mx-10 2xl:mx-14" />
 
 			{/* Topic filter row */}
-			<div className="flex items-center gap-2 overflow-x-auto px-8 py-4 scrollbar-none xl:gap-3 xl:px-10 xl:py-5 2xl:gap-4 2xl:px-14 2xl:py-6">
-				<button
-					type="button"
-					onClick={() =>
-						updateParams((params) => params.delete("topic"))
-					}
-					className={cn(
-						"shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
-						activeTopicFilter === "all"
-							? "bg-minuri-ocean text-white"
-							: "text-minuri-slate/50 hover:bg-minuri-fog hover:text-minuri-ocean",
-					)}
-				>
-					All
-				</button>
-				{GUIDE_TOPICS.map((topic) => (
-					<button
-						key={topic.slug}
+			<LayoutGroup id="guide-topic-filter">
+				<div className="flex items-center gap-2 overflow-x-auto px-8 py-4 scrollbar-none xl:gap-3 xl:px-10 xl:py-5 2xl:gap-4 2xl:px-14 2xl:py-6">
+					<motion.button
 						type="button"
 						onClick={() =>
-							updateParams((params) =>
-								params.set("topic", topic.slug),
-							)
+							updateParams((params) => params.delete("topic"))
 						}
+						initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: prefersReducedMotion ? 0 : 0.3, delay: 0, ease: entranceEase }}
 						className={cn(
-							"shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
-							activeTopicFilter === topic.slug
-								? "bg-minuri-ocean text-white"
-								: "text-minuri-slate/50 hover:bg-minuri-fog hover:text-minuri-ocean",
+							"relative shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
+							activeTopicFilter === "all"
+								? "text-white"
+								: "text-minuri-slate/50 hover:text-minuri-ocean",
 						)}
 					>
-						{topic.name}
-					</button>
-				))}
-			</div>
+						{activeTopicFilter === "all" && (
+							<motion.span
+								layoutId="active-filter-pill"
+								className="absolute inset-0 rounded-lg bg-minuri-ocean"
+								transition={springTransition}
+							/>
+						)}
+						<span className="relative z-10">All</span>
+					</motion.button>
+					{GUIDE_TOPICS.map((topic, index) => (
+						<motion.button
+							key={topic.slug}
+							type="button"
+							onClick={() =>
+								updateParams((params) =>
+									params.set("topic", topic.slug),
+								)
+							}
+							initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: prefersReducedMotion ? 0 : 0.3, delay: prefersReducedMotion ? 0 : (index + 1) * 0.05, ease: entranceEase }}
+							className={cn(
+								"relative shrink-0 rounded-lg px-5 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors xl:px-6 xl:py-2.5 xl:text-xs 2xl:px-8 2xl:py-3 2xl:text-sm",
+								activeTopicFilter === topic.slug
+									? "text-white"
+									: "text-minuri-slate/50 hover:text-minuri-ocean",
+							)}
+						>
+							{activeTopicFilter === topic.slug && (
+								<motion.span
+									layoutId="active-filter-pill"
+									className="absolute inset-0 rounded-lg bg-minuri-ocean"
+									transition={springTransition}
+								/>
+							)}
+							<span className="relative z-10">{topic.name}</span>
+						</motion.button>
+					))}
+				</div>
+			</LayoutGroup>
 		</div>
 	);
 
@@ -139,11 +166,11 @@ export function GuidesLibraryView() {
 
 	const libraryBackHome = (
 		<Link
-			href="/"
-			className="mt-4 inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
+			href="/guides"
+			className="inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 		>
 			<ArrowLeft className="size-3.5" aria-hidden />
-			Back to home
+			Back
 		</Link>
 	);
 

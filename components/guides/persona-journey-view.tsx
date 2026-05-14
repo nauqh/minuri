@@ -217,12 +217,12 @@ export function PersonaDetailFullscreen({
 						>
 							{/* ── Panel 0: Persona description ── */}
 							<div
-								className="relative flex h-screen w-screen shrink-0"
+								className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
 								style={{ backgroundColor: "#f0ede8" }}
 							>
 								{/* Far left — huge vertical name */}
 								<motion.div
-									className="flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6"
+									className="hidden md:flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6"
 									initial={{
 										y: prefersReducedMotion ? 0 : 70,
 										opacity: 0,
@@ -253,7 +253,7 @@ export function PersonaDetailFullscreen({
 
 								{/* Center — persona photo (layoutId shared element from intro card) */}
 								<motion.div
-									className="relative w-[42%] shrink-0"
+									className="relative h-[45vh] w-full shrink-0 md:h-auto md:w-[42%]"
 									layoutId={`persona-photo-${persona.id}`}
 									transition={{
 										duration: 0.68,
@@ -272,7 +272,7 @@ export function PersonaDetailFullscreen({
 
 								{/* Right — role / hint / quote */}
 								<motion.div
-									className="flex flex-1 flex-col justify-between px-8 py-10 lg:px-10 lg:py-12"
+									className="flex flex-1 flex-col justify-between px-6 py-5 md:px-8 md:py-10 lg:px-10 lg:py-12"
 									style={{ backgroundColor: "#f0ede8" }}
 									initial={{
 										x: prefersReducedMotion ? 0 : 55,
@@ -305,7 +305,7 @@ export function PersonaDetailFullscreen({
 
 									<div>
 										<p
-											className="text-lg font-medium leading-relaxed text-gray-800 md:text-2xl lg:text-3xl"
+											className="text-base font-medium leading-relaxed text-gray-800 md:text-2xl lg:text-3xl"
 											style={{
 												fontFamily:
 													"var(--font-hero-serif)",
@@ -329,7 +329,7 @@ export function PersonaDetailFullscreen({
 								({ dayIndex, guides }, panelIndex) => (
 									<div
 										key={dayIndex}
-										className="relative flex h-screen w-screen shrink-0 flex-col justify-between px-12 py-12 lg:px-20 lg:py-14"
+										className="relative flex h-screen w-screen shrink-0 flex-col justify-between px-6 py-10 md:px-12 md:py-12 lg:px-20 lg:py-14"
 										style={{ backgroundColor: "#f0ede8" }}
 									>
 										{/* Top — persona mini + day label */}
@@ -367,11 +367,11 @@ export function PersonaDetailFullscreen({
 										</div>
 
 										{/* Middle — guide cards */}
-										<div className="flex gap-6">
+										<div className="flex gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-visible md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 											{guides.map((guide, index) => (
 												<div
 													key={guide.slug}
-													className="w-72 shrink-0"
+													className="w-64 shrink-0 md:w-72"
 												>
 													<GuideCard
 														guide={guide}

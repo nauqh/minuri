@@ -280,26 +280,6 @@ export function LandingHeroSectionV2({
 
 					<div className="mt-0 grid flex-1 gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-start md:gap-10">
 						<div className="flex flex-col md:h-[350px] min-[1500px]:h-[380px]">
-							<motion.p
-								className="hidden text-2xl font-semibold leading-snug text-minuri-ocean md:mt-4 md:block md:leading-tight min-[1500px]:text-4xl"
-								variants={{
-									hidden: {
-										opacity: 0,
-										y: 14,
-									},
-									visible: {
-										opacity: 1,
-										y: 0,
-										transition: {
-											duration: 0.5,
-											ease: entranceEase,
-										},
-									},
-								}}
-							>
-								Your everyday support system to start living
-								independently
-							</motion.p>
 							<motion.div
 								className="mt-auto space-y-6 pt-10 md:space-y-0 md:pt-0"
 								variants={{
@@ -322,7 +302,7 @@ export function LandingHeroSectionV2({
 									services, and follow clear next steps for
 									day-to-day independent life.
 								</p>
-								{/* Mobile CTAs only — desktop CTAs live in the bottom bar */}
+								{/* Mobile CTAs only */}
 								<motion.div
 									className="flex flex-wrap items-center gap-4 max-md:flex-col max-md:items-stretch pt-2 md:hidden"
 									variants={{
@@ -358,6 +338,69 @@ export function LandingHeroSectionV2({
 											className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
 										/>
 									</Link>
+								</motion.div>
+
+								{/* Desktop subheading */}
+								<motion.p
+									className="hidden max-w-sm text-2xl font-medium leading-snug text-minuri-ocean md:block md:leading-tight md:pb-6 min-[1500px]:max-w-md min-[1500px]:text-4xl"
+									variants={{
+										hidden: { opacity: 0, y: 14 },
+										visible: {
+											opacity: 1,
+											y: 0,
+											transition: {
+												duration: 0.5,
+												ease: entranceEase,
+											},
+										},
+									}}
+								>
+									Your everyday support system to start living
+									independently
+								</motion.p>
+
+								{/* Desktop CTAs — 3-layer press */}
+								<motion.div
+									className="hidden md:flex items-center gap-5 pt-2"
+									variants={{
+										hidden: { opacity: 0, y: 10 },
+										visible: {
+											opacity: 1,
+											y: 0,
+											transition: { duration: 0.5, ease: entranceEase, delay: 0.12 },
+										},
+									}}
+								>
+									{/* Primary: Let's get started */}
+									<div className="group relative">
+										<div className="absolute inset-0 translate-x-[7px] translate-y-[7px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
+										<div className="absolute inset-0 translate-x-[3.5px] translate-y-[3.5px] rounded-xl" style={{ backgroundColor: "oklch(0.38 0.07 228)" }} />
+										<Link
+											href="/start"
+											className="relative z-10 inline-flex h-12 items-center gap-2 rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-150 ease-out group-hover:translate-x-[3.5px] group-hover:translate-y-[3.5px]"
+										>
+											Let&apos;s get started
+											<ChevronRight className="size-4" aria-hidden />
+										</Link>
+									</div>
+
+									{/* Secondary: About us */}
+									<div className="group relative">
+										<div className="absolute inset-0 translate-x-[7px] translate-y-[7px] rounded-xl bg-minuri-ocean/10" />
+										<div className="absolute inset-0 translate-x-[3.5px] translate-y-[3.5px] rounded-xl bg-minuri-ocean/25" />
+										<button
+											type="button"
+											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-semibold text-minuri-ocean transition-transform duration-150 ease-out group-hover:translate-x-[3.5px] group-hover:translate-y-[3.5px]"
+											onClick={() =>
+												lenis?.scrollTo(window.scrollY + window.innerHeight, {
+													duration: 1.4,
+													easing: (t) => 1 - Math.pow(1 - t, 4),
+												})
+											}
+										>
+											About us
+										</button>
+									</div>
 								</motion.div>
 							</motion.div>
 						</div>
