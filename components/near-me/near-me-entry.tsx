@@ -140,11 +140,11 @@ export function NearMeEntry() {
 			<div className="hidden h-full lg:flex lg:w-[42%] xl:w-[44%] flex-col justify-between bg-minuri-ocean px-10 py-8 xl:px-14 xl:py-12">
 				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
 					<Link
-						href="/"
-						className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-medium text-white/60 transition hover:border-white/30 hover:text-white/80"
+						href="/start"
+						className="inline-flex w-fit items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 					>
 						<ArrowLeft className="size-3.5" aria-hidden />
-						Back to home
+						Back
 					</Link>
 				</motion.div>
 
@@ -210,11 +210,11 @@ export function NearMeEntry() {
 			{/* ── Form panel ── */}
 			<div className="flex h-full flex-1 flex-col items-center justify-center overflow-y-auto bg-minuri-fog px-5 py-6 md:px-8">
 				<Link
-					href="/"
-					className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition hover:scale-105 lg:hidden"
+					href="/start"
+					className="mb-5 inline-flex w-fit items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white lg:hidden"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
-					Back to home
+					Back
 				</Link>
 
 				<div className="w-full max-w-[460px] 2xl:max-w-[560px]">

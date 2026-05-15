@@ -71,9 +71,8 @@ export function LandingDataSection() {
 								ease: easeOut,
 							}}
 						>
-							The systems that support you — healthcare, housing,
-							transport, community — assume you already know how
-							they work.
+							Nobody gives you the manual — you&apos;re just
+							expected to know.
 						</motion.p>
 					</div>
 

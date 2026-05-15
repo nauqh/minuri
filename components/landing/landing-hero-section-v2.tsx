@@ -139,18 +139,9 @@ export function LandingHeroSectionV2({
 }) {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [hasStartedWordCycle, setHasStartedWordCycle] = useState(false);
-	const [showConfirm, setShowConfirm] = useState(false);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const lenis = useLenis();
 	const router = useRouter();
-
-	const handleStartClick = () => {
-		if (showConfirm) {
-			router.push("/start");
-			return;
-		}
-		setShowConfirm(true);
-	};
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 	const headlineWord = hasStartedWordCycle
 		? HERO_TOPIC_CARDS[activeIndex].word
@@ -329,58 +320,27 @@ export function LandingHeroSectionV2({
 										},
 									}}
 								>
-									{/* Primary: Let's get started */}
-									<div className="group relative mb-2 mr-2">
-										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
-										<div
-											className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px]"
-											style={{
-												backgroundColor:
-													"oklch(0.38 0.07 228)",
-											}}
-										/>
+									{/* Primary: Let’s get started */}
+									<div className="group relative mb-3 mr-3">
+										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
+										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 										<button
-											onClick={handleStartClick}
-											className="relative z-10 inline-flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											onClick={() =>
+												router.push("/start")
+											}
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center justify-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
 										>
-											<AnimatePresence
-												mode="wait"
-												initial={false}
-											>
-												<motion.span
-													key={
-														showConfirm
-															? "confirm"
-															: "start"
-													}
-													initial={{
-														opacity: 0,
-														y: 8,
-													}}
-													animate={{
-														opacity: 1,
-														y: 0,
-													}}
-													exit={{ opacity: 0, y: -8 }}
-													transition={{
-														duration: 0.18,
-													}}
-												>
-													{showConfirm
-														? "Are you sure?"
-														: "Let’s get started"}
-												</motion.span>
-											</AnimatePresence>
+											Let’s start
 										</button>
 									</div>
 
-									{/* Secondary: About us */}
-									<div className="group relative mb-2 mr-2">
-										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl bg-minuri-ocean/10" />
-										<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px] bg-minuri-ocean/25" />
+									{/* Secondary: About us / Are you sure? */}
+									<div className="group relative mb-3 mr-3">
+										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
+										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 										<Link
 											href="/about"
-											className="relative z-10 inline-flex h-12 items-center justify-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
 										>
 											About us
 										</Link>
@@ -422,85 +382,41 @@ export function LandingHeroSectionV2({
 										},
 									}}
 								>
-									{/* Primary: Let's get started */}
-									<div className="group relative mb-2 mr-2">
-										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl border border-minuri-ocean/15 bg-minuri-fog" />
-										<div
-											className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px]"
-											style={{
-												backgroundColor:
-													"oklch(0.38 0.07 228)",
-											}}
-										/>
+									{/* Primary: Let’s get started */}
+									<div className="group relative mb-3 mr-3">
+										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
+										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 										<button
-											onClick={handleStartClick}
-											className="relative z-10 inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											onClick={() =>
+												router.push("/start")
+											}
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
 										>
-											<AnimatePresence
-												mode="wait"
-												initial={false}
-											>
-												<motion.span
-													key={
-														showConfirm
-															? "confirm"
-															: "start"
-													}
-													initial={{
-														opacity: 0,
-														y: 8,
-													}}
-													animate={{
-														opacity: 1,
-														y: 0,
-													}}
-													exit={{ opacity: 0, y: -8 }}
-													transition={{
-														duration: 0.18,
-													}}
-												>
-													{showConfirm
-														? "Are you sure?"
-														: "Let’s get started"}
-												</motion.span>
-											</AnimatePresence>
+											Let’s get started
 										</button>
 									</div>
 
-									{/* Secondary: About us */}
-									<div className="group relative mb-2 mr-2">
-										<div className="absolute inset-0 translate-x-[8px] translate-y-[8px] rounded-xl bg-minuri-ocean/10" />
-										<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px] bg-minuri-ocean/25" />
+									{/* Secondary: About us / Are you sure? */}
+									<div className="group relative mb-3 mr-3">
+										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
+										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 										<Link
 											href="/about"
-											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
 										>
 											About us
 										</Link>
 									</div>
 
-									<AnimatePresence>
-										{showConfirm && (
-											<motion.div
-												className="hidden md:flex absolute top-full left-0 items-center gap-1.5 pt-2 text-minuri-ocean/50"
-												initial={{ opacity: 0, y: -6 }}
-												animate={{ opacity: 1, y: 0 }}
-												exit={{ opacity: 0, y: -4 }}
-												transition={{
-													duration: 0.22,
-													ease: "easeOut",
-												}}
-											>
-												<CornerDownRight
-													className="size-4"
-													strokeWidth={2}
-												/>
-												<span className="text-xs font-semibold uppercase tracking-widest">
-													or scroll to explore first
-												</span>
-											</motion.div>
-										)}
-									</AnimatePresence>
+									<div className="hidden md:flex absolute top-full left-0 items-center gap-1.5 pt-2 text-minuri-ocean/50">
+										<CornerDownRight
+											className="size-4"
+											strokeWidth={2}
+										/>
+										<span className="text-xs font-semibold uppercase tracking-widest">
+											or scroll to explore first
+										</span>
+									</div>
 								</motion.div>
 							</motion.div>
 						</div>
@@ -565,11 +481,7 @@ export function LandingHeroSectionV2({
 								},
 							)
 						}
-						animate={
-							showConfirm
-								? { scale: [1, 1.13, 0.97, 1.1, 1] }
-								: { scale: 1 }
-						}
+						animate={{ scale: 1 }}
 						transition={{
 							duration: 2.5,
 							ease: "easeInOut",

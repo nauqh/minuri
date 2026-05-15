@@ -4,23 +4,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, Bookmark, BookmarkCheck, Copy, Check, Download, ExternalLink, Map as MapIcon, X } from "lucide-react";
+import {
+	ArrowLeft,
+	Bookmark,
+	BookmarkCheck,
+	Copy,
+	Check,
+	Download,
+	ExternalLink,
+	Map as MapIcon,
+	X,
+} from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { GUIDE_TOPICS, GUIDES, type Guide } from "@/content/guides";
-import type {
-	GuideOrigin,
-	GuideTopicFilter,
-} from "@/lib/guides";
+import type { GuideOrigin, GuideTopicFilter } from "@/lib/guides";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuideMarkdown } from "@/components/guides/guide-markdown";
 import { GuideSectionLabel } from "@/components/guides/guide-section-label";
-import {
-	buildGuideHref,
-	getNextGuide,
-	getTopicMeta,
-} from "@/lib/guides";
+import { buildGuideHref, getNextGuide, getTopicMeta } from "@/lib/guides";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { cn } from "@/lib/utils";
 import { GuideShareModal } from "@/components/guides/guide-share-modal";
@@ -303,8 +306,8 @@ export function GuideDetailView({
 		<div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
 			<div className="rounded-[0.85rem] border border-minuri-silver/70 bg-minuri-fog/40 px-3.5 py-3">
 				<p className="text-xs text-minuri-slate">
-					{currentTopicGuideIndex + 1} of {currentTopicGuides.length} in{" "}
-					{topicMeta?.name ?? "this topic"}
+					{currentTopicGuideIndex + 1} of {currentTopicGuides.length}{" "}
+					in {topicMeta?.name ?? "this topic"}
 				</p>
 			</div>
 
@@ -361,8 +364,12 @@ export function GuideDetailView({
 												? "border-minuri-teal/40 bg-minuri-mist text-minuri-ocean hover:bg-minuri-ice"
 												: "border-minuri-silver/70 bg-minuri-white text-minuri-slate hover:bg-minuri-fog",
 									)}
-									aria-current={isCurrent ? "step" : undefined}
-									onClick={() => setIsJourneySidebarOpen(false)}
+									aria-current={
+										isCurrent ? "step" : undefined
+									}
+									onClick={() =>
+										setIsJourneySidebarOpen(false)
+									}
 								>
 									<span className="truncate">
 										{index + 1}. {item.title}
@@ -441,8 +448,6 @@ export function GuideDetailView({
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-
-
 	return (
 		<div className="min-h-screen bg-minuri-white text-minuri-ink">
 			<div className="fixed inset-x-0 top-0 z-50 h-[2px] bg-minuri-white">
@@ -451,10 +456,12 @@ export function GuideDetailView({
 					style={{ width: `${readingProgress}%` }}
 				/>
 			</div>
-			<header className={cn(
+			<header
+				className={cn(
 					"fixed inset-x-0 top-[2px] z-40 bg-minuri-white/95 backdrop-blur transition-transform duration-300",
 					headerVisible ? "translate-y-0" : "-translate-y-full",
-				)}>
+				)}
+			>
 				<div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 					<div className="mx-auto flex min-h-21 w-full items-center justify-between bg-minuri-white">
 						<Link
@@ -589,13 +596,25 @@ export function GuideDetailView({
 								) : null}
 							</motion.section>
 
-							{(feelingSection || revealSection) ? (
+							{feelingSection || revealSection ? (
 								<div className="flex flex-col gap-6 md:flex-row md:items-stretch">
 									{feelingSection ? (
 										<motion.section
 											{...sectionAnim}
-											initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -60, filter: prefersReducedMotion ? "blur(0px)" : "blur(4px)" }}
-											whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+											initial={{
+												opacity: 0,
+												x: prefersReducedMotion
+													? 0
+													: -60,
+												filter: prefersReducedMotion
+													? "blur(0px)"
+													: "blur(4px)",
+											}}
+											whileInView={{
+												opacity: 1,
+												x: 0,
+												filter: "blur(0px)",
+											}}
 											className="guide-section-feeling md:flex-1"
 											style={{ paddingTop: "2rem" }}
 										>
@@ -612,8 +631,20 @@ export function GuideDetailView({
 									{revealSection ? (
 										<motion.section
 											{...sectionAnim}
-											initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 60, filter: prefersReducedMotion ? "blur(0px)" : "blur(4px)" }}
-											whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+											initial={{
+												opacity: 0,
+												x: prefersReducedMotion
+													? 0
+													: 60,
+												filter: prefersReducedMotion
+													? "blur(0px)"
+													: "blur(4px)",
+											}}
+											whileInView={{
+												opacity: 1,
+												x: 0,
+												filter: "blur(0px)",
+											}}
 											className="guide-section-reveal md:flex-1"
 											style={{ paddingTop: "2rem" }}
 										>
@@ -640,7 +671,13 @@ export function GuideDetailView({
 									className="guide-section-body"
 								>
 									<GuideSectionLabel label="How It Works" />
-									<h2 className="text-2xl font-semibold leading-tight text-minuri-ocean md:text-3xl" style={{ fontFamily: "var(--font-hero-serif)" }}>
+									<h2
+										className="text-2xl font-semibold leading-tight text-minuri-ocean md:text-3xl"
+										style={{
+											fontFamily:
+												"var(--font-hero-serif)",
+										}}
+									>
 										{bodySection.title}
 									</h2>
 									<GuideMarkdown
@@ -678,7 +715,8 @@ export function GuideDetailView({
 													</p>
 													{step.estimateMin > 0 && (
 														<p className="mt-2 text-xs text-minuri-slate">
-															~{step.estimateMin} min
+															~{step.estimateMin}{" "}
+															min
 														</p>
 													)}
 												</li>
@@ -687,7 +725,6 @@ export function GuideDetailView({
 									</ol>
 								</motion.section>
 							) : null}
-
 
 							{nextGuide ? (
 								<motion.section {...sectionAnim}>
@@ -712,7 +749,11 @@ export function GuideDetailView({
 												/>
 												<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 												<p className="absolute bottom-2.5 left-3.5 text-[0.6rem] uppercase tracking-[0.18em] text-white/70">
-													{getTopicMeta(nextGuide.topic)?.name}
+													{
+														getTopicMeta(
+															nextGuide.topic,
+														)?.name
+													}
 												</p>
 											</div>
 											{/* Card body */}
@@ -727,7 +768,8 @@ export function GuideDetailView({
 													{nextGuide.title}
 												</p>
 												<p className="mt-1 text-xs text-minuri-slate">
-													{nextGuide.readingTimeMin} min read
+													{nextGuide.readingTimeMin}{" "}
+													min read
 												</p>
 												<p className="mt-3 text-sm font-medium text-minuri-teal transition-colors group-hover:text-minuri-ocean">
 													Continue reading →
@@ -743,63 +785,118 @@ export function GuideDetailView({
 								<motion.section {...sectionAnim}>
 									<button
 										type="button"
-										onClick={() => setSourcesOpen((o) => !o)}
+										onClick={() =>
+											setSourcesOpen((o) => !o)
+										}
 										className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-minuri-slate transition-colors hover:text-minuri-teal"
 									>
-										<span>{sourcesOpen ? "Hide" : "Show"} {guide.sourceLinks.length} source{guide.sourceLinks.length !== 1 ? "s" : ""}</span>
-										<span className="text-minuri-silver">{sourcesOpen ? "↑" : "↓"}</span>
+										<span>
+											{sourcesOpen ? "Hide" : "Show"}{" "}
+											{guide.sourceLinks.length} source
+											{guide.sourceLinks.length !== 1
+												? "s"
+												: ""}
+										</span>
+										<span className="text-minuri-silver">
+											{sourcesOpen ? "↑" : "↓"}
+										</span>
 									</button>
 
 									<AnimatePresence initial={false}>
 										{sourcesOpen && (
 											<motion.div
 												key="sources-list"
-												initial={{ height: 0, opacity: 0 }}
-												animate={{ height: "auto", opacity: 1 }}
+												initial={{
+													height: 0,
+													opacity: 0,
+												}}
+												animate={{
+													height: "auto",
+													opacity: 1,
+												}}
 												exit={{ height: 0, opacity: 0 }}
-												transition={{ duration: prefersReducedMotion ? 0.01 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+												transition={{
+													duration:
+														prefersReducedMotion
+															? 0.01
+															: 0.28,
+													ease: [0.22, 1, 0.36, 1],
+												}}
 												style={{ overflow: "hidden" }}
 											>
 												<div className="mt-4 divide-y divide-minuri-silver/30 rounded-sm border border-minuri-silver/40 bg-minuri-fog/30">
-													{guide.sourceLinks.map((link, i) => {
-														let domain = "";
-														try { domain = new URL(link.href).hostname.replace("www.", ""); } catch {}
-														return (
-															<motion.a
-																key={link.href}
-																href={link.href}
-																target="_blank"
-																rel="noreferrer"
-																initial={{ opacity: 0, x: -8 }}
-																animate={{ opacity: 1, x: 0 }}
-																transition={{ duration: prefersReducedMotion ? 0.01 : 0.2, delay: prefersReducedMotion ? 0 : i * 0.04 }}
-																className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-minuri-fog/60"
-															>
-																<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-minuri-teal/10 text-[10px] font-bold text-minuri-teal">
-																	{i + 1}
-																</span>
-																<div className="min-w-0 flex-1">
-																	<p className="text-sm font-medium text-minuri-ink group-hover:text-minuri-teal">
-																		{link.label}
-																	</p>
-																	{domain && (
-																		<p className="mt-0.5 text-xs text-minuri-slate">
-																			{domain}
+													{guide.sourceLinks.map(
+														(link, i) => {
+															let domain = "";
+															try {
+																domain =
+																	new URL(
+																		link.href,
+																	).hostname.replace(
+																		"www.",
+																		"",
+																	);
+															} catch {}
+															return (
+																<motion.a
+																	key={
+																		link.href
+																	}
+																	href={
+																		link.href
+																	}
+																	target="_blank"
+																	rel="noreferrer"
+																	initial={{
+																		opacity: 0,
+																		x: -8,
+																	}}
+																	animate={{
+																		opacity: 1,
+																		x: 0,
+																	}}
+																	transition={{
+																		duration:
+																			prefersReducedMotion
+																				? 0.01
+																				: 0.2,
+																		delay: prefersReducedMotion
+																			? 0
+																			: i *
+																				0.04,
+																	}}
+																	className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-minuri-fog/60"
+																>
+																	<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-minuri-teal/10 text-[10px] font-bold text-minuri-teal">
+																		{i + 1}
+																	</span>
+																	<div className="min-w-0 flex-1">
+																		<p className="text-sm font-medium text-minuri-ink group-hover:text-minuri-teal">
+																			{
+																				link.label
+																			}
 																		</p>
-																	)}
-																</div>
-																<ExternalLink className="mt-0.5 size-3.5 shrink-0 text-minuri-silver group-hover:text-minuri-teal" />
-															</motion.a>
-														);
-													})}
+																		{domain && (
+																			<p className="mt-0.5 text-xs text-minuri-slate">
+																				{
+																					domain
+																				}
+																			</p>
+																		)}
+																	</div>
+																	<ExternalLink className="mt-0.5 size-3.5 shrink-0 text-minuri-silver group-hover:text-minuri-teal" />
+																</motion.a>
+															);
+														},
+													)}
 												</div>
 											</motion.div>
 										)}
 									</AnimatePresence>
 								</motion.section>
 							) : null}
-
-						</div>{/* end sections container */}
+						</div>
+						{/* end sections container */}
 
 						{/* Guide footer — full-bleed, content constrained to match sections above */}
 						<motion.footer
@@ -807,78 +904,106 @@ export function GuideDetailView({
 							className="guide-footer-end"
 						>
 							<div className="relative z-10 mx-auto w-full px-4 text-center md:max-w-3xl md:px-8 lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
+								{/* Ornament + title */}
+								<p className="mb-5 text-lg text-minuri-seafoam/25">
+									✦
+								</p>
+								<h2
+									className="text-xl font-semibold leading-snug text-white/75 md:text-2xl"
+									style={{
+										fontFamily: "var(--font-hero-serif)",
+									}}
+								>
+									{guide.title}
+								</h2>
+								<p className="mt-2 text-xs uppercase tracking-widest text-white/25">
+									{topicMeta?.name} · {guide.readingTimeMin}{" "}
+									min read
+								</p>
 
-									{/* Ornament + title */}
-									<p className="mb-5 text-lg text-minuri-seafoam/25">✦</p>
-									<h2
-										className="text-xl font-semibold leading-snug text-white/75 md:text-2xl"
-										style={{ fontFamily: "var(--font-hero-serif)" }}
+								{/* Actions */}
+								<div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+									<button
+										type="button"
+										onClick={() =>
+											toggleBookmark(guide.slug)
+										}
+										className={cn(
+											"inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-200",
+											isBookmarked(guide.slug)
+												? "border-minuri-seafoam/50 bg-minuri-seafoam/10 text-minuri-seafoam"
+												: "border-white/15 text-white/60 hover:border-white/30 hover:text-white",
+										)}
 									>
-										{guide.title}
-									</h2>
-									<p className="mt-2 text-xs uppercase tracking-widest text-white/25">
-										{topicMeta?.name} · {guide.readingTimeMin} min read
-									</p>
-
-									{/* Actions */}
-									<div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-										<button
-											type="button"
-											onClick={() => toggleBookmark(guide.slug)}
-											className={cn(
-												"inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-200",
-												isBookmarked(guide.slug)
-													? "border-minuri-seafoam/50 bg-minuri-seafoam/10 text-minuri-seafoam"
-													: "border-white/15 text-white/60 hover:border-white/30 hover:text-white",
-											)}
-										>
-											{isBookmarked(guide.slug)
-												? <><BookmarkCheck className="size-4" /> Saved</>
-												: <><Bookmark className="size-4" /> Save</>
-											}
-										</button>
-										<button
-											type="button"
-											onClick={() => {
-												navigator.clipboard.writeText(window.location.href);
-												setCopied(true);
-												setTimeout(() => setCopied(false), 2000);
-											}}
-											className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/60 transition-all duration-200 hover:border-white/30 hover:text-white"
-										>
-											{copied
-												? <><Check className="size-4" /> Copied</>
-												: <><Copy className="size-4" /> Copy link</>
-											}
-										</button>
-										<button
-											type="button"
-											onClick={() => setShareOpen(true)}
-											className="inline-flex items-center gap-2 rounded-full bg-minuri-seafoam/10 border border-minuri-seafoam/30 px-5 py-2.5 text-sm font-medium text-minuri-seafoam transition-all duration-200 hover:bg-minuri-seafoam/20"
-										>
-											<Download className="size-4" />
-											Download guide
-										</button>
-									</div>
-
-									{/* Bottom bar */}
-									<div className="mt-10 flex items-center justify-between border-t border-white/[0.07] pt-6">
-										<Link
-											href={backHref}
-											className="inline-flex items-center gap-1.5 text-xs text-white/30 transition-colors hover:text-white/60"
-										>
-											<ArrowLeft className="size-3.5" />
-											All guides
-										</Link>
-										<p
-											className="text-xs font-black uppercase tracking-widest text-white/15"
-											style={{ fontFamily: "var(--font-hero-serif)" }}
-										>
-											Minuri
-										</p>
-									</div>
+										{isBookmarked(guide.slug) ? (
+											<>
+												<BookmarkCheck className="size-4" />{" "}
+												Saved
+											</>
+										) : (
+											<>
+												<Bookmark className="size-4" />{" "}
+												Save
+											</>
+										)}
+									</button>
+									<button
+										type="button"
+										onClick={() => {
+											navigator.clipboard.writeText(
+												window.location.href,
+											);
+											setCopied(true);
+											setTimeout(
+												() => setCopied(false),
+												2000,
+											);
+										}}
+										className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/60 transition-all duration-200 hover:border-white/30 hover:text-white"
+									>
+										{copied ? (
+											<>
+												<Check className="size-4" />{" "}
+												Copied
+											</>
+										) : (
+											<>
+												<Copy className="size-4" /> Copy
+												link
+											</>
+										)}
+									</button>
+									<button
+										type="button"
+										onClick={() => setShareOpen(true)}
+										className="inline-flex items-center gap-2 rounded-full bg-minuri-seafoam/10 border border-minuri-seafoam/30 px-5 py-2.5 text-sm font-medium text-minuri-seafoam transition-all duration-200 hover:bg-minuri-seafoam/20"
+									>
+										<Download className="size-4" />
+										Download guide
+									</button>
 								</div>
-							</motion.footer>
+
+								{/* Bottom bar */}
+								<div className="mt-10 flex items-center justify-between border-t border-white/[0.07] pt-6">
+									<Link
+										href={backHref}
+										className="inline-flex items-center gap-1.5 text-xs text-white/30 transition-colors hover:text-white/60"
+									>
+										<ArrowLeft className="size-3.5" />
+										All guides
+									</Link>
+									<p
+										className="text-xs font-black uppercase tracking-widest text-white/15"
+										style={{
+											fontFamily:
+												"var(--font-hero-serif)",
+										}}
+									>
+										Minuri
+									</p>
+								</div>
+							</div>
+						</motion.footer>
 					</motion.article>
 					<motion.div
 						className="hidden shrink-0 xl:block"
@@ -941,7 +1066,9 @@ export function GuideDetailView({
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
-						transition={{ duration: prefersReducedMotion ? 0.01 : 0.22 }}
+						transition={{
+							duration: prefersReducedMotion ? 0.01 : 0.22,
+						}}
 					>
 						<button
 							type="button"
@@ -955,7 +1082,9 @@ export function GuideDetailView({
 							initial={{ y: "100%" }}
 							animate={{ y: 0 }}
 							exit={{ y: "100%" }}
-							transition={{ duration: prefersReducedMotion ? 0.01 : 0.28 }}
+							transition={{
+								duration: prefersReducedMotion ? 0.01 : 0.28,
+							}}
 						>
 							<div className="flex items-center justify-between border-b border-minuri-silver/70 px-4 py-3">
 								<div>
@@ -963,12 +1092,15 @@ export function GuideDetailView({
 										Your journey map
 									</p>
 									<p className="mt-1 text-xs text-minuri-slate">
-										Guide {currentGuideJourneyIndex + 1} of {journeyGuides.length}
+										Guide {currentGuideJourneyIndex + 1} of{" "}
+										{journeyGuides.length}
 									</p>
 								</div>
 								<button
 									type="button"
-									onClick={() => setIsJourneySidebarOpen(false)}
+									onClick={() =>
+										setIsJourneySidebarOpen(false)
+									}
 									className="flex size-9 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate transition-colors hover:bg-minuri-mist"
 									aria-label="Hide journey map"
 								>

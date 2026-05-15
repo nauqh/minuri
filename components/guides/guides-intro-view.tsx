@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
+	Check,
 	Compass,
 	HeartPulse,
 	Home,
@@ -62,7 +63,9 @@ export function GuidesIntroView() {
 	const prefersReducedMotion = useReducedMotion();
 	const [selected, setSelected] = useState<Set<GuideTopicSlug>>(new Set());
 	const [activating, setActivating] = useState<Persona | null>(null);
-	const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
+	const [selectedPersona, setSelectedPersona] = useState<Persona | null>(
+		null,
+	);
 
 	const guideCounts = new Map(
 		GUIDE_TOPICS.map((t) => [
@@ -152,12 +155,13 @@ export function GuidesIntroView() {
 				</motion.h1>
 
 				<motion.p
-					className="landing-section-subheading mt-4"
+					className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid mt-20"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, delay: 0.16, ease: EASE }}
 				>
-					Pick one or more topics. We&apos;ll open those guides first.
+					Tap a topic below to select it — we&apos;ll curate those
+					guides for you.
 				</motion.p>
 			</div>
 
@@ -194,20 +198,60 @@ export function GuidesIntroView() {
 								animate={{
 									opacity: 1,
 									y: 0,
-									scale: isSelected && !prefersReducedMotion ? 1.03 : 1,
+									scale:
+										isSelected && !prefersReducedMotion
+											? 1.03
+											: 1,
 								}}
 								transition={{
-									opacity: { duration: 0.45, delay: prefersReducedMotion ? 0 : i * 0.07, ease: EASE },
-									y: { duration: 0.45, delay: prefersReducedMotion ? 0 : i * 0.07, ease: EASE },
-									scale: { type: "spring", stiffness: 380, damping: 26 },
+									opacity: {
+										duration: 0.45,
+										delay: prefersReducedMotion
+											? 0
+											: i * 0.07,
+										ease: EASE,
+									},
+									y: {
+										duration: 0.45,
+										delay: prefersReducedMotion
+											? 0
+											: i * 0.07,
+										ease: EASE,
+									},
+									scale: {
+										type: "spring",
+										stiffness: 380,
+										damping: 26,
+									},
 								}}
 								whileHover={{
-									scale: prefersReducedMotion ? 1 : isSelected ? 1.03 : 1.02,
+									scale: prefersReducedMotion
+										? 1
+										: isSelected
+											? 1.03
+											: 1.02,
 								}}
 								whileTap={{
 									scale: prefersReducedMotion ? 1 : 0.97,
 								}}
 							>
+								<div
+									className={cn(
+										"absolute right-3 top-3 flex size-5 items-center justify-center rounded-full border-2 transition-all duration-200",
+										isSelected
+											? "border-[#05292a] bg-[#05292a]"
+											: "border-[#05292a]/30 bg-white/20",
+									)}
+									aria-hidden
+								>
+									{isSelected && (
+										<Check
+											className="size-3 text-white"
+											strokeWidth={3}
+										/>
+									)}
+								</div>
+
 								<Icon
 									className="size-9 shrink-0 text-[#05292a] transition-transform duration-200 group-hover:scale-110"
 									aria-hidden
@@ -284,7 +328,7 @@ export function GuidesIntroView() {
 			<div className="mx-auto max-w-screen-2xl px-6 py-6">
 				<div className="flex items-center gap-4">
 					<div className="h-px flex-1 bg-minuri-silver/60" />
-					<span className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-mid">
+					<span className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid">
 						or follow a journey
 					</span>
 					<div className="h-px flex-1 bg-minuri-silver/60" />
@@ -314,18 +358,37 @@ export function GuidesIntroView() {
 								y: prefersReducedMotion ? 0 : 14,
 							}}
 							animate={
-								(activating && activating.id !== persona.id) || (selectedPersona && selectedPersona.id !== persona.id)
-									? { opacity: 0, scale: 0.93, y: 0, filter: "blur(6px)" }
+								(activating && activating.id !== persona.id) ||
+								(selectedPersona &&
+									selectedPersona.id !== persona.id)
+									? {
+											opacity: 0,
+											scale: 0.93,
+											y: 0,
+											filter: "blur(6px)",
+										}
 									: activating?.id === persona.id
-										? { opacity: 1, scale: 1.05, y: -8, filter: "blur(0px)" }
-										: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+										? {
+												opacity: 1,
+												scale: 1.05,
+												y: -8,
+												filter: "blur(0px)",
+											}
+										: {
+												opacity: 1,
+												y: 0,
+												scale: 1,
+												filter: "blur(0px)",
+											}
 							}
 							transition={
 								activating || selectedPersona
 									? { duration: 0.28, ease: EASE }
 									: {
 											duration: 0.4,
-											delay: prefersReducedMotion ? 0 : 0.28 + i * 0.06,
+											delay: prefersReducedMotion
+												? 0
+												: 0.28 + i * 0.06,
 											ease: EASE,
 										}
 							}
@@ -335,7 +398,8 @@ export function GuidesIntroView() {
 								onClick={() => handlePersonaClick(persona)}
 								className={cn(
 									"group relative block w-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50",
-									activating?.id !== persona.id && "overflow-hidden",
+									activating?.id !== persona.id &&
+										"overflow-hidden",
 								)}
 							>
 								<div className="relative aspect-[3/4]">
@@ -344,7 +408,10 @@ export function GuidesIntroView() {
 										layoutId={`persona-photo-${persona.id}`}
 										className="absolute inset-0"
 										style={{ borderRadius: 16 }}
-										transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+										transition={{
+											duration: 0.68,
+											ease: [0.22, 1, 0.36, 1],
+										}}
 									>
 										<Image
 											src={persona.imageUrl}
@@ -357,10 +424,11 @@ export function GuidesIntroView() {
 
 									{/* Overlays — fade out instantly when this card activates */}
 									<div
-									className={cn(
-										"pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/15 transition-opacity duration-100",
-										activating?.id === persona.id && "opacity-0",
-									)}
+										className={cn(
+											"pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/15 transition-opacity duration-100",
+											activating?.id === persona.id &&
+												"opacity-0",
+										)}
 									>
 										{/* Top: role badge + age · origin */}
 										<div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3 sm:p-4">
@@ -377,7 +445,8 @@ export function GuidesIntroView() {
 											<h3
 												className="text-left text-xl font-bold leading-tight text-white sm:text-2xl"
 												style={{
-													fontFamily: "var(--font-hero-serif)",
+													fontFamily:
+														"var(--font-hero-serif)",
 												}}
 											>
 												{persona.name}

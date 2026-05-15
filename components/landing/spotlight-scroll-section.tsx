@@ -237,27 +237,14 @@ export function SpotlightScrollSection() {
 	const shouldReduceMotion = useReducedMotion();
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	/*
-	 * Single shared scroll progress over the tall container (below).
-	 * progress = 0  →  container top at viewport top
-	 * progress = 1  →  container bottom at viewport bottom
-	 *
-	 * Five equal progress segments (dwell / slide / dwell / slide / dwell):
-	 *
-	 * Card 0 dwell:       0.00 – 0.20
-	 * Slide 0→1:          0.20 – 0.40  — card 1 slides up
-	 * Card 1 dwell:       0.40 – 0.60
-	 * Slide 1→2:          0.60 – 0.80  — card 2 slides up
-	 * Card 2 dwell:       0.80 – 1.00
-	 */
 	const { scrollYProgress } = useScroll({
 		target: containerRef,
 		offset: ["start start", "end end"],
 	});
 
-	// card 0 stays fixed; cards 1 and 2 each slide up from below
-	const y1 = useTransform(scrollYProgress, [0.2, 0.4], ["100%", "0%"]);
-	const y2 = useTransform(scrollYProgress, [0.6, 0.8], ["100%", "0%"]);
+	// card 0 stays fixed; cards 1 and 2 slide up immediately back-to-back
+	const y1 = useTransform(scrollYProgress, [0, 0.5], ["100%", "0%"]);
+	const y2 = useTransform(scrollYProgress, [0.5, 1.0], ["100%", "0%"]);
 
 	const yValues: (MotionValue<string> | number)[] = [
 		0,
@@ -290,7 +277,7 @@ export function SpotlightScrollSection() {
 			<div
 				ref={containerRef}
 				className="relative"
-				style={{ height: "400vh" }}
+				style={{ height: "300vh" }}
 			>
 				<div className="sticky top-0 h-screen overflow-hidden bg-minuri-white">
 					{cards.map((card, i) => (
