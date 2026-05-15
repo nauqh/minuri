@@ -8,7 +8,6 @@ import {
 	ChevronDown,
 	BookOpen,
 	MapPin,
-	Sparkles,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +24,7 @@ const GUIDE_NOTES = [
 			"Free for eligible visa holders",
 		],
 		rotate: -6,
+		href: "/guides",
 	},
 	{
 		topic: "Getting Around",
@@ -36,6 +36,7 @@ const GUIDE_NOTES = [
 			"Register online to protect balance",
 		],
 		rotate: 5,
+		href: "/guides",
 	},
 	{
 		topic: "Home & Admin",
@@ -47,10 +48,21 @@ const GUIDE_NOTES = [
 			"Refunded at end of tenancy",
 		],
 		rotate: -3,
+		href: "/guides",
 	},
 ];
 
-const JOURNEY_STICKY_CARDS = [
+const JOURNEY_STICKY_CARDS: Array<{
+	id: string;
+	topic: string;
+	title: string;
+	note: string;
+	bg: string;
+	rotate: number;
+	left?: string;
+	right?: string;
+	top: string;
+}> = [
 	{
 		id: "myki",
 		topic: "Getting Around",
@@ -58,7 +70,7 @@ const JOURNEY_STICKY_CARDS = [
 		note: "$6 at 7-Eleven. Top up before boarding — no cash on trams.",
 		bg: "#5dd6ff",
 		rotate: 2,
-		left: "3%",
+		left: "2%",
 		top: "3%",
 	},
 	{
@@ -67,9 +79,9 @@ const JOURNEY_STICKY_CARDS = [
 		title: "Cheapest groceries",
 		note: "ALDI → IGA → Woolies. Saturday market = fresh & cheap.",
 		bg: "#00f5c8",
-		rotate: -2,
-		left: "23%",
-		top: "3%",
+		rotate: -4,
+		left: "20%",
+		top: "18%",
 	},
 	{
 		id: "medicare",
@@ -77,9 +89,9 @@ const JOURNEY_STICKY_CARDS = [
 		title: "Medicare card",
 		note: "Free for eligible visas. Bring passport + visa to Services Australia.",
 		bg: "#fcf300",
-		rotate: -2,
-		left: "56%",
-		top: "3%",
+		rotate: 3,
+		right: "23%",
+		top: "15%",
 	},
 	{
 		id: "meetpeople",
@@ -88,7 +100,7 @@ const JOURNEY_STICKY_CARDS = [
 		note: "Uni clubs, Meetup.com, Bumble BFF. Locals are friendlier than you think.",
 		bg: "#cae9ff",
 		rotate: -2,
-		left: "82%",
+		right: "2%",
 		top: "3%",
 	},
 	{
@@ -99,7 +111,7 @@ const JOURNEY_STICKY_CARDS = [
 		bg: "#ffc2d1",
 		rotate: -6,
 		left: "2%",
-		top: "14%",
+		top: "74%",
 	},
 	{
 		id: "tram",
@@ -108,8 +120,8 @@ const JOURNEY_STICKY_CARDS = [
 		note: "CBD trams are free! No tap-on needed inside the city loop.",
 		bg: "#5dd6ff",
 		rotate: 5,
-		left: "79%",
-		top: "13%",
+		right: "2%",
+		top: "80%",
 	},
 ];
 
@@ -171,10 +183,10 @@ export function StartGateway() {
 				{/* Back button */}
 				<Link
 					href="/"
-					className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-3 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
+					className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
-					Back
+					Back to home
 				</Link>
 				{/* Grid — dark lines matching left panel */}
 				<div
@@ -288,24 +300,20 @@ export function StartGateway() {
 					<p className="text-[10px] font-black uppercase tracking-[0.2em] text-minuri-white/30">
 						Two ways in
 					</p>
-					<h2 className="mt-4 text-2xl font-black leading-snug text-minuri-white md:text-3xl">
+					<h2 className="mt-4 text-2xl font-black tracking-wide leading-snug text-minuri-white md:text-3xl">
 						Start with what you need right now —
 						<br className="hidden md:block" />
-						<span className="text-minuri-teal">
-							{" "}
-							guides
-						</span> or{" "}
-						<span className="text-minuri-teal">
-							nearby support.
-						</span>
+						<span className="text-minuri-ice"> Guides</span> or{" "}
+						<span className="text-minuri-ice">Near-me</span>{" "}
+						support.
 					</h2>
 				</motion.div>
 
 				{/* Split screen — contained like a lens */}
-				<div className="relative mx-auto max-w-[90rem] flex h-auto min-h-svh flex-col overflow-hidden rounded-2xl border border-minuri-white/15 md:h-svh md:flex-row">
+				<div className="relative mx-auto max-w-[90rem] flex h-auto min-h-svh flex-col overflow-hidden rounded-2xl md:h-svh md:flex-row">
 					{/* ─── Guides panel ─── */}
 					<div
-						className="relative flex min-h-[60vh] flex-col justify-end overflow-hidden md:min-h-0"
+						className="relative flex min-h-[80vh] flex-col justify-end overflow-hidden md:min-h-0"
 						style={{
 							width: guidesWidth,
 							transition: panelTransition,
@@ -352,7 +360,7 @@ export function StartGateway() {
 										top: `${4 + i * 20}%`,
 										transformOrigin: "50% 0%",
 										pointerEvents: "auto",
-										cursor: "default",
+										cursor: "pointer",
 									}}
 									animate={{ y: [0, -8, 0] }}
 									transition={{
@@ -468,14 +476,14 @@ export function StartGateway() {
 								Guides to Medicare, Myki, rental bonds — before
 								you need to ask.
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-full">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm">
 								<Link
 									href="/guides"
-									className="relative z-10 inline-flex h-10 items-center gap-1.5 rounded-full border border-minuri-ocean/30 bg-minuri-ocean/10 px-5 text-sm font-semibold text-minuri-ocean transition-colors duration-200 group-hover:text-minuri-white"
+									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-sm border border-minuri-ocean px-7 text-sm font-black uppercase tracking-wide text-minuri-ocean transition-colors duration-200 group-hover:text-minuri-white"
 								>
 									Explore guides
 									<ChevronRight
-										className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
 										aria-hidden
 									/>
 								</Link>
@@ -484,9 +492,15 @@ export function StartGateway() {
 						</motion.div>
 					</div>
 
+					{/* ─── Divider ─── */}
+					<div
+						className="h-6 w-full md:h-full md:w-px md:shrink-0"
+						style={{ background: "oklch(0.18 0.042 228)" }}
+					/>
+
 					{/* ─── Near Me panel ─── */}
 					<div
-						className="relative flex min-h-[60vh] flex-col overflow-hidden md:min-h-0"
+						className="relative flex min-h-[80vh] flex-col overflow-hidden md:min-h-0"
 						style={{
 							width: nearbyWidth,
 							transition: panelTransition,
@@ -508,8 +522,7 @@ export function StartGateway() {
 
 						{/* Lower: heading */}
 						<motion.div
-							className="relative z-20 p-8 md:p-14"
-							style={{ background: "oklch(0.18 0.042 228)" }}
+							className="relative z-20 bg-minuri-mid p-8 md:p-14"
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{
@@ -531,14 +544,14 @@ export function StartGateway() {
 								Support services near you — with costs and
 								eligibility.
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-full">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm">
 								<Link
 									href="/near-me"
-									className="relative z-10 inline-flex h-10 items-center gap-2 rounded-full border border-minuri-white/30 bg-minuri-white/10 px-5 text-sm font-semibold text-minuri-white transition-colors duration-200 group-hover:text-minuri-ocean"
+									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-sm border border-minuri-white px-7 text-sm font-black uppercase tracking-wide text-minuri-white transition-colors duration-200 group-hover:text-minuri-ocean"
 								>
 									Find nearby support
 									<ChevronRight
-										className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
 										aria-hidden
 									/>
 								</Link>
@@ -557,9 +570,25 @@ export function StartGateway() {
 					viewport={{ once: true, amount: 0.5 }}
 					transition={{ duration: 0.7, ease: easeOut }}
 				>
-					<h2 className="mt-4 text-2xl font-black leading-snug text-minuri-white md:text-3xl">
-						or, want us to do the thinking for you?{" "}
+					<h2 className="mt-20 text-2xl tracking-wide font-black leading-snug text-minuri-white md:text-3xl">
+						or, want us to design the{" "}
+						<span className="text-minuri-ice">Journey</span> for
+						you?
 					</h2>
+					<motion.div
+						animate={{ y: [0, 6, 0] }}
+						transition={{
+							duration: 1.5,
+							repeat: Infinity,
+							ease: "easeInOut",
+						}}
+						className="mt-4 flex justify-center"
+					>
+						<ChevronDown
+							className="size-10 text-minuri-white"
+							aria-hidden
+						/>
+					</motion.div>
 				</motion.div>
 			</section>
 
@@ -606,44 +635,51 @@ export function StartGateway() {
 
 				{/* Floating sticky cards — spread across top */}
 				<div className="pointer-events-none absolute inset-0 overflow-hidden">
-					{JOURNEY_STICKY_CARDS.map((card, i) => (
-						<motion.div
+					{JOURNEY_STICKY_CARDS.map((card) => (
+						<div
 							key={card.id}
-							className="absolute guide-sticky flex flex-col gap-1.5"
+							className="absolute"
 							style={{
-								rotate: card.rotate,
-								backgroundColor: card.bg,
 								left: card.left,
+								right: card.right,
 								top: card.top,
-								width: "14rem",
-								padding: "1rem 1.25rem 2rem",
-							}}
-							animate={{ y: [0, -8, 0] }}
-							transition={{
-								duration: 3.4,
-								ease: "easeInOut",
-								repeat: Infinity,
 							}}
 						>
-							<p
-								className="text-[8px] font-black uppercase tracking-[0.16em]"
-								style={{ color: "rgba(2,18,20,0.45)" }}
+							<motion.div
+								className="guide-sticky flex flex-col gap-1.5"
+								style={{
+									rotate: card.rotate,
+									backgroundColor: card.bg,
+									width: "14rem",
+									padding: "1rem 1.25rem 2rem",
+								}}
+								animate={{ y: [0, -8, 0] }}
+								transition={{
+									duration: 3.4,
+									ease: "easeInOut",
+									repeat: Infinity,
+								}}
 							>
-								{card.topic}
-							</p>
-							<p
-								className="text-sm font-black leading-snug"
-								style={{ color: "#05292a" }}
-							>
-								{card.title}
-							</p>
-							<p
-								className="text-[10px] leading-snug"
-								style={{ color: "rgba(2,18,20,0.65)" }}
-							>
-								{card.note}
-							</p>
-						</motion.div>
+								<p
+									className="text-[8px] font-black uppercase tracking-[0.16em]"
+									style={{ color: "rgba(2,18,20,0.45)" }}
+								>
+									{card.topic}
+								</p>
+								<p
+									className="text-sm font-black leading-snug"
+									style={{ color: "#05292a" }}
+								>
+									{card.title}
+								</p>
+								<p
+									className="text-[10px] leading-snug"
+									style={{ color: "rgba(2,18,20,0.65)" }}
+								>
+									{card.note}
+								</p>
+							</motion.div>
+						</div>
 					))}
 				</div>
 
@@ -655,36 +691,22 @@ export function StartGateway() {
 					viewport={{ once: true, amount: 0.4 }}
 					transition={{ duration: 0.8, ease: easeOut }}
 				>
-					<div className="mb-6 inline-flex items-center gap-2 rounded-full bg-minuri-teal/15 px-4 py-2">
-						<Sparkles
-							className="size-3.5 text-minuri-teal"
-							aria-hidden
-						/>
-						<span className="text-xs font-black uppercase tracking-widest text-minuri-teal">
-							Recommended
-						</span>
-					</div>
-
 					<h2 className="max-w-4xl text-4xl font-black uppercase leading-tight tracking-tight text-minuri-teal md:text-6xl">
 						Your personal starter kit
 					</h2>
 
-					<p className="mt-6 max-w-2xl text-base leading-relaxed text-minuri-ocean/65 md:text-lg">
+					<p className="mt-6 max-w-2xl text-base leading-relaxed text-minuri-ocean md:text-lg">
 						A curated 7-day plan — guides + nearby services — built
 						around your moment, your suburb, and what you still need
 						to sort.
 					</p>
 
-					<div className="group relative mt-10 inline-flex overflow-hidden rounded-full">
+					<div className="group relative mt-10 inline-flex overflow-hidden rounded-sm">
 						<Link
 							href="/journey"
-							className="relative z-10 inline-flex h-14 items-center gap-2 rounded-full border border-minuri-ocean/70 px-8 text-base font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
+							className="relative z-10 inline-flex h-16 items-center rounded-sm border border-minuri-ocean/70 px-14 text-lg font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
 						>
 							Build my plan
-							<ChevronRight
-								className="size-5 transition-transform duration-200 ease-out group-hover:translate-x-1"
-								aria-hidden
-							/>
 						</Link>
 						<span className="absolute inset-0 translate-y-full bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 					</div>

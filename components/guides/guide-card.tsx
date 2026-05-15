@@ -61,7 +61,7 @@ export function GuideCard({
 				aria-label={`Read guide: ${guide.title}`}
 				className="absolute inset-0 z-10 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60"
 			/>
-			<div className="relative mb-5 h-52 overflow-hidden rounded-sm bg-minuri-fog md:h-56">
+			<div className="relative mb-5 h-64 overflow-hidden rounded-sm bg-minuri-fog md:h-72">
 				<Image
 					src={guide.thumbnailUrl}
 					alt={`${guide.title} thumbnail`}

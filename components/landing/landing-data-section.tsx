@@ -136,10 +136,10 @@ export function LandingDataSection() {
 								ease: easeOut,
 							}}
 						>
-							<p className="text-xl font-bold leading-snug text-minuri-ocean md:text-2xl">
-								Loneliness. Anxiety. Financial stress. These
+							<p className="text-xl font-medium leading-snug text-minuri-ocean md:text-2xl">
+								"Loneliness. Anxiety. Financial stress. These
 								aren&apos;t personal failures — they&apos;re
-								systemic gaps.
+								systemic gaps."
 							</p>
 						</motion.div>
 

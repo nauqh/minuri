@@ -114,11 +114,11 @@ export function GuidesIntroView() {
 			{/* ── Header ── */}
 			<div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-4">
 				<Link
-					href="/"
-					className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 bg-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform hover:scale-105"
+					href="/start"
+					className="inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
-					Back to home
+					Back
 				</Link>
 				<button
 					type="button"
