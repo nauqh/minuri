@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-	ArrowLeft,
-	ChevronRight,
-	ChevronDown,
-	BookOpen,
-	MapPin,
-} from "lucide-react";
+import { ArrowLeft, ChevronRight, BookOpen, MapPin } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
@@ -52,79 +46,6 @@ const GUIDE_NOTES = [
 	},
 ];
 
-const JOURNEY_STICKY_CARDS: Array<{
-	id: string;
-	topic: string;
-	title: string;
-	note: string;
-	bg: string;
-	rotate: number;
-	left?: string;
-	right?: string;
-	top: string;
-}> = [
-	{
-		id: "myki",
-		topic: "Getting Around",
-		title: "Get a Myki card",
-		note: "$6 at 7-Eleven. Top up before boarding — no cash on trams.",
-		bg: "#5dd6ff",
-		rotate: 2,
-		left: "2%",
-		top: "3%",
-	},
-	{
-		id: "aldi",
-		topic: "Food & Eating",
-		title: "Cheapest groceries",
-		note: "ALDI → IGA → Woolies. Saturday market = fresh & cheap.",
-		bg: "#00f5c8",
-		rotate: -4,
-		left: "20%",
-		top: "18%",
-	},
-	{
-		id: "medicare",
-		topic: "Health & Wellbeing",
-		title: "Medicare card",
-		note: "Free for eligible visas. Bring passport + visa to Services Australia.",
-		bg: "#fcf300",
-		rotate: 3,
-		right: "23%",
-		top: "15%",
-	},
-	{
-		id: "meetpeople",
-		topic: "Social & Belonging",
-		title: "Meet people",
-		note: "Uni clubs, Meetup.com, Bumble BFF. Locals are friendlier than you think.",
-		bg: "#cae9ff",
-		rotate: -2,
-		right: "2%",
-		top: "3%",
-	},
-	{
-		id: "bond",
-		topic: "Home & Admin",
-		title: "Rental bond",
-		note: "Max 4 weeks rent. Paid to RTBA — NOT your landlord.",
-		bg: "#ffc2d1",
-		rotate: -6,
-		left: "2%",
-		top: "74%",
-	},
-	{
-		id: "tram",
-		topic: "Getting Around",
-		title: "Free tram zone",
-		note: "CBD trams are free! No tap-on needed inside the city loop.",
-		bg: "#5dd6ff",
-		rotate: 5,
-		right: "2%",
-		top: "80%",
-	},
-];
-
 const easeOut = [0.22, 1, 0.36, 1] as const;
 const panelTransition = "width 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
 
@@ -134,7 +55,6 @@ export function StartGateway() {
 	const [isMobile, setIsMobile] = useState(false);
 	const rafRef = useRef<number | null>(null);
 	const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const journeyRef = useRef<HTMLDivElement>(null);
 
 	const handlePanelEnter = (panel: "guides" | "nearby") => {
 		if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
@@ -297,21 +217,19 @@ export function StartGateway() {
 				</motion.div>
 
 				{/* Split screen — contained like a lens */}
-				<div className="relative mx-auto max-w-[90rem] flex h-auto min-h-svh flex-col overflow-hidden rounded-2xl md:h-svh md:flex-row">
+				<div className="relative mx-auto max-w-[90rem] flex h-auto min-h-[85vh] flex-col overflow-hidden rounded-2xl md:h-[85vh] md:flex-row">
 					{/* ─── Guides panel ─── */}
 					<div
-						className="relative flex min-h-[80vh] flex-col justify-end overflow-hidden md:min-h-0"
+						className="relative min-h-[75vh] overflow-hidden md:min-h-0"
 						style={{
 							width: guidesWidth,
 							transition: panelTransition,
+							background: "oklch(0.96 0.022 75)",
 						}}
 						onMouseEnter={() => handlePanelEnter("guides")}
 						onMouseLeave={handlePanelLeave}
 					>
-						<div
-							className="absolute inset-0"
-							style={{ background: "oklch(0.96 0.022 75)" }}
-						/>
+						{/* Grid */}
 						<div
 							aria-hidden
 							className="pointer-events-none absolute inset-0"
@@ -324,18 +242,7 @@ export function StartGateway() {
 							}}
 						/>
 
-						<span
-							aria-hidden
-							className="pointer-events-none absolute bottom-0 left-0 select-none font-black uppercase leading-none text-minuri-ocean"
-							style={{
-								fontSize: "clamp(5rem, 18vw, 16rem)",
-								opacity: 0.04,
-								letterSpacing: "-0.02em",
-							}}
-						>
-							GUIDES
-						</span>
-
+						{/* Floating cards */}
 						<div className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
 							{GUIDE_NOTES.map((note, i) => (
 								<motion.div
@@ -435,37 +342,41 @@ export function StartGateway() {
 							))}
 						</div>
 
-						<div
-							aria-hidden
-							className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2"
-							style={{
-								background:
-									"linear-gradient(to top, oklch(0.96 0.022 75) 45%, oklch(0.96 0.022 75 / 0.80) 70%, transparent 100%)",
-							}}
-						/>
+						{/* Persistent label */}
+						<div className="absolute right-6 top-6 z-20 inline-flex items-center gap-2 rounded-lg bg-minuri-ocean px-4 py-2.5 shadow-md">
+							<BookOpen
+								className="size-4 text-white"
+								aria-hidden
+							/>
+							<span className="text-xs font-black uppercase tracking-widest text-white">
+								Guides
+							</span>
+						</div>
 
+						{/* Hover drawer */}
 						<motion.div
-							className="relative z-20 p-8 md:p-14"
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.7, ease: easeOut }}
+							className="absolute bottom-6 left-6 z-30 max-w-sm rounded-2xl bg-minuri-mid p-6 shadow-xl"
+							animate={{ y: hovered === "guides" ? 0 : "100%" }}
+							transition={{ duration: 0.45, ease: easeOut }}
 						>
-							<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-ocean/10 px-3.5 py-1.5">
+							<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-white/15 px-3.5 py-1.5 backdrop-blur-sm">
 								<BookOpen
-									className="size-3.5 text-minuri-ocean"
+									className="size-3.5 text-minuri-white"
 									aria-hidden
 								/>
-								<span className="text-xs font-black uppercase tracking-widest text-minuri-ocean">
+								<span className="text-xs font-black uppercase tracking-widest text-minuri-white">
 									Guides
 								</span>
 							</div>
-							<h3 className="mt-1 max-w-lg text-base font-medium leading-snug text-minuri-ocean md:text-lg">
-								Guides to Medicare, Myki, rental bonds
+							<h3 className="mt-1 text-base font-medium leading-snug text-minuri-white">
+								Step-by-step guides for Medicare, Myki, rental
+								bonds, banking, and more — everything you need
+								to settle in.
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-ocean">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-ice">
 								<Link
 									href="/guides"
-									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-black uppercase tracking-wider text-white"
+									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-ocean"
 								>
 									Explore first-time guides
 									<ChevronRight
@@ -473,7 +384,7 @@ export function StartGateway() {
 										aria-hidden
 									/>
 								</Link>
-								<span className="absolute inset-0 translate-y-full bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+								<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 							</div>
 						</motion.div>
 					</div>
@@ -486,7 +397,7 @@ export function StartGateway() {
 
 					{/* ─── Near Me panel ─── */}
 					<div
-						className="relative flex min-h-[80vh] flex-col overflow-hidden md:min-h-0"
+						className="relative min-h-[75vh] overflow-hidden md:min-h-0"
 						style={{
 							width: nearbyWidth,
 							transition: panelTransition,
@@ -494,28 +405,32 @@ export function StartGateway() {
 						onMouseEnter={() => handlePanelEnter("nearby")}
 						onMouseLeave={handlePanelLeave}
 					>
-						{/* Upper: map image */}
-						<div className="relative min-h-0 flex-1 overflow-hidden">
-							<Image
-								src="/map-preview.png"
-								alt="Map preview"
-								fill
-								sizes="(max-width: 768px) 100vw, 50vw"
-								className="object-cover"
-								priority={false}
+						{/* Full-bleed map */}
+						<Image
+							src="/map-preview.png"
+							alt="Map preview"
+							fill
+							sizes="(max-width: 768px) 100vw, 50vw"
+							className="object-cover"
+							priority={false}
+						/>
+
+						{/* Persistent label */}
+						<div className="absolute right-6 top-6 z-20 inline-flex items-center gap-2 rounded-lg bg-minuri-white px-4 py-2.5 shadow-md">
+							<MapPin
+								className="size-4 text-minuri-ocean"
+								aria-hidden
 							/>
+							<span className="text-xs font-black uppercase tracking-widest text-minuri-ocean">
+								Near Me
+							</span>
 						</div>
 
-						{/* Lower: heading */}
+						{/* Hover drawer */}
 						<motion.div
-							className="relative z-20 bg-minuri-mid p-8 md:p-14"
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{
-								duration: 0.7,
-								ease: easeOut,
-								delay: 0.08,
-							}}
+							className="absolute bottom-6 left-6 z-30 max-w-sm rounded-2xl bg-minuri-mid p-6 shadow-xl"
+							animate={{ y: hovered === "nearby" ? 0 : "100%" }}
+							transition={{ duration: 0.45, ease: easeOut }}
 						>
 							<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-white/15 px-3.5 py-1.5 backdrop-blur-sm">
 								<MapPin
@@ -526,13 +441,15 @@ export function StartGateway() {
 									Near Me
 								</span>
 							</div>
-							<h3 className="mt-1 max-w-lg text-base font-medium leading-snug text-minuri-white md:text-lg">
-								Support services near you
+							<h3 className="mt-1 text-base font-medium leading-snug text-minuri-white">
+								GP clinics, food banks, legal aid, community
+								centres — filtered by your suburb and what you
+								need right now.
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-white">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-ice">
 								<Link
 									href="/near-me"
-									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-black uppercase tracking-wider text-minuri-ocean"
+									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-ocean"
 								>
 									Find nearby support
 									<ChevronRight
@@ -540,7 +457,7 @@ export function StartGateway() {
 										aria-hidden
 									/>
 								</Link>
-								<span className="absolute inset-0 translate-y-full bg-minuri-ice transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+								<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 							</div>
 						</motion.div>
 					</div>
@@ -560,140 +477,18 @@ export function StartGateway() {
 						<span className="text-minuri-ice">Journey</span> for
 						you?
 					</h2>
-					<motion.div
-						animate={{ y: [0, 6, 0] }}
-						transition={{
-							duration: 1.5,
-							repeat: Infinity,
-							ease: "easeInOut",
-						}}
-						className="mt-4 flex justify-center"
-					>
-						<ChevronDown
-							className="size-10 text-minuri-white"
-							aria-hidden
-						/>
-					</motion.div>
-				</motion.div>
-			</section>
-
-			{/* ── Section 2: Journey — full width, below fold ── */}
-			<section
-				ref={journeyRef}
-				className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-6 py-24 bg-minuri-white"
-			>
-				{/* Grid lines — same as hero section */}
-				<div
-					aria-hidden
-					className="pointer-events-none absolute inset-0"
-					style={{
-						backgroundImage: [
-							"linear-gradient(to right, rgba(2,24,25,0.07) 1px, transparent 1px)",
-							"linear-gradient(to bottom, rgba(2,24,25,0.07) 1px, transparent 1px)",
-						].join(", "),
-						backgroundSize: "96px 96px",
-					}}
-				/>
-
-				{/* Radial fade — soften grid at edges */}
-				<div
-					aria-hidden
-					className="pointer-events-none absolute inset-0"
-					style={{
-						background:
-							"radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(255,255,255,0.55) 60%, white 82%)",
-					}}
-				/>
-
-				{/* Ghost word */}
-				<span
-					aria-hidden
-					className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 select-none whitespace-nowrap font-black uppercase leading-none text-minuri-ocean"
-					style={{
-						fontSize: "clamp(6rem, 20vw, 18rem)",
-						opacity: 0.04,
-						letterSpacing: "-0.03em",
-					}}
-				>
-					JOURNEY
-				</span>
-
-				{/* Floating sticky cards — spread across top */}
-				<div className="pointer-events-none absolute inset-0 overflow-hidden">
-					{JOURNEY_STICKY_CARDS.map((card) => (
-						<div
-							key={card.id}
-							className="absolute"
-							style={{
-								left: card.left,
-								right: card.right,
-								top: card.top,
-							}}
-						>
-							<motion.div
-								className="guide-sticky flex flex-col gap-1.5"
-								style={{
-									rotate: card.rotate,
-									backgroundColor: card.bg,
-									width: "14rem",
-									padding: "1rem 1.25rem 2rem",
-								}}
-								animate={{ y: [0, -8, 0] }}
-								transition={{
-									duration: 3.4,
-									ease: "easeInOut",
-									repeat: Infinity,
-								}}
-							>
-								<p
-									className="text-[8px] font-black uppercase tracking-[0.16em]"
-									style={{ color: "rgba(2,18,20,0.45)" }}
-								>
-									{card.topic}
-								</p>
-								<p
-									className="text-sm font-black leading-snug"
-									style={{ color: "#05292a" }}
-								>
-									{card.title}
-								</p>
-								<p
-									className="text-[10px] leading-snug"
-									style={{ color: "rgba(2,18,20,0.65)" }}
-								>
-									{card.note}
-								</p>
-							</motion.div>
-						</div>
-					))}
-				</div>
-
-				{/* Centered content */}
-				<motion.div
-					className="relative z-10 flex flex-col items-center text-center"
-					initial={{ opacity: 0, y: 24 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, amount: 0.4 }}
-					transition={{ duration: 0.8, ease: easeOut }}
-				>
-					<h2 className="max-w-4xl text-4xl font-black uppercase leading-tight tracking-tight text-minuri-teal md:text-6xl">
-						Your personal starter kit
-					</h2>
-
-					<p className="mt-6 max-w-2xl text-base leading-relaxed text-minuri-ocean md:text-lg">
-						A curated 7-day plan — guides + nearby services — built
-						around your moment, your suburb, and what you still need
-						to sort.
-					</p>
-
-					<div className="group relative mt-10 inline-flex overflow-hidden rounded-sm">
+					<div className="group relative mt-8 inline-flex overflow-hidden rounded-sm bg-minuri-teal">
 						<Link
 							href="/journey"
-							className="relative z-10 inline-flex h-16 items-center rounded-sm border border-minuri-ocean/70 px-14 text-lg font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
+							className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-white group-hover:text-minuri-ocean"
 						>
-							Build my plan
+							Build my journey
+							<ChevronRight
+								className="size-4 transition-transform duration-200 group-hover:translate-x-1"
+								aria-hidden
+							/>
 						</Link>
-						<span className="absolute inset-0 translate-y-full bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+						<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 					</div>
 				</motion.div>
 			</section>

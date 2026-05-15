@@ -23,6 +23,81 @@ import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
 import { ALREADY_SORTED_ITEMS } from "@/lib/journey-week";
 
+const easeOut = [0.22, 1, 0.36, 1] as const;
+
+const JOURNEY_STICKY_CARDS: Array<{
+	id: string;
+	topic: string;
+	title: string;
+	note: string;
+	bg: string;
+	rotate: number;
+	left?: string;
+	right?: string;
+	top: string;
+}> = [
+	{
+		id: "myki",
+		topic: "Getting Around",
+		title: "Get a Myki card",
+		note: "$6 at 7-Eleven. Top up before boarding — no cash on trams.",
+		bg: "#5dd6ff",
+		rotate: 2,
+		left: "2%",
+		top: "3%",
+	},
+	{
+		id: "aldi",
+		topic: "Food & Eating",
+		title: "Cheapest groceries",
+		note: "ALDI → IGA → Woolies. Saturday market = fresh & cheap.",
+		bg: "#00f5c8",
+		rotate: -4,
+		left: "20%",
+		top: "18%",
+	},
+	{
+		id: "medicare",
+		topic: "Health & Wellbeing",
+		title: "Medicare card",
+		note: "Free for eligible visas. Bring passport + visa to Services Australia.",
+		bg: "#fcf300",
+		rotate: 3,
+		right: "23%",
+		top: "15%",
+	},
+	{
+		id: "meetpeople",
+		topic: "Social & Belonging",
+		title: "Meet people",
+		note: "Uni clubs, Meetup.com, Bumble BFF. Locals are friendlier than you think.",
+		bg: "#cae9ff",
+		rotate: -2,
+		right: "2%",
+		top: "3%",
+	},
+	{
+		id: "bond",
+		topic: "Home & Admin",
+		title: "Rental bond",
+		note: "Max 4 weeks rent. Paid to RTBA — NOT your landlord.",
+		bg: "#ffc2d1",
+		rotate: -6,
+		left: "2%",
+		top: "74%",
+	},
+	{
+		id: "tram",
+		topic: "Getting Around",
+		title: "Free tram zone",
+		note: "CBD trams are free! No tap-on needed inside the city loop.",
+		bg: "#5dd6ff",
+		rotate: 5,
+		right: "2%",
+		top: "80%",
+	},
+];
+
 const MIN_MOMENT_LENGTH = 30;
 
 const MOMENT_PRESETS = [
@@ -101,7 +176,7 @@ export function JourneyOnboarding() {
 	const [suburbError, setSuburbError] = useState("");
 	const [selectedTopics, setSelectedTopics] = useState<GuideTopicSlug[]>([]);
 	const [alreadySorted, setAlreadySorted] = useState<string[]>([]);
-	const [stage, setStage] = useState<"form" | "loading">("form");
+	const [stage, setStage] = useState<"intro" | "form" | "loading">("intro");
 
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const listboxId = useId();
@@ -209,7 +284,144 @@ export function JourneyOnboarding() {
 
 	return (
 		<AnimatePresence mode="wait">
-			{stage === "loading" ? (
+			{stage === "intro" ? (
+				<motion.section
+					key="intro"
+					className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 bg-minuri-white"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{
+						opacity: 0,
+						transition: {
+							duration: prefersReducedMotion ? 0.01 : 0.15,
+						},
+					}}
+				>
+					<button
+						type="button"
+						onClick={() => router.back()}
+						className="absolute left-6 top-1/2 -translate-y-1/2 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
+					>
+						<ArrowLeft className="size-3.5" aria-hidden />
+						Back
+					</button>
+
+					{/* Grid lines */}
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-0"
+						style={{
+							backgroundImage: [
+								"linear-gradient(to right, rgba(2,24,25,0.07) 1px, transparent 1px)",
+								"linear-gradient(to bottom, rgba(2,24,25,0.07) 1px, transparent 1px)",
+							].join(", "),
+							backgroundSize: "96px 96px",
+						}}
+					/>
+
+					{/* Radial fade */}
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-0"
+						style={{
+							background:
+								"radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(255,255,255,0.55) 60%, white 82%)",
+						}}
+					/>
+
+					{/* Ghost word */}
+					<span
+						aria-hidden
+						className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 select-none whitespace-nowrap font-black uppercase leading-none text-minuri-ocean"
+						style={{
+							fontSize: "clamp(6rem, 20vw, 18rem)",
+							opacity: 0.04,
+							letterSpacing: "-0.03em",
+						}}
+					>
+						JOURNEY
+					</span>
+
+					{/* Floating sticky cards */}
+					<div className="pointer-events-none absolute inset-0 overflow-hidden">
+						{JOURNEY_STICKY_CARDS.map((card) => (
+							<div
+								key={card.id}
+								className="absolute"
+								style={{
+									left: card.left,
+									right: card.right,
+									top: card.top,
+								}}
+							>
+								<motion.div
+									className="guide-sticky flex flex-col gap-1.5"
+									style={{
+										rotate: card.rotate,
+										backgroundColor: card.bg,
+										width: "18rem",
+										padding: "1.25rem 1.5rem",
+									}}
+									animate={{ y: [0, -8, 0] }}
+									transition={{
+										duration: 3.4,
+										ease: "easeInOut",
+										repeat: Infinity,
+									}}
+								>
+									<p
+										className="text-[10px] font-black uppercase tracking-[0.16em]"
+										style={{ color: "rgba(2,18,20,0.45)" }}
+									>
+										{card.topic}
+									</p>
+									<p
+										className="text-base font-black leading-snug"
+										style={{ color: "#05292a" }}
+									>
+										{card.title}
+									</p>
+									<p
+										className="text-xs leading-snug"
+										style={{ color: "rgba(2,18,20,0.65)" }}
+									>
+										{card.note}
+									</p>
+								</motion.div>
+							</div>
+						))}
+					</div>
+
+					{/* Centered content */}
+					<motion.div
+						className="relative z-10 flex flex-col items-center text-center"
+						initial={{ opacity: 0, y: 24 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.8, ease: easeOut }}
+					>
+						<h2 className="max-w-4xl text-4xl font-black uppercase leading-tight tracking-tight text-minuri-teal md:text-6xl">
+							Your personal starter kit
+						</h2>
+
+						<p className="mt-6 max-w-2xl text-base leading-relaxed text-minuri-ocean md:text-lg">
+							A curated 7-day plan — guides + nearby services —
+							built around your moment, your suburb, and what you
+							still need to sort.
+						</p>
+
+						<div className="group relative mt-10 inline-flex overflow-hidden rounded-sm">
+							<button
+								type="button"
+								onClick={() => setStage("form")}
+								className="relative z-10 inline-flex h-16 items-center rounded-sm border border-minuri-ocean/70 px-14 text-lg font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
+							>
+								Build my plan
+							</button>
+							<span className="absolute inset-0 translate-y-full bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+						</div>
+					</motion.div>
+				</motion.section>
+			) : stage === "loading" ? (
 				<motion.div
 					key="loading"
 					className="flex min-h-screen flex-col items-center justify-center bg-minuri-white px-6 py-16"
@@ -311,14 +523,14 @@ export function JourneyOnboarding() {
 							<div className="flex items-center">
 								<button
 									type="button"
-									onClick={() => router.push("/")}
+									onClick={() => setStage("intro")}
 									className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
 								>
 									<ArrowLeft
 										className="size-3.5"
 										aria-hidden
 									/>
-									Back to home
+									Back
 								</button>
 							</div>
 
