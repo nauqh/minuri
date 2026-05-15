@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
 	ArrowLeft,
 	ArrowRight,
+	Check,
 	Compass,
 	HeartPulse,
 	Home,
@@ -152,12 +153,12 @@ export function GuidesIntroView() {
 				</motion.h1>
 
 				<motion.p
-					className="landing-section-subheading mt-4"
+					className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid mt-20"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, delay: 0.16, ease: EASE }}
 				>
-					Pick one or more topics. We&apos;ll open those guides first.
+					Tap a topic below to select it — we&apos;ll open those guides first.
 				</motion.p>
 			</div>
 
@@ -208,6 +209,20 @@ export function GuidesIntroView() {
 									scale: prefersReducedMotion ? 1 : 0.97,
 								}}
 							>
+								<div
+									className={cn(
+										"absolute right-3 top-3 flex size-5 items-center justify-center rounded-full border-2 transition-all duration-200",
+										isSelected
+											? "border-[#05292a] bg-[#05292a]"
+											: "border-[#05292a]/30 bg-white/20",
+									)}
+									aria-hidden
+								>
+									{isSelected && (
+										<Check className="size-3 text-white" strokeWidth={3} />
+									)}
+								</div>
+
 								<Icon
 									className="size-9 shrink-0 text-[#05292a] transition-transform duration-200 group-hover:scale-110"
 									aria-hidden

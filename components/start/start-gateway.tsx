@@ -211,16 +211,6 @@ export function StartGateway() {
 					}}
 				/>
 
-				{/* Badge */}
-				<motion.p
-					className="mb-8 inline-flex rounded-sm border border-minuri-ocean/15 bg-minuri-ocean px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-minuri-white"
-					initial={{ opacity: 0, y: 12 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6, ease: easeOut }}
-				>
-					Get started
-				</motion.p>
-
 				{/* Heading */}
 				<motion.h1
 					className="relative mx-auto max-w-4xl font-black leading-[1.05] tracking-tight text-minuri-ocean"
@@ -297,10 +287,7 @@ export function StartGateway() {
 					viewport={{ once: true, amount: 0.5 }}
 					transition={{ duration: 0.7, ease: easeOut }}
 				>
-					<p className="text-[10px] font-black uppercase tracking-[0.2em] text-minuri-white/30">
-						Two ways in
-					</p>
-					<h2 className="mt-4 text-2xl font-black tracking-wide leading-snug text-minuri-white md:text-3xl">
+					<h2 className="mt-4 text-3xl font-black tracking-wider leading-snug text-minuri-white md:text-4xl">
 						Start with what you need right now —
 						<br className="hidden md:block" />
 						<span className="text-minuri-ice"> Guides</span> or{" "}
@@ -472,22 +459,21 @@ export function StartGateway() {
 									Guides
 								</span>
 							</div>
-							<h3 className="mt-1 max-w-lg text-xl font-semibold leading-snug text-minuri-ocean md:text-2xl">
-								Guides to Medicare, Myki, rental bonds — before
-								you need to ask.
+							<h3 className="mt-1 max-w-lg text-base font-medium leading-snug text-minuri-ocean md:text-lg">
+								Guides to Medicare, Myki, rental bonds
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-ocean">
 								<Link
 									href="/guides"
-									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-sm border border-minuri-ocean px-7 text-sm font-black uppercase tracking-wide text-minuri-ocean transition-colors duration-200 group-hover:text-minuri-white"
+									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-black uppercase tracking-wider text-white"
 								>
-									Explore guides
+									Explore first-time guides
 									<ChevronRight
 										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
 										aria-hidden
 									/>
 								</Link>
-								<span className="absolute inset-0 translate-y-full bg-minuri-ocean transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+								<span className="absolute inset-0 translate-y-full bg-minuri-teal transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 							</div>
 						</motion.div>
 					</div>
@@ -540,14 +526,13 @@ export function StartGateway() {
 									Near Me
 								</span>
 							</div>
-							<h3 className="mt-1 max-w-lg text-xl font-semibold leading-snug text-minuri-white md:text-2xl">
-								Support services near you — with costs and
-								eligibility.
+							<h3 className="mt-1 max-w-lg text-base font-medium leading-snug text-minuri-white md:text-lg">
+								Support services near you
 							</h3>
-							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm">
+							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-white">
 								<Link
 									href="/near-me"
-									className="relative z-10 inline-flex h-12 items-center gap-2 rounded-sm border border-minuri-white px-7 text-sm font-black uppercase tracking-wide text-minuri-white transition-colors duration-200 group-hover:text-minuri-ocean"
+									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-black uppercase tracking-wider text-minuri-ocean"
 								>
 									Find nearby support
 									<ChevronRight
@@ -555,7 +540,7 @@ export function StartGateway() {
 										aria-hidden
 									/>
 								</Link>
-								<span className="absolute inset-0 translate-y-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+								<span className="absolute inset-0 translate-y-full bg-minuri-ice transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 							</div>
 						</motion.div>
 					</div>
@@ -570,7 +555,7 @@ export function StartGateway() {
 					viewport={{ once: true, amount: 0.5 }}
 					transition={{ duration: 0.7, ease: easeOut }}
 				>
-					<h2 className="mt-20 text-2xl tracking-wide font-black leading-snug text-minuri-white md:text-3xl">
+					<h2 className="mt-20 text-3xl tracking-wider font-black leading-snug text-minuri-white md:text-4xl">
 						or, want us to design the{" "}
 						<span className="text-minuri-ice">Journey</span> for
 						you?

@@ -341,7 +341,7 @@ export function LandingHeroSectionV2({
 										/>
 										<button
 											onClick={handleStartClick}
-											className="relative z-10 inline-flex h-12 items-center justify-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
 										>
 											<AnimatePresence
 												mode="wait"
@@ -355,15 +355,24 @@ export function LandingHeroSectionV2({
 													}
 													initial={{
 														opacity: 0,
-														y: 8,
+														filter: "blur(10px)",
+														scale: 0.82,
 													}}
 													animate={{
 														opacity: 1,
-														y: 0,
+														filter: "blur(0px)",
+														scale: 1,
 													}}
-													exit={{ opacity: 0, y: -8 }}
+													exit={{
+														opacity: 0,
+														filter: "blur(10px)",
+														scale: 1.18,
+													}}
 													transition={{
-														duration: 0.18,
+														duration: 0.38,
+														ease: [
+															0.22, 1, 0.36, 1,
+														],
 													}}
 												>
 													{showConfirm
@@ -380,7 +389,7 @@ export function LandingHeroSectionV2({
 										<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px] bg-minuri-ocean/25" />
 										<Link
 											href="/about"
-											className="relative z-10 inline-flex h-12 items-center justify-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center justify-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
 										>
 											About us
 										</Link>
@@ -434,7 +443,7 @@ export function LandingHeroSectionV2({
 										/>
 										<button
 											onClick={handleStartClick}
-											className="relative z-10 inline-flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center gap-2 overflow-hidden rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
 										>
 											<AnimatePresence
 												mode="wait"
@@ -448,15 +457,24 @@ export function LandingHeroSectionV2({
 													}
 													initial={{
 														opacity: 0,
-														y: 8,
+														filter: "blur(10px)",
+														scale: 0.82,
 													}}
 													animate={{
 														opacity: 1,
-														y: 0,
+														filter: "blur(0px)",
+														scale: 1,
 													}}
-													exit={{ opacity: 0, y: -8 }}
+													exit={{
+														opacity: 0,
+														filter: "blur(10px)",
+														scale: 1.18,
+													}}
 													transition={{
-														duration: 0.18,
+														duration: 0.38,
+														ease: [
+															0.22, 1, 0.36, 1,
+														],
 													}}
 												>
 													{showConfirm
@@ -473,7 +491,7 @@ export function LandingHeroSectionV2({
 										<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px] bg-minuri-ocean/25" />
 										<Link
 											href="/about"
-											className="relative z-10 inline-flex h-12 items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[6px] group-hover:translate-y-[6px]"
 										>
 											About us
 										</Link>

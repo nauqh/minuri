@@ -257,7 +257,7 @@ export function GuidesLibraryView() {
 			description="Every topic, one guide at a time."
 			headerStart={libraryBackHome}
 		>
-			<div className="space-y-8">
+			<div className="mx-auto w-full max-w-4xl space-y-8">
 				{guidesSearchFilter}
 				<div className="px-12">
 					{guidesListBody}
