@@ -45,11 +45,11 @@ export const PERSONAS: Persona[] = [
         id: "priya",
         name: "Priya",
         age: 22,
-        origin: "India",
-        role: "International Student",
-        tagline: "I'm terrified of getting sick when I don't know how anything works here.",
+        origin: "Hobart TAS",
+        role: "Interstate Student",
+        tagline: "I have Medicare. I just don't know how to actually use it.",
         situation:
-            "Studying at UniMelb, first time in Australia. No Medicare card, no idea how the healthcare system works. Managing housing admin for the first time with no family to call.",
+            "From Hobart, first time living in a big city, studying at UniMelb. Has a Medicare card but has never had to navigate the healthcare system on her own — her mum sorted every appointment and prescription back home. Quietly anxious about getting sick in a city where she doesn't know which clinic to walk into. Managing housing admin for the first time with no family in Melbourne to call for help.",
         accentColor: "#1f8f88",
         imageUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlb3BsZXxlbnwwfHwwfHx8MA%3D%3D",
         journey: [
@@ -129,11 +129,11 @@ export const PERSONAS: Persona[] = [
         id: "mei",
         name: "Mei",
         age: 20,
-        origin: "China",
-        role: "International Student",
+        origin: "Cairns QLD",
+        role: "Interstate Student",
         tagline: "Every dollar is accounted for. I can't afford to get this wrong.",
         situation:
-            "Studying at RMIT. Grocery costs, transport costs and activity costs all matter. Needs to stretch her budget as far as possible, find free ways to spend time, and connect with community without spending money she doesn't have.",
+            "From Cairns, studying at Monash. On Youth Allowance plus a small casual income — her parents can't help much. Grocery costs, transport costs and activity costs all matter. Needs to stretch her budget as far as possible, find free ways to spend time, and connect with community without spending money she doesn't have. Has Medicare but has never had to use it herself, and assumes a GP visit will cost her out of pocket.",
         accentColor: "#c96b50",
         imageUrl: "https://images.unsplash.com/photo-1552699611-e2c208d5d9cf?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHBvcnRyYWl0JTIwd29tYW58ZW58MHx8MHx8fDA%3D",
         journey: [
