@@ -138,14 +138,21 @@ export function NearMeEntry() {
 		<div className="flex h-screen flex-col overflow-hidden lg:flex-row">
 			{/* ── Brand panel ── */}
 			<div className="hidden h-full lg:flex lg:w-[42%] xl:w-[44%] flex-col justify-between bg-minuri-ocean px-10 py-8 xl:px-14 xl:py-12">
-				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
-					<Link
-						href="/start"
-						className="inline-flex w-fit items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
-					>
-						<ArrowLeft className="size-3.5" aria-hidden />
-						Back
-					</Link>
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.4 }}
+				>
+					<div className="group relative inline-flex overflow-hidden rounded-sm bg-minuri-teal shadow-xs">
+						<Link
+							href="/start"
+							className="relative z-10 inline-flex items-center gap-2 px-6 py-2 text-base font-semibold text-white transition-colors duration-300 group-hover:text-minuri-ocean"
+						>
+							<ArrowLeft className="size-3.5" aria-hidden />
+							Back
+						</Link>
+						<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+					</div>
 				</motion.div>
 
 				<motion.div
@@ -164,8 +171,8 @@ export function NearMeEntry() {
 					</h2>
 
 					{/* Animated topic word */}
-					<div className="mt-8 flex items-baseline gap-3">
-						<span className="text-sm text-white/35 2xl:text-base">
+					<div className="mt-8 flex items-baseline gap-2">
+						<span className="text-sm text-white/50 2xl:text-base">
 							Right now, you need to
 						</span>
 						<div className="relative h-9 overflow-hidden 2xl:h-11">
@@ -190,7 +197,7 @@ export function NearMeEntry() {
 						</div>
 					</div>
 
-					<p className="mt-10 max-w-xs text-sm leading-relaxed text-white/40 2xl:text-base 2xl:max-w-sm">
+					<p className="mt-10 max-w-sm text-sm tracking-wide leading-relaxed text-white 2xl:text-base 2xl:max-w-md">
 						Essential services for newcomers in Melbourne — food,
 						transport, health, admin, and community, all mapped to
 						your suburb.
@@ -208,10 +215,10 @@ export function NearMeEntry() {
 			</div>
 
 			{/* ── Form panel ── */}
-			<div className="flex h-full flex-1 flex-col items-center justify-center overflow-y-auto bg-minuri-fog px-5 py-6 md:px-8">
+			<div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-y-auto bg-minuri-fog px-5 py-6 md:px-8">
 				<Link
 					href="/start"
-					className="mb-5 inline-flex w-fit items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white lg:hidden"
+					className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white lg:hidden"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
 					Back
@@ -223,22 +230,30 @@ export function NearMeEntry() {
 						className="mb-3"
 						initial={{ opacity: 0, y: 16 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5, delay: 0.05, ease: EASE_OUT }}
+						transition={{
+							duration: 0.5,
+							delay: 0.05,
+							ease: EASE_OUT,
+						}}
 					>
 						<h1 className="text-xl font-black tracking-tight text-minuri-ocean md:text-2xl 2xl:text-3xl">
 							What&apos;s on your mind?
 						</h1>
-						<p className="mt-1.5 text-sm text-minuri-slate 2xl:text-base">
+						<p className="mt-1.5 font-medium text-sm text-minuri-slate 2xl:text-md">
 							Pick what fits — we&apos;ll find what&apos;s near
 							you.
 						</p>
 					</motion.div>
 
 					<motion.div
-						className="overflow-hidden rounded-2xl border border-minuri-silver/40 bg-minuri-white shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]"
+						className="overflow-hidden rounded-2xl border border-minuri-silver/40 bg-minuri-white"
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.55, delay: 0.15, ease: EASE_OUT }}
+						transition={{
+							duration: 0.55,
+							delay: 0.15,
+							ease: EASE_OUT,
+						}}
 					>
 						{ALL_TOPICS.map((t, i) => {
 							const isSelected = selectedTopic === t.slug;
@@ -291,10 +306,10 @@ export function NearMeEntry() {
 									<div className="min-w-0 flex-1 pl-1">
 										<p
 											className={cn(
-												"font-hero-serif text-[1rem] leading-snug transition-colors duration-150 2xl:text-[1.15rem]",
+												"text-[1rem] leading-snug transition-colors duration-150 2xl:text-[1.15rem]",
 												isSelected
 													? "text-minuri-ocean"
-													: "text-minuri-mid/70",
+													: "text-minuri-mid",
 											)}
 										>
 											&ldquo;{t.tagline}&rdquo;
@@ -304,7 +319,7 @@ export function NearMeEntry() {
 												"mt-0.5 text-xs font-medium transition-colors duration-150 2xl:text-sm",
 												isSelected
 													? "text-minuri-mid"
-													: "text-minuri-slate/60",
+													: "text-minuri-slate",
 											)}
 										>
 											{t.label}
@@ -341,7 +356,7 @@ export function NearMeEntry() {
 						transition={{ duration: 0.4, delay: 0.32 }}
 					>
 						<div className="h-px flex-1 bg-minuri-silver/50" />
-						<span className="text-xs font-medium text-minuri-slate/40 2xl:text-sm">
+						<span className="text-sm font-medium text-minuri-slate 2xl:text-md">
 							then
 						</span>
 						<div className="h-px flex-1 bg-minuri-silver/50" />
@@ -352,7 +367,11 @@ export function NearMeEntry() {
 						className="rounded-2xl border border-minuri-silver/40 bg-minuri-white px-6 py-4 shadow-[0_4px_24px_-8px_rgba(4,30,43,0.10)]"
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.55, delay: 0.36, ease: EASE_OUT }}
+						transition={{
+							duration: 0.55,
+							delay: 0.36,
+							ease: EASE_OUT,
+						}}
 					>
 						<p className="mb-3 text-sm font-semibold text-minuri-mid 2xl:text-base">
 							Which suburb are you in?
@@ -551,7 +570,7 @@ export function NearMeEntry() {
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.4, delay: 0.5 }}
 					>
-							Your location stays on your device · No account needed
+						Your location stays on your device · No account needed
 					</motion.p>
 				</div>
 			</div>

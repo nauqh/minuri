@@ -488,7 +488,7 @@ export function StartGateway() {
 								aria-hidden
 							/>
 						</Link>
-						<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+						<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 					</div>
 				</motion.div>
 			</section>
