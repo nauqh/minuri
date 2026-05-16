@@ -86,7 +86,6 @@ export function GuidesIntroView() {
 	const router = useRouter();
 	const prefersReducedMotion = useReducedMotion();
 	const [selected, setSelected] = useState<Set<GuideTopicSlug>>(new Set());
-	const [activating, setActivating] = useState<Persona | null>(null);
 	const [selectedPersona, setSelectedPersona] = useState<Persona | null>(
 		null,
 	);
@@ -125,12 +124,8 @@ export function GuidesIntroView() {
 	}
 
 	function handlePersonaClick(persona: Persona) {
-		if (activating) return;
-		setActivating(persona);
-		setTimeout(() => {
-			setSelectedPersona(persona);
-			setActivating(null);
-		}, 150);
+		if (selectedPersona) return;
+		setSelectedPersona(persona);
 	}
 
 	function handlePersonaBack() {
@@ -174,13 +169,11 @@ export function GuidesIntroView() {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, delay: 0.06, ease: EASE }}
 				>
-					What do you need
-					<br />
-					most right now?
+					What do you need most right now?
 				</motion.h1>
 
 				<motion.p
-					className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid mt-20"
+					className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid mt-8"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, delay: 0.16, ease: EASE }}
@@ -514,12 +507,10 @@ export function GuidesIntroView() {
 
 			{/* ── Divider ── */}
 			<div className="mx-auto max-w-screen-2xl mt-12 px-6 py-6">
-				<div className="flex items-center gap-4">
-					<div className="h-px flex-1 bg-minuri-silver/60" />
+				<div className="flex items-center justify-center">
 					<span className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid">
 						or follow a journey
 					</span>
-					<div className="h-px flex-1 bg-minuri-silver/60" />
 				</div>
 			</div>
 
@@ -527,8 +518,8 @@ export function GuidesIntroView() {
 			<div className="mx-auto max-w-screen-2xl px-2 pb-16">
 				<div className="mb-6">
 					<p className="text-sm text-minuri-slate">
-						Choose someone like you — we&apos;ll open their curated
-						week of guides.
+						Choose someone like you, we&apos;ll show you their
+						curated week.
 					</p>
 				</div>
 				<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2 lg:grid-cols-6">
@@ -540,31 +531,23 @@ export function GuidesIntroView() {
 								y: prefersReducedMotion ? 0 : 14,
 							}}
 							animate={
-								(activating && activating.id !== persona.id) ||
-								(selectedPersona &&
-									selectedPersona.id !== persona.id)
+								selectedPersona &&
+								selectedPersona.id !== persona.id
 									? {
 											opacity: 0,
 											scale: 0.93,
 											y: 0,
 											filter: "blur(6px)",
 										}
-									: activating?.id === persona.id
-										? {
-												opacity: 1,
-												scale: 1.05,
-												y: -8,
-												filter: "blur(0px)",
-											}
-										: {
-												opacity: 1,
-												y: 0,
-												scale: 1,
-												filter: "blur(0px)",
-											}
+									: {
+											opacity: 1,
+											y: 0,
+											scale: 1,
+											filter: "blur(0px)",
+										}
 							}
 							transition={
-								activating || selectedPersona
+								selectedPersona
 									? { duration: 0.28, ease: EASE }
 									: {
 											duration: 0.4,
@@ -580,14 +563,13 @@ export function GuidesIntroView() {
 								onClick={() => handlePersonaClick(persona)}
 								className={cn(
 									"group relative block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50",
-									activating?.id !== persona.id
+									selectedPersona?.id !== persona.id
 										? "overflow-hidden"
 										: "",
 								)}
 								style={{ borderRadius: 16 }}
 								whileHover={
-									activating?.id !== persona.id &&
-									!prefersReducedMotion
+									!selectedPersona && !prefersReducedMotion
 										? { borderRadius: 32 }
 										: {}
 								}
@@ -619,14 +601,14 @@ export function GuidesIntroView() {
 									<div
 										className={cn(
 											"pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-transparent px-3 py-3 text-left transition-opacity duration-100 sm:px-4 sm:py-4",
-											activating?.id === persona.id &&
-												"opacity-0",
+											selectedPersona?.id ===
+												persona.id && "opacity-0",
 										)}
 									>
-										<p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/70 sm:text-[10px]">
+										<p className="text-xs font-semibold uppercase tracking-[0.15em] text-white">
 											[{persona.role}]
 										</p>
-										<p className="mt-0.5 text-xs font-bold leading-snug text-white sm:text-sm">
+										<p className="mt-0.5 text-xl font-bold leading-snug text-white">
 											{persona.name}
 										</p>
 									</div>
