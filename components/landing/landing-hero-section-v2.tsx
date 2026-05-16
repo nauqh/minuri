@@ -72,7 +72,7 @@ function CatRive() {
 		// Patch canvas 2D context to skip artboard background fill.
 		// Rive render order per frame: clearRect → fillRect (bg) → draw cat.
 		// We intercept: after clearRect, drop the next fillRect call.
-		const canvas = rive.canvas as HTMLCanvasElement | undefined;
+		const canvas = (rive as unknown as { canvas: HTMLCanvasElement | undefined }).canvas;
 		let restoreCtx: (() => void) | undefined;
 		if (canvas) {
 			const ctx = canvas.getContext("2d");
@@ -494,7 +494,7 @@ export function LandingHeroSectionV2({
 
 						<div className="relative z-10 flex w-full flex-col md:ml-auto md:pb-4 md:max-w-[460px] min-[1500px]:max-w-[600px]">
 							<div
-								className="relative grid grid-cols-2 gap-4 md:gap-5 h-[350px] min-[1500px]:h-[380px]"
+								className="relative grid grid-cols-2 gap-4 md:gap-5 h-[500px] md:h-[350px] min-[1500px]:h-[380px]"
 								style={{ gridAutoRows: "1fr" }}
 							>
 								{HERO_TOPIC_CARDS.slice(0, 4).map((card, i) => (
@@ -514,7 +514,7 @@ export function LandingHeroSectionV2({
 								))}
 								{/* Cat — 6th card position above card 5, tape only */}
 								<motion.div
-									className="relative hidden md:block md:absolute right-[calc(100%+20px)] -top-2 h-[calc(50%-10px)] w-[calc(50%-10px)]"
+									className="relative md:absolute md:right-[calc(100%+20px)] md:-top-2 md:h-[calc(50%-10px)] md:w-[calc(50%-10px)]"
 									initial={{ opacity: 0, y: -800 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{
@@ -574,7 +574,7 @@ export function LandingHeroSectionV2({
 										restartCycle();
 									}}
 									entranceEase={entranceEase}
-									className="hidden md:block md:absolute right-[calc(100%+20px)] top-[calc(50%+5px)] h-[calc(50%-5px)] w-[calc(50%-5px)]"
+									className="md:absolute md:right-[calc(100%+20px)] md:top-[calc(50%+5px)] md:h-[calc(50%-5px)] md:w-[calc(50%-5px)]"
 								/>
 							</div>
 						</div>
