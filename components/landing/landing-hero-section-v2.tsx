@@ -6,6 +6,7 @@ import { CornerDownRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
+import { useRive, Layout, Fit } from "@rive-app/react-canvas";
 
 import { LandingHeader } from "@/components/landing/landing-header";
 
@@ -54,6 +55,76 @@ const HERO_TOPIC_CARDS: {
 ];
 
 const STICKY_ROTATE = [-1.5, 0.8, -0.6, 1.2];
+
+function CatRive() {
+	const { rive, RiveComponent } = useRive({
+		src: "/cat-follow-cursor.riv",
+		artboard: "Artboard 2",
+		stateMachines: "State Machine 1",
+		layout: new Layout({ fit: Fit.Contain }),
+		autoplay: true,
+		autoBind: true,
+	});
+
+	useEffect(() => {
+		if (!rive) return;
+
+		// Patch canvas 2D context to skip artboard background fill.
+		// Rive render order per frame: clearRect → fillRect (bg) → draw cat.
+		// We intercept: after clearRect, drop the next fillRect call.
+		const canvas = rive.canvas as HTMLCanvasElement | undefined;
+		let restoreCtx: (() => void) | undefined;
+		if (canvas) {
+			const ctx = canvas.getContext("2d");
+			if (ctx) {
+				const originalClearRect = ctx.clearRect.bind(ctx);
+				const originalFillRect = ctx.fillRect.bind(ctx);
+				let justCleared = false;
+				ctx.clearRect = (...args: Parameters<typeof ctx.clearRect>) => {
+					justCleared = true;
+					return originalClearRect(...args);
+				};
+				ctx.fillRect = (...args: Parameters<typeof ctx.fillRect>) => {
+					if (justCleared) { justCleared = false; return; }
+					return originalFillRect(...args);
+				};
+				restoreCtx = () => {
+					ctx.clearRect = originalClearRect;
+					ctx.fillRect = originalFillRect;
+				};
+			}
+		}
+
+		const vmi = rive.viewModelInstance;
+		if (vmi) {
+			const xProp = vmi.number("xPos");
+			const yProp = vmi.number("yPos");
+			if (xProp) xProp.value = 50;
+			if (yProp) yProp.value = 50;
+
+			const handleMouseMove = (e: MouseEvent) => {
+				if (xProp) xProp.value = (e.clientX / window.innerWidth) * 100;
+				if (yProp) yProp.value = (e.clientY / window.innerHeight) * 100;
+			};
+			const handleMouseLeave = () => {
+				if (xProp) xProp.value = 50;
+				if (yProp) yProp.value = 50;
+			};
+			window.addEventListener("mousemove", handleMouseMove);
+			document.addEventListener("mouseleave", handleMouseLeave);
+
+			return () => {
+				restoreCtx?.();
+				window.removeEventListener("mousemove", handleMouseMove);
+				document.removeEventListener("mouseleave", handleMouseLeave);
+			};
+		}
+
+		return () => restoreCtx?.();
+	}, [rive]);
+
+	return <RiveComponent style={{ width: "100%", height: "100%" }} />;
+}
 
 function HeroTopicCard({
 	card,
@@ -441,6 +512,57 @@ export function LandingHeroSectionV2({
 										className=""
 									/>
 								))}
+								{/* Cat — 6th card position above card 5, tape only */}
+								<motion.div
+									className="relative hidden md:block md:absolute right-[calc(100%+20px)] -top-2 h-[calc(50%-10px)] w-[calc(50%-10px)]"
+									initial={{ opacity: 0, y: -800 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										opacity: {
+											duration: 0.35,
+											delay: 0.5 + 5 * 0.12,
+											ease: "easeOut",
+										},
+										y: {
+											type: "spring",
+											stiffness: 120,
+											damping: 18,
+											delay: 0.5 + 5 * 0.15,
+										},
+									}}
+								>
+									<motion.div
+										style={{ rotate: STICKY_ROTATE[5 % 4] }}
+										className="relative h-full"
+										animate={{ y: [0, -7, 0] }}
+										transition={{
+											duration: 3.2 + 0.3 * 0.28,
+											ease: "easeInOut",
+											repeat: Infinity,
+											delay: 0.3,
+										}}
+									>
+										{/* Tape strip — matches guide-sticky::before */}
+										<div
+											className="absolute left-1/2 z-10 rounded-[1px]"
+											style={{
+												top: -10,
+												width: 44,
+												height: 18,
+												transform:
+													"translateX(-50%) rotate(-1.5deg)",
+												background:
+													"rgba(253, 230, 138, 0.72)",
+												boxShadow:
+													"0 1px 3px rgba(0,0,0,0.1)",
+											}}
+										/>
+										<div className="relative h-full overflow-hidden rounded-[2px]">
+											<CatRive />
+										</div>
+									</motion.div>
+								</motion.div>
+
 								{/* Card 5: sits at row-2 level, extends left into text column */}
 								<HeroTopicCard
 									card={HERO_TOPIC_CARDS[4]}
