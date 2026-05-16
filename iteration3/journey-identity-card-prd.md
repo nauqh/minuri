@@ -1,6 +1,6 @@
 # Journey Identity Card — PRD 2.0
 
-**Epic:** AI-Powered Living Identity Card
+**Epic:** AI-Powered Living Identity Card + Letter from Melbourne
 **Date:** 2026-05-16
 **Status:** Proposal
 
