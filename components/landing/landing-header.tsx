@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
 	ArrowRight,
 	BookOpen,
-	ChevronRight,
 	Compass,
 	LifeBuoy,
 	MapPin,
@@ -132,31 +131,40 @@ export function LandingHeader({
 						ease: entranceEase,
 					}}
 				>
-					<motion.div
-						className="hidden rounded-sm md:inline-flex"
-						animate={
-							ctaHighlighted
-								? { scale: [1, 1.13, 0.97, 1.1, 1] }
-								: { scale: 1 }
-						}
-						transition={{
-							duration: 2.5,
-							ease: "easeInOut",
-							times: [0, 0.25, 0.5, 0.75, 1],
-						}}
-					>
+					<div className="hidden md:flex items-center gap-2">
 						<Link
-							href="/about"
-							className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-1.5 rounded-sm bg-minuri-ocean px-6 min-[1500px]:px-8 text-base min-[1500px]:text-lg font-medium text-minuri-white transition-transform duration-200 ease-out hover:scale-105"
+							href="/guides"
+							className="inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm border border-minuri-ocean/25 px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-ocean transition-all duration-200 ease-out hover:bg-minuri-ocean/5 hover:border-minuri-ocean/50"
 						>
-							Meet the team
-							<ChevronRight
-								className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-1"
-								strokeWidth={2.25}
-								aria-hidden
-							/>
+							<BookOpen className="size-4" strokeWidth={2} aria-hidden />
+							Guides
 						</Link>
-					</motion.div>
+						<motion.div
+							className="inline-flex rounded-sm"
+							animate={
+								ctaHighlighted
+									? { scale: [1, 1.13, 0.97, 1.1, 1] }
+									: { scale: 1 }
+							}
+							transition={{
+								duration: 2.5,
+								ease: "easeInOut",
+								times: [0, 0.25, 0.5, 0.75, 1],
+							}}
+						>
+							<Link
+								href="/near-me"
+								className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
+							>
+								<MapPin
+									className="size-4 transition-transform duration-200 group-hover:scale-110"
+									strokeWidth={2}
+									aria-hidden
+								/>
+								Near me
+							</Link>
+						</motion.div>
+					</div>
 					<div className="relative flex self-stretch md:hidden">
 						<button
 							type="button"

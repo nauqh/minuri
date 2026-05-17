@@ -405,7 +405,7 @@ export function LandingHeroSectionV2({
 										</button>
 									</div>
 
-									{/* Secondary: About us / Are you sure? */}
+									{/* Secondary: Find nearby */}
 									<div className="group relative mb-3 mr-3">
 										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
 										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
@@ -467,7 +467,7 @@ export function LandingHeroSectionV2({
 										</button>
 									</div>
 
-									{/* Secondary: About us / Are you sure? */}
+									{/* Secondary: Find nearby */}
 									<div className="group relative mb-3 mr-3">
 										<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
 										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />

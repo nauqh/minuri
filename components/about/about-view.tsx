@@ -23,8 +23,8 @@ function Word({
 	const end = Math.min((index + 1) / total, 1);
 	const opacity = useTransform(progress, [start, end], [0.12, 1]);
 	return (
-		<motion.span className="inline" style={{ opacity }}>
-			{word}{" "}
+		<motion.span className="block leading-none" style={{ opacity }}>
+			{word}
 		</motion.span>
 	);
 }
@@ -33,15 +33,15 @@ function ScrollHighlightQuote() {
 	const ref = useRef<HTMLDivElement>(null);
 	const { scrollYProgress } = useScroll({
 		target: ref,
-		offset: ["start 0.5", "start 0"],
+		offset: ["start 0.9", "end 0.1"],
 	});
 
 	return (
 		<div
 			ref={ref}
-			className="flex min-h-screen w-full items-center justify-center px-6 py-28 md:px-12 md:py-40"
+			className="flex min-h-screen w-full flex-col justify-between px-6 py-16 md:px-12 md:py-20"
 		>
-			<p className="w-full text-center text-[clamp(4rem,10vw,9rem)] font-black uppercase leading-[0.95] tracking-tight text-minuri-ocean">
+			<p className="flex h-full flex-1 flex-col justify-between text-[clamp(4rem,9vw,8rem)] font-black uppercase tracking-tight text-minuri-ocean">
 				{QUOTE.map((word, i) => (
 					<Word
 						key={i}
@@ -106,21 +106,9 @@ const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export function AboutView() {
 	const [teamHovered, setTeamHovered] = useState(false);
 	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-	const [showReal, setShowReal] = useState(false);
-	const introTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	const handleRowEnter = (index: number) => {
-		if (introTimer.current) clearTimeout(introTimer.current);
-		setHoveredIndex(index);
-		setShowReal(false);
-		introTimer.current = setTimeout(() => setShowReal(true), 1400);
-	};
-
-	const handleRowLeave = () => {
-		if (introTimer.current) clearTimeout(introTimer.current);
-		setHoveredIndex(null);
-		setShowReal(false);
-	};
+	const handleRowEnter = (index: number) => setHoveredIndex(index);
+	const handleRowLeave = () => setHoveredIndex(null);
 
 	return (
 		<motion.div
@@ -301,7 +289,7 @@ export function AboutView() {
 			>
 				<div className="mx-6 border-t border-minuri-ocean/30 md:mx-12" />
 				{/* Floating portrait — absolute in center column, overlaps rows */}
-				<AnimatePresence mode="wait">
+				<AnimatePresence>
 					{hoveredIndex !== null && (
 						<motion.div
 							key={hoveredIndex}
@@ -331,9 +319,10 @@ export function AboutView() {
 							<motion.div
 								className="absolute inset-0"
 								initial={{ opacity: 0 }}
-								animate={{ opacity: showReal ? 1 : 0 }}
+								animate={{ opacity: 1 }}
 								transition={{
-									duration: 0.9,
+									delay: 0.7,
+									duration: 0.8,
 									ease: [0.25, 0.46, 0.45, 0.94],
 								}}
 							>
@@ -397,14 +386,11 @@ export function AboutView() {
 										<motion.div
 											className="absolute inset-0"
 											animate={{
-												opacity:
-													showReal &&
-													hoveredIndex === index
-														? 1
-														: 0,
+												opacity: hoveredIndex === index ? 1 : 0,
 											}}
 											transition={{
-												duration: 0.9,
+												delay: hoveredIndex === index ? 0.7 : 0,
+												duration: 0.8,
 												ease: [0.25, 0.46, 0.45, 0.94],
 											}}
 										>
