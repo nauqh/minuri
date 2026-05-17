@@ -6,12 +6,10 @@ import {
 	ArrowLeft,
 	Check,
 	CheckCircle2,
-	ChevronDown,
 	ChevronRight,
 	Compass,
 	HeartPulse,
 	Home,
-	Info,
 	Loader2,
 	MapPin,
 	Pencil,
@@ -206,7 +204,6 @@ export function JourneyOnboarding() {
 	const [yourMoment, setYourMoment] = useState("");
 	const [selectedPreset, setSelectedPreset] = useState<PresetId | null>(null);
 	const [showTextarea, setShowTextarea] = useState(false);
-	const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
 	const [suburbQuery, setSuburbQuery] = useState("");
 	const [suburbOptions, setSuburbOptions] = useState<SuburbOption[]>([]);
@@ -302,6 +299,12 @@ export function JourneyOnboarding() {
 		hasConfirmedSuburb &&
 		selectedTopics.length >= 1;
 
+	const missingCount = [
+		yourMoment.length >= MIN_MOMENT_LENGTH,
+		hasConfirmedSuburb,
+		selectedTopics.length >= 1,
+	].filter((v) => !v).length;
+
 	const showMomentPrompt =
 		yourMoment.length > 0 && yourMoment.length < MIN_MOMENT_LENGTH;
 
@@ -346,7 +349,7 @@ export function JourneyOnboarding() {
 					<button
 						type="button"
 						onClick={() => router.back()}
-						className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-4 py-2 text-sm font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white hover:cursor-pointer md:top-1/2 md:-translate-y-1/2 md:px-6 md:text-base"
+						className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 					>
 						<ArrowLeft className="size-3.5" aria-hidden />
 						Back to Start
@@ -578,7 +581,39 @@ export function JourneyOnboarding() {
 							background: "oklch(0.68 0.13 15 / 0.2)",
 						}}
 					/>
-					<div className="mx-auto max-w-4xl px-6 py-8 md:py-10">
+
+					{/* How it works — sticky note pinned to right */}
+					<div className="pointer-events-none absolute right-4 top-44 hidden w-72 select-none xl:block 2xl:right-10 2xl:w-80">
+						<div className="guide-sticky guide-sticky-a">
+							<p
+								className="text-xs font-black uppercase tracking-[0.16em]"
+								style={{ color: "rgba(2,18,20,0.45)" }}
+							>
+								How it works
+							</p>
+							<ol className="mt-3 space-y-4">
+								{HOW_IT_WORKS_STEPS.map((step, index) => (
+									<li key={step.title} className="flex items-start gap-2.5">
+										<span
+											className="flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+											style={{ background: "rgba(2,18,20,0.1)", color: "#05292a" }}
+										>
+											{index + 1}
+										</span>
+										<div>
+											<p className="text-xs font-bold leading-snug" style={{ color: "#05292a" }}>
+												{step.title}
+											</p>
+											<p className="mt-1 text-[11px] leading-snug" style={{ color: "rgba(2,18,20,0.55)" }}>
+												{step.body}
+											</p>
+										</div>
+									</li>
+								))}
+							</ol>
+						</div>
+					</div>
+					<div className="max-w-4xl pl-0 pr-6 py-8 md:py-10 xl:mr-[5%]" style={{ marginLeft: "max(1.5rem, calc(clamp(2.5rem, 7vw, 6rem) + 24px))" }}>
 						<motion.div
 							className="flex flex-col"
 							initial={{
@@ -618,94 +653,10 @@ export function JourneyOnboarding() {
 								</p>
 							</div>
 
-							{/* ── How it works collapsible ── */}
-							<div className="mb-8 overflow-hidden rounded-xl border border-minuri-silver/60 bg-minuri-white shadow-sm">
-								<motion.button
-									type="button"
-									onClick={() => setHowItWorksOpen((v) => !v)}
-									whileHover={{ scale: 1 }}
-									className="flex w-full items-center justify-between p-4 text-left font-semibold text-minuri-ocean transition-colors hover:bg-minuri-fog/40"
-								>
-									<span className="flex items-center gap-2">
-										<Info
-											className="size-4 text-minuri-teal"
-											aria-hidden
-										/>
-										How it works
-									</span>
-									<ChevronDown
-										className={cn(
-											"size-4 text-minuri-slate transition-transform duration-200",
-											howItWorksOpen && "rotate-180",
-										)}
-										aria-hidden
-									/>
-								</motion.button>
-								<AnimatePresence initial={false}>
-									{howItWorksOpen && (
-										<motion.div
-											key="how-it-works"
-											initial={{ height: 0, opacity: 0 }}
-											animate={{
-												height: "auto",
-												opacity: 1,
-											}}
-											exit={{ height: 0, opacity: 0 }}
-											transition={{
-												duration: prefersReducedMotion
-													? 0.01
-													: 0.28,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="overflow-hidden"
-										>
-											<div
-												className="border-t border-minuri-silver/40 px-6 py-5"
-												style={{
-													backgroundColor:
-														"var(--minuri-white)",
-													backgroundImage:
-														"linear-gradient(oklch(0.60 0.04 220 / 0.09) 1px, transparent 1px), linear-gradient(90deg, oklch(0.60 0.04 220 / 0.06) 1px, transparent 1px)",
-													backgroundSize:
-														"1.5rem 1.5rem",
-												}}
-											>
-												<ol className="flex flex-col gap-5">
-													{HOW_IT_WORKS_STEPS.map(
-														(step, index) => (
-															<li
-																key={step.title}
-																className="flex items-start gap-4"
-															>
-																<span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-minuri-teal/10 text-sm font-bold text-minuri-teal">
-																	{index + 1}
-																</span>
-																<div>
-																	<p className="font-semibold text-minuri-ocean">
-																		{
-																			step.title
-																		}
-																	</p>
-																	<p className="mt-1 text-sm text-minuri-slate">
-																		{
-																			step.body
-																		}
-																	</p>
-																</div>
-															</li>
-														),
-													)}
-												</ol>
-											</div>
-										</motion.div>
-									)}
-								</AnimatePresence>
-							</div>
-
 							{/* ── Form sections ── */}
 							<div>
 								<motion.div
-									className="space-y-10"
+									className="space-y-12"
 									initial={{
 										opacity: 0,
 										y: prefersReducedMotion ? 0 : 20,
@@ -722,12 +673,20 @@ export function JourneyOnboarding() {
 								>
 									{/* ── Your moment ── */}
 									<div>
-										<p className="border-l-2 border-minuri-teal/50 pl-2.5 text-sm font-semibold text-minuri-ocean">
-											Your moment
-											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
-												— pick what sounds like you
+										<div className="mb-4 flex items-center gap-3">
+											<span className={cn(
+												"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
+												yourMoment.length >= MIN_MOMENT_LENGTH
+													? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
+													: "border-2 border-minuri-teal/50 text-minuri-teal",
+											)}>
+												{yourMoment.length >= MIN_MOMENT_LENGTH ? <Check className="size-3.5" strokeWidth={3} /> : "1"}
 											</span>
-										</p>
+											<div>
+												<p className="text-sm font-bold text-minuri-ocean">Your moment</p>
+												<p className="text-xs text-minuri-slate">Pick a preset that sounds like you, or write your own</p>
+											</div>
+										</div>
 
 										{/* Preset cards */}
 										<div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -954,15 +913,20 @@ export function JourneyOnboarding() {
 
 									{/* ── Suburb ── */}
 									<div>
-										<label
-											htmlFor="suburb-input"
-											className="block border-l-2 border-minuri-teal/50 pl-2.5 text-sm font-semibold text-minuri-ocean"
-										>
-											Where are you settling in?
-											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
-												— Melbourne suburb
+										<div className="mb-4 flex items-center gap-3">
+											<span className={cn(
+												"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
+												hasConfirmedSuburb
+													? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
+													: "border-2 border-minuri-teal/50 text-minuri-teal",
+											)}>
+												{hasConfirmedSuburb ? <Check className="size-3.5" strokeWidth={3} /> : "2"}
 											</span>
-										</label>
+											<div>
+												<label htmlFor="suburb-input" className="block cursor-pointer text-sm font-bold text-minuri-ocean">Your Melbourne suburb</label>
+												<p className="text-xs text-minuri-slate">Type to search and confirm your suburb</p>
+											</div>
+										</div>
 										<div className="relative mt-2.5">
 											<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-minuri-silver" />
 											<input
@@ -1151,12 +1115,20 @@ export function JourneyOnboarding() {
 
 									{/* ── Topic cards ── */}
 									<div>
-										<p className="border-l-2 border-minuri-teal/50 pl-2.5 text-sm font-semibold text-minuri-ocean">
-											What matters most right now?
-											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
-												— select at least one
+										<div className="mb-4 flex items-center gap-3">
+											<span className={cn(
+												"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
+												selectedTopics.length >= 1
+													? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
+													: "border-2 border-minuri-teal/50 text-minuri-teal",
+											)}>
+												{selectedTopics.length >= 1 ? <Check className="size-3.5" strokeWidth={3} /> : "3"}
 											</span>
-										</p>
+											<div>
+												<p className="text-sm font-bold text-minuri-ocean">What matters most right now?</p>
+												<p className="text-xs text-minuri-slate">Select at least one topic to focus your plan</p>
+											</div>
+										</div>
 										<div
 											className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5"
 											role="group"
@@ -1191,7 +1163,7 @@ export function JourneyOnboarding() {
 															"group relative flex min-h-[8rem] flex-col gap-2 rounded-2xl border p-4 text-left outline-none",
 															"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 															isSelected
-																? "ring-[2.5px] ring-[#05292a]/30 ring-offset-2 shadow-[0_16px_32px_-12px_rgba(2,24,25,0.28)]"
+																? "shadow-[0_16px_32px_-12px_rgba(2,24,25,0.28)]"
 																: "hover:shadow-sm",
 														)}
 														style={{
@@ -1321,10 +1293,16 @@ export function JourneyOnboarding() {
 									className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-minuri-teal px-12 py-4 text-base font-bold text-primary-foreground shadow-lg transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 md:w-auto"
 								>
 									Build My Guide Journey
-									<ChevronRight
-										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
-										aria-hidden
-									/>
+									{missingCount > 0 ? (
+										<span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold">
+											{missingCount} left
+										</span>
+									) : (
+										<ChevronRight
+											className="size-4 transition-transform duration-200 group-hover:translate-x-1"
+											aria-hidden
+										/>
+									)}
 								</button>
 							</div>
 						</motion.div>
