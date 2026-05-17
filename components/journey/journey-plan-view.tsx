@@ -26,6 +26,7 @@ import { useJourneyState } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
+import { loadWeekPlan, resolveWeekPlan } from "@/lib/journey/week-plan-store";
 import { getVibe, DEFAULT_VIBE_ID, type Vibe } from "@/lib/vibes";
 import { LANDING_KEYS } from "@/components/landing/landing-local-state";
 import { IdentityCard } from "@/components/journey/identity-card";
@@ -579,13 +580,12 @@ export function JourneyPlanView() {
 		);
 	}
 
-	const {
-		suburb,
-		selectedTopics,
-		yourMoment,
-		alreadySorted = [],
-	} = journeyState;
-	const weekPlan = buildWeekPlan(selectedTopics, yourMoment, alreadySorted);
+	const { suburb, selectedTopics, yourMoment } = journeyState;
+	const weekPlan = (() => {
+		const stored = loadWeekPlan();
+		if (stored) return resolveWeekPlan(stored);
+		return buildWeekPlan(selectedTopics, yourMoment);
+	})();
 	const currentDay = weekPlan.find((d) => d.day === activeDay) ?? weekPlan[0];
 
 	const truncatedMoment =
@@ -626,7 +626,7 @@ export function JourneyPlanView() {
 
 		if (dayNowDone && !earnedDaysRef.current.has(day)) {
 			earnedDaysRef.current.add(day);
-			earnDay(day);
+			earnDay(day, plan.memoryLine);
 			setToastDay(day);
 			setToastVisible(true);
 			setHasCardNotif(true);

@@ -9,6 +9,7 @@ export type DayPlan = {
     narrative: string;
     guides: Guide[];
     tasks: string[];
+    memoryLine?: string;
 };
 
 export const TOPIC_NEAR_ME: Record<GuideTopicSlug, NearMeTopic> = {
@@ -43,23 +44,6 @@ export function getTopicShort(slug: GuideTopicSlug) {
     return TOPIC_SHORT[slug];
 }
 
-// Checklist items shown in onboarding
-export const ALREADY_SORTED_ITEMS = [
-    { id: "myki", label: "Myki card" },
-    { id: "gp", label: "GP registered" },
-    { id: "bank", label: "Bank account" },
-    { id: "sim", label: "SIM card" },
-    { id: "lease", label: "Lease signed" },
-] as const;
-
-// Guide slugs to skip when a checklist item is ticked
-const ALREADY_SORTED_SKIP: Record<string, string[]> = {
-    myki: ["getting-myki-and-surviving-ptv"],
-    gp: ["finding-a-gp-before-you-need-one"],
-    bank: [],
-    sim: [],
-    lease: ["renting-without-getting-burned", "your-bond-starts-on-day-one"],
-};
 
 const GUIDE_NARRATIVES: Partial<Record<string, string>> = {
     "your-first-48-hours-checklist":
@@ -272,7 +256,6 @@ const ARC_THEMES: Record<number, { theme: string; shortLabel: string }> = {
 export function buildWeekPlan(
     selectedTopics: GuideTopicSlug[],
     yourMoment = "",
-    alreadySorted: string[] = [],
 ): DayPlan[] {
     const allTopics: GuideTopicSlug[] = [
         "food-eating",
@@ -282,16 +265,13 @@ export function buildWeekPlan(
         "social-belonging",
     ];
 
-    const skipSlugs = new Set(
-        alreadySorted.flatMap((item) => ALREADY_SORTED_SKIP[item] ?? []),
-    );
     const boostedSlugs = getKeywordBoosts(yourMoment);
 
     // Build per-topic guide queues sorted by boost → title
     const topicQueues = new Map<GuideTopicSlug, Guide[]>();
     for (const topic of allTopics) {
         const guides = [...GUIDES]
-            .filter((g) => g.isPublished && g.topic === topic && !skipSlugs.has(g.slug))
+            .filter((g) => g.isPublished && g.topic === topic)
             .sort((a, b) => {
                 const aBoosted = boostedSlugs.has(a.slug) ? 0 : 1;
                 const bBoosted = boostedSlugs.has(b.slug) ? 0 : 1;

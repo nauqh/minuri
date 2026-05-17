@@ -87,7 +87,7 @@ type ArchetypeBlueprint = {
   mood: string;
   palette: [PaletteColor, PaletteColor, PaletteColor];
   traits: JourneyIdentity["traits"];
-  letterTemplate: (suburb: string, unsorted: string) => string;
+  letterTemplate: (suburb: string) => string;
 };
 
 const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
@@ -103,8 +103,8 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
       { hex: "#3D405B", name: "Late Evening" },
     ],
     traits: { courage: 68, curiosity: 76, social: 88, independence: 52 },
-    letterTemplate: (suburb, unsorted) =>
-      `You came here ready to meet people, even if you don't fully know it yet. ${suburb} will help with that — this city opens up when you do. ${unsorted} Melbourne doesn't ask you to have everything figured out before it welcomes you. The friendships that start here tend to begin small — a shared tram, a familiar face at the café, a conversation you didn't plan. You're already doing the hard part just by being here.`,
+    letterTemplate: (suburb) =>
+      `You came here ready to meet people, even if you don't fully know it yet. ${suburb} will help with that — this city opens up when you do. Melbourne doesn't ask you to have everything figured out before it welcomes you. The friendships that start here tend to begin small — a shared tram, a familiar face at the café, a conversation you didn't plan. You're already doing the hard part just by being here.`,
   },
   "getting-around": {
     archetype: "The Urban Explorer",
@@ -118,8 +118,8 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
       { hex: "#ADE8F4", name: "Open Air" },
     ],
     traits: { courage: 65, curiosity: 92, social: 58, independence: 82 },
-    letterTemplate: (suburb, unsorted) =>
-      `You're the kind of person who figures things out by moving through them. ${suburb} suits that — there's always another street to learn. ${unsorted} Melbourne reveals itself slowly. The shortcuts, the hidden laneways, the tram lines that actually make sense — you'll know them all by the end of this week. The city rewards people who explore it on foot, even when they're slightly lost.`,
+    letterTemplate: (suburb) =>
+      `You're the kind of person who figures things out by moving through them. ${suburb} suits that — there's always another street to learn. Melbourne reveals itself slowly. The shortcuts, the hidden laneways, the tram lines that actually make sense — you'll know them all by the end of this week. The city rewards people who explore it on foot, even when they're slightly lost.`,
   },
   "health-wellbeing": {
     archetype: "The Careful Settler",
@@ -133,8 +133,8 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
       { hex: "#1B4332", name: "Deep Green" },
     ],
     traits: { courage: 60, curiosity: 72, social: 55, independence: 85 },
-    letterTemplate: (suburb, unsorted) =>
-      `You arrived with a quiet determination most people don't even notice in themselves. ${suburb} is a good place to settle into — the pace here rewards those who take it seriously. ${unsorted} Taking care of yourself in a new city is an act of courage. This week is about building a foundation, not rushing to the finish. Melbourne will wait for you.`,
+    letterTemplate: (suburb) =>
+      `You arrived with a quiet determination most people don't even notice in themselves. ${suburb} is a good place to settle into — the pace here rewards those who take it seriously. Taking care of yourself in a new city is an act of courage. This week is about building a foundation, not rushing to the finish. Melbourne will wait for you.`,
   },
   "home-admin": {
     archetype: "The Steady Builder",
@@ -148,8 +148,8 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
       { hex: "#F4A261", name: "Warm Brick" },
     ],
     traits: { courage: 74, curiosity: 64, social: 50, independence: 90 },
-    letterTemplate: (suburb, unsorted) =>
-      `You showed up and started sorting things out before most people even unpack. ${suburb} has everything you need — it just takes a week to find it. ${unsorted} The admin feels overwhelming at first. It isn't. You've already started, and that's the hardest part. Melbourne was built by people who figured it out as they went. You're doing the same thing.`,
+    letterTemplate: (suburb) =>
+      `You showed up and started sorting things out before most people even unpack. ${suburb} has everything you need — it just takes a week to find it. The admin feels overwhelming at first. It isn't. You've already started, and that's the hardest part. Melbourne was built by people who figured it out as they went. You're doing the same thing.`,
   },
   "food-eating": {
     archetype: "The Hungry Wanderer",
@@ -163,8 +163,8 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
       { hex: "#2C1810", name: "Dark Roast" },
     ],
     traits: { courage: 70, curiosity: 88, social: 72, independence: 62 },
-    letterTemplate: (suburb, unsorted) =>
-      `You found your way to ${suburb}, which means you already have good instincts. Melbourne's food culture isn't something you discover — it's something you stumble into, then never leave. ${unsorted} This week, let eating be the thread that pulls the rest together. The best market stall, the café that gets your order right, the corner spot that feels like yours — they're all there. You just have to find them.`,
+    letterTemplate: (suburb) =>
+      `You found your way to ${suburb}, which means you already have good instincts. Melbourne's food culture isn't something you discover — it's something you stumble into, then never leave. This week, let eating be the thread that pulls the rest together. The best market stall, the café that gets your order right, the corner spot that feels like yours — they're all there. You just have to find them.`,
   },
   default: {
     archetype: "The Quiet Pioneer",
@@ -178,39 +178,20 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
       { hex: "#1A2A3A", name: "Night Arrival" },
     ],
     traits: { courage: 72, curiosity: 85, social: 48, independence: 78 },
-    letterTemplate: (suburb, unsorted) =>
-      `You arrived with courage in your suitcase and questions you haven't figured out how to ask yet. ${suburb} is a good suburb for that — loud enough to feel alive, small enough to learn. ${unsorted} People who feel alone in their first few days here often find that Melbourne rewards small acts of showing up — the coffee order you learn, the tram route you memorise, the corner you start to recognise. You made it this far. That's not nothing.`,
+    letterTemplate: (suburb) =>
+      `You arrived with courage in your suitcase and questions you haven't figured out how to ask yet. ${suburb} is a good suburb for that — loud enough to feel alive, small enough to learn. People who feel alone in their first few days here often find that Melbourne rewards small acts of showing up — the coffee order you learn, the tram route you memorise, the corner you start to recognise. You made it this far. That's not nothing.`,
   },
 };
-
-const UNSORTED_HINTS: Record<string, string> = {
-  gp: "We noticed you haven't registered with a GP yet. That's okay — that's what this week is for.",
-  medicare: "Medicare is still on your list. It's easier than it looks; this week will help.",
-  bank: "A local bank account is still open. This week gives you the steps.",
-  myki: "A Myki card is still on your list. It's the first thing Melbourne asks of you.",
-  bond: "Your rental bond paperwork is still open. It's worth sorting sooner than later.",
-};
-
-const ALL_SORTED_KEYS = Object.keys(UNSORTED_HINTS);
-
-function pickUnsortedHint(alreadySorted: string[]): string {
-  const missing = ALL_SORTED_KEYS.filter((k) => !alreadySorted.includes(k));
-  if (missing.length === 0) return "";
-  const pick = missing[0];
-  return UNSORTED_HINTS[pick] ?? "";
-}
 
 export function buildMockIdentity(
   suburb: string,
   topics: string[],
-  alreadySorted: string[] = [],
 ): JourneyIdentity {
   const priority = (
     ["social-belonging", "getting-around", "health-wellbeing", "home-admin", "food-eating"] as TopicSlug[]
   ).find((t) => topics.includes(t)) ?? "default";
 
   const bp = BLUEPRINTS[priority] ?? BLUEPRINTS.default;
-  const unsortedHint = pickUnsortedHint(alreadySorted);
   const suburbDisplay = suburb || "your suburb";
 
   return {
@@ -223,7 +204,38 @@ export function buildMockIdentity(
     palette: bp.palette,
     traits: bp.traits,
     letter: {
-      body: bp.letterTemplate(suburbDisplay, unsortedHint).trim(),
+      body: bp.letterTemplate(suburbDisplay).trim(),
+      sign_off: "— Your City",
+    },
+  };
+}
+
+const SPECIES_TO_BLUEPRINT: Record<string, string> = {
+  pioneer: "default",
+  settler: "health-wellbeing",
+  builder: "home-admin",
+  openheart: "social-belonging",
+};
+
+export function buildIdentityFromLLM(
+  llm: import("@/lib/journey/week-plan-store").IdentityLLM,
+): JourneyIdentity {
+  const bp = BLUEPRINTS[SPECIES_TO_BLUEPRINT[llm.species] ?? "default"] ?? BLUEPRINTS.default;
+  return {
+    archetype: bp.archetype,
+    mantra: bp.mantra,
+    final_mantra: bp.final_mantra,
+    symbol: bp.symbol,
+    mood: bp.mood,
+    suburb_line: llm.suburb_line,
+    palette: [
+      { hex: llm.vibe.hex, name: llm.vibe.name },
+      bp.palette[1],
+      bp.palette[2],
+    ],
+    traits: bp.traits,
+    letter: {
+      body: llm.letter_body,
       sign_off: "— Your City",
     },
   };

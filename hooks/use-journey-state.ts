@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { GuideTopicSlug } from "@/content/guides";
+import { clearWeekPlan } from "@/lib/journey/week-plan-store";
 
 export type JourneyState = {
     yourMoment: string;
     suburb: string;
     selectedTopics: GuideTopicSlug[];
-    alreadySorted: string[];
 };
 
 const STORAGE_KEY = "minuri:journey:v2";
@@ -40,6 +40,7 @@ export function useJourneyState() {
             localStorage.removeItem(STORAGE_KEY);
             localStorage.removeItem(TASKS_KEY);
         } catch { /* ignore */ }
+        clearWeekPlan();
         setState(null);
         setCompletedTasks(new Set());
     }, []);

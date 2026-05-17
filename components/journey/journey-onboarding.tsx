@@ -26,7 +26,14 @@ import { normalizeSuburbName, type SuburbOption } from "@/lib/suburbs";
 import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
-import { buildMockIdentity } from "@/lib/journey/identity";
+import {
+	buildMockIdentity,
+	buildIdentityFromLLM,
+} from "@/lib/journey/identity";
+import {
+	saveWeekPlan,
+	type JourneyAPIResponse,
+} from "@/lib/journey/week-plan-store";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -308,22 +315,34 @@ export function JourneyOnboarding() {
 	const showMomentPrompt =
 		yourMoment.length > 0 && yourMoment.length < MIN_MOMENT_LENGTH;
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		if (!isFormValid || !selectedSuburb) return;
 		saveJourney({
 			yourMoment,
 			suburb: selectedSuburb.locality,
 			selectedTopics,
-			alreadySorted: [],
 		});
-		// Build personalized mock — swap initIdentity call for real API when backend is ready
-		initIdentity(
-			buildMockIdentity(selectedSuburb.locality, selectedTopics, []),
-		);
 		setStage("loading");
-		setTimeout(() => {
-			router.push("/journey/plan");
-		}, 2200);
+		try {
+			const res = await fetch("https://minuri-server-production.up.railway.app/journey", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					suburb: selectedSuburb.locality,
+					your_moment: yourMoment,
+					selected_topics: selectedTopics,
+				}),
+			});
+			if (!res.ok) throw new Error("API error");
+			const data = (await res.json()) as JourneyAPIResponse;
+			saveWeekPlan(data.week_plan);
+			initIdentity(buildIdentityFromLLM(data.identity));
+		} catch {
+			initIdentity(
+				buildMockIdentity(selectedSuburb.locality, selectedTopics),
+			);
+		}
+		router.push("/journey/plan");
 	}
 
 	const revealTransition = {
@@ -583,7 +602,7 @@ export function JourneyOnboarding() {
 					/>
 
 					{/* How it works — sticky note pinned to right */}
-					<div className="pointer-events-none absolute right-4 top-44 hidden w-72 select-none xl:block 2xl:right-10 2xl:w-80">
+					<div className="pointer-events-none absolute right-16 top-44 hidden w-72 select-none xl:block min-[1500px]:right-20 2xl:right-24 2xl:w-80">
 						<div className="guide-sticky guide-sticky-a">
 							<p
 								className="text-xs font-black uppercase tracking-[0.16em]"
@@ -593,18 +612,32 @@ export function JourneyOnboarding() {
 							</p>
 							<ol className="mt-3 space-y-4">
 								{HOW_IT_WORKS_STEPS.map((step, index) => (
-									<li key={step.title} className="flex items-start gap-2.5">
+									<li
+										key={step.title}
+										className="flex items-start gap-2.5"
+									>
 										<span
 											className="flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-											style={{ background: "rgba(2,18,20,0.1)", color: "#05292a" }}
+											style={{
+												background: "rgba(2,18,20,0.1)",
+												color: "#05292a",
+											}}
 										>
 											{index + 1}
 										</span>
 										<div>
-											<p className="text-xs font-bold leading-snug" style={{ color: "#05292a" }}>
+											<p
+												className="text-xs font-bold leading-snug"
+												style={{ color: "#05292a" }}
+											>
 												{step.title}
 											</p>
-											<p className="mt-1 text-[11px] leading-snug" style={{ color: "rgba(2,18,20,0.55)" }}>
+											<p
+												className="mt-1 text-[11px] leading-snug"
+												style={{
+													color: "rgba(2,18,20,0.55)",
+												}}
+											>
 												{step.body}
 											</p>
 										</div>
@@ -613,7 +646,13 @@ export function JourneyOnboarding() {
 							</ol>
 						</div>
 					</div>
-					<div className="max-w-4xl pl-0 pr-6 py-8 md:py-10 xl:mr-[5%]" style={{ marginLeft: "max(1.5rem, calc(clamp(2.5rem, 7vw, 6rem) + 24px))" }}>
+					<div
+						className="max-w-4xl min-[1500px]:max-w-5xl pl-0 pr-6 py-8 md:py-10 xl:mr-[5%]"
+						style={{
+							marginLeft:
+								"max(1.5rem, calc(clamp(2.5rem, 7vw, 6rem) + 48px))",
+						}}
+					>
 						<motion.div
 							className="flex flex-col"
 							initial={{
@@ -628,7 +667,7 @@ export function JourneyOnboarding() {
 								<button
 									type="button"
 									onClick={() => setStage("intro")}
-									className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
+									className="inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 								>
 									<ArrowLeft
 										className="size-3.5"
@@ -643,10 +682,10 @@ export function JourneyOnboarding() {
 								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
 									Your guide journey
 								</p>
-								<h1 className="mt-3 text-3xl font-black leading-tight text-minuri-ocean md:text-4xl">
+								<h1 className="mt-3 text-2xl font-black leading-tight text-minuri-ocean md:text-3xl min-[1500px]:text-4xl">
 									Where are you and what do you need?
 								</h1>
-								<p className="mt-3 text-base leading-relaxed text-minuri-slate md:text-lg">
+								<p className="mt-3 text-base leading-relaxed text-minuri-slate md:text-lg min-[1500px]:text-xl">
 									Tell us what&apos;s going on. We&apos;ll
 									build a personalised week plan around your
 									situation.
@@ -674,17 +713,33 @@ export function JourneyOnboarding() {
 									{/* ── Your moment ── */}
 									<div>
 										<div className="mb-4 flex items-center gap-3">
-											<span className={cn(
-												"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
-												yourMoment.length >= MIN_MOMENT_LENGTH
-													? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
-													: "border-2 border-minuri-teal/50 text-minuri-teal",
-											)}>
-												{yourMoment.length >= MIN_MOMENT_LENGTH ? <Check className="size-3.5" strokeWidth={3} /> : "1"}
+											<span
+												className={cn(
+													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
+													yourMoment.length >=
+														MIN_MOMENT_LENGTH
+														? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
+														: "border-2 border-minuri-teal/50 text-minuri-teal",
+												)}
+											>
+												{yourMoment.length >=
+												MIN_MOMENT_LENGTH ? (
+													<Check
+														className="size-3.5"
+														strokeWidth={3}
+													/>
+												) : (
+													"1"
+												)}
 											</span>
 											<div>
-												<p className="text-sm font-bold text-minuri-ocean">Your moment</p>
-												<p className="text-xs text-minuri-slate">Pick a preset that sounds like you, or write your own</p>
+												<p className="text-base font-bold text-minuri-ocean">
+													Your moment
+												</p>
+												<p className="text-xs text-minuri-slate">
+													Pick a preset that sounds
+													like you, or write your own
+												</p>
 											</div>
 										</div>
 
@@ -914,17 +969,34 @@ export function JourneyOnboarding() {
 									{/* ── Suburb ── */}
 									<div>
 										<div className="mb-4 flex items-center gap-3">
-											<span className={cn(
-												"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
-												hasConfirmedSuburb
-													? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
-													: "border-2 border-minuri-teal/50 text-minuri-teal",
-											)}>
-												{hasConfirmedSuburb ? <Check className="size-3.5" strokeWidth={3} /> : "2"}
+											<span
+												className={cn(
+													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
+													hasConfirmedSuburb
+														? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
+														: "border-2 border-minuri-teal/50 text-minuri-teal",
+												)}
+											>
+												{hasConfirmedSuburb ? (
+													<Check
+														className="size-3.5"
+														strokeWidth={3}
+													/>
+												) : (
+													"2"
+												)}
 											</span>
 											<div>
-												<label htmlFor="suburb-input" className="block cursor-pointer text-sm font-bold text-minuri-ocean">Your Melbourne suburb</label>
-												<p className="text-xs text-minuri-slate">Type to search and confirm your suburb</p>
+												<label
+													htmlFor="suburb-input"
+													className="block cursor-pointer text-base font-bold text-minuri-ocean"
+												>
+													Your Melbourne suburb
+												</label>
+												<p className="text-xs text-minuri-slate">
+													Type to search and confirm
+													your suburb
+												</p>
 											</div>
 										</div>
 										<div className="relative mt-2.5">
@@ -1116,17 +1188,31 @@ export function JourneyOnboarding() {
 									{/* ── Topic cards ── */}
 									<div>
 										<div className="mb-4 flex items-center gap-3">
-											<span className={cn(
-												"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
-												selectedTopics.length >= 1
-													? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
-													: "border-2 border-minuri-teal/50 text-minuri-teal",
-											)}>
-												{selectedTopics.length >= 1 ? <Check className="size-3.5" strokeWidth={3} /> : "3"}
+											<span
+												className={cn(
+													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
+													selectedTopics.length >= 1
+														? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
+														: "border-2 border-minuri-teal/50 text-minuri-teal",
+												)}
+											>
+												{selectedTopics.length >= 1 ? (
+													<Check
+														className="size-3.5"
+														strokeWidth={3}
+													/>
+												) : (
+													"3"
+												)}
 											</span>
 											<div>
-												<p className="text-sm font-bold text-minuri-ocean">What matters most right now?</p>
-												<p className="text-xs text-minuri-slate">Select at least one topic to focus your plan</p>
+												<p className="text-base font-bold text-minuri-ocean">
+													What matters most right now?
+												</p>
+												<p className="text-xs text-minuri-slate">
+													Select at least one topic to
+													focus your plan
+												</p>
 											</div>
 										</div>
 										<div
@@ -1253,7 +1339,7 @@ export function JourneyOnboarding() {
 															<h3 className="text-sm font-semibold leading-tight text-[#05292a]">
 																{topic.name}
 															</h3>
-																					</div>
+														</div>
 														<span className="mt-auto text-xs font-semibold text-[#05292a]">
 															{count}{" "}
 															{count === 1
