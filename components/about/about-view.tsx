@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Volume2, VolumeX } from "lucide-react";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 
-const QUOTE = "Me and you are incredible - (Minuri)".split(" ");
+const QUOTE = "Me and you are incre -dible (Minuri)".split(" ");
 
 function Word({
 	word,
@@ -23,7 +23,10 @@ function Word({
 	const end = Math.min((index + 1) / total, 1);
 	const opacity = useTransform(progress, [start, end], [0.12, 1]);
 	return (
-		<motion.span className="block leading-none" style={{ opacity }}>
+		<motion.span
+			className={`block leading-none ${index % 2 === 0 ? "text-left" : "text-right"}`}
+			style={{ opacity }}
+		>
 			{word}
 		</motion.span>
 	);
@@ -31,6 +34,7 @@ function Word({
 
 function ScrollHighlightQuote() {
 	const ref = useRef<HTMLDivElement>(null);
+	const [muted, setMuted] = useState(true);
 	const { scrollYProgress } = useScroll({
 		target: ref,
 		offset: ["start 0.9", "end 0.1"],
@@ -39,19 +43,44 @@ function ScrollHighlightQuote() {
 	return (
 		<div
 			ref={ref}
-			className="flex min-h-screen w-full flex-col justify-between px-6 py-16 md:px-12 md:py-20"
+			className="relative flex min-h-screen w-full flex-col justify-between px-6 py-16 text-[clamp(4rem,9vw,8rem)] font-black uppercase tracking-tight text-minuri-ocean md:px-12 md:py-20"
 		>
-			<p className="flex h-full flex-1 flex-col justify-between text-[clamp(4rem,9vw,8rem)] font-black uppercase tracking-tight text-minuri-ocean">
-				{QUOTE.map((word, i) => (
-					<Word
-						key={i}
-						word={word}
-						progress={scrollYProgress}
-						index={i}
-						total={QUOTE.length}
+			{QUOTE.map((word, i) => (
+				<Word
+					key={i}
+					word={word}
+					progress={scrollYProgress}
+					index={i}
+					total={QUOTE.length}
+				/>
+			))}
+
+			{/* Video — absolute centered over words */}
+			<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+				<div className="pointer-events-auto relative w-[300px] md:w-[360px]">
+					<video
+						autoPlay
+						muted={muted}
+						loop
+						playsInline
+						src="/team/team-intro.mp4"
+						className="w-full rounded-2xl object-cover shadow-xl border-2 border-minuri-ocean"
+						style={{ aspectRatio: "9/16" }}
 					/>
-				))}
-			</p>
+					<button
+						type="button"
+						onClick={() => setMuted((m) => !m)}
+						className="absolute bottom-3 right-3 flex size-8 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70"
+						aria-label={muted ? "Unmute" : "Mute"}
+					>
+						{muted ? (
+							<VolumeX className="size-4" />
+						) : (
+							<Volume2 className="size-4" />
+						)}
+					</button>
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -111,12 +140,7 @@ export function AboutView() {
 	const handleRowLeave = () => setHoveredIndex(null);
 
 	return (
-		<motion.div
-			className="mx-auto min-h-screen w-full max-w-[1600px] bg-minuri-white text-minuri-ink"
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			transition={{ duration: 0.4, ease }}
-		>
+		<div className="mx-auto min-h-screen w-full max-w-[1600px] bg-minuri-white text-minuri-ink">
 			{/* Hero + Story — merged so illustration spans both */}
 			<section className="relative px-6 pt-32 pb-16 md:px-12 md:pt-40 md:pb-24">
 				<div className="pointer-events-none absolute inset-0 opacity-[0.035]">
@@ -145,16 +169,15 @@ export function AboutView() {
 					style={{ fontFamily: "var(--font-sans)" }}
 					initial={{ opacity: 0, y: 40 }}
 					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.7, ease, delay: 0.1 }}
+					transition={{ duration: 0.7, ease, delay: 1.0 }}
 				>
 					About Minuri
 				</motion.h1>
 				<motion.div
 					className="relative z-10 mt-16 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-[140px_1fr] md:gap-10"
 					initial={{ opacity: 0, y: 28 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, amount: 0.3 }}
-					transition={{ duration: 0.7, ease }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.7, ease, delay: 1.15 }}
 				>
 					<p className="text-xs font-black uppercase tracking-[0.12em] text-minuri-teal md:pt-3">
 						(Our Story)
@@ -247,8 +270,8 @@ export function AboutView() {
 					</p>
 					<div>
 						<h2 className="text-[clamp(2rem,5vw,4rem)] font-black leading-[1.05] tracking-tight text-minuri-ocean">
-							We met at university in Melbourne and built the
-							guide we wished we&apos;d had
+							We arrived in Melbourne and built the guide we
+							wished existed
 						</h2>
 						<div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-14">
 							<p className="text-base leading-relaxed text-minuri-ink md:text-lg md:leading-relaxed">
@@ -386,10 +409,16 @@ export function AboutView() {
 										<motion.div
 											className="absolute inset-0"
 											animate={{
-												opacity: hoveredIndex === index ? 1 : 0,
+												opacity:
+													hoveredIndex === index
+														? 1
+														: 0,
 											}}
 											transition={{
-												delay: hoveredIndex === index ? 0.7 : 0,
+												delay:
+													hoveredIndex === index
+														? 0.7
+														: 0,
 												duration: 0.8,
 												ease: [0.25, 0.46, 0.45, 0.94],
 											}}
@@ -466,6 +495,6 @@ export function AboutView() {
 					<span className="absolute inset-0 translate-y-full bg-minuri-ocean transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
 				</div>
 			</motion.section>
-		</motion.div>
+		</div>
 	);
 }
