@@ -5,8 +5,8 @@ import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-	CalendarDays,
 	CheckCircle2,
+	UserCircle,
 	ChevronDown,
 	Compass,
 	HeartPulse,
@@ -23,10 +23,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { Guide, GuideTopicSlug } from "@/content/guides";
 import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
+import { useIdentityState } from "@/hooks/use-identity-state";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
 import { getVibe, DEFAULT_VIBE_ID, type Vibe } from "@/lib/vibes";
 import { LANDING_KEYS } from "@/components/landing/landing-local-state";
+import { IdentityCard } from "@/components/journey/identity-card";
+import { CardEarnToast } from "@/components/journey/card-earn-toast";
 
 const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
 	"food-eating": Sandwich,
@@ -108,18 +111,13 @@ function DayStepperNav({
 							<span
 								className={cn(
 									"flex size-8 items-center justify-center rounded-full text-xs font-bold transition-all",
-									isDone
-										? "bg-minuri-teal text-white"
-										: isActive
-											? "text-white"
-											: "bg-minuri-fog text-minuri-slate",
+									isDone || isActive
+										? "text-white"
+										: "bg-minuri-fog text-minuri-slate",
 								)}
 								style={
-									isActive && !isDone
-										? {
-												backgroundColor:
-													"var(--vibe-accent)",
-											}
+									isDone || isActive
+										? { backgroundColor: "var(--vibe-accent)" }
 										: undefined
 								}
 							>
@@ -176,9 +174,9 @@ function GuideAccordionRow({
 			<div className="flex gap-4">
 				{/* Left: fixed-width image — height grows with content */}
 				<motion.div
-					animate={{ height: open ? 180 : 76 }}
+					animate={{ height: open ? 220 : 96 }}
 					transition={{ duration, ease }}
-					className="relative w-28 shrink-0 overflow-hidden rounded-xl bg-minuri-fog sm:w-32"
+					className="relative w-36 shrink-0 overflow-hidden rounded-xl bg-minuri-fog sm:w-40"
 				>
 					{guide.thumbnailUrl && (
 						<Image
@@ -194,8 +192,8 @@ function GuideAccordionRow({
 				{/* Right: flex column — spreads content to fill image height */}
 				<motion.div
 					className="min-w-0 flex-1 flex flex-col"
-					initial={{ minHeight: 76 }}
-					animate={{ minHeight: open ? 180 : 76 }}
+					initial={{ minHeight: 96 }}
+					animate={{ minHeight: open ? 220 : 96 }}
 					transition={{ duration, ease }}
 				>
 					<button
@@ -203,6 +201,7 @@ function GuideAccordionRow({
 						onClick={onToggle}
 						className="flex w-full items-start justify-between gap-2 text-left"
 						aria-expanded={open}
+						data-no-scale
 					>
 						<div className="min-w-0">
 							<span className="block text-base font-semibold leading-snug text-minuri-ocean">
@@ -260,6 +259,8 @@ function WeekDrawer({
 	activeDay,
 	completedTasks,
 	vibe,
+	identity,
+	cardState,
 	onSelectDay,
 	onClose,
 }: {
@@ -268,6 +269,8 @@ function WeekDrawer({
 	activeDay: number;
 	completedTasks: Set<string>;
 	vibe: Vibe;
+	identity: import("@/lib/journey/identity").JourneyIdentity | null;
+	cardState: import("@/lib/journey/identity").IdentityCardState | null;
 	onSelectDay: (day: number) => void;
 	onClose: () => void;
 }) {
@@ -308,17 +311,16 @@ function WeekDrawer({
 							duration: prefersReducedMotion ? 0.01 : 0.3,
 							ease: [0.22, 1, 0.36, 1],
 						}}
-						className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-minuri-white shadow-2xl sm:max-w-md"
+						className="fixed inset-y-0 right-0 z-50 flex w-full flex-col bg-minuri-white shadow-2xl sm:max-w-md"
 						role="dialog"
 						aria-label="Your week"
 					>
-						<div className="flex items-center justify-between border-b border-minuri-silver/40 px-5 py-4">
-							<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-								Your week at a glance
-							</p>
+						{/* Sticky close bar */}
+						<div className="flex shrink-0 items-center justify-end px-4 py-3">
 							<button
 								type="button"
 								onClick={onClose}
+								data-no-scale
 								className="rounded-lg p-1.5 text-minuri-slate transition-colors hover:text-minuri-ocean"
 								aria-label="Close drawer"
 							>
@@ -326,91 +328,36 @@ function WeekDrawer({
 							</button>
 						</div>
 
-						<ol className="px-3 py-3">
-							{weekPlan.map((plan) => {
-								const Icon = TOPIC_ICONS[plan.topicSlug];
-								const colors = TOPIC_COLORS[plan.topicSlug];
-								const isActive = plan.day === activeDay;
-								const isDone = isDayDone(plan, completedTasks);
-								return (
-									<li key={plan.day}>
-										<button
-											type="button"
-											onClick={() => {
-												onSelectDay(plan.day);
-												onClose();
-											}}
-											className={cn(
-												"flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition-colors",
-												isActive
-													? "bg-minuri-teal/10 text-minuri-ocean"
-													: "text-minuri-slate hover:bg-minuri-silver/20",
-											)}
-										>
-											<span
-												className={cn(
-													"flex size-6 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold",
-													isDone
-														? "bg-minuri-teal text-white"
-														: isActive
-															? "bg-minuri-teal text-white"
-															: cn(
-																	colors.iconBg,
-																	colors.text,
-																),
-												)}
-											>
-												{isDone ? (
-													<CheckCircle2
-														className="size-3.5"
-														aria-hidden
-													/>
-												) : (
-													plan.day
-												)}
-											</span>
-											<span className="min-w-0">
-												<span
-													className={cn(
-														"block text-xs font-semibold",
-														isDone || isActive
-															? "text-minuri-teal"
-															: "text-minuri-ocean",
-													)}
-												>
-													{plan.theme}
-												</span>
-												<span className="block truncate text-[11px] text-minuri-slate">
-													{plan.guides[0]?.title}
-												</span>
-											</span>
-										</button>
-									</li>
-								);
-							})}
-						</ol>
-
-						<div className="border-t border-minuri-silver/40 px-5 py-5">
-							<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-								Your vibe
-							</p>
-							<div className="mt-3 flex items-center gap-3">
-								<span
-									className="size-8 shrink-0 rounded-xl"
-									style={{ backgroundColor: vibe.hex }}
-								/>
-								<div>
-									<p className="text-sm font-bold text-minuri-ocean">
-										{vibe.name}
-									</p>
-									<p className="font-mono text-[11px] text-minuri-slate">
-										{vibe.hex}
-									</p>
+						{/* Scrollable body */}
+						<div className="flex-1 overflow-y-auto">
+							<div className="px-5 py-5">
+								<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
+									Your vibe
+								</p>
+								<div className="mt-3 flex items-center gap-3">
+									<span
+										className="size-8 shrink-0 rounded-xl"
+										style={{ backgroundColor: vibe.hex }}
+									/>
+									<div>
+										<p className="text-sm font-bold text-minuri-ocean">
+											{vibe.name}
+										</p>
+										<p className="font-mono text-[11px] text-minuri-slate">
+											{vibe.hex}
+										</p>
+									</div>
 								</div>
+								<p className="mt-3 text-xs leading-relaxed text-minuri-slate">
+									{vibe.traits}
+								</p>
 							</div>
-							<p className="mt-3 text-xs leading-relaxed text-minuri-slate">
-								{vibe.traits}
-							</p>
+
+							{identity && cardState && (
+								<div className="border-t border-minuri-silver/40 px-5 pb-5 pt-4">
+									<IdentityCard identity={identity} cardState={cardState} />
+								</div>
+							)}
 						</div>
 					</motion.div>
 				</>
@@ -435,7 +382,9 @@ function DayContent({
 	const prefersReducedMotion = useReducedMotion();
 	const colors = TOPIC_COLORS[plan.topicSlug];
 	const Icon = TOPIC_ICONS[plan.topicSlug];
-	const [openGuides, setOpenGuides] = useState<Set<string>>(new Set());
+	const [openGuides, setOpenGuides] = useState<Set<string>>(
+		() => new Set(plan.guides[0] ? [plan.guides[0].slug] : []),
+	);
 
 	function toggleGuide(slug: string) {
 		setOpenGuides((prev) => {
@@ -487,11 +436,11 @@ function DayContent({
 				style={{ backgroundColor: "var(--vibe-accent)" }}
 			/>
 
-			{/* Guides + Tasks — side by side */}
-			<div className="mb-8 flex gap-8 items-start">
+			{/* Guides + Tasks — stacked on mobile, side by side on md+ */}
+			<div className="mb-8 flex flex-col gap-6 md:flex-row md:gap-8 items-start">
 				{/* Guides accordion */}
 				<div className="flex-1 min-w-0">
-					<p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-minuri-mid">
+					<p className="mb-3 text-base font-bold text-minuri-ocean">
 						Guides
 					</p>
 					<div>
@@ -500,11 +449,8 @@ function DayContent({
 								key={guide.slug}
 								guide={guide}
 								suburb={suburb}
-								open={index === 0 || openGuides.has(guide.slug)}
-								onToggle={() => {
-									if (index === 0) return;
-									toggleGuide(guide.slug);
-								}}
+								open={openGuides.has(guide.slug)}
+								onToggle={() => toggleGuide(guide.slug)}
 							/>
 						))}
 					</div>
@@ -512,7 +458,7 @@ function DayContent({
 
 				{/* Task list — flat, no outer border box */}
 				{plan.tasks.length > 0 && (
-					<div className="w-72 shrink-0">
+					<div className="w-full md:w-72 md:shrink-0">
 						<p
 							className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em]"
 							style={{ color: "var(--vibe-accent)" }}
@@ -577,12 +523,17 @@ export function JourneyPlanView() {
 		completedTasks,
 		toggleTaskComplete,
 	} = useJourneyState();
+	const { identity, cardState, earnDay, hydrated: identityHydrated } = useIdentityState();
 	const prefersReducedMotion = useReducedMotion();
 	const scrollRef = useRef<HTMLDivElement>(null);
+	const earnedDaysRef = useRef<Set<number>>(new Set());
 
 	const [activeDay, setActiveDay] = useState(1);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [vibe, setVibe] = useState<Vibe>(() => getVibe(DEFAULT_VIBE_ID));
+	const [toastDay, setToastDay] = useState<number | null>(null);
+	const [toastVisible, setToastVisible] = useState(false);
+	const [hasCardNotif, setHasCardNotif] = useState(false);
 
 	useEffect(() => {
 		const stored =
@@ -592,6 +543,23 @@ export function JourneyPlanView() {
 				: DEFAULT_VIBE_ID;
 		setVibe(getVibe(stored));
 	}, []);
+
+	useEffect(() => {
+		if (!identity) return;
+		const color = identity.palette[0].hex;
+		document.documentElement.style.setProperty("--vibe-accent", color);
+		setVibe((v) => ({ ...v, hex: color }));
+	}, [identity]);
+
+	useEffect(() => {
+		if (!hydrated || !journeyState) return;
+		if (!identity || !cardState) return;
+
+		// Seed earnedDaysRef from already-earned days so we don't re-fire
+		for (const d of cardState.daysCompleted) {
+			earnedDaysRef.current.add(d);
+		}
+	}, [identityHydrated, identity, cardState, hydrated, journeyState]);
 
 	const revealTransition = {
 		duration: prefersReducedMotion ? 0.01 : 0.45,
@@ -638,6 +606,33 @@ export function JourneyPlanView() {
 		router.push("/journey");
 	}
 
+	function handleToggleTask(key: string) {
+		toggleTaskComplete(key);
+
+		// Check day completion after toggle (optimistic: assume the toggle succeeds)
+		const [dayStr] = key.split("-");
+		const day = parseInt(dayStr, 10);
+		const plan = weekPlan.find((p) => p.day === day);
+		if (!plan || !identity || !cardState) return;
+
+		// Build the next completed set
+		const nextCompleted = new Set(completedTasks);
+		if (nextCompleted.has(key)) nextCompleted.delete(key);
+		else nextCompleted.add(key);
+
+		const dayNowDone =
+			plan.tasks.length > 0 &&
+			plan.tasks.every((_, i) => nextCompleted.has(`${plan.day}-${i}`));
+
+		if (dayNowDone && !earnedDaysRef.current.has(day)) {
+			earnedDaysRef.current.add(day);
+			earnDay(day);
+			setToastDay(day);
+			setToastVisible(true);
+			setHasCardNotif(true);
+		}
+	}
+
 	const prevDay = weekPlan.find((d) => d.day === activeDay - 1);
 	const nextDay = weekPlan.find((d) => d.day === activeDay + 1);
 
@@ -649,9 +644,23 @@ export function JourneyPlanView() {
 				activeDay={activeDay}
 				completedTasks={completedTasks}
 				vibe={vibe}
+				identity={identity}
+				cardState={cardState}
 				onSelectDay={selectDay}
 				onClose={() => setDrawerOpen(false)}
 			/>
+
+			{toastDay !== null && (
+				<CardEarnToast
+					day={toastDay}
+					visible={toastVisible}
+					onDone={() => setToastVisible(false)}
+					onOpenCard={() => {
+						setDrawerOpen(true);
+						setHasCardNotif(false);
+					}}
+				/>
+			)}
 
 			{/* Header */}
 			<header className="px-6 py-4">
@@ -663,21 +672,40 @@ export function JourneyPlanView() {
 						Minuri
 					</Link>
 					<div className="flex items-center gap-2">
-						<button
+						<motion.button
 							type="button"
-							onClick={() => setDrawerOpen((o) => !o)}
-							className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
+							data-no-scale
+							onClick={() => {
+								setDrawerOpen((o) => !o);
+								setHasCardNotif(false);
+							}}
+							className="relative inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
+							animate={
+								hasCardNotif && !drawerOpen
+									? { scale: [1, 1.13, 0.97, 1.1, 1] }
+									: { scale: 1 }
+							}
+							transition={{
+								duration: 2.5,
+								ease: "easeInOut",
+								times: [0, 0.25, 0.5, 0.75, 1],
+								repeat: hasCardNotif && !drawerOpen ? Infinity : 0,
+								repeatDelay: 1.2,
+							}}
 						>
+							{hasCardNotif && !drawerOpen && (
+								<span className="absolute -right-1 -top-1 size-2.5 rounded-full bg-minuri-teal ring-2 ring-white" />
+							)}
 							{drawerOpen ? (
 								<X className="size-3.5" aria-hidden />
 							) : (
-								<CalendarDays
+								<UserCircle
 									className="size-3.5"
 									aria-hidden
 								/>
 							)}
-							{drawerOpen ? "Close" : "Week"}
-						</button>
+							{drawerOpen ? "Close" : "My card"}
+						</motion.button>
 						<button
 							type="button"
 							onClick={handleStartOver}
@@ -691,101 +719,107 @@ export function JourneyPlanView() {
 			</header>
 
 			<main className="mx-auto max-w-screen-xl px-6 py-10 md:py-12">
-				{/* Hero */}
-				<motion.div
-					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 18 }}
-					className="mb-10"
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, margin: "-10% 0px -8% 0px" }}
-					transition={revealTransition}
-				>
-					<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
-						Your guide journey
-					</p>
-					<h1 className="mt-2 text-4xl font-black leading-tight text-minuri-ocean md:text-5xl">
-						Your first week in{" "}
-						<span style={{ color: "var(--vibe-accent)" }}>
-							{suburb}
-						</span>
-					</h1>
-
-					{truncatedMoment && (
+				<div className="flex gap-10 items-start">
+					{/* ── Left: main plan content ── */}
+					<div className="min-w-0 flex-1 min-w-0">
+						{/* Hero */}
 						<motion.div
-							initial={{
-								opacity: 0,
-								y: prefersReducedMotion ? 0 : 6,
-							}}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{
-								duration: prefersReducedMotion ? 0.01 : 0.4,
-								delay: 0.1,
-							}}
-							className="mt-4 py-2 pl-4"
-							style={{
-								borderLeftWidth: "3px",
-								borderLeftStyle: "solid",
-								borderLeftColor: "var(--vibe-accent)",
-							}}
+							initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 18 }}
+							className="mb-10"
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-10% 0px -8% 0px" }}
+							transition={revealTransition}
 						>
-							<p className="text-sm italic leading-relaxed text-minuri-slate">
-								{truncatedMoment}
+							<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
+								Your guide journey
+							</p>
+							<h1 className="mt-2 text-4xl font-black leading-tight text-minuri-ocean md:text-5xl">
+								Your first week in{" "}
+								<span style={{ color: "var(--vibe-accent)" }}>
+									{suburb}
+								</span>
+							</h1>
+
+							{truncatedMoment && (
+								<motion.div
+									initial={{
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 6,
+									}}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										duration: prefersReducedMotion ? 0.01 : 0.4,
+										delay: 0.1,
+									}}
+									className="mt-4 py-2 pl-4"
+									style={{
+										borderLeftWidth: "3px",
+										borderLeftStyle: "solid",
+										borderLeftColor: "var(--vibe-accent)",
+									}}
+								>
+									<p className="text-sm italic leading-relaxed text-minuri-slate">
+										{truncatedMoment}
+									</p>
+								</motion.div>
+							)}
+
+							<p className="mt-4 text-sm text-minuri-slate">
+								One guide per day. One task to do. Places to go near{" "}
+								{suburb} — all in one place.
 							</p>
 						</motion.div>
-					)}
 
-					<p className="mt-4 text-sm text-minuri-slate">
-						One guide per day. One task to do. Places to go near{" "}
-						{suburb} — all in one place.
-					</p>
-				</motion.div>
+						{/* Day stepper */}
+						<div ref={scrollRef} className="mb-8">
+							<DayStepperNav
+								weekPlan={weekPlan}
+								activeDay={activeDay}
+								completedTasks={completedTasks}
+								onSelect={selectDay}
+							/>
+						</div>
 
-				{/* Day stepper */}
-				<div ref={scrollRef} className="mb-8">
-					<DayStepperNav
-						weekPlan={weekPlan}
-						activeDay={activeDay}
-						completedTasks={completedTasks}
-						onSelect={selectDay}
-					/>
-				</div>
+						{/* Day content */}
+						<AnimatePresence mode="wait">
+							{currentDay && (
+								<DayContent
+									key={currentDay.day}
+									plan={currentDay}
+									suburb={suburb}
+									completedTasks={completedTasks}
+									toggleTaskComplete={handleToggleTask}
+								/>
+							)}
+						</AnimatePresence>
 
-				{/* Day content — no outer card wrapper */}
-				<AnimatePresence mode="wait">
-					{currentDay && (
-						<DayContent
-							key={currentDay.day}
-							plan={currentDay}
-							suburb={suburb}
-							completedTasks={completedTasks}
-							toggleTaskComplete={toggleTaskComplete}
-						/>
-					)}
-				</AnimatePresence>
+						{/* Prev / next */}
+						<div className="mt-10 flex items-center justify-between border-t border-minuri-silver/40 pt-6">
+							{prevDay ? (
+								<button
+									type="button"
+									onClick={() => selectDay(prevDay.day)}
+									className="text-sm text-minuri-slate transition-colors hover:text-minuri-ocean"
+								>
+									← Day {prevDay.day} · {prevDay.shortLabel}
+								</button>
+							) : (
+								<span />
+							)}
+							{nextDay ? (
+								<button
+									type="button"
+									onClick={() => selectDay(nextDay.day)}
+									className="text-sm text-minuri-slate transition-colors hover:text-minuri-ocean"
+								>
+									Day {nextDay.day} · {nextDay.shortLabel} →
+								</button>
+							) : (
+								<span />
+							)}
+						</div>
+					</div>
 
-				{/* Prev / next — plain text links */}
-				<div className="mt-10 flex items-center justify-between border-t border-minuri-silver/40 pt-6">
-					{prevDay ? (
-						<button
-							type="button"
-							onClick={() => selectDay(prevDay.day)}
-							className="text-sm text-minuri-slate transition-colors hover:text-minuri-ocean"
-						>
-							← Day {prevDay.day} · {prevDay.shortLabel}
-						</button>
-					) : (
-						<span />
-					)}
-					{nextDay ? (
-						<button
-							type="button"
-							onClick={() => selectDay(nextDay.day)}
-							className="text-sm text-minuri-slate transition-colors hover:text-minuri-ocean"
-						>
-							Day {nextDay.day} · {nextDay.shortLabel} →
-						</button>
-					) : (
-						<span />
-					)}
 				</div>
 			</main>
 		</div>

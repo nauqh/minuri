@@ -268,6 +268,10 @@ export function NearMeMap({
 		});
 
 		map.addControl(new maplibregl.NavigationControl(), "top-right");
+		map.scrollZoom.enable();
+
+		const onWheel = (e: WheelEvent) => e.stopPropagation();
+		containerRef.current.addEventListener("wheel", onWheel, { passive: false });
 
 		map.on("moveend", () => {
 			if (!originalCenterRef.current) return;
@@ -285,6 +289,7 @@ export function NearMeMap({
 		mapRef.current = map;
 
 		return () => {
+			containerRef.current?.removeEventListener("wheel", onWheel);
 			map.remove();
 			mapRef.current = null;
 		};

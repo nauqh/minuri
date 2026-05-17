@@ -22,6 +22,8 @@ import { normalizeSuburbName, type SuburbOption } from "@/lib/suburbs";
 import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
 import { ALREADY_SORTED_ITEMS } from "@/lib/journey-week";
+import { useIdentityState } from "@/hooks/use-identity-state";
+import { buildMockIdentity } from "@/lib/journey/identity";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -121,12 +123,12 @@ const MOMENT_PRESETS = [
 	},
 	{
 		id: 3,
-		icon: "✈️",
-		headline: "New to Australia",
+		icon: "🎒",
+		headline: "First year of uni",
 		preview:
-			"I'm navigating a new country — I don't fully understand Medicare, banking, or how things work here yet.",
+			"Everything is still pretty new — classes, the city, living away from home. I'm trying to build a routine while getting the basics sorted.",
 		fullText:
-			"I'm an international student who's just arrived in Australia and I'm still figuring out how things work here. I need to understand Medicare, how banking works, and how to navigate public transport — so I can focus on my studies.",
+			"I'm in my first year of university in Melbourne and things still feel pretty overwhelming. I want to sort out a GP, understand public transport, find affordable places to eat, and figure out how to manage my budget — so I can focus on actually enjoying this chapter.",
 	},
 	{
 		id: 4,
@@ -159,6 +161,7 @@ const HOW_IT_WORKS_STEPS = [
 export function JourneyOnboarding() {
 	const router = useRouter();
 	const { saveJourney } = useJourneyState();
+	const { initIdentity } = useIdentityState();
 	const prefersReducedMotion = useReducedMotion();
 
 	const [yourMoment, setYourMoment] = useState("");
@@ -271,6 +274,14 @@ export function JourneyOnboarding() {
 			selectedTopics,
 			alreadySorted,
 		});
+		// Build personalized mock — swap initIdentity call for real API when backend is ready
+		initIdentity(
+			buildMockIdentity(
+				selectedSuburb.locality,
+				selectedTopics,
+				alreadySorted,
+			),
+		);
 		setStage("loading");
 		setTimeout(() => {
 			router.push("/journey/plan");
@@ -300,10 +311,10 @@ export function JourneyOnboarding() {
 					<button
 						type="button"
 						onClick={() => router.back()}
-						className="absolute left-6 top-1/2 -translate-y-1/2 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
+						className="absolute left-6 top-1/2 -translate-y-1/2 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white hover:cursor-pointer"
 					>
 						<ArrowLeft className="size-3.5" aria-hidden />
-						Back
+						Back to Start
 					</button>
 
 					{/* Grid lines */}
@@ -413,7 +424,7 @@ export function JourneyOnboarding() {
 							<button
 								type="button"
 								onClick={() => setStage("form")}
-								className="relative z-10 inline-flex h-16 items-center rounded-sm border border-minuri-ocean/70 px-14 text-lg font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white"
+								className="relative z-10 inline-flex h-16 items-center rounded-sm border border-minuri-ocean/70 px-14 text-lg font-semibold text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-white hover:cursor-pointer"
 							>
 								Build my plan
 							</button>
@@ -438,13 +449,28 @@ export function JourneyOnboarding() {
 					<div className="w-full max-w-4xl">
 						{/* Spinner + heading */}
 						<div className="text-center">
-							<Loader2 className="mx-auto size-10 animate-spin text-minuri-teal" />
+							<motion.span
+								className="mx-auto block text-5xl"
+								animate={{
+									scale: [1, 1.15, 1],
+									rotate: [0, 5, -5, 0],
+								}}
+								transition={{
+									duration: 2.4,
+									repeat: Infinity,
+									ease: "easeInOut",
+								}}
+							>
+								🌱
+							</motion.span>
 							<p className="mt-6 text-2xl font-bold text-minuri-ocean md:text-3xl">
-								Putting together your Melbourne starter kit...
+								Reading your story...
 							</p>
 							<p className="mt-3 text-sm text-minuri-slate">
-								Personalising your guide path for{" "}
-								{selectedSuburb?.locality}
+								Crafting your Melbourne identity for{" "}
+								<span className="font-semibold text-minuri-teal">
+									{selectedSuburb?.locality}
+								</span>
 							</p>
 						</div>
 

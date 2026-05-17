@@ -552,9 +552,7 @@ function CompactCard({
 			)}
 		>
 			<div className="flex items-center gap-3">
-				<div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xl">
-					{emoji}
-				</div>
+				<PlacePhoto place={place} topic={topic} className="size-20 rounded-xl" />
 
 				<div className="min-w-0 flex-1">
 					<div className="flex items-center justify-between gap-2">

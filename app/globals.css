@@ -196,6 +196,9 @@
 	button:not([disabled]):hover {
 		transform: scale(1.03);
 	}
+	button:not([disabled])[data-no-scale]:hover {
+		transform: none !important;
+	}
 }
 
 /* Serif accent for hero (Next font sets --font-hero-serif on <html>) */
