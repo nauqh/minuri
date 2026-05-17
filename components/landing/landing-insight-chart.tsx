@@ -57,7 +57,7 @@ const STRIP_DATA: {
 		],
 		color: "#ffc2d1",
 		sourceUrl:
-			"https://www.missionaustralia.com.au/what-we-do/research-and-resources/youth-survey",
+			"https://www.missionaustralia.com.au/what-we-do/evidence-impact-and-advocacy/research/youth-survey/youth-survey-reports/youth-survey-2025/",
 	},
 	{
 		value: 67,

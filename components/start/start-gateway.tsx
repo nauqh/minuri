@@ -106,7 +106,7 @@ export function StartGateway() {
 					className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
-					Back to home
+					Back to Home
 				</Link>
 				{/* Grid — dark lines matching left panel */}
 				<div

@@ -141,7 +141,7 @@ export function GuidesIntroView() {
 					className="inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 				>
 					<ArrowLeft className="size-3.5" aria-hidden />
-					Back
+					Back to Start
 				</Link>
 				<button
 					type="button"

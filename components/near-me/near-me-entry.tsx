@@ -149,7 +149,7 @@ export function NearMeEntry() {
 							className="relative z-10 inline-flex items-center gap-2 px-6 py-2 text-base font-semibold text-white transition-colors duration-300 group-hover:text-minuri-ocean"
 						>
 							<ArrowLeft className="size-3.5" aria-hidden />
-							Back
+							Back to Start
 						</Link>
 						<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 					</div>

@@ -8,11 +8,17 @@ import {
 	CheckCircle2,
 	ChevronDown,
 	ChevronRight,
+	Compass,
+	HeartPulse,
+	Home,
 	Info,
 	Loader2,
 	MapPin,
 	Pencil,
+	Sandwich,
 	Search,
+	Users,
+	type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
@@ -21,11 +27,44 @@ import { GUIDES, GUIDE_TOPICS, type GuideTopicSlug } from "@/content/guides";
 import { normalizeSuburbName, type SuburbOption } from "@/lib/suburbs";
 import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
-import { ALREADY_SORTED_ITEMS } from "@/lib/journey-week";
 import { useIdentityState } from "@/hooks/use-identity-state";
 import { buildMockIdentity } from "@/lib/journey/identity";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
+
+type TopicVisual = {
+	icon: LucideIcon;
+	heroBg: string;
+	description: string;
+};
+
+const TOPIC_VISUALS: Record<string, TopicVisual> = {
+	"food-eating": {
+		icon: Sandwich,
+		heroBg: "#00f5c8",
+		description: "Eat well on any budget",
+	},
+	"getting-around": {
+		icon: Compass,
+		heroBg: "#5dd6ff",
+		description: "Navigate the city with confidence",
+	},
+	"health-wellbeing": {
+		icon: HeartPulse,
+		heroBg: "#fcf300",
+		description: "Stay healthy and supported",
+	},
+	"home-admin": {
+		icon: Home,
+		heroBg: "#ffc2d1",
+		description: "Handle rent, bills and admin",
+	},
+	"social-belonging": {
+		icon: Users,
+		heroBg: "#cae9ff",
+		description: "Build connections from scratch",
+	},
+};
 
 const JOURNEY_STICKY_CARDS: Array<{
 	id: string;
@@ -178,8 +217,14 @@ export function JourneyOnboarding() {
 	const [suburbLoading, setSuburbLoading] = useState(false);
 	const [suburbError, setSuburbError] = useState("");
 	const [selectedTopics, setSelectedTopics] = useState<GuideTopicSlug[]>([]);
-	const [alreadySorted, setAlreadySorted] = useState<string[]>([]);
 	const [stage, setStage] = useState<"intro" | "form" | "loading">("intro");
+
+	const guideCounts = new Map(
+		GUIDE_TOPICS.map((t) => [
+			t.slug,
+			GUIDES.filter((g) => g.topic === t.slug).length,
+		]),
+	);
 
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const listboxId = useId();
@@ -230,12 +275,6 @@ export function JourneyOnboarding() {
 		);
 	}
 
-	function toggleAlreadySorted(id: string) {
-		setAlreadySorted((prev) =>
-			prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
-		);
-	}
-
 	function handleSelectPreset(preset: (typeof MOMENT_PRESETS)[number]) {
 		setSelectedPreset(preset.id);
 		setYourMoment(preset.fullText);
@@ -272,15 +311,11 @@ export function JourneyOnboarding() {
 			yourMoment,
 			suburb: selectedSuburb.locality,
 			selectedTopics,
-			alreadySorted,
+			alreadySorted: [],
 		});
 		// Build personalized mock — swap initIdentity call for real API when backend is ready
 		initIdentity(
-			buildMockIdentity(
-				selectedSuburb.locality,
-				selectedTopics,
-				alreadySorted,
-			),
+			buildMockIdentity(selectedSuburb.locality, selectedTopics, []),
 		);
 		setStage("loading");
 		setTimeout(() => {
@@ -298,7 +333,7 @@ export function JourneyOnboarding() {
 			{stage === "intro" ? (
 				<motion.section
 					key="intro"
-					className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 bg-minuri-white"
+					className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 journey-notebook-bg"
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					exit={{
@@ -311,22 +346,20 @@ export function JourneyOnboarding() {
 					<button
 						type="button"
 						onClick={() => router.back()}
-						className="absolute left-6 top-1/2 -translate-y-1/2 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white hover:cursor-pointer"
+						className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-4 py-2 text-sm font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white hover:cursor-pointer md:top-1/2 md:-translate-y-1/2 md:px-6 md:text-base"
 					>
 						<ArrowLeft className="size-3.5" aria-hidden />
 						Back to Start
 					</button>
 
-					{/* Grid lines */}
+					{/* Notebook red margin line */}
 					<div
 						aria-hidden
-						className="pointer-events-none absolute inset-0"
+						className="pointer-events-none absolute inset-y-0"
 						style={{
-							backgroundImage: [
-								"linear-gradient(to right, rgba(2,24,25,0.07) 1px, transparent 1px)",
-								"linear-gradient(to bottom, rgba(2,24,25,0.07) 1px, transparent 1px)",
-							].join(", "),
-							backgroundSize: "96px 96px",
+							left: "clamp(3rem, 8vw, 7rem)",
+							width: "2px",
+							background: "oklch(0.68 0.13 15 / 0.22)",
 						}}
 					/>
 
@@ -435,7 +468,7 @@ export function JourneyOnboarding() {
 			) : stage === "loading" ? (
 				<motion.div
 					key="loading"
-					className="flex min-h-screen flex-col items-center justify-center bg-minuri-white px-6 py-16"
+					className="flex min-h-screen flex-col items-center justify-center journey-notebook-bg px-6 py-16"
 					initial={{
 						opacity: 0,
 						scale: prefersReducedMotion ? 1 : 0.97,
@@ -527,7 +560,7 @@ export function JourneyOnboarding() {
 			) : (
 				<motion.div
 					key="form"
-					className="min-h-screen bg-minuri-white text-minuri-ink"
+					className="relative min-h-screen journey-notebook-bg text-minuri-ink"
 					exit={{
 						opacity: 0,
 						transition: {
@@ -535,6 +568,16 @@ export function JourneyOnboarding() {
 						},
 					}}
 				>
+					{/* Notebook red margin line */}
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-y-0"
+						style={{
+							left: "clamp(2.5rem, 7vw, 6rem)",
+							width: "2px",
+							background: "oklch(0.68 0.13 15 / 0.2)",
+						}}
+					/>
 					<div className="mx-auto max-w-4xl px-6 py-8 md:py-10">
 						<motion.div
 							className="flex flex-col"
@@ -616,7 +659,17 @@ export function JourneyOnboarding() {
 											}}
 											className="overflow-hidden"
 										>
-											<div className="border-t border-minuri-silver/40 bg-minuri-fog/30 px-6 py-5">
+											<div
+												className="border-t border-minuri-silver/40 px-6 py-5"
+												style={{
+													backgroundColor:
+														"var(--minuri-white)",
+													backgroundImage:
+														"linear-gradient(oklch(0.60 0.04 220 / 0.09) 1px, transparent 1px), linear-gradient(90deg, oklch(0.60 0.04 220 / 0.06) 1px, transparent 1px)",
+													backgroundSize:
+														"1.5rem 1.5rem",
+												}}
+											>
 												<ol className="flex flex-col gap-5">
 													{HOW_IT_WORKS_STEPS.map(
 														(step, index) => (
@@ -669,7 +722,7 @@ export function JourneyOnboarding() {
 								>
 									{/* ── Your moment ── */}
 									<div>
-										<p className="text-sm font-semibold text-minuri-ocean">
+										<p className="border-l-2 border-minuri-teal/50 pl-2.5 text-sm font-semibold text-minuri-ocean">
 											Your moment
 											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
 												— pick what sounds like you
@@ -838,8 +891,18 @@ export function JourneyOnboarding() {
 																? "moment-hint"
 																: undefined
 														}
+														style={{
+															backgroundColor:
+																"var(--minuri-white)",
+															backgroundImage:
+																"repeating-linear-gradient(transparent, transparent 1.5rem, oklch(0.72 0.03 220 / 0.18) 1.5rem, oklch(0.72 0.03 220 / 0.18) calc(1.5rem + 1px))",
+															lineHeight:
+																"1.5rem",
+															paddingTop:
+																"0.6rem",
+														}}
 														className={cn(
-															"w-full resize-none rounded-2xl border bg-minuri-white px-4 py-3 text-sm leading-relaxed outline-none transition",
+															"w-full resize-none rounded-2xl border px-4 pb-3 text-sm outline-none transition",
 															showMomentPrompt
 																? "border-amber-300 focus:border-amber-400"
 																: yourMoment.length >=
@@ -893,7 +956,7 @@ export function JourneyOnboarding() {
 									<div>
 										<label
 											htmlFor="suburb-input"
-											className="block text-sm font-semibold text-minuri-ocean"
+											className="block border-l-2 border-minuri-teal/50 pl-2.5 text-sm font-semibold text-minuri-ocean"
 										>
 											Where are you settling in?
 											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
@@ -1086,76 +1149,33 @@ export function JourneyOnboarding() {
 										)}
 									</div>
 
-									{/* ── Already sorted checklist ── */}
+									{/* ── Topic cards ── */}
 									<div>
-										<p className="text-sm font-semibold text-minuri-ocean">
-											Already sorted?
-											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
-												— we&apos;ll skip what
-												you&apos;ve done
-											</span>
-										</p>
-										<div className="mt-3 flex flex-wrap gap-2">
-											{ALREADY_SORTED_ITEMS.map(
-												(item) => {
-													const checked =
-														alreadySorted.includes(
-															item.id,
-														);
-													return (
-														<button
-															key={item.id}
-															type="button"
-															role="checkbox"
-															aria-checked={
-																checked
-															}
-															onClick={() =>
-																toggleAlreadySorted(
-																	item.id,
-																)
-															}
-															className={cn(
-																"inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
-																checked
-																	? "border-minuri-teal bg-minuri-mist/60 text-minuri-teal"
-																	: "border-minuri-silver bg-minuri-white text-minuri-slate hover:border-minuri-teal/40 hover:text-minuri-ocean",
-															)}
-														>
-															{checked && (
-																<Check
-																	className="size-3.5"
-																	aria-hidden
-																/>
-															)}
-															{item.label}
-														</button>
-													);
-												},
-											)}
-										</div>
-									</div>
-
-									{/* ── Topic chips ── */}
-									<div>
-										<p className="text-sm font-semibold text-minuri-ocean">
+										<p className="border-l-2 border-minuri-teal/50 pl-2.5 text-sm font-semibold text-minuri-ocean">
 											What matters most right now?
 											<span className="ml-1.5 text-xs font-normal text-minuri-slate">
 												— select at least one
 											</span>
 										</p>
 										<div
-											className="mt-3 flex flex-wrap gap-2.5"
+											className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5"
 											role="group"
 											aria-label="Topic selection"
 										>
-											{GUIDE_TOPICS.map((topic) => {
+											{GUIDE_TOPICS.map((topic, i) => {
+												const visual =
+													TOPIC_VISUALS[topic.slug];
+												const Icon = visual.icon;
 												const isSelected =
 													selectedTopics.includes(
 														topic.slug,
 													);
+												const count =
+													guideCounts.get(
+														topic.slug,
+													) ?? 0;
 												return (
-													<button
+													<motion.button
 														key={topic.slug}
 														type="button"
 														role="checkbox"
@@ -1168,14 +1188,107 @@ export function JourneyOnboarding() {
 															)
 														}
 														className={cn(
-															"rounded-xl border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
+															"group relative flex min-h-[8rem] flex-col gap-2 rounded-2xl border p-4 text-left outline-none",
+															"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 															isSelected
-																? "border-minuri-teal bg-minuri-teal text-primary-foreground"
-																: "border-minuri-silver bg-minuri-white text-minuri-ocean hover:border-minuri-teal/50 hover:bg-minuri-fog",
+																? "ring-[2.5px] ring-[#05292a]/30 ring-offset-2 shadow-[0_16px_32px_-12px_rgba(2,24,25,0.28)]"
+																: "hover:shadow-sm",
 														)}
+														style={{
+															backgroundColor:
+																visual.heroBg,
+															borderColor:
+																visual.heroBg,
+														}}
+														initial={{
+															opacity: 0,
+															y: prefersReducedMotion
+																? 0
+																: 16,
+														}}
+														animate={{
+															opacity: 1,
+															y: 0,
+															scale:
+																isSelected &&
+																!prefersReducedMotion
+																	? 1.03
+																	: 1,
+														}}
+														transition={{
+															opacity: {
+																duration: 0.4,
+																delay: prefersReducedMotion
+																	? 0
+																	: i * 0.06,
+																ease: [
+																	0.22, 1,
+																	0.36, 1,
+																],
+															},
+															y: {
+																duration: 0.4,
+																delay: prefersReducedMotion
+																	? 0
+																	: i * 0.06,
+																ease: [
+																	0.22, 1,
+																	0.36, 1,
+																],
+															},
+															scale: {
+																type: "spring",
+																stiffness: 380,
+																damping: 26,
+															},
+														}}
+														whileHover={{
+															scale: prefersReducedMotion
+																? 1
+																: isSelected
+																	? 1.03
+																	: 1.02,
+														}}
+														whileTap={{
+															scale: prefersReducedMotion
+																? 1
+																: 0.97,
+														}}
 													>
-														{topic.name}
-													</button>
+														<div
+															className={cn(
+																"absolute right-2 top-2 flex size-5 items-center justify-center rounded-full border-2 transition-all duration-200",
+																isSelected
+																	? "border-[#05292a] bg-[#05292a]"
+																	: "border-[#05292a]/30 bg-white/20",
+															)}
+															aria-hidden
+														>
+															{isSelected && (
+																<Check
+																	className="size-3 text-white"
+																	strokeWidth={
+																		3
+																	}
+																/>
+															)}
+														</div>
+														<Icon
+															className="size-8 shrink-0 text-[#05292a] transition-transform duration-200 group-hover:scale-110"
+															aria-hidden
+														/>
+														<div className="flex-1">
+															<h3 className="text-sm font-semibold leading-tight text-[#05292a]">
+																{topic.name}
+															</h3>
+																					</div>
+														<span className="mt-auto text-xs font-semibold text-[#05292a]">
+															{count}{" "}
+															{count === 1
+																? "guide"
+																: "guides"}
+														</span>
+													</motion.button>
 												);
 											})}
 										</div>
@@ -1184,7 +1297,20 @@ export function JourneyOnboarding() {
 							</div>
 
 							{/* ── Footer submit ── */}
-							<div className="mt-12 border-t border-minuri-silver/40 pt-8 text-center">
+							<div className="relative mt-12 pt-8 text-center">
+								{/* Scissors tear-off line */}
+								<div
+									aria-hidden
+									className="pointer-events-none absolute inset-x-0 top-0 flex items-center"
+								>
+									<span
+										className="pr-1.5 text-sm text-minuri-slate/40"
+										style={{ background: "white" }}
+									>
+										✂
+									</span>
+									<div className="flex-1 border-t border-dashed border-minuri-slate/25" />
+								</div>
 								<p className="mb-6 text-sm text-minuri-slate">
 									Ready to generate your personalised guide?
 								</p>

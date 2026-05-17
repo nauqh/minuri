@@ -7,11 +7,11 @@ import { LandingDotGrid } from "./landing-dot-grid";
 
 const STAT_CARDS = [
 	{
-		stat: "1 in 4",
-		label: "Young Australians experience high psychological distress during a major life transition",
-		source: "Mission Australia Youth Survey, 2024",
+		stat: "2 in 5",
+		label: "Young Australians report stress directly linked to their mental health — affecting school attendance, confidence and daily motivation",
+		source: "Mission Australia Youth Survey, 2025",
 		fullCitation:
-			"Mission Australia Youth Survey 2024. Psychological distress rates among Australians aged 15–24 during significant life transitions.",
+			"Mission Australia Youth Survey 2025. Stress and mental health impacts on school attendance, confidence and daily motivation among young Australians.",
 		accentClass: "bg-minuri-teal",
 	},
 	{
