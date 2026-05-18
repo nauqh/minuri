@@ -22,7 +22,12 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import Image from "next/image";
 import { GUIDES, GUIDE_TOPICS, type GuideTopicSlug } from "@/content/guides";
-import { normalizeSuburbName, preloadSuburbs, rankAndFilterSuburbs, type SuburbOption } from "@/lib/suburbs";
+import {
+	normalizeSuburbName,
+	preloadSuburbs,
+	rankAndFilterSuburbs,
+	type SuburbOption,
+} from "@/lib/suburbs";
 import { cn } from "@/lib/utils";
 import { useJourneyState } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
@@ -168,7 +173,10 @@ export function JourneyOnboarding() {
 			const topics = Array.from(
 				new Set(
 					(slugs as string[])
-						.map((slug) => GUIDES.find((g) => g.slug === slug)?.topic)
+						.map(
+							(slug) =>
+								GUIDES.find((g) => g.slug === slug)?.topic,
+						)
 						.filter((t): t is GuideTopicSlug => Boolean(t)),
 				),
 			);
@@ -189,13 +197,15 @@ export function JourneyOnboarding() {
 	const listboxId = useId();
 
 	useEffect(() => {
-		preloadSuburbs().then((suburbs) => {
-			setAllSuburbs(suburbs);
-			setSuburbLoading(false);
-		}).catch(() => {
-			setSuburbError("Could not load suburbs right now.");
-			setSuburbLoading(false);
-		});
+		preloadSuburbs()
+			.then((suburbs) => {
+				setAllSuburbs(suburbs);
+				setSuburbLoading(false);
+			})
+			.catch(() => {
+				setSuburbError("Could not load suburbs right now.");
+				setSuburbLoading(false);
+			});
 	}, []);
 
 	const suburbOptions = useMemo(() => {
@@ -271,18 +281,23 @@ export function JourneyOnboarding() {
 		});
 		setStage("loading");
 		try {
-			const res = await fetch(`${process.env.NEXT_PUBLIC_MINURI_SERVER_BASE_URL}/journey`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					suburb: selectedSuburb.locality,
-					your_moment: yourMoment,
-					selected_topics: selectedTopics,
-				}),
-			});
+			const res = await fetch(
+				`${process.env.NEXT_PUBLIC_MINURI_SERVER_BASE_URL}journey`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						suburb: selectedSuburb.locality,
+						your_moment: yourMoment,
+						selected_topics: selectedTopics,
+					}),
+				},
+			);
 			if (!res.ok) throw new Error("API error");
 			const data = (await res.json()) as JourneyAPIResponse;
-			saveWeekPlan(buildStaticWeekPlan(data.identity.archetype, selectedTopics));
+			saveWeekPlan(
+				buildStaticWeekPlan(data.identity.archetype, selectedTopics),
+			);
 			initIdentity(buildIdentityFromLLM(data.identity));
 		} catch {
 			saveWeekPlan(buildStaticWeekPlan("first-timer", selectedTopics));
@@ -475,9 +490,15 @@ export function JourneyOnboarding() {
 							{/* ── Header ── */}
 							<motion.div
 								className="flex items-center"
-								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -10 }}
+								initial={{
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : -10,
+								}}
 								animate={{ opacity: 1, y: 0 }}
-								transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.05 }}
+								transition={{
+									...revealTransition,
+									delay: prefersReducedMotion ? 0 : 0.05,
+								}}
 							>
 								<button
 									type="button"
@@ -495,9 +516,15 @@ export function JourneyOnboarding() {
 							{/* ── Page intro ── */}
 							<motion.div
 								className="pt-5 pb-4"
-								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+								initial={{
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : 16,
+								}}
 								animate={{ opacity: 1, y: 0 }}
-								transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.12 }}
+								transition={{
+									...revealTransition,
+									delay: prefersReducedMotion ? 0 : 0.12,
+								}}
 							>
 								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
 									Your guide journey
@@ -517,10 +544,21 @@ export function JourneyOnboarding() {
 								<div className="space-y-12">
 									{/* ── Your moment ── */}
 									<motion.div
-										initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+										initial={{
+											opacity: 0,
+											y: prefersReducedMotion ? 0 : 20,
+										}}
 										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true, margin: "-5% 0px" }}
-										transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.05 }}
+										viewport={{
+											once: true,
+											margin: "-5% 0px",
+										}}
+										transition={{
+											...revealTransition,
+											delay: prefersReducedMotion
+												? 0
+												: 0.05,
+										}}
 									>
 										<div className="mb-4 flex items-center gap-3">
 											<span
@@ -778,10 +816,21 @@ export function JourneyOnboarding() {
 
 									{/* ── Suburb ── */}
 									<motion.div
-										initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+										initial={{
+											opacity: 0,
+											y: prefersReducedMotion ? 0 : 20,
+										}}
 										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true, margin: "-5% 0px" }}
-										transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.05 }}
+										viewport={{
+											once: true,
+											margin: "-5% 0px",
+										}}
+										transition={{
+											...revealTransition,
+											delay: prefersReducedMotion
+												? 0
+												: 0.05,
+										}}
 									>
 										<div className="mb-4 flex items-center gap-3">
 											<span
@@ -902,7 +951,6 @@ export function JourneyOnboarding() {
 													onClick={() => {
 														setSelectedSuburb(null);
 														setSuburbQuery("");
-														setSuburbOptions([]);
 													}}
 													className="rounded-full border border-minuri-silver/80 bg-minuri-white px-2.5 py-1 text-[0.68rem] font-semibold text-minuri-slate transition-colors hover:border-minuri-teal/45 hover:text-minuri-teal"
 												>
@@ -998,16 +1046,27 @@ export function JourneyOnboarding() {
 													)}
 											</div>
 										)}
-								</motion.div>
+									</motion.div>
 
-								{/* ── Topic cards ── */}
-								<motion.div
-									initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true, margin: "-5% 0px" }}
-									transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.05 }}
-								>
-									<div className="mb-4 flex items-center gap-3">
+									{/* ── Topic cards ── */}
+									<motion.div
+										initial={{
+											opacity: 0,
+											y: prefersReducedMotion ? 0 : 20,
+										}}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{
+											once: true,
+											margin: "-5% 0px",
+										}}
+										transition={{
+											...revealTransition,
+											delay: prefersReducedMotion
+												? 0
+												: 0.05,
+										}}
+									>
+										<div className="mb-4 flex items-center gap-3">
 											<span
 												className={cn(
 													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
@@ -1161,7 +1220,9 @@ export function JourneyOnboarding() {
 																{topic.name}
 															</p>
 															<h3 className="mt-1 text-xs font-semibold leading-snug text-[#05292a]">
-																{TOPIC_URGENCY[topic.slug] ?? topic.name}
+																{TOPIC_URGENCY[
+																	topic.slug
+																] ?? topic.name}
 															</h3>
 														</div>
 														<span className="mt-auto text-xs font-semibold text-[#05292a]">
@@ -1174,32 +1235,39 @@ export function JourneyOnboarding() {
 												);
 											})}
 										</div>
-									{selectedTopics.length >= 1 && (
-										<motion.p
-											initial={{ opacity: 0, y: -4 }}
-											animate={{ opacity: 1, y: 0 }}
-											transition={{ duration: 0.2 }}
-											className="mt-3 text-sm text-minuri-teal"
-										>
-											Your 7-day plan will cover{" "}
-											{selectedTopics.length}{" "}
-											{selectedTopics.length === 1
-												? "topic"
-												: "topics"}{" "}
-											— guides, tasks, and nearby places per day.
-										</motion.p>
-									)}
-							</motion.div>
-						</div>
-					</div>
+										{selectedTopics.length >= 1 && (
+											<motion.p
+												initial={{ opacity: 0, y: -4 }}
+												animate={{ opacity: 1, y: 0 }}
+												transition={{ duration: 0.2 }}
+												className="mt-3 text-sm text-minuri-teal"
+											>
+												Your 7-day plan will cover{" "}
+												{selectedTopics.length}{" "}
+												{selectedTopics.length === 1
+													? "topic"
+													: "topics"}{" "}
+												— guides, tasks, and nearby
+												places per day.
+											</motion.p>
+										)}
+									</motion.div>
+								</div>
+							</div>
 
-					{/* ── Footer submit ── */}
+							{/* ── Footer submit ── */}
 							<motion.div
 								className="relative mt-12 pt-8 text-center"
-								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+								initial={{
+									opacity: 0,
+									y: prefersReducedMotion ? 0 : 20,
+								}}
 								whileInView={{ opacity: 1, y: 0 }}
 								viewport={{ once: true, margin: "-5% 0px" }}
-								transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.05 }}
+								transition={{
+									...revealTransition,
+									delay: prefersReducedMotion ? 0 : 0.05,
+								}}
 							>
 								{/* Scissors tear-off line */}
 								<div

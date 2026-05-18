@@ -34,6 +34,7 @@ import { getVibe, DEFAULT_VIBE_ID, type Vibe } from "@/lib/vibes";
 import { LANDING_KEYS } from "@/components/landing/landing-local-state";
 import { IdentityCard } from "@/components/journey/identity-card";
 import { CardEarnToast } from "@/components/journey/card-earn-toast";
+import { MelbourneLetter } from "@/components/journey/melbourne-letter";
 
 const TOPIC_ICONS: Record<GuideTopicSlug, LucideIcon> = {
 	"food-eating": Sandwich,
@@ -86,21 +87,30 @@ const WHY_TODAY: Record<GuideTopicSlug, string> = {
 
 function LetterReveal({
 	identity,
+	suburb,
 	onContinue,
 }: {
 	identity: import("@/lib/journey/identity").JourneyIdentity;
+	suburb: string;
 	onContinue: () => void;
 }) {
 	const prefersReducedMotion = useReducedMotion();
 	const [leaving, setLeaving] = useState(false);
+	const [letterDone, setLetterDone] = useState(false);
+	const [showLetter, setShowLetter] = useState(false);
 
 	const accent = identity.palette[0].hex;
-	const sentences = identity.letter.body
-		.split(". ")
-		.flatMap((part, i, arr) => (i < arr.length - 1 ? [part + "."] : [part]))
-		.filter((s) => s.trim().length > 0);
 
 	const d = (ms: number) => (prefersReducedMotion ? 0 : ms / 1000);
+
+	useEffect(() => {
+		if (prefersReducedMotion) {
+			setShowLetter(true);
+			return;
+		}
+		const t = setTimeout(() => setShowLetter(true), 2200);
+		return () => clearTimeout(t);
+	}, [prefersReducedMotion]);
 
 	async function handleContinue() {
 		setLeaving(true);
@@ -194,80 +204,60 @@ function LetterReveal({
 					style={{ backgroundColor: accent }}
 				/>
 
-				{/* Letter body — sentences staggered */}
-				<div className="text-left">
-					{sentences.map((sentence, i) => (
-						<motion.p
-							key={i}
-							initial={{ opacity: 0, y: 6 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{
-								duration: 0.55,
-								delay: d(1000 + i * 130),
-								ease: [0.22, 1, 0.36, 1],
-							}}
-							className="my-0 text-lg leading-[3rem] tracking-wide text-minuri-slate min-[1500px]:text-xl"
-						>
-							{sentence}
-						</motion.p>
-					))}
-				</div>
+				{/* Letter — mounts after 2.2s so identity renders first */}
+				<AnimatePresence>
+					{showLetter && (
+						<div className="mt-4 flex justify-center">
+							<MelbourneLetter
+								suburb={suburb}
+								body={identity.letter.body}
+								signOff={identity.letter.sign_off}
+								skipStream={prefersReducedMotion ?? false}
+								onComplete={() => setLetterDone(true)}
+								paragraphClassName="text-xl leading-[3rem] tracking-wide text-minuri-slate min-[1500px]:text-2xl"
+								className="max-w-3xl"
+							/>
+						</div>
+					)}
+				</AnimatePresence>
 
-				{/* Sign-off */}
-				<motion.p
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{
-						duration: 0.5,
-						delay: d(1000 + sentences.length * 130 + 200),
-					}}
-					className="mt-5 text-right text-base font-medium text-minuri-slate/60"
-				>
-					{identity.letter.sign_off}
-				</motion.p>
+				{/* Mantra + CTA — appear after letter finishes */}
+				<AnimatePresence>
+					{letterDone && (
+						<>
+							<motion.div
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ duration: 0.5, delay: 0.3 }}
+								className="mt-6 text-center"
+							>
+								<p className="text-base italic text-minuri-slate">
+									&ldquo;{identity.mantra}&rdquo;
+								</p>
+							</motion.div>
 
-				{/* Mantra */}
-				<motion.div
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{
-						duration: 0.5,
-						delay: d(1000 + sentences.length * 130 + 500),
-					}}
-					className="mt-6 text-center"
-				>
-					<p className="text-base italic text-minuri-slate">
-						&ldquo;{identity.mantra}&rdquo;
-					</p>
-				</motion.div>
-
-				{/* CTA */}
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{
-						duration: 0.6,
-						delay: d(1000 + sentences.length * 130 + 900),
-						ease: [0.22, 1, 0.36, 1],
-					}}
-					className="mt-10 flex justify-center"
-				>
-					<button
-						type="button"
-						onClick={handleContinue}
-						className="group inline-flex items-center gap-2.5 rounded-xl px-12 py-4 text-base font-bold text-white shadow-lg transition-all duration-200 hover:scale-[1.03] hover:shadow-xl active:scale-95"
-						style={{
-							backgroundColor: accent,
-							boxShadow: `0 8px 24px -4px ${accent}80`,
-						}}
-					>
-						Begin my week
-						<ChevronRight
-							className="size-4 transition-transform duration-200 group-hover:translate-x-1"
-							aria-hidden
-						/>
-					</button>
-				</motion.div>
+							<motion.div
+								initial={{ opacity: 0, y: 20 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+								className="mt-10 flex justify-center"
+							>
+								<button
+									type="button"
+									onClick={handleContinue}
+									className="group inline-flex items-center gap-2.5 rounded-xl px-12 py-4 text-base font-bold text-white transition-all duration-200 hover:scale-[1.03] active:scale-95"
+									style={{ backgroundColor: accent }}
+								>
+									Begin my week
+									<ChevronRight
+										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
+										aria-hidden
+									/>
+								</button>
+							</motion.div>
+						</>
+					)}
+				</AnimatePresence>
 			</div>
 			</div>
 		</motion.div>
@@ -833,16 +823,17 @@ export function JourneyPlanView() {
 		);
 	}
 
+	const { suburb, selectedTopics, yourMoment } = journeyState;
+
 	if (planStage === "letter" && identity) {
 		return (
 			<LetterReveal
 				identity={identity}
+				suburb={suburb}
 				onContinue={() => setPlanStage("plan")}
 			/>
 		);
 	}
-
-	const { suburb, selectedTopics, yourMoment } = journeyState;
 	const weekPlan = (() => {
 		const stored = loadWeekPlan();
 		if (stored) return resolveWeekPlan(stored);

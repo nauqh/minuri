@@ -68,7 +68,7 @@ export const MOCK_IDENTITY: JourneyIdentity = {
   },
   letter: {
     body: "You arrived with courage in your suitcase and questions you haven't figured out how to ask yet. Melbourne is a good city for that — loud enough to feel alive, small enough to learn. That's what this week is for. People who feel alone in their first few days here often find that Melbourne rewards small acts of showing up — the coffee order you learn, the tram route you memorise, the corner you start to recognise. You made it this far. That's not nothing.",
-    sign_off: "— Your City",
+    sign_off: "— Minuri",
   },
 };
 
@@ -173,7 +173,7 @@ export function buildMockIdentity(
     traits: bp.traits,
     letter: {
       body: bp.letterTemplate(suburbDisplay).trim(),
-      sign_off: "— Your City",
+      sign_off: "— Minuri",
     },
   };
 }
@@ -197,7 +197,7 @@ export function buildIdentityFromLLM(
     traits: bp.traits,
     letter: {
       body: llm.letter_body,
-      sign_off: "— Your City",
+      sign_off: "— Minuri",
     },
   };
 }
