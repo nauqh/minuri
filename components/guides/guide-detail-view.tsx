@@ -27,6 +27,7 @@ import { buildGuideHref, getNextGuide, getTopicMeta } from "@/lib/guides";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { cn } from "@/lib/utils";
 import { GuideShareModal } from "@/components/guides/guide-share-modal";
+import { BookmarkToast } from "@/components/guides/bookmark-toast";
 
 type GuideDetailViewProps = {
 	guide: Guide;
@@ -174,8 +175,14 @@ export function GuideDetailView({
 	const [sourcesOpen, setSourcesOpen] = useState(false);
 	const [copied, setCopied] = useState(false);
 	const [shareOpen, setShareOpen] = useState(false);
+	const [hasJourney, setHasJourney] = useState(false);
+	const [bookmarkToastVisible, setBookmarkToastVisible] = useState(false);
 	const lastScrollY = useRef(0);
 	const prefersReducedMotion = useReducedMotion();
+
+	useEffect(() => {
+		setHasJourney(!!window.localStorage.getItem("minuri:journey:v2"));
+	}, []);
 	const sectionAnim = {
 		initial: {
 			opacity: 0,
@@ -203,17 +210,23 @@ export function GuideDetailView({
 				(pathname.startsWith("/guides/") &&
 					pathname !== "/guides/bookmarks"),
 		},
-		{
-			href: "/guides/bookmarks",
-			label: "My Bookmarks",
-			active: pathname === "/guides/bookmarks",
-		},
+		hasJourney
+			? {
+					href: "/journey/plan",
+					label: "My Journey",
+					active: pathname.startsWith("/journey"),
+				}
+			: {
+					href: "/guides/bookmarks",
+					label: "My Bookmarks",
+					active: pathname === "/guides/bookmarks",
+				},
 		{
 			href: "/near-me",
 			label: "Near Me",
 			active: pathname === "/near-me",
 		},
-	] as const;
+	];
 
 	useEffect(() => {
 		let isCancelled = false;
@@ -448,6 +461,14 @@ export function GuideDetailView({
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
+	function handleBookmarkToggle() {
+		const wasBookmarked = isBookmarked(guide.slug);
+		toggleBookmark(guide.slug);
+		if (!wasBookmarked) {
+			setBookmarkToastVisible(true);
+		}
+	}
+
 	return (
 		<div className="min-h-screen bg-minuri-white text-minuri-ink">
 			<div className="fixed inset-x-0 top-0 z-50 h-[2px] bg-minuri-white">
@@ -518,7 +539,7 @@ export function GuideDetailView({
 									className="size-4"
 									aria-hidden="true"
 								/>
-								Back to guides
+								{from === "journey" ? "Back to your plan" : "Back to guides"}
 							</Link>
 							<div className="flex items-center gap-2">
 								<button
@@ -546,7 +567,7 @@ export function GuideDetailView({
 								</button>
 								<BookmarkButton
 									active={isBookmarked(guide.slug)}
-									onToggle={() => toggleBookmark(guide.slug)}
+									onToggle={handleBookmarkToggle}
 									className="size-8 border-minuri-silver/80 text-minuri-teal hover:bg-minuri-fog"
 								/>
 							</div>
@@ -925,9 +946,7 @@ export function GuideDetailView({
 								<div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
 									<button
 										type="button"
-										onClick={() =>
-											toggleBookmark(guide.slug)
-										}
+										onClick={handleBookmarkToggle}
 										className={cn(
 											"inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-200",
 											isBookmarked(guide.slug)
@@ -1113,6 +1132,11 @@ export function GuideDetailView({
 				) : null}
 			</AnimatePresence>
 
+			<BookmarkToast
+				visible={bookmarkToastVisible}
+				hasJourney={hasJourney}
+				onDone={() => setBookmarkToastVisible(false)}
+			/>
 			<GuideShareModal
 				guide={guide}
 				isOpen={shareOpen}

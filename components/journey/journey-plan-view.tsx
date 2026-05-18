@@ -6,6 +6,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
 	CheckCircle2,
+	ChevronRight,
 	UserCircle,
 	ChevronDown,
 	Compass,
@@ -20,10 +21,12 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-import type { Guide, GuideTopicSlug } from "@/content/guides";
+import { GUIDES, type Guide, type GuideTopicSlug } from "@/content/guides";
 import { cn } from "@/lib/utils";
+import { getTopicMeta } from "@/lib/guides";
 import { useJourneyState } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
+import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
 import { loadWeekPlan, resolveWeekPlan } from "@/lib/journey/week-plan-store";
@@ -70,6 +73,206 @@ const TOPIC_COLORS: Record<
 		divider: "bg-rose-300",
 	},
 };
+
+const WHY_TODAY: Record<GuideTopicSlug, string> = {
+	"food-eating": "Sorting food early means one less daily decision while you're still finding your feet.",
+	"getting-around": "Getting mobile early opens up everything else — guides, places, people.",
+	"health-wellbeing": "Registering a GP while you're well is much easier than waiting until you need one.",
+	"home-admin": "Admin sorted early means you stop carrying it through the rest of the week.",
+	"social-belonging": "One connection made now compounds over the weeks ahead.",
+};
+
+// ─── Letter Reveal ───────────────────────────────────────────────────────────
+
+function LetterReveal({
+	identity,
+	onContinue,
+}: {
+	identity: import("@/lib/journey/identity").JourneyIdentity;
+	onContinue: () => void;
+}) {
+	const prefersReducedMotion = useReducedMotion();
+	const [leaving, setLeaving] = useState(false);
+
+	const accent = identity.palette[0].hex;
+	const sentences = identity.letter.body
+		.split(". ")
+		.flatMap((part, i, arr) => (i < arr.length - 1 ? [part + "."] : [part]))
+		.filter((s) => s.trim().length > 0);
+
+	const d = (ms: number) => (prefersReducedMotion ? 0 : ms / 1000);
+
+	async function handleContinue() {
+		setLeaving(true);
+		await new Promise<void>((r) => setTimeout(r, 450));
+		onContinue();
+	}
+
+	return (
+		<motion.div
+			className="journey-notebook-bg relative flex h-screen flex-col overflow-hidden"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: leaving ? 0 : 1, y: leaving ? -16 : 0 }}
+			transition={{ duration: leaving ? 0.4 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+		>
+			{/* Notebook red margin line */}
+			<div
+				aria-hidden
+				className="pointer-events-none absolute inset-y-0"
+				style={{
+					left: "clamp(3rem, 8vw, 7rem)",
+					width: "2px",
+					background: "oklch(0.68 0.13 15 / 0.22)",
+				}}
+			/>
+
+			{/* Soft radial fade at edges */}
+			<div
+				aria-hidden
+				className="pointer-events-none absolute inset-0"
+				style={{
+					background:
+						"radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(255,255,255,0.55) 60%, white 82%)",
+				}}
+			/>
+
+			<div className="relative z-10 flex flex-1 flex-col items-center overflow-y-auto px-6 pt-[4rem] pb-10">
+			<div className="w-full max-w-3xl">
+				{/* Symbol */}
+				<div className="mb-8 flex justify-center">
+					<motion.div
+						initial={{ scale: 0, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1 }}
+						transition={{ duration: 0.7, delay: d(0), ease: [0.22, 1, 0.36, 1] }}
+					>
+						<motion.div
+							animate={prefersReducedMotion ? undefined : { scale: [1, 1.1, 1] }}
+							transition={{
+								duration: 3,
+								repeat: Infinity,
+								repeatDelay: 1,
+								ease: "easeInOut",
+							}}
+							className="flex size-20 items-center justify-center rounded-full text-4xl"
+							style={{
+								backgroundColor: `${accent}28`,
+								boxShadow: `0 0 32px ${accent}50`,
+							}}
+						>
+							{identity.symbol}
+						</motion.div>
+					</motion.div>
+				</div>
+
+				{/* "A letter for you" */}
+				<motion.p
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.5, delay: d(400) }}
+					className="mb-3 text-center text-[11px] font-semibold uppercase tracking-[0.2em]"
+					style={{ color: accent }}
+				>
+					A letter for you
+				</motion.p>
+
+				{/* Archetype */}
+				<motion.h1
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.6, delay: d(600), ease: [0.22, 1, 0.36, 1] }}
+					className="text-center text-3xl font-black text-minuri-ocean md:text-4xl"
+				>
+					{identity.archetype}
+				</motion.h1>
+
+				{/* Divider */}
+				<motion.div
+					initial={{ scaleX: 0, opacity: 0 }}
+					animate={{ scaleX: 1, opacity: 1 }}
+					transition={{ duration: 0.55, delay: d(850), ease: [0.22, 1, 0.36, 1] }}
+					className="mx-auto my-6 h-px w-20 origin-center"
+					style={{ backgroundColor: accent }}
+				/>
+
+				{/* Letter body — sentences staggered */}
+				<div className="text-left">
+					{sentences.map((sentence, i) => (
+						<motion.p
+							key={i}
+							initial={{ opacity: 0, y: 6 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{
+								duration: 0.55,
+								delay: d(1000 + i * 130),
+								ease: [0.22, 1, 0.36, 1],
+							}}
+							className="my-0 text-lg leading-[3rem] tracking-wide text-minuri-slate min-[1500px]:text-xl"
+						>
+							{sentence}
+						</motion.p>
+					))}
+				</div>
+
+				{/* Sign-off */}
+				<motion.p
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{
+						duration: 0.5,
+						delay: d(1000 + sentences.length * 130 + 200),
+					}}
+					className="mt-5 text-right text-base font-medium text-minuri-slate/60"
+				>
+					{identity.letter.sign_off}
+				</motion.p>
+
+				{/* Mantra */}
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{
+						duration: 0.5,
+						delay: d(1000 + sentences.length * 130 + 500),
+					}}
+					className="mt-6 text-center"
+				>
+					<p className="text-base italic text-minuri-slate">
+						&ldquo;{identity.mantra}&rdquo;
+					</p>
+				</motion.div>
+
+				{/* CTA */}
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{
+						duration: 0.6,
+						delay: d(1000 + sentences.length * 130 + 900),
+						ease: [0.22, 1, 0.36, 1],
+					}}
+					className="mt-10 flex justify-center"
+				>
+					<button
+						type="button"
+						onClick={handleContinue}
+						className="group inline-flex items-center gap-2.5 rounded-xl px-12 py-4 text-base font-bold text-white shadow-lg transition-all duration-200 hover:scale-[1.03] hover:shadow-xl active:scale-95"
+						style={{
+							backgroundColor: accent,
+							boxShadow: `0 8px 24px -4px ${accent}80`,
+						}}
+					>
+						Begin my week
+						<ChevronRight
+							className="size-4 transition-transform duration-200 group-hover:translate-x-1"
+							aria-hidden
+						/>
+					</button>
+				</motion.div>
+			</div>
+			</div>
+		</motion.div>
+	);
+}
 
 function isDayDone(plan: DayPlan, completedTasks: Set<string>) {
 	return (
@@ -262,6 +465,7 @@ function WeekDrawer({
 	vibe,
 	identity,
 	cardState,
+	suburb,
 	onSelectDay,
 	onClose,
 }: {
@@ -272,10 +476,15 @@ function WeekDrawer({
 	vibe: Vibe;
 	identity: import("@/lib/journey/identity").JourneyIdentity | null;
 	cardState: import("@/lib/journey/identity").IdentityCardState | null;
+	suburb: string;
 	onSelectDay: (day: number) => void;
 	onClose: () => void;
 }) {
 	const prefersReducedMotion = useReducedMotion();
+	const { bookmarks } = useGuideBookmarks();
+	const savedGuides = bookmarks
+		.map((slug) => GUIDES.find((g) => g.slug === slug))
+		.filter((g): g is Guide => Boolean(g));
 
 	useEffect(() => {
 		if (!open) return;
@@ -285,6 +494,11 @@ function WeekDrawer({
 		window.addEventListener("keydown", onKey);
 		return () => window.removeEventListener("keydown", onKey);
 	}, [open, onClose]);
+
+	useEffect(() => {
+		if (!open) document.body.style.overflow = "";
+		return () => { document.body.style.overflow = ""; };
+	}, [open]);
 
 	return (
 		<AnimatePresence>
@@ -315,6 +529,8 @@ function WeekDrawer({
 						className="fixed inset-y-0 right-0 z-50 flex w-full flex-col bg-minuri-white shadow-2xl sm:max-w-md"
 						role="dialog"
 						aria-label="Your week"
+						onMouseEnter={() => { document.body.style.overflow = "hidden"; }}
+						onMouseLeave={() => { document.body.style.overflow = ""; }}
 					>
 						{/* Sticky close bar */}
 						<div className="flex shrink-0 items-center justify-end px-4 py-3">
@@ -330,7 +546,7 @@ function WeekDrawer({
 						</div>
 
 						{/* Scrollable body */}
-						<div className="flex-1 overflow-y-auto">
+						<div className="flex-1 overflow-y-auto overscroll-contain">
 							<div className="px-5 py-5">
 								<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
 									Your vibe
@@ -357,6 +573,36 @@ function WeekDrawer({
 							{identity && cardState && (
 								<div className="border-t border-minuri-silver/40 px-5 pb-5 pt-4">
 									<IdentityCard identity={identity} cardState={cardState} />
+								</div>
+							)}
+
+							{savedGuides.length > 0 && (
+								<div className="border-t border-minuri-silver/40 px-5 pb-6 pt-4">
+									<p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
+										Saved guides
+									</p>
+									<div className="space-y-2">
+										{savedGuides.map((guide) => {
+											const topicMeta = getTopicMeta(guide.topic);
+											return (
+												<Link
+													key={guide.slug}
+													href={`/guides/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
+													onClick={onClose}
+													className="flex items-start gap-3 rounded-xl border border-minuri-silver/40 px-3 py-2.5 transition-colors hover:bg-minuri-fog"
+												>
+													<div className="min-w-0 flex-1">
+														<p className="text-sm font-medium leading-snug text-minuri-ocean">
+															{guide.title}
+														</p>
+														<p className="mt-0.5 text-[11px] text-minuri-slate">
+															{topicMeta?.name} · {guide.readingTimeMin} min
+														</p>
+													</div>
+												</Link>
+											);
+										})}
+									</div>
 								</div>
 							)}
 						</div>
@@ -428,6 +674,11 @@ function DayContent({
 					<p className="mt-1.5 text-base leading-relaxed text-minuri-slate md:text-[1.06rem] md:leading-8">
 						{plan.narrative}
 					</p>
+					{WHY_TODAY[plan.topicSlug] && (
+						<p className="mt-2 text-xs italic text-minuri-slate/60">
+							{WHY_TODAY[plan.topicSlug]}
+						</p>
+					)}
 				</div>
 			</div>
 
@@ -532,6 +783,8 @@ export function JourneyPlanView() {
 	const [activeDay, setActiveDay] = useState(1);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [vibe, setVibe] = useState<Vibe>(() => getVibe(DEFAULT_VIBE_ID));
+	const [letterExpanded, setLetterExpanded] = useState(false);
+	const [planStage, setPlanStage] = useState<"letter" | "plan">("letter");
 	const [toastDay, setToastDay] = useState<number | null>(null);
 	const [toastVisible, setToastVisible] = useState(false);
 	const [hasCardNotif, setHasCardNotif] = useState(false);
@@ -577,6 +830,15 @@ export function JourneyPlanView() {
 			<div className="flex min-h-screen items-center justify-center bg-minuri-white">
 				<div className="size-8 animate-spin rounded-full border-2 border-minuri-silver border-t-minuri-teal" />
 			</div>
+		);
+	}
+
+	if (planStage === "letter" && identity) {
+		return (
+			<LetterReveal
+				identity={identity}
+				onContinue={() => setPlanStage("plan")}
+			/>
 		);
 	}
 
@@ -637,7 +899,12 @@ export function JourneyPlanView() {
 	const nextDay = weekPlan.find((d) => d.day === activeDay + 1);
 
 	return (
-		<div className="min-h-screen overflow-x-hidden bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]">
+		<motion.div
+			className="min-h-screen overflow-x-hidden bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+		>
 			<WeekDrawer
 				open={drawerOpen}
 				weekPlan={weekPlan}
@@ -646,6 +913,7 @@ export function JourneyPlanView() {
 				vibe={vibe}
 				identity={identity}
 				cardState={cardState}
+				suburb={suburb}
 				onSelectDay={selectDay}
 				onClose={() => setDrawerOpen(false)}
 			/>
@@ -764,9 +1032,37 @@ export function JourneyPlanView() {
 								</motion.div>
 							)}
 
+							{identity?.letter?.body && (
+								<motion.div
+									initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										duration: prefersReducedMotion ? 0.01 : 0.45,
+										delay: 0.18,
+									}}
+									className="mt-5 rounded-2xl border border-minuri-silver/50 bg-minuri-fog/60 px-5 py-4"
+								>
+									<p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-minuri-teal">
+										A letter for you
+									</p>
+									<p className="text-sm leading-relaxed text-minuri-slate">
+										{letterExpanded
+											? identity.letter.body
+											: identity.letter.body.slice(0, 160).trimEnd() + "…"}
+									</p>
+									<button
+										type="button"
+										onClick={() => setLetterExpanded((v) => !v)}
+										className="mt-2 text-xs font-medium text-minuri-teal hover:underline"
+									>
+										{letterExpanded ? "Show less" : "Read more"}
+									</button>
+								</motion.div>
+							)}
+
 							<p className="mt-4 text-sm text-minuri-slate">
-								One guide per day. One task to do. Places to go near{" "}
-								{suburb} — all in one place.
+								Guides, tasks, and places near{" "}
+								{suburb} — one day at a time.
 							</p>
 						</motion.div>
 
@@ -822,6 +1118,6 @@ export function JourneyPlanView() {
 
 				</div>
 			</main>
-		</div>
+		</motion.div>
 	);
 }

@@ -192,6 +192,153 @@ function WeekArc({
 	);
 }
 
+function DayPageContent({
+	dayIndex,
+	guides,
+	panelNumber,
+	totalPanels,
+	persona,
+	isBookmarked,
+	toggleBookmark,
+	validDays,
+}: {
+	dayIndex: number;
+	guides: ReturnType<typeof getGuidesFromSlugs>;
+	panelNumber: number;
+	totalPanels: number;
+	persona: Persona;
+	isBookmarked: (slug: string) => boolean;
+	toggleBookmark: (slug: string) => void;
+	validDays: { dayIndex: number }[];
+}) {
+	const allDaysForArc = persona.journey.map((_, i) => ({
+		dayIndex: i,
+		hasGuides: validDays.some((d) => d.dayIndex === i),
+	}));
+	return (
+		<>
+			{/* Left — day header + guide cards */}
+			<div
+				className="flex flex-1 flex-col justify-between px-6 py-10 md:flex-none md:w-[52%] md:px-12 md:py-14 lg:px-20"
+				style={{ boxShadow: "inset -12px 0 18px -8px rgba(0,0,0,0.06)" }}
+			>
+				<div className="flex items-start justify-between">
+					<div>
+						<p
+							className="text-[10px] font-bold uppercase tracking-[0.2em]"
+							style={{ color: persona.accentColor }}
+						>
+							{persona.name} · Day {dayIndex + 1}
+						</p>
+						<h2
+							className="mt-1 text-3xl font-black text-gray-900 md:text-4xl lg:text-5xl"
+							style={{
+								fontFamily: "var(--font-hero-serif)",
+								letterSpacing: "-0.03em",
+							}}
+						>
+							{dayIndex === 0
+								? "First day"
+								: dayIndex === 6
+									? "End of week"
+									: `Day ${dayIndex + 1}`}
+						</h2>
+					</div>
+					<span className="text-xs text-gray-400">
+						{panelNumber} / {totalPanels}
+					</span>
+				</div>
+
+				<div className="flex gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-visible md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+					{guides.map((guide, index) => (
+						<div key={guide.slug} className="w-64 shrink-0 md:w-72">
+							<GuideCard
+								guide={guide}
+								href={`/guides/${guide.slug}`}
+								bookmarked={isBookmarked(guide.slug)}
+								onToggleBookmark={toggleBookmark}
+								animationDelay={index * 0.06}
+							/>
+						</div>
+					))}
+				</div>
+			</div>
+
+			{/* Spine — spiral coil binding */}
+			<div
+				className="hidden shrink-0 w-10 overflow-hidden md:block"
+				style={{
+					background:
+						"linear-gradient(to right, #e8e3db, #cec9c0 35%, #cec9c0 65%, #e8e3db)",
+				}}
+			>
+				<div
+					className="h-full w-full"
+					style={{
+						backgroundImage: COIL_PATTERN,
+						backgroundRepeat: "repeat-y",
+						backgroundPosition: "center top",
+						backgroundSize: "40px 26px",
+					}}
+				/>
+			</div>
+
+			{/* Right — journal + week arc */}
+			<div
+				className="hidden flex-1 flex-col justify-between px-10 py-14 md:flex lg:px-14"
+				style={{ boxShadow: "inset 12px 0 18px -8px rgba(0,0,0,0.06)" }}
+			>
+				<JournalNote
+					text={persona.dayNarratives[dayIndex]}
+					name={persona.name}
+				/>
+				<WeekArc
+					allDays={allDaysForArc}
+					currentDayIndex={dayIndex}
+					accentColor={persona.accentColor}
+				/>
+			</div>
+		</>
+	);
+}
+
+function FlipPanel({
+	children,
+	flipIndex,
+	numFlips,
+	scrollYProgress,
+	prefersReducedMotion,
+}: {
+	children: React.ReactNode;
+	flipIndex: number;
+	numFlips: number;
+	scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+	prefersReducedMotion: boolean | null;
+}) {
+	const start = flipIndex / numFlips;
+	const end = (flipIndex + 1) / numFlips;
+
+	const rotateY = useTransform(
+		scrollYProgress,
+		[start, end],
+		prefersReducedMotion ? [0, 0] : [-90, 0],
+	);
+
+	return (
+		<motion.div
+			className="absolute inset-0"
+			style={{
+				rotateY,
+				zIndex: flipIndex + 2,
+				backgroundColor: "#f0ede8",
+				transformOrigin: "left center",
+			}}
+		>
+			{children}
+		</motion.div>
+	);
+}
+
 export function PersonaDetailFullscreen({
 	persona,
 	onBack,
@@ -212,17 +359,18 @@ export function PersonaDetailFullscreen({
 
 	// 1 description panel + one panel per day
 	const numPanels = 1 + validDays.length;
+	const numFlips = validDays.length;
 	const trackHeight = `${numPanels * 100}vh`;
-	const slideWidth = `${numPanels * 100}vw`;
-	const maxTranslate = `${(numPanels - 1) * 100}vw`;
-
-	const x = useTransform(
-		scrollYProgress,
-		[0, 1],
-		prefersReducedMotion ? ["0vw", "0vw"] : ["0vw", `-${maxTranslate}`],
-	);
 
 	const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+
+	const day1 = validDays[0] ?? null;
+	const flipDays = validDays.slice(1);
+	const stripX = useTransform(
+		scrollYProgress,
+		[0, 1 / numFlips],
+		prefersReducedMotion ? ["0vw", "0vw"] : ["0vw", "-100vw"],
+	);
 
 	useEffect(() => {
 		function onKeyDown(e: KeyboardEvent) {
@@ -315,16 +463,20 @@ export function PersonaDetailFullscreen({
 				{/* Tall scroll track — height = numPanels × 100vh */}
 				<div ref={contentRef} style={{ height: trackHeight }}>
 					{/* Sticky viewport */}
-					<div className="sticky top-0 h-screen overflow-hidden">
+					<div
+						className="sticky top-0 h-screen overflow-hidden"
+						style={{ perspective: "1200px" }}
+					>
+						{/* Sliding strip: Persona → Day 1 */}
 						<motion.div
 							className="flex h-full"
-							style={{ x, width: slideWidth }}
+							style={{ x: stripX, width: "200vw" }}
 						>
-							{/* ── Panel 0: Persona description ── */}
-							<div
-								className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
-								style={{ backgroundColor: "#f0ede8" }}
-							>
+						{/* ── Persona panel ── */}
+						<div
+							className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
+							style={{ backgroundColor: "#f0ede8" }}
+						>
 								{/* Far left — huge vertical name */}
 								<motion.div
 									className="hidden md:flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6"
@@ -429,135 +581,52 @@ export function PersonaDetailFullscreen({
 								</motion.div>
 							</div>
 
-							{/* ── Panels 1–N: One full-screen panel per day ── */}
-							{validDays.map(
-								({ dayIndex, guides }, panelIndex) => (
-									<div
-										key={dayIndex}
-										className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
-										style={{ backgroundColor: "#f0ede8" }}
-									>
-										{/* Left — day header + guide cards */}
-										<div
-											className="flex flex-1 flex-col justify-between px-6 py-10 md:flex-none md:w-[52%] md:px-12 md:py-14 lg:px-20"
-											style={{
-												boxShadow:
-													"inset -12px 0 18px -8px rgba(0,0,0,0.06)",
-											}}
-										>
-											<div className="flex items-start justify-between">
-												<div>
-													<p
-														className="text-[10px] font-bold uppercase tracking-[0.2em]"
-														style={{
-															color: persona.accentColor,
-														}}
-													>
-														{persona.name} · Day{" "}
-														{dayIndex + 1}
-													</p>
-													<h2
-														className="mt-1 text-3xl font-black text-gray-900 md:text-4xl lg:text-5xl"
-														style={{
-															fontFamily:
-																"var(--font-hero-serif)",
-															letterSpacing:
-																"-0.03em",
-														}}
-													>
-														{dayIndex === 0
-															? "First day"
-															: dayIndex === 6
-																? "End of week"
-																: `Day ${dayIndex + 1}`}
-													</h2>
-												</div>
-												<span className="text-xs text-gray-400">
-													{panelIndex + 1} /{" "}
-													{validDays.length}
-												</span>
-											</div>
-
-											<div className="flex gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-visible md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-												{guides.map((guide, index) => (
-													<div
-														key={guide.slug}
-														className="w-64 shrink-0 md:w-72"
-													>
-														<GuideCard
-															guide={guide}
-															href={`/guides/${guide.slug}`}
-															bookmarked={isBookmarked(
-																guide.slug,
-															)}
-															onToggleBookmark={
-																toggleBookmark
-															}
-															animationDelay={
-																index * 0.06
-															}
-														/>
-													</div>
-												))}
-											</div>
-										</div>
-
-										{/* Spine — spiral coil binding */}
-										<div
-											className="hidden shrink-0 w-10 overflow-hidden md:block"
-											style={{
-												background:
-													"linear-gradient(to right, #e8e3db, #cec9c0 35%, #cec9c0 65%, #e8e3db)",
-											}}
-										>
-											<div
-												className="h-full w-full"
-												style={{
-													backgroundImage: COIL_PATTERN,
-													backgroundRepeat: "repeat-y",
-													backgroundPosition:
-														"center top",
-													backgroundSize: "40px 26px",
-												}}
-											/>
-										</div>
-
-										{/* Right — journal + week arc */}
-										<div
-											className="hidden flex-1 flex-col justify-between px-10 py-14 md:flex lg:px-14"
-											style={{
-												boxShadow:
-													"inset 12px 0 18px -8px rgba(0,0,0,0.06)",
-											}}
-										>
-											<JournalNote
-												text={
-													persona.dayNarratives[
-														dayIndex
-													]
-												}
-												name={persona.name}
-											/>
-											<WeekArc
-												allDays={persona.journey.map(
-													(_, i) => ({
-														dayIndex: i,
-														hasGuides:
-															validDays.some(
-																(d) =>
-																	d.dayIndex ===
-																	i,
-															),
-													}),
-												)}
-												currentDayIndex={dayIndex}
-												accentColor={persona.accentColor}
-											/>
-										</div>
-									</div>
-								),
+							{/* Day 1 in the strip */}
+							{day1 && (
+								<div
+									className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
+									style={{ backgroundColor: "#f0ede8" }}
+								>
+									<DayPageContent
+										dayIndex={day1.dayIndex}
+										guides={day1.guides}
+										panelNumber={1}
+										totalPanels={validDays.length}
+										persona={persona}
+										isBookmarked={isBookmarked}
+										toggleBookmark={toggleBookmark}
+										validDays={validDays}
+									/>
+								</div>
 							)}
 						</motion.div>
+
+						{/* Days 2+: flip in on top */}
+						{flipDays.map(({ dayIndex, guides }, i) => (
+							<FlipPanel
+								key={dayIndex}
+								flipIndex={i + 1}
+								numFlips={numFlips}
+								scrollYProgress={scrollYProgress}
+								prefersReducedMotion={prefersReducedMotion}
+							>
+								<div
+									className="absolute inset-0 flex flex-col md:flex-row"
+									style={{ backgroundColor: "#f0ede8" }}
+								>
+									<DayPageContent
+										dayIndex={dayIndex}
+										guides={guides}
+										panelNumber={i + 2}
+										totalPanels={validDays.length}
+										persona={persona}
+										isBookmarked={isBookmarked}
+										toggleBookmark={toggleBookmark}
+										validDays={validDays}
+									/>
+								</div>
+							</FlipPanel>
+						))}
 					</div>
 				</div>
 			</div>

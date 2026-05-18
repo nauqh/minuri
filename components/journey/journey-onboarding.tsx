@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
 	ArrowLeft,
@@ -69,6 +69,14 @@ const TOPIC_VISUALS: Record<string, TopicVisual> = {
 		heroBg: "#cae9ff",
 		description: "Build connections from scratch",
 	},
+};
+
+const TOPIC_URGENCY: Record<string, string> = {
+	"food-eating": "I need to sort groceries and eating on a budget",
+	"getting-around": "I need to figure out transport and getting around",
+	"health-wellbeing": "I need a GP and to understand the health system",
+	"home-admin": "I need to sort rent, bills, and admin paperwork",
+	"social-belonging": "I want to meet people and stop feeling isolated",
 };
 
 const JOURNEY_STICKY_CARDS: Array<{
@@ -167,12 +175,12 @@ const MOMENT_PRESETS = [
 	},
 	{
 		id: 3,
-		icon: "🎒",
-		headline: "First year of uni",
+		icon: "✈️",
+		headline: "Just moved from overseas",
 		preview:
-			"Everything is still pretty new — classes, the city, living away from home. I'm trying to build a routine while getting the basics sorted.",
+			"Australia is still very new — I'm figuring out things like Medicare, banking, and how everything works here.",
 		fullText:
-			"I'm in my first year of university in Melbourne and things still feel pretty overwhelming. I want to sort out a GP, understand public transport, find affordable places to eat, and figure out how to manage my budget — so I can focus on actually enjoying this chapter.",
+			"I've just moved to Melbourne from overseas and there's a lot I don't understand yet. I need to get a local SIM, figure out Medicare and whether I'm eligible, open a bank account, and learn how to get around — all while adjusting to a completely different city and system.",
 	},
 	{
 		id: 4,
@@ -221,7 +229,28 @@ export function JourneyOnboarding() {
 	const [suburbLoading, setSuburbLoading] = useState(false);
 	const [suburbError, setSuburbError] = useState("");
 	const [selectedTopics, setSelectedTopics] = useState<GuideTopicSlug[]>([]);
+	const [prefilledFromBookmarks, setPrefilledFromBookmarks] = useState(false);
 	const [stage, setStage] = useState<"intro" | "form" | "loading">("intro");
+
+	useEffect(() => {
+		const raw = window.localStorage.getItem("minuri:guide-bookmarks:v1");
+		if (!raw) return;
+		try {
+			const slugs = JSON.parse(raw) as unknown[];
+			if (!Array.isArray(slugs) || slugs.length === 0) return;
+			const topics = Array.from(
+				new Set(
+					(slugs as string[])
+						.map((slug) => GUIDES.find((g) => g.slug === slug)?.topic)
+						.filter((t): t is GuideTopicSlug => Boolean(t)),
+				),
+			);
+			if (topics.length > 0) {
+				setSelectedTopics(topics);
+				setPrefilledFromBookmarks(true);
+			}
+		} catch {}
+	}, []);
 
 	const guideCounts = new Map(
 		GUIDE_TOPICS.map((t) => [
@@ -1210,8 +1239,9 @@ export function JourneyOnboarding() {
 													What matters most right now?
 												</p>
 												<p className="text-xs text-minuri-slate">
-													Select at least one topic to
-													focus your plan
+													{prefilledFromBookmarks
+														? "Pre-selected based on your saved guides"
+														: "Select at least one topic to focus your plan"}
 												</p>
 											</div>
 										</div>
@@ -1336,8 +1366,11 @@ export function JourneyOnboarding() {
 															aria-hidden
 														/>
 														<div className="flex-1">
-															<h3 className="text-sm font-semibold leading-tight text-[#05292a]">
+															<p className="text-[10px] font-semibold uppercase tracking-wide text-[#05292a]/50">
 																{topic.name}
+															</p>
+															<h3 className="mt-1 text-xs font-semibold leading-snug text-[#05292a]">
+																{TOPIC_URGENCY[topic.slug] ?? topic.name}
 															</h3>
 														</div>
 														<span className="mt-auto text-xs font-semibold text-[#05292a]">
@@ -1350,11 +1383,26 @@ export function JourneyOnboarding() {
 												);
 											})}
 										</div>
-									</div>
-								</motion.div>
-							</div>
+									{selectedTopics.length >= 1 && (
+										<motion.p
+											initial={{ opacity: 0, y: -4 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{ duration: 0.2 }}
+											className="mt-3 text-sm text-minuri-teal"
+										>
+											Your 7-day plan will cover{" "}
+											{selectedTopics.length}{" "}
+											{selectedTopics.length === 1
+												? "topic"
+												: "topics"}{" "}
+											— guides, tasks, and nearby places per day.
+										</motion.p>
+									)}
+								</div>
+							</motion.div>
+						</div>
 
-							{/* ── Footer submit ── */}
+						{/* ── Footer submit ── */}
 							<div className="relative mt-12 pt-8 text-center">
 								{/* Scissors tear-off line */}
 								<div

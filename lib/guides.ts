@@ -6,7 +6,7 @@ import {
 } from "@/content/guides";
 
 export type GuideTopicFilter = "all" | GuideTopicSlug;
-export type GuideOrigin = "library" | "bookmarks";
+export type GuideOrigin = "library" | "bookmarks" | "journey";
 
 export function parseSingleParam(
     value: string | string[] | undefined,
@@ -26,7 +26,9 @@ export function parseGuideTopicFilter(
 export function parseGuideOrigin(
     value: string | null | undefined,
 ): GuideOrigin {
-    return value === "bookmarks" ? "bookmarks" : "library";
+    if (value === "bookmarks") return "bookmarks";
+    if (value === "journey") return "journey";
+    return "library";
 }
 
 export function getGuideBySlug(slug: string): Guide | undefined {
