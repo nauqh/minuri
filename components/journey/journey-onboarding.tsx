@@ -1189,12 +1189,18 @@ export function JourneyOnboarding() {
 											— guides, tasks, and nearby places per day.
 										</motion.p>
 									)}
-								</div>
-							</div>
+							</motion.div>
 						</div>
+					</div>
 
-						{/* ── Footer submit ── */}
-							<div className="relative mt-12 pt-8 text-center">
+					{/* ── Footer submit ── */}
+							<motion.div
+								className="relative mt-12 pt-8 text-center"
+								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-5% 0px" }}
+								transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 0.05 }}
+							>
 								{/* Scissors tear-off line */}
 								<div
 									aria-hidden
@@ -1229,7 +1235,7 @@ export function JourneyOnboarding() {
 										/>
 									)}
 								</button>
-							</div>
+							</motion.div>
 						</motion.div>
 					</div>
 				</motion.div>
