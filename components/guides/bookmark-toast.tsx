@@ -23,29 +23,36 @@ export function BookmarkToast({ visible, hasJourney, onDone }: BookmarkToastProp
 				<motion.div
 					role="status"
 					aria-live="polite"
-					initial={{ opacity: 0, y: 12 }}
+					initial={{ opacity: 0, y: -48 }}
 					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: 12 }}
-					transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-					className="fixed bottom-6 left-1/2 z-[60] flex -translate-x-1/2 items-center gap-4 rounded-2xl border border-minuri-silver/60 bg-minuri-white px-4 py-3 shadow-lg"
+					exit={{ opacity: 0, y: -24, scale: 0.95 }}
+					transition={{
+						opacity: { duration: 0.28, ease: "easeOut" },
+						y: { type: "spring", stiffness: 280, damping: 24 },
+						scale: { duration: 0.2, ease: "easeIn" },
+					}}
+					className="fixed right-6 top-20 z-[60] w-56"
 				>
-					<div className="min-w-0">
-						<p className="text-sm font-semibold text-minuri-ocean">
-							{hasJourney ? "Added to your story" : "Saved"}
+					<div className="guide-sticky guide-sticky-a">
+						<p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#05292a]/50">
+							{hasJourney ? "Your Story" : "Guides"}
 						</p>
-						<p className="mt-0.5 text-xs text-minuri-slate">
+						<p className="mt-1.5 text-sm font-bold leading-snug text-[#05292a]">
+							{hasJourney ? "Added to your story" : "Guide saved"}
+						</p>
+						<p className="mt-1 text-xs leading-snug text-[#05292a]/70">
 							{hasJourney
 								? "Showing in your journey plan."
 								: "Build your first week to put this in context."}
 						</p>
+						<Link
+							href={hasJourney ? "/journey/plan" : "/journey"}
+							onClick={onDone}
+							className="mt-3 inline-flex text-xs font-semibold text-[#05292a] hover:underline"
+						>
+							{hasJourney ? "View journey →" : "Start journey →"}
+						</Link>
 					</div>
-					<Link
-						href={hasJourney ? "/journey/plan" : "/journey"}
-						onClick={onDone}
-						className="shrink-0 whitespace-nowrap rounded-full bg-minuri-teal px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-minuri-ocean"
-					>
-						{hasJourney ? "View journey →" : "Start journey →"}
-					</Link>
 				</motion.div>
 			)}
 		</AnimatePresence>

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
 import {
 	ArrowLeft,
 	Bookmark,
@@ -12,18 +11,15 @@ import {
 	Check,
 	Download,
 	ExternalLink,
-	Map as MapIcon,
-	X,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-import { GUIDE_TOPICS, GUIDES, type Guide } from "@/content/guides";
+import type { Guide } from "@/content/guides";
 import type { GuideOrigin, GuideTopicFilter } from "@/lib/guides";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
-import { GuideCard } from "@/components/guides/guide-card";
 import { GuideMarkdown } from "@/components/guides/guide-markdown";
 import { GuideSectionLabel } from "@/components/guides/guide-section-label";
-import { buildGuideHref, getNextGuide, getTopicMeta } from "@/lib/guides";
+import { getNextGuide, getTopicMeta } from "@/lib/guides";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { cn } from "@/lib/utils";
 import { GuideShareModal } from "@/components/guides/guide-share-modal";
@@ -162,15 +158,12 @@ export function GuideDetailView({
 	from,
 	suburb,
 }: GuideDetailViewProps) {
-	const { isBookmarked, toggleBookmark, bookmarks, hasHydrated } =
-		useGuideBookmarks();
-	const pathname = usePathname();
+	const { isBookmarked, toggleBookmark } = useGuideBookmarks();
 	const topicMeta = getTopicMeta(guide.topic);
 	const nextGuide = getNextGuide(guide);
 	const articleRef = useRef<HTMLElement | null>(null);
 	const [readingProgress, setReadingProgress] = useState(0);
 	const [markdownContent, setMarkdownContent] = useState<string | null>(null);
-	const [isJourneySidebarOpen, setIsJourneySidebarOpen] = useState(false);
 	const [headerVisible, setHeaderVisible] = useState(true);
 	const [sourcesOpen, setSourcesOpen] = useState(false);
 	const [copied, setCopied] = useState(false);
@@ -186,47 +179,16 @@ export function GuideDetailView({
 	const sectionAnim = {
 		initial: {
 			opacity: 0,
-			y: prefersReducedMotion ? 0 : 52,
-			filter: prefersReducedMotion ? "blur(0px)" : "blur(6px)",
+			y: prefersReducedMotion ? 0 : 20,
+			filter: prefersReducedMotion ? "blur(0px)" : "blur(3px)",
 		},
 		whileInView: { opacity: 1, y: 0, filter: "blur(0px)" } as const,
 		viewport: { once: true, amount: 0.08 } as const,
 		transition: {
-			duration: prefersReducedMotion ? 0.01 : 0.7,
+			duration: prefersReducedMotion ? 0.01 : 0.38,
 			ease: SECTION_ENTER_EASE,
 		},
 	};
-	const links = [
-		{
-			href: "/",
-			label: "Home",
-			active: pathname === "/",
-		},
-		{
-			href: "/guides",
-			label: "Guides",
-			active:
-				pathname === "/guides" ||
-				(pathname.startsWith("/guides/") &&
-					pathname !== "/guides/bookmarks"),
-		},
-		hasJourney
-			? {
-					href: "/journey/plan",
-					label: "My Journey",
-					active: pathname.startsWith("/journey"),
-				}
-			: {
-					href: "/guides/bookmarks",
-					label: "My Bookmarks",
-					active: pathname === "/guides/bookmarks",
-				},
-		{
-			href: "/near-me",
-			label: "Near Me",
-			active: pathname === "/near-me",
-		},
-	];
 
 	useEffect(() => {
 		let isCancelled = false;
@@ -287,131 +249,6 @@ export function GuideDetailView({
 	const nextChapterSection = resolvedSections.find(
 		(section) => section.sectionKey === "next-chapter",
 	);
-	const nextChapterCardText = toPlainCardText(nextChapterSection?.body[0]);
-	const journeyGuides = useMemo(() => {
-		return [...GUIDES].sort((a, b) => a.title.localeCompare(b.title));
-	}, []);
-	const currentGuideJourneyIndex = journeyGuides.findIndex(
-		(item) => item.slug === guide.slug,
-	);
-	const currentTopicGuides = useMemo(() => {
-		return journeyGuides.filter((item) => item.topic === guide.topic);
-	}, [guide.topic, journeyGuides]);
-	const currentTopicGuideIndex = currentTopicGuides.findIndex(
-		(item) => item.slug === guide.slug,
-	);
-	const topicJourneySummary = useMemo(() => {
-		return GUIDE_TOPICS.map((topic) => {
-			const guidesInTopic = journeyGuides.filter(
-				(item) => item.topic === topic.slug,
-			);
-			const completed = guidesInTopic.filter((item) =>
-				isBookmarked(item.slug),
-			).length;
-			return {
-				topic,
-				total: guidesInTopic.length,
-				completed,
-			};
-		});
-	}, [isBookmarked, journeyGuides]);
-	const journeyMapBody = (
-		<div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
-			<div className="rounded-[0.85rem] border border-minuri-silver/70 bg-minuri-fog/40 px-3.5 py-3">
-				<p className="text-xs text-minuri-slate">
-					{currentTopicGuideIndex + 1} of {currentTopicGuides.length}{" "}
-					in {topicMeta?.name ?? "this topic"}
-				</p>
-			</div>
-
-			<div className="grid gap-2.5">
-				{topicJourneySummary.map(({ topic, total, completed }) => {
-					const isCurrentTopic = topic.slug === guide.topic;
-					const isDone = completed === total && total > 0;
-					return (
-						<div
-							key={topic.slug}
-							className={cn(
-								"rounded-[0.85rem] border px-3.5 py-3",
-								isCurrentTopic
-									? "border-minuri-teal/70 bg-minuri-mist"
-									: "border-minuri-silver/70 bg-minuri-white",
-							)}
-						>
-							<p className="mt-1 text-sm font-semibold text-minuri-ocean">
-								{topic.name}
-							</p>
-							<p className="mt-1 text-xs text-minuri-slate">
-								{completed}/{total} saved{" "}
-								{isDone
-									? "· complete"
-									: isCurrentTopic
-										? "· you are here"
-										: ""}
-							</p>
-						</div>
-					);
-				})}
-			</div>
-
-			<div>
-				<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-					More in this topic
-				</p>
-				<ol className="mt-3 space-y-2">
-					{currentTopicGuides.map((item, index) => {
-						const isCurrent = item.slug === guide.slug;
-						const isSaved = isBookmarked(item.slug);
-						return (
-							<li key={item.slug}>
-								<Link
-									href={buildGuideHref(
-										{ slug: item.slug },
-										{ topicFilter, query, from },
-									)}
-									className={cn(
-										"flex items-center justify-between gap-3 rounded-[0.8rem] border px-3 py-2 text-sm transition-colors",
-										isCurrent
-											? "border-minuri-teal/70 bg-minuri-teal text-primary-foreground"
-											: isSaved
-												? "border-minuri-teal/40 bg-minuri-mist text-minuri-ocean hover:bg-minuri-ice"
-												: "border-minuri-silver/70 bg-minuri-white text-minuri-slate hover:bg-minuri-fog",
-									)}
-									aria-current={
-										isCurrent ? "step" : undefined
-									}
-									onClick={() =>
-										setIsJourneySidebarOpen(false)
-									}
-								>
-									<span className="truncate">
-										{index + 1}. {item.title}
-									</span>
-									{isCurrent ? (
-										<span className="text-xs">Now</span>
-									) : null}
-								</Link>
-							</li>
-						);
-					})}
-				</ol>
-			</div>
-		</div>
-	);
-
-	useEffect(() => {
-		if (!isJourneySidebarOpen) return;
-		function onKeyDown(event: KeyboardEvent) {
-			if (event.key === "Escape") {
-				setIsJourneySidebarOpen(false);
-			}
-		}
-		document.addEventListener("keydown", onKeyDown);
-		return () => {
-			document.removeEventListener("keydown", onKeyDown);
-		};
-	}, [isJourneySidebarOpen]);
-
 	useEffect(() => {
 		function updateProgress() {
 			const article = articleRef.current;
@@ -483,96 +320,51 @@ export function GuideDetailView({
 					headerVisible ? "translate-y-0" : "-translate-y-full",
 				)}
 			>
-				<div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-					<div className="mx-auto flex min-h-21 w-full items-center justify-between bg-minuri-white">
+				<div className="mx-auto max-w-screen-xl px-6">
+					<div className="flex h-18 w-full items-center justify-between">
 						<Link
-							href="/"
-							className="z-10 flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem]"
+							href={backHref}
+							className="inline-flex items-center gap-2 text-sm font-medium text-minuri-slate transition-colors hover:text-minuri-teal"
 						>
-							<span className="uppercase">Minuri</span>
+							<ArrowLeft className="size-4" aria-hidden="true" />
+							{from === "journey" ? "Back to your plan" : "Back to guides"}
 						</Link>
-						<div className="z-10 ml-10 flex items-center gap-4 md:gap-6">
-							<nav
-								aria-label="Guides navigation"
-								className="hidden items-center gap-10 text-base font-medium text-minuri-ocean md:flex"
-							>
-								{links.map((link) => (
-									<Link
-										key={link.href}
-										href={link.href}
-										className={cn(
-											"minuri-link-underline inline-flex h-12 items-center whitespace-nowrap",
-											link.active
-												? "text-minuri-ocean"
-												: "text-minuri-ocean/70 transition-colors duration-200 hover:text-minuri-ocean",
-										)}
-									>
-										{link.label}
-									</Link>
-								))}
-							</nav>
-							<span className="text-xs font-semibold text-minuri-slate">
-								{readingProgress}% complete
-							</span>
+						<div className="flex items-center gap-2">
+							<BookmarkButton
+								active={isBookmarked(guide.slug)}
+								onToggle={handleBookmarkToggle}
+								className="size-9 border-minuri-silver/80 text-minuri-teal hover:bg-minuri-fog"
+							/>
+							{hasJourney ? (
+								<Link
+									href="/journey/plan"
+									className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
+								>
+									<span
+										className="size-2 shrink-0 rounded-full"
+										style={{ backgroundColor: "var(--vibe-accent, var(--color-minuri-teal))" }}
+									/>
+									My Journey · {readingProgress}%
+								</Link>
+							) : (
+								<Link
+									href="/journey"
+									className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
+								>
+									Build your week →
+								</Link>
+							)}
 						</div>
 					</div>
 				</div>
 			</header>
 
-			<main className="mx-auto max-w-screen-2xl px-4 pt-28 md:px-8 md:pt-32">
+			<main className="mx-auto max-w-screen-2xl px-4 pt-20 md:px-8 md:pt-24">
 				<div className="mx-auto flex w-full max-w-368 items-start">
-					<motion.article
+					<article
 						ref={articleRef}
 						className="min-w-0 flex-1"
-						initial={false}
-						animate={{ x: 0 }}
-						transition={{
-							duration: prefersReducedMotion ? 0.01 : 0.3,
-						}}
 					>
-						<div className="mx-auto flex w-full items-center justify-between gap-3 md:max-w-3xl lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
-							<Link
-								href={backHref}
-								className="inline-flex items-center gap-2 text-xs text-minuri-slate transition-colors hover:text-minuri-teal"
-							>
-								<ArrowLeft
-									className="size-4"
-									aria-hidden="true"
-								/>
-								{from === "journey" ? "Back to your plan" : "Back to guides"}
-							</Link>
-							<div className="flex items-center gap-2">
-								<button
-									type="button"
-									onClick={() =>
-										setIsJourneySidebarOpen(
-											(current) => !current,
-										)
-									}
-									className={cn(
-										"inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-										isJourneySidebarOpen
-											? "border-minuri-teal/70 bg-minuri-mist text-minuri-ocean hover:bg-minuri-ice"
-											: "border-minuri-silver/80 text-minuri-ocean hover:bg-minuri-fog",
-									)}
-									aria-expanded={isJourneySidebarOpen}
-								>
-									<MapIcon
-										className="size-3.5"
-										aria-hidden="true"
-									/>
-									{isJourneySidebarOpen
-										? "Hide map"
-										: "Journey map"}
-								</button>
-								<BookmarkButton
-									active={isBookmarked(guide.slug)}
-									onToggle={handleBookmarkToggle}
-									className="size-8 border-minuri-silver/80 text-minuri-teal hover:bg-minuri-fog"
-								/>
-							</div>
-						</div>
-
 						<section className="mx-auto mt-6 w-full md:mt-8 md:max-w-3xl lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
 							<p className="text-xs uppercase tracking-[0.14em] text-minuri-slate">
 								{topicMeta?.name?.toUpperCase()}
@@ -1023,114 +815,9 @@ export function GuideDetailView({
 								</div>
 							</div>
 						</motion.footer>
-					</motion.article>
-					<motion.div
-						className="hidden shrink-0 xl:block"
-						animate={{
-							width: isJourneySidebarOpen ? "26rem" : "0rem",
-							marginLeft: isJourneySidebarOpen
-								? "1.25rem"
-								: "0rem",
-							opacity: isJourneySidebarOpen ? 1 : 0,
-						}}
-						transition={{
-							duration: prefersReducedMotion ? 0.01 : 0.28,
-						}}
-						style={{
-							pointerEvents: isJourneySidebarOpen
-								? "auto"
-								: "none",
-							overflow: "hidden",
-						}}
-					>
-						<aside
-							aria-label="Journey map"
-							className="sticky top-24 h-[calc(100vh-7rem)] w-104 overflow-hidden rounded-[1rem] border border-minuri-silver/80 bg-minuri-white shadow-[-8px_10px_30px_-20px_color-mix(in_oklch,var(--minuri-ocean)_45%,transparent)]"
-						>
-							<div className="flex h-full min-w-0 flex-1 flex-col">
-								<div className="flex items-center justify-between border-b border-minuri-silver/70 px-4 py-3">
-									<div>
-										<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-											Your journey map
-										</p>
-										<p className="mt-1 text-xs text-minuri-slate">
-											Guide {currentGuideJourneyIndex + 1}{" "}
-											of {journeyGuides.length}
-										</p>
-									</div>
-									<button
-										type="button"
-										onClick={() =>
-											setIsJourneySidebarOpen(false)
-										}
-										className="flex size-9 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate transition-colors hover:bg-minuri-mist"
-										aria-label="Hide journey map"
-									>
-										<X
-											className="size-4"
-											aria-hidden="true"
-										/>
-									</button>
-								</div>
-								{journeyMapBody}
-							</div>
-						</aside>
-					</motion.div>
+				</article>
 				</div>
 			</main>
-			<AnimatePresence>
-				{isJourneySidebarOpen ? (
-					<motion.div
-						className="fixed inset-0 z-60 xl:hidden"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{
-							duration: prefersReducedMotion ? 0.01 : 0.22,
-						}}
-					>
-						<button
-							type="button"
-							className="absolute inset-0 bg-minuri-ocean/35 backdrop-blur-[1px]"
-							onClick={() => setIsJourneySidebarOpen(false)}
-							aria-label="Close journey map"
-						/>
-						<motion.aside
-							aria-label="Journey map"
-							className="absolute inset-x-0 bottom-0 flex h-[min(82vh,44rem)] flex-col overflow-hidden rounded-t-[1.25rem] border-t border-minuri-silver/70 bg-minuri-white shadow-[0_-12px_36px_-24px_color-mix(in_oklch,var(--minuri-ocean)_50%,transparent)]"
-							initial={{ y: "100%" }}
-							animate={{ y: 0 }}
-							exit={{ y: "100%" }}
-							transition={{
-								duration: prefersReducedMotion ? 0.01 : 0.28,
-							}}
-						>
-							<div className="flex items-center justify-between border-b border-minuri-silver/70 px-4 py-3">
-								<div>
-									<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-										Your journey map
-									</p>
-									<p className="mt-1 text-xs text-minuri-slate">
-										Guide {currentGuideJourneyIndex + 1} of{" "}
-										{journeyGuides.length}
-									</p>
-								</div>
-								<button
-									type="button"
-									onClick={() =>
-										setIsJourneySidebarOpen(false)
-									}
-									className="flex size-9 items-center justify-center rounded-full bg-minuri-fog text-minuri-slate transition-colors hover:bg-minuri-mist"
-									aria-label="Hide journey map"
-								>
-									<X className="size-4" aria-hidden="true" />
-								</button>
-							</div>
-							{journeyMapBody}
-						</motion.aside>
-					</motion.div>
-				) : null}
-			</AnimatePresence>
 
 			<BookmarkToast
 				visible={bookmarkToastVisible}
