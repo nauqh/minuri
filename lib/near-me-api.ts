@@ -29,6 +29,23 @@ export type NearbyInterestRecord = {
 		| null;
 };
 
+export type NearbyEventRecord = {
+	title: string;
+	date: {
+		start_date: string;
+		when: string;
+	};
+	address: string[];
+	description?: string | null;
+	link?: string | null;
+	thumbnail?: string | null;
+	venue?: {
+		name: string;
+		rating?: number | null;
+		reviews?: number | null;
+	} | null;
+};
+
 // Server-side fetchers (used by local route handlers)
 export async function fetchSuburbs({
 	limit,
@@ -119,5 +136,24 @@ export async function fetchNearbyInterest({
 		return payload;
 	}
 
+	return Array.isArray(payload.results) ? payload.results : [];
+}
+
+export async function fetchNearbyEvents({ suburb }: { suburb: string }) {
+	const params = new URLSearchParams({ suburb: suburb.trim() });
+	const response = await fetch(
+		buildMinuriServerUrl("/api/nearby-events", params),
+		{ cache: "no-store" },
+	);
+
+	if (!response.ok) {
+		throw new Error(`Nearby events upstream failed: ${response.status}`);
+	}
+
+	const payload = (await response.json()) as
+		| NearbyEventRecord[]
+		| { results?: NearbyEventRecord[] };
+
+	if (Array.isArray(payload)) return payload;
 	return Array.isArray(payload.results) ? payload.results : [];
 }

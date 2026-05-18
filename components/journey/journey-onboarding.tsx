@@ -161,31 +161,8 @@ export function JourneyOnboarding() {
 	const [suburbError, setSuburbError] = useState("");
 	const [allSuburbs, setAllSuburbs] = useState<SuburbOption[]>([]);
 	const [selectedTopics, setSelectedTopics] = useState<GuideTopicSlug[]>([]);
-	const [prefilledFromBookmarks, setPrefilledFromBookmarks] = useState(false);
 	const [stage, setStage] = useState<"form" | "loading">("form");
 
-	useEffect(() => {
-		const raw = window.localStorage.getItem("minuri:guide-bookmarks:v1");
-		if (!raw) return;
-		try {
-			const slugs = JSON.parse(raw) as unknown[];
-			if (!Array.isArray(slugs) || slugs.length === 0) return;
-			const topics = Array.from(
-				new Set(
-					(slugs as string[])
-						.map(
-							(slug) =>
-								GUIDES.find((g) => g.slug === slug)?.topic,
-						)
-						.filter((t): t is GuideTopicSlug => Boolean(t)),
-				),
-			);
-			if (topics.length > 0) {
-				setSelectedTopics(topics);
-				setPrefilledFromBookmarks(true);
-			}
-		} catch {}
-	}, []);
 
 	const guideCounts = new Map(
 		GUIDE_TOPICS.map((t) => [
@@ -355,6 +332,9 @@ export function JourneyOnboarding() {
 									{selectedSuburb?.locality}
 								</span>
 							</p>
+							<p className="mt-2 text-xs text-minuri-slate/50">
+								This can take up to 30 seconds
+							</p>
 						</div>
 
 						{/* Guide thumbnail grid */}
@@ -430,7 +410,12 @@ export function JourneyOnboarding() {
 					/>
 
 					{/* How it works — sticky note pinned to right */}
-					<div className="pointer-events-none absolute right-16 top-44 hidden w-72 select-none xl:block min-[1500px]:right-20 2xl:right-24 2xl:w-80">
+					<motion.div
+						className="pointer-events-none absolute right-16 top-44 hidden w-72 select-none xl:block min-[1500px]:right-20 2xl:right-24 2xl:w-80"
+						initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 24 }}
+						animate={{ opacity: 1, x: 0 }}
+						transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 1.5 }}
+					>
 						<div className="guide-sticky guide-sticky-a">
 							<p
 								className="text-xs font-black uppercase tracking-[0.16em]"
@@ -473,7 +458,7 @@ export function JourneyOnboarding() {
 								))}
 							</ol>
 						</div>
-					</div>
+					</motion.div>
 					<div
 						className="max-w-4xl min-[1500px]:max-w-5xl pl-0 pr-6 py-8 md:py-10 xl:mr-[5%]"
 						style={{
@@ -497,7 +482,7 @@ export function JourneyOnboarding() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{
 									...revealTransition,
-									delay: prefersReducedMotion ? 0 : 0.05,
+									delay: prefersReducedMotion ? 0 : 0.45,
 								}}
 							>
 								<button
@@ -523,7 +508,7 @@ export function JourneyOnboarding() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{
 									...revealTransition,
-									delay: prefersReducedMotion ? 0 : 0.12,
+									delay: prefersReducedMotion ? 0 : 0.55,
 								}}
 							>
 								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
@@ -546,18 +531,12 @@ export function JourneyOnboarding() {
 									<motion.div
 										initial={{
 											opacity: 0,
-											y: prefersReducedMotion ? 0 : 20,
+											y: prefersReducedMotion ? 0 : 24,
 										}}
-										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{
-											once: true,
-											margin: "-5% 0px",
-										}}
+										animate={{ opacity: 1, y: 0 }}
 										transition={{
 											...revealTransition,
-											delay: prefersReducedMotion
-												? 0
-												: 0.05,
+											delay: prefersReducedMotion ? 0 : 0.7,
 										}}
 									>
 										<div className="mb-4 flex items-center gap-3">
@@ -581,7 +560,7 @@ export function JourneyOnboarding() {
 												)}
 											</span>
 											<div>
-												<p className="text-base font-bold text-minuri-ocean">
+												<p className="text-xl font-bold text-minuri-ocean">
 													Your moment
 												</p>
 												<p className="text-xs text-minuri-slate">
@@ -818,18 +797,12 @@ export function JourneyOnboarding() {
 									<motion.div
 										initial={{
 											opacity: 0,
-											y: prefersReducedMotion ? 0 : 20,
+											y: prefersReducedMotion ? 0 : 24,
 										}}
-										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{
-											once: true,
-											margin: "-5% 0px",
-										}}
+										animate={{ opacity: 1, y: 0 }}
 										transition={{
 											...revealTransition,
-											delay: prefersReducedMotion
-												? 0
-												: 0.05,
+											delay: prefersReducedMotion ? 0 : 0.95,
 										}}
 									>
 										<div className="mb-4 flex items-center gap-3">
@@ -853,7 +826,7 @@ export function JourneyOnboarding() {
 											<div>
 												<label
 													htmlFor="suburb-input"
-													className="block cursor-pointer text-base font-bold text-minuri-ocean"
+													className="block cursor-pointer text-xl font-bold text-minuri-ocean"
 												>
 													Your Melbourne suburb
 												</label>
@@ -1052,18 +1025,12 @@ export function JourneyOnboarding() {
 									<motion.div
 										initial={{
 											opacity: 0,
-											y: prefersReducedMotion ? 0 : 20,
+											y: prefersReducedMotion ? 0 : 24,
 										}}
-										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{
-											once: true,
-											margin: "-5% 0px",
-										}}
+										animate={{ opacity: 1, y: 0 }}
 										transition={{
 											...revealTransition,
-											delay: prefersReducedMotion
-												? 0
-												: 0.05,
+											delay: prefersReducedMotion ? 0 : 1.2,
 										}}
 									>
 										<div className="mb-4 flex items-center gap-3">
@@ -1085,18 +1052,16 @@ export function JourneyOnboarding() {
 												)}
 											</span>
 											<div>
-												<p className="text-base font-bold text-minuri-ocean">
+												<p className="text-xl font-bold text-minuri-ocean">
 													What matters most right now?
 												</p>
 												<p className="text-xs text-minuri-slate">
-													{prefilledFromBookmarks
-														? "Pre-selected based on your saved guides"
-														: "Select at least one topic to focus your plan"}
+													Select at least one topic to focus your plan
 												</p>
 											</div>
 										</div>
 										<div
-											className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5"
+											className="mt-3 -mr-6 pr-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 xl:-mr-[8vw] xl:pr-[8vw]"
 											role="group"
 											aria-label="Topic selection"
 										>
@@ -1126,11 +1091,11 @@ export function JourneyOnboarding() {
 															)
 														}
 														className={cn(
-															"group relative flex min-h-[8rem] flex-col gap-2 rounded-2xl border p-4 text-left outline-none",
+															"group relative flex min-h-[8rem] flex-col gap-2 rounded-2xl border p-4 text-left outline-none transition-[opacity,filter] duration-300",
 															"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 															isSelected
 																? "shadow-[0_16px_32px_-12px_rgba(2,24,25,0.28)]"
-																: "hover:shadow-sm",
+																: "hover:shadow-sm opacity-60 hover:opacity-85",
 														)}
 														style={{
 															backgroundColor:

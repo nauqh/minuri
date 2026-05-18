@@ -593,8 +593,8 @@ input[type="search"]::-webkit-search-cancel-button {
 	position: relative;
 	width: 100vw;
 	margin-left: calc(50% - 50vw);
-	background: oklch(0.22 0.028 232);
-	padding: 5rem 2rem 4rem;
+	background: var(--minuri-ink);
+	padding: 4rem 2rem 3rem;
 	margin-top: 2rem;
 }
 

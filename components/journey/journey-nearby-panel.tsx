@@ -24,11 +24,12 @@ const NearMeMap = dynamic(
 
 type Props = {
     suburb: string;
+    topic?: string;
 };
 
 type LoadState = "loading" | "success" | "empty" | "error";
 
-export function JourneyNearbyPanel({ suburb }: Props) {
+export function JourneyNearbyPanel({ suburb, topic }: Props) {
     const prefersReducedMotion = useReducedMotion();
     const [places, setPlaces] = useState<NearMePlace[]>([]);
     const [loadState, setLoadState] = useState<LoadState>("loading");
@@ -38,7 +39,10 @@ export function JourneyNearbyPanel({ suburb }: Props) {
         let cancelled = false;
         setLoadState("loading");
 
-        fetch(`/api/nearby-interest?suburb=${encodeURIComponent(suburb)}`)
+        const url = topic
+            ? `/api/nearby-interest?suburb=${encodeURIComponent(suburb)}&topic=${encodeURIComponent(topic)}`
+            : `/api/nearby-interest?suburb=${encodeURIComponent(suburb)}`;
+        fetch(url)
             .then((r) => r.json() as Promise<NearbyInterestRecord[]>)
             .then((data) => {
                 if (cancelled) return;
@@ -69,7 +73,7 @@ export function JourneyNearbyPanel({ suburb }: Props) {
         return () => {
             cancelled = true;
         };
-    }, [suburb]);
+    }, [suburb, topic]);
 
     const handleSelectPlace = useCallback(
         (id: string) => setSelectedId((prev) => (prev === id ? null : id)),
@@ -93,7 +97,9 @@ export function JourneyNearbyPanel({ suburb }: Props) {
                     Near you
                 </p>
                 <h2 className="mt-0.5 text-lg font-bold text-minuri-ocean">
-                    Services near {suburb}
+                    {topic === "social-belonging"
+                        ? `Find your people near ${suburb}`
+                        : `Services near ${suburb}`}
                 </h2>
             </div>
 

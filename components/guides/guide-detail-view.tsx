@@ -7,9 +7,6 @@ import {
 	ArrowLeft,
 	Bookmark,
 	BookmarkCheck,
-	Copy,
-	Check,
-	Download,
 	ExternalLink,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -22,7 +19,6 @@ import { GuideSectionLabel } from "@/components/guides/guide-section-label";
 import { getNextGuide, getTopicMeta } from "@/lib/guides";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { cn } from "@/lib/utils";
-import { GuideShareModal } from "@/components/guides/guide-share-modal";
 import { BookmarkToast } from "@/components/guides/bookmark-toast";
 
 type GuideDetailViewProps = {
@@ -166,8 +162,6 @@ export function GuideDetailView({
 	const [markdownContent, setMarkdownContent] = useState<string | null>(null);
 	const [headerVisible, setHeaderVisible] = useState(true);
 	const [sourcesOpen, setSourcesOpen] = useState(false);
-	const [copied, setCopied] = useState(false);
-	const [shareOpen, setShareOpen] = useState(false);
 	const [hasJourney, setHasJourney] = useState(false);
 	const [bookmarkToastVisible, setBookmarkToastVisible] = useState(false);
 	const lastScrollY = useRef(0);
@@ -716,99 +710,56 @@ export function GuideDetailView({
 							{...sectionAnim}
 							className="guide-footer-end"
 						>
-							<div className="relative z-10 mx-auto w-full px-4 text-center md:max-w-3xl md:px-8 lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
-								{/* Ornament + title */}
-								<p className="mb-5 text-lg text-minuri-seafoam/25">
-									✦
+							<div className="relative z-10 mx-auto flex w-full flex-col items-center px-4 md:max-w-3xl md:px-8 lg:max-w-4xl xl:max-w-5xl min-[1500px]:max-w-6xl">
+								<p className="mb-7 text-[10px] uppercase tracking-[0.22em] text-white/20">
+									End of guide
 								</p>
-								<h2
-									className="text-xl font-semibold leading-snug text-white/75 md:text-2xl"
-									style={{
-										fontFamily: "var(--font-hero-serif)",
-									}}
+
+								<Link
+									href={hasJourney ? "/journey/plan" : "/journey"}
+									className="inline-flex items-center gap-2.5 rounded-full border border-minuri-seafoam/30 bg-minuri-seafoam/10 px-7 py-3 text-sm font-semibold text-minuri-seafoam transition-all duration-200 hover:border-minuri-seafoam/50 hover:bg-minuri-seafoam/[0.18]"
 								>
-									{guide.title}
-								</h2>
-								<p className="mt-2 text-xs uppercase tracking-widest text-white/25">
-									{topicMeta?.name} · {guide.readingTimeMin}{" "}
-									min read
-								</p>
+									{hasJourney ? (
+										<>
+											<span
+												className="size-2 shrink-0 rounded-full"
+												style={{ backgroundColor: "var(--vibe-accent, var(--color-minuri-seafoam))" }}
+											/>
+											Back to your plan
+										</>
+									) : (
+										<>Build your week →</>
+									)}
+								</Link>
 
-								{/* Actions */}
-								<div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-									<button
-										type="button"
-										onClick={handleBookmarkToggle}
-										className={cn(
-											"inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-200",
-											isBookmarked(guide.slug)
-												? "border-minuri-seafoam/50 bg-minuri-seafoam/10 text-minuri-seafoam"
-												: "border-white/15 text-white/60 hover:border-white/30 hover:text-white",
-										)}
-									>
-										{isBookmarked(guide.slug) ? (
-											<>
-												<BookmarkCheck className="size-4" />{" "}
-												Saved
-											</>
-										) : (
-											<>
-												<Bookmark className="size-4" />{" "}
-												Save
-											</>
-										)}
-									</button>
-									<button
-										type="button"
-										onClick={() => {
-											navigator.clipboard.writeText(
-												window.location.href,
-											);
-											setCopied(true);
-											setTimeout(
-												() => setCopied(false),
-												2000,
-											);
-										}}
-										className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-white/60 transition-all duration-200 hover:border-white/30 hover:text-white"
-									>
-										{copied ? (
-											<>
-												<Check className="size-4" />{" "}
-												Copied
-											</>
-										) : (
-											<>
-												<Copy className="size-4" /> Copy
-												link
-											</>
-										)}
-									</button>
-									<button
-										type="button"
-										onClick={() => setShareOpen(true)}
-										className="inline-flex items-center gap-2 rounded-full bg-minuri-seafoam/10 border border-minuri-seafoam/30 px-5 py-2.5 text-sm font-medium text-minuri-seafoam transition-all duration-200 hover:bg-minuri-seafoam/20"
-									>
-										<Download className="size-4" />
-										Download guide
-									</button>
-								</div>
+								<button
+									type="button"
+									onClick={handleBookmarkToggle}
+									className={cn(
+										"mt-4 inline-flex items-center gap-1.5 text-[11px] transition-colors duration-200",
+										isBookmarked(guide.slug)
+											? "text-minuri-seafoam/50 hover:text-minuri-seafoam/80"
+											: "text-white/20 hover:text-white/40",
+									)}
+								>
+									{isBookmarked(guide.slug) ? (
+										<><BookmarkCheck className="size-3" /> Saved</>
+									) : (
+										<><Bookmark className="size-3" /> Save guide</>
+									)}
+								</button>
 
-								{/* Bottom bar */}
-								<div className="mt-10 flex items-center justify-between border-t border-white/[0.07] pt-6">
+								<div className="mt-12 flex w-full items-center justify-between border-t border-white/[0.06] pt-5">
 									<Link
 										href={backHref}
-										className="inline-flex items-center gap-1.5 text-xs text-white/30 transition-colors hover:text-white/60"
+										className="inline-flex items-center gap-1.5 text-[11px] text-white/20 transition-colors hover:text-white/40"
 									>
-										<ArrowLeft className="size-3.5" />
+										<ArrowLeft className="size-3" />
 										All guides
 									</Link>
 									<p
-										className="text-xs font-black uppercase tracking-widest text-white/15"
-										style={{
-											fontFamily:
-												"var(--font-hero-serif)",
-										}}
+										className="text-[10px] font-black uppercase tracking-widest text-white/10"
+										style={{ fontFamily: "var(--font-hero-serif)" }}
 									>
 										Minuri
 									</p>
@@ -823,11 +774,6 @@ export function GuideDetailView({
 				visible={bookmarkToastVisible}
 				hasJourney={hasJourney}
 				onDone={() => setBookmarkToastVisible(false)}
-			/>
-			<GuideShareModal
-				guide={guide}
-				isOpen={shareOpen}
-				onClose={() => setShareOpen(false)}
 			/>
 		</div>
 	);

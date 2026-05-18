@@ -105,10 +105,15 @@ export function JourneyDayPlaces({ suburb, topicSlug }: Props) {
 
     return (
         <div className="mt-6">
-            <p className="mb-1 text-base font-bold text-minuri-ocean">
-                Places to go today in {suburb}
-            </p>
-            <p className="mb-3 text-sm text-minuri-slate">{TOPIC_PLACE_LABEL[topicSlug]}</p>
+            <div className="mb-1 flex items-center gap-2.5">
+                <div className="h-7 w-1 rounded-full bg-minuri-teal" aria-hidden />
+                <p className="text-xl font-black md:text-2xl text-minuri-ocean">
+                    {topicSlug === "social-belonging"
+                        ? `Find your people in ${suburb}`
+                        : `Places to go today in ${suburb}`}
+                </p>
+            </div>
+            <p className="mb-3 pl-[14px] text-sm text-minuri-slate">{TOPIC_PLACE_LABEL[topicSlug]}</p>
 
             <div className="flex flex-col overflow-hidden rounded-xl border border-minuri-silver/60 sm:flex-row sm:h-[480px]">
                 <div className="h-[260px] min-w-0 sm:h-auto sm:flex-[3]">

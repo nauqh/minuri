@@ -28,6 +28,7 @@ import { useJourneyState } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
+import { JourneyNearbyEvents } from "@/components/journey/journey-nearby-events";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
 import { loadWeekPlan, resolveWeekPlan } from "@/lib/journey/week-plan-store";
 import { getVibe, DEFAULT_VIBE_ID, type Vibe } from "@/lib/vibes";
@@ -682,9 +683,10 @@ function DayContent({
 			<div className="mb-8 flex flex-col gap-6 md:flex-row md:gap-8 items-start">
 				{/* Guides accordion */}
 				<div className="flex-1 min-w-0">
-					<p className="mb-3 text-base font-bold text-minuri-ocean">
-						Guides
-					</p>
+					<div className="mb-3 flex items-center gap-2.5">
+						<div className="h-7 w-1 rounded-full bg-minuri-teal" aria-hidden />
+						<p className="text-xl font-black md:text-2xl text-minuri-ocean">Guides</p>
+					</div>
 					<div>
 						{plan.guides.map((guide, index) => (
 							<GuideAccordionRow
@@ -1104,6 +1106,11 @@ export function JourneyPlanView() {
 							) : (
 								<span />
 							)}
+						</div>
+
+						{/* Community near you */}
+						<div className="mt-12">
+							<JourneyNearbyEvents suburb={suburb} />
 						</div>
 					</div>
 
