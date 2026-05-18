@@ -17,6 +17,7 @@ import {
 	filterGuides,
 	getTopicMeta,
 	parseGuideTopicFilter,
+	type GuideTopicFilter,
 } from "@/lib/guides";
 import { cn } from "@/lib/utils";
 
@@ -205,7 +206,7 @@ type TopicSectionProps = {
 	topicSlug: string;
 	topicName: string;
 	guides: Guide[];
-	activeTopicFilter: string;
+	activeTopicFilter: GuideTopicFilter;
 	rawQuery: string;
 	isBookmarked: (slug: string) => boolean;
 	toggleBookmark: (slug: string) => void;
