@@ -24,6 +24,8 @@ import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 
 const DOT_PATTERN = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='white' fill-opacity='0.18'/%3E%3C/svg%3E")`;
 
+const COIL_PATTERN = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='26' viewBox='0 0 40 26'><path d='M 5,13 A 15,9 0 0,0 35,13' fill='none' stroke='%23b8b3ac' stroke-width='2' stroke-linecap='round'/><path d='M 5,13 A 15,9 0 0,1 35,13' fill='none' stroke='%2382807a' stroke-width='3' stroke-linecap='round'/></svg>")`;
+
 function PersonaPickerCard({
 	persona,
 	onSelect,
@@ -84,6 +86,109 @@ function PersonaPickerCard({
 				</div>
 			</div>
 		</motion.button>
+	);
+}
+
+function JournalNote({ text, name }: { text: string; name: string }) {
+	const LINE_H = 32;
+	return (
+		<div>
+			<p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-gray-400">
+				{name}&rsquo;s journal
+			</p>
+			<div
+				style={{
+					backgroundColor: "#fbf9f5",
+					backgroundImage: [
+						"linear-gradient(90deg, transparent 40px, #d4807055 40px, #d4807055 41px, transparent 41px)",
+						`repeating-linear-gradient(#e2ddd6, #e2ddd6 1px, transparent 1px, transparent ${LINE_H}px)`,
+					].join(", "),
+					backgroundSize: `100% 100%, 100% ${LINE_H}px`,
+					backgroundPositionY: `0, 0`,
+					padding: `8px 20px 16px 56px`,
+					boxShadow:
+						"0 1px 4px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(0,0,0,0.05)",
+					borderRadius: "2px",
+				}}
+			>
+				<p
+					style={{
+						fontFamily: "var(--font-hero-serif)",
+						fontSize: "1.05rem",
+						lineHeight: `${LINE_H}px`,
+						color: "#374151",
+						fontStyle: "italic",
+					}}
+				>
+					&ldquo;{text}&rdquo;
+				</p>
+			</div>
+		</div>
+	);
+}
+
+function WeekArc({
+	allDays,
+	currentDayIndex,
+	accentColor,
+}: {
+	allDays: { dayIndex: number; hasGuides: boolean }[];
+	currentDayIndex: number;
+	accentColor: string;
+}) {
+	return (
+		<div>
+			<p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.2em] text-gray-400">
+				Week journey
+			</p>
+			<div className="relative">
+				<div className="absolute left-1.5 right-1.5 top-[5px] h-px bg-black/10" />
+				<div className="relative flex justify-between">
+					{allDays.map(({ dayIndex, hasGuides }) => {
+						const isPast = dayIndex < currentDayIndex;
+						const isCurrent = dayIndex === currentDayIndex;
+						const isFuture = dayIndex > currentDayIndex;
+						return (
+							<div
+								key={dayIndex}
+								className="flex flex-col items-center gap-2"
+							>
+								<div
+									className="size-[11px] rounded-full"
+									style={{
+										backgroundColor: isFuture
+											? "transparent"
+											: accentColor,
+										opacity: isPast ? 0.35 : 1,
+										border: isFuture
+											? "1.5px solid #d1d5db"
+											: "none",
+										outline: isCurrent
+											? `2px solid ${accentColor}40`
+											: "none",
+										outlineOffset: isCurrent ? "2px" : "0",
+										filter:
+											!hasGuides && !isFuture
+												? "grayscale(1)"
+												: "none",
+									}}
+								/>
+								<span
+									style={{
+										fontSize: "8px",
+										color: isCurrent ? "#4b5563" : "#9ca3af",
+										fontWeight: isCurrent ? 600 : 400,
+										opacity: !hasGuides ? 0.4 : 1,
+									}}
+								>
+									{dayIndex + 1}
+								</span>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+		</div>
 	);
 }
 
@@ -329,65 +434,125 @@ export function PersonaDetailFullscreen({
 								({ dayIndex, guides }, panelIndex) => (
 									<div
 										key={dayIndex}
-										className="relative flex h-screen w-screen shrink-0 flex-col justify-between px-6 py-10 md:px-12 md:py-12 lg:px-20 lg:py-14"
+										className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
 										style={{ backgroundColor: "#f0ede8" }}
 									>
-										{/* Top — persona mini + day label */}
-										<div className="flex items-start justify-between">
-											<div>
-												<p
-													className="text-[10px] font-bold uppercase tracking-[0.2em]"
-													style={{
-														color: persona.accentColor,
-													}}
-												>
-													{persona.name} · Day{" "}
-													{dayIndex + 1}
-												</p>
-												<h2
-													className="mt-1 text-3xl font-black text-gray-900 md:text-4xl lg:text-5xl"
-													style={{
-														fontFamily:
-															"var(--font-hero-serif)",
-														letterSpacing:
-															"-0.03em",
-													}}
-												>
-													{dayIndex === 0
-														? "First day"
-														: dayIndex === 6
-															? "End of week"
-															: `Day ${dayIndex + 1}`}
-												</h2>
+										{/* Left — day header + guide cards */}
+										<div
+											className="flex flex-1 flex-col justify-between px-6 py-10 md:flex-none md:w-[52%] md:px-12 md:py-14 lg:px-20"
+											style={{
+												boxShadow:
+													"inset -12px 0 18px -8px rgba(0,0,0,0.06)",
+											}}
+										>
+											<div className="flex items-start justify-between">
+												<div>
+													<p
+														className="text-[10px] font-bold uppercase tracking-[0.2em]"
+														style={{
+															color: persona.accentColor,
+														}}
+													>
+														{persona.name} · Day{" "}
+														{dayIndex + 1}
+													</p>
+													<h2
+														className="mt-1 text-3xl font-black text-gray-900 md:text-4xl lg:text-5xl"
+														style={{
+															fontFamily:
+																"var(--font-hero-serif)",
+															letterSpacing:
+																"-0.03em",
+														}}
+													>
+														{dayIndex === 0
+															? "First day"
+															: dayIndex === 6
+																? "End of week"
+																: `Day ${dayIndex + 1}`}
+													</h2>
+												</div>
+												<span className="text-xs text-gray-400">
+													{panelIndex + 1} /{" "}
+													{validDays.length}
+												</span>
 											</div>
-											<span className="text-xs text-gray-400">
-												{panelIndex + 1} /{" "}
-												{validDays.length}
-											</span>
+
+											<div className="flex gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-visible md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+												{guides.map((guide, index) => (
+													<div
+														key={guide.slug}
+														className="w-64 shrink-0 md:w-72"
+													>
+														<GuideCard
+															guide={guide}
+															href={`/guides/${guide.slug}`}
+															bookmarked={isBookmarked(
+																guide.slug,
+															)}
+															onToggleBookmark={
+																toggleBookmark
+															}
+															animationDelay={
+																index * 0.06
+															}
+														/>
+													</div>
+												))}
+											</div>
 										</div>
 
-										{/* Middle — guide cards */}
-										<div className="flex gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-visible md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-											{guides.map((guide, index) => (
-												<div
-													key={guide.slug}
-													className="w-64 shrink-0 md:w-72"
-												>
-													<GuideCard
-														guide={guide}
-														href={`/guides/${guide.slug}`}
-														bookmarked={isBookmarked(
-															guide.slug,
-														)}
-														onToggleBookmark={
-															toggleBookmark
-														}
-														animationDelay={
-															index * 0.06
-														}
-													/>
-												</div>
-											))}
+										{/* Spine — spiral coil binding */}
+										<div
+											className="hidden shrink-0 w-10 overflow-hidden md:block"
+											style={{
+												background:
+													"linear-gradient(to right, #e8e3db, #cec9c0 35%, #cec9c0 65%, #e8e3db)",
+											}}
+										>
+											<div
+												className="h-full w-full"
+												style={{
+													backgroundImage: COIL_PATTERN,
+													backgroundRepeat: "repeat-y",
+													backgroundPosition:
+														"center top",
+													backgroundSize: "40px 26px",
+												}}
+											/>
+										</div>
+
+										{/* Right — journal + week arc */}
+										<div
+											className="hidden flex-1 flex-col justify-between px-10 py-14 md:flex lg:px-14"
+											style={{
+												boxShadow:
+													"inset 12px 0 18px -8px rgba(0,0,0,0.06)",
+											}}
+										>
+											<JournalNote
+												text={
+													persona.dayNarratives[
+														dayIndex
+													]
+												}
+												name={persona.name}
+											/>
+											<WeekArc
+												allDays={persona.journey.map(
+													(_, i) => ({
+														dayIndex: i,
+														hasGuides:
+															validDays.some(
+																(d) =>
+																	d.dayIndex ===
+																	i,
+															),
+													}),
+												)}
+												currentDayIndex={dayIndex}
+												accentColor={persona.accentColor}
+											/>
 										</div>
 									</div>
 								),

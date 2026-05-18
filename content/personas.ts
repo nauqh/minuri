@@ -17,6 +17,7 @@ export type Persona = {
     accentColor: string;
     imageUrl: string;
     journey: string[][];
+    dayNarratives: string[];
 };
 
 export const PERSONAS: Persona[] = [
@@ -40,6 +41,15 @@ export const PERSONAS: Persona[] = [
             ["budgeting-on-what-you-actually-earn", "setting-up-utilities-without-overpaying"],
             ["making-friends-in-a-city-where-everyones-busy", "free-things-to-do-this-week"],
         ],
+        dayNarratives: [
+            "Arrived yesterday. The fridge is empty and I don't know what half of Woolies even is.",
+            "Tapped on the wrong zone twice. Myki is more confusing than it looks.",
+            "Made pasta tonight for the first time without Mum watching. It actually tasted fine.",
+            "First weekend alone and everyone seems to already have plans.",
+            "Booked a GP for the first time in my life. Felt weirdly adult.",
+            "Turns out I have sixty dollars a week for food. That's the number I'm working with.",
+            "Went to a free movie thing on campus. Talked to someone. Small but real.",
+        ],
     },
     {
         id: "priya",
@@ -60,6 +70,15 @@ export const PERSONAS: Persona[] = [
             ["getting-myki-and-surviving-ptv", "finding-your-way-around-melbourne-in-week-one"],
             ["when-you-dont-know-anyone-yet", "homesickness-nobody-warns-you-about"],
             ["finding-your-community", "volunteering-as-a-way-in"],
+        ],
+        dayNarratives: [
+            "Found a bulk billing clinic two streets over. Didn't call yet but knowing it's there already helps.",
+            "My prescription transfers fine. I was expecting more bureaucracy.",
+            "Spent an hour learning what actually counts as an emergency. Worth it.",
+            "Filed the condition report on day one. The agent seemed surprised. I wasn't taking chances.",
+            "Caught the right tram on the first try. Hobart doesn't have trams. Melbourne doesn't apologise for that.",
+            "Called Mum this afternoon. Missing something I can't quite name.",
+            "Found a community garden volunteering shift. Turns out doing something with your hands helps.",
         ],
     },
     {
@@ -82,6 +101,15 @@ export const PERSONAS: Persona[] = [
             ["finding-a-gp-before-you-need-one", "when-to-see-a-psych-counsellor-or-friend"],
             ["making-friends-in-a-city-where-everyones-busy", "finding-your-community"],
         ],
+        dayNarratives: [
+            "Lease signed, condition report filed, keys in my pocket. Did it without calling home.",
+            "Read my payslip properly for the first time. Super is going somewhere and I should probably care where.",
+            "Internet on, power in my name, lease read cover to cover. Adulting is mostly just paperwork.",
+            "CBD to Carlton in twelve minutes on the tram. Brisbane feels far away and also fine.",
+            "Sunday prep done. Four containers in the fridge. Lunch sorted for the week.",
+            "Mentioned to my GP that I've been more stressed than usual. She actually listened.",
+            "Signed up for five-a-side soccer. Don't know anyone yet. That's the point.",
+        ],
     },
     {
         id: "chloe",
@@ -102,6 +130,15 @@ export const PERSONAS: Persona[] = [
             ["sustaining-yourself-sleep-movement-disconnecting", "building-a-local-routine"],
             ["your-first-grocery-run", "cheap-eats-when-broke"],
             ["surviving-the-first-weekend-alone", "finding-your-community"],
+        ],
+        dayNarratives: [
+            "Wrote down the crisis line number. Didn't need it. But knowing it's there changes something.",
+            "Found a psych who bulk bills. Waiting list is long but I'm on it now.",
+            "My prescription transferred without any drama. Small win, but I needed one.",
+            "Missing Sydney badly today. Called Mum. She said it gets easier.",
+            "Slept eight hours. Made breakfast before leaving. Tiny things that help more than they should.",
+            "Bought actual food this time. Not just snacks and avoidance.",
+            "Went for a walk, got coffee, sat in a park. Starting to feel like I live here.",
         ],
     },
     {
@@ -124,6 +161,15 @@ export const PERSONAS: Persona[] = [
             ["getting-myki-and-surviving-ptv", "cycling-melbourne-without-fear"],
             ["building-a-local-routine", "free-things-to-do-this-week"],
         ],
+        dayNarratives: [
+            "Photographed every scratch in the flat before unpacking a single box. The agent was surprised. I was prepared.",
+            "Read the lease cover to cover. Found two clauses worth questioning. Landlord changed them.",
+            "Got power connected in my name for the first time. Strange how normal it feels.",
+            "Asked HR about my super contributions. Should have done this three years ago.",
+            "Cooked an actual dinner. Not instant noodles. Real ingredients that required real decisions.",
+            "Cycled to work for the first time. The bike lanes are better than I expected.",
+            "Have a regular coffee spot now. The guy knows my order. That's not nothing.",
+        ],
     },
     {
         id: "mei",
@@ -144,6 +190,15 @@ export const PERSONAS: Persona[] = [
             ["finding-a-gp-before-you-need-one", "medicare-bulk-billing-and-mental-health-care-plans"],
             ["when-you-dont-know-anyone-yet", "finding-your-community"],
             ["volunteering-as-a-way-in", "homesickness-nobody-warns-you-about"],
+        ],
+        dayNarratives: [
+            "Ozbargain open in one tab, Woolworths in the other. Every dollar is going to count.",
+            "Rice cooker. That's it. Two dollars worth of ingredients and four meals done.",
+            "Mapped a route that stays in zone 1 only. Saving four dollars a day. That's eighty a month.",
+            "Free community dinner tonight. Ate well, talked to people, spent nothing.",
+            "Bulk billing exists and I actually qualify. That's a relief I didn't know I needed.",
+            "Still figuring out where I fit here. Cairns feels very far away today.",
+            "Signed up to volunteer at a community garden. Cheap way to meet people and feel less alone.",
         ],
     },
 ];
