@@ -43,7 +43,7 @@ export async function fetchSuburbs({
 	const response = await fetch(
 		buildMinuriServerUrl("/suburb", params),
 		{
-			cache: "no-store",
+			next: { revalidate: 86400 }, // suburbs data is static — cache for 24h
 		},
 	);
 

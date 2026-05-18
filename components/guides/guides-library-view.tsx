@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useDeferredValue } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -28,283 +28,340 @@ const TOPIC_COLORS: Record<string, string> = {
 	"social-belonging": "#cae9ff",
 };
 
-type BentoVariant = "xl" | "tall" | "wide" | "sm" | "color";
-
-// One fixed variant per guide (by position in the full GUIDES array).
-// Filtered subsets retain their per-guide identity — no repeating pattern visible.
-const GUIDE_LAYOUT: Array<{ cols: number; rows: number; variant: BentoVariant }> = [
-	{ cols: 2, rows: 2, variant: "xl" },    // 0
-	{ cols: 1, rows: 1, variant: "color" }, // 1
-	{ cols: 1, rows: 2, variant: "tall" },  // 2
-	{ cols: 1, rows: 1, variant: "sm" },    // 3
-	{ cols: 2, rows: 1, variant: "wide" },  // 4
-	{ cols: 1, rows: 1, variant: "color" }, // 5
-	{ cols: 1, rows: 1, variant: "sm" },    // 6
-	{ cols: 1, rows: 2, variant: "tall" },  // 7
-	{ cols: 1, rows: 1, variant: "sm" },    // 8
-	{ cols: 2, rows: 1, variant: "wide" },  // 9
-	{ cols: 1, rows: 1, variant: "color" }, // 10
-	{ cols: 1, rows: 2, variant: "tall" },  // 11
-	{ cols: 2, rows: 1, variant: "wide" },  // 12
-	{ cols: 1, rows: 1, variant: "sm" },    // 13
-	{ cols: 1, rows: 1, variant: "color" }, // 14
-	{ cols: 2, rows: 2, variant: "xl" },    // 15
-	{ cols: 1, rows: 1, variant: "sm" },    // 16
-	{ cols: 1, rows: 1, variant: "color" }, // 17
-	{ cols: 1, rows: 2, variant: "tall" },  // 18
-	{ cols: 2, rows: 1, variant: "wide" },  // 19
-	{ cols: 1, rows: 1, variant: "sm" },    // 20
-	{ cols: 1, rows: 1, variant: "color" }, // 21
-	{ cols: 1, rows: 1, variant: "sm" },    // 22
-	{ cols: 1, rows: 1, variant: "color" }, // 23
-	{ cols: 2, rows: 1, variant: "wide" },  // 24
-	{ cols: 1, rows: 2, variant: "tall" },  // 25
-	{ cols: 1, rows: 1, variant: "sm" },    // 26
-	{ cols: 2, rows: 2, variant: "xl" },    // 27
-	{ cols: 1, rows: 1, variant: "color" }, // 28
-	{ cols: 1, rows: 2, variant: "tall" },  // 29
-	{ cols: 1, rows: 1, variant: "sm" },    // 30
-	{ cols: 2, rows: 1, variant: "wide" },  // 31
-];
-
-// O(1) lookup: guide slug → index in full GUIDES array
-const GUIDE_INDEX_MAP = new Map(GUIDES.map((g, i) => [g.slug, i]));
-
 // ─── Card sub-components ──────────────────────────────────────────────────────
 
-type ImageCardProps = {
+type SharedCardProps = {
 	guide: Guide;
 	href: string;
 	accent: string;
 	meta: ReturnType<typeof getTopicMeta>;
-	variant: "xl" | "tall" | "sm";
-	isBookmarked: boolean;
-	onToggleBookmark: () => void;
-	prefersReducedMotion: boolean;
 };
 
-function ImageCard({
+type BookmarkProps = {
+	isBookmarked: boolean;
+	onToggleBookmark: () => void;
+};
+
+function TopicBadge({ accent, label }: { accent: string; label: string }) {
+	return (
+		<span
+			className="inline-block rounded-full px-2.5 py-0.5 text-[9px] font-black uppercase tracking-widest"
+			style={{ backgroundColor: accent, color: "#021819" }}
+		>
+			{label}
+		</span>
+	);
+}
+
+function HeroCard({
 	guide,
 	href,
 	accent,
 	meta,
-	variant,
 	isBookmarked,
 	onToggleBookmark,
-	prefersReducedMotion,
-}: ImageCardProps) {
-	const isXl = variant === "xl";
-
+}: SharedCardProps & BookmarkProps) {
 	return (
-		<motion.article
-			className="group relative h-full w-full overflow-hidden shadow-sm"
-			style={{ borderRadius: 16 }}
-			whileHover={prefersReducedMotion ? {} : { borderRadius: 32 }}
-			transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-		>
-			<Link
-				href={href}
-				className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-minuri-teal/60"
-				aria-label={`Read guide: ${guide.title}`}
-			/>
-			{/* Clip wrapper inherits animated border-radius — prevents 1-frame lag */}
-			<div className="absolute inset-0 overflow-hidden" style={{ borderRadius: "inherit" }}>
+		<article className="group minuri-link-underline-trigger">
+			<div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
+				<Link
+					href={href}
+					className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-minuri-teal/60"
+					aria-label={`Read guide: ${guide.title}`}
+				/>
 				<Image
 					src={guide.thumbnailUrl}
 					alt={guide.title}
 					fill
-					sizes={
-						isXl
-							? "(max-width: 1024px) 100vw, 50vw"
-							: "(max-width: 1024px) 50vw, 25vw"
-					}
-					className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-					priority={isXl}
+					sizes="(max-width: 1024px) 100vw, 66vw"
+					className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+					priority
 				/>
+				<div className="absolute right-3 top-3 z-20">
+					<BookmarkButton
+						active={isBookmarked}
+						onToggle={onToggleBookmark}
+						className="border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/45"
+					/>
+				</div>
 			</div>
-			{/* Gradient overlay */}
-			<div
-				className="absolute inset-0"
-				style={{
-					background: isXl
-						? `linear-gradient(135deg, ${accent}55 0%, transparent 40%), linear-gradient(to top, rgba(2,24,25,0.94) 0%, rgba(2,24,25,0.22) 50%, transparent 75%)`
-						: `linear-gradient(to top, rgba(2,24,25,0.92) 0%, rgba(2,24,25,0.12) 55%, transparent 80%)`,
-				}}
-			/>
-			{/* Topic color accent line */}
-			<div
-				className="absolute top-0 left-0 right-0 h-0.5"
-				style={{ backgroundColor: accent }}
-			/>
-			{/* Card content */}
-			<div
-				className={cn(
-					"absolute bottom-0 left-0 right-0 z-20",
-					isXl ? "p-7" : "p-4",
-				)}
-			>
-				<div className="mb-2 flex items-center gap-2">
-					<span
-						className={cn(
-							"rounded-full font-black uppercase tracking-[0.15em]",
-							isXl
-								? "px-3 py-1 text-[10px]"
-								: "px-2 py-0.5 text-[9px]",
-						)}
-						style={{ backgroundColor: accent, color: "#021819" }}
-					>
-						{meta?.name ?? guide.topic}
+			<div className="mt-4">
+				<div className="mb-2 flex items-center gap-2.5">
+					<TopicBadge accent={accent} label={meta?.name ?? guide.topic} />
+					<span className="text-xs text-minuri-slate">
+						{guide.readingTimeMin} min read
 					</span>
-					<span
-						className={cn(
-							"text-white/45",
-							isXl ? "text-xs" : "text-[10px]",
-						)}
+				</div>
+				<Link href={href} tabIndex={-1} aria-hidden>
+					<h3
+						className="w-fit pb-1 text-2xl font-semibold leading-tight text-minuri-ocean md:text-3xl"
+						style={{ fontFamily: "var(--font-hero-serif)" }}
 					>
+						<span className="minuri-link-underline-multiline">{guide.title}</span>
+					</h3>
+					{guide.summary && (
+						<p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-minuri-slate">
+							{guide.summary}
+						</p>
+					)}
+				</Link>
+			</div>
+		</article>
+	);
+}
+
+function ListItem({ guide, href, accent, meta }: SharedCardProps) {
+	return (
+		<article className="group minuri-link-underline-trigger flex gap-3">
+			<Link
+				href={href}
+				className="flex w-full gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60 focus-visible:ring-offset-2"
+				aria-label={`Read guide: ${guide.title}`}
+			>
+				<div className="relative h-[72px] w-28 shrink-0 overflow-hidden rounded-lg">
+					<Image
+						src={guide.thumbnailUrl}
+						alt={guide.title}
+						fill
+						sizes="112px"
+						className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+					/>
+				</div>
+				<div className="min-w-0 flex-1 py-0.5">
+					<TopicBadge accent={accent} label={meta?.name ?? guide.topic} />
+					<h4
+						className="mt-1 w-fit pb-1 line-clamp-2 text-sm font-medium leading-snug text-minuri-ocean"
+						style={{ fontFamily: "var(--font-hero-serif)" }}
+					>
+						<span className="minuri-link-underline-multiline">{guide.title}</span>
+					</h4>
+					<p className="mt-0.5 text-[10px] text-minuri-slate">
+						{guide.readingTimeMin} min read
+					</p>
+				</div>
+			</Link>
+		</article>
+	);
+}
+
+function StackedCard({
+	guide,
+	href,
+	accent,
+	meta,
+	isBookmarked,
+	onToggleBookmark,
+	aspectClass = "aspect-[4/3]",
+}: SharedCardProps &
+	BookmarkProps & {
+		aspectClass?: string;
+	}) {
+	return (
+		<article className="group minuri-link-underline-trigger">
+			<div className={cn("relative overflow-hidden rounded-xl", aspectClass)}>
+				<Link
+					href={href}
+					className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-minuri-teal/60"
+					aria-label={`Read guide: ${guide.title}`}
+				/>
+				<Image
+					src={guide.thumbnailUrl}
+					alt={guide.title}
+					fill
+					sizes="(max-width: 1024px) 50vw, 25vw"
+					className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+				/>
+				<div className="absolute right-2 top-2 z-20">
+					<BookmarkButton
+						active={isBookmarked}
+						onToggle={onToggleBookmark}
+						className="border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/45"
+					/>
+				</div>
+			</div>
+			<div className="mt-2.5">
+				<div className="mb-1.5 flex items-center gap-2">
+					<TopicBadge accent={accent} label={meta?.name ?? guide.topic} />
+					<span className="text-[10px] text-minuri-slate">
 						{guide.readingTimeMin} min
 					</span>
 				</div>
-				<h3
-					className={cn(
-						"font-black leading-tight text-white",
-						isXl
-							? "max-w-2xl text-3xl md:text-4xl"
-							: "line-clamp-2 text-sm",
-					)}
-					style={{ fontFamily: "var(--font-hero-serif)" }}
-				>
-					{guide.title}
-				</h3>
-				{isXl && guide.summary && (
-					<p className="mt-2 max-w-lg text-sm leading-relaxed text-white/50 line-clamp-2">
-						{guide.summary}
-					</p>
-				)}
-			</div>
-			<div className="absolute right-3 top-3 z-20">
-				<BookmarkButton
-					active={isBookmarked}
-					onToggle={onToggleBookmark}
-					className="border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/45"
-				/>
-			</div>
-		</motion.article>
-	);
-}
-
-type WideCardProps = {
-	guide: Guide;
-	href: string;
-	accent: string;
-	meta: ReturnType<typeof getTopicMeta>;
-	isBookmarked: boolean;
-	onToggleBookmark: () => void;
-	prefersReducedMotion: boolean;
-};
-
-function WideCard({
-	guide,
-	href,
-	accent,
-	meta,
-	isBookmarked,
-	onToggleBookmark,
-	prefersReducedMotion,
-}: WideCardProps) {
-	return (
-		<motion.article
-			className="group relative flex h-full w-full overflow-hidden shadow-sm"
-			style={{ borderRadius: 16 }}
-			whileHover={prefersReducedMotion ? {} : { borderRadius: 32 }}
-			transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-		>
-			<Link
-				href={href}
-				className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-minuri-teal/60"
-				aria-label={`Read guide: ${guide.title}`}
-			/>
-			{/* Left: solid topic color panel with text */}
-			<div
-				className="flex w-2/5 shrink-0 flex-col justify-between p-5"
-				style={{ backgroundColor: accent }}
-			>
-				<span className="text-[9px] font-black uppercase tracking-widest text-black/40">
-					{meta?.name ?? guide.topic}
-				</span>
-				<div>
+				<Link href={href} tabIndex={-1} aria-hidden>
 					<h3
-						className="line-clamp-3 text-base font-black leading-snug text-minuri-ocean"
+						className="w-fit pb-1 line-clamp-2 text-sm font-medium leading-snug text-minuri-ocean"
 						style={{ fontFamily: "var(--font-hero-serif)" }}
 					>
-						{guide.title}
+						<span className="minuri-link-underline-multiline">{guide.title}</span>
 					</h3>
-					<p className="mt-1.5 text-[10px] text-black/45">
-						{guide.readingTimeMin} min read
-					</p>
-				</div>
+				</Link>
 			</div>
-			{/* Right: image — no inner overflow-hidden; outer article handles the clip */}
-			<div className="relative flex-1">
-				<Image
-					src={guide.thumbnailUrl}
-					alt={guide.title}
-					fill
-					sizes="33vw"
-					className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-				/>
-			</div>
-			<div className="absolute right-3 top-3 z-20">
-				<BookmarkButton
-					active={isBookmarked}
-					onToggle={onToggleBookmark}
-					className="border-white/20 bg-black/25 text-white backdrop-blur-sm hover:bg-black/45"
-				/>
-			</div>
-		</motion.article>
+		</article>
 	);
 }
 
-type ColorCardProps = {
-	guide: Guide;
-	href: string;
-	accent: string;
-	meta: ReturnType<typeof getTopicMeta>;
+// ─── Per-topic Forbes section ─────────────────────────────────────────────────
+
+type TopicSectionProps = {
+	topicSlug: string;
+	topicName: string;
+	guides: Guide[];
+	activeTopicFilter: string;
+	rawQuery: string;
+	isBookmarked: (slug: string) => boolean;
+	toggleBookmark: (slug: string) => void;
 	prefersReducedMotion: boolean;
+	entranceEase: [number, number, number, number];
+	showHeader: boolean;
 };
 
-function ColorCard({ guide, href, accent, meta, prefersReducedMotion }: ColorCardProps) {
+function TopicSection({
+	topicSlug,
+	topicName,
+	guides,
+	activeTopicFilter,
+	rawQuery,
+	isBookmarked,
+	toggleBookmark,
+	prefersReducedMotion,
+	entranceEase,
+	showHeader,
+}: TopicSectionProps) {
+	const accent = TOPIC_COLORS[topicSlug] ?? "#00f5c8";
+	const [hero, ...rest] = guides;
+	const sidebarItems = rest.slice(0, 2);
+	const listItems = rest.slice(2, 6);
+	const gridItems = rest.slice(6);
+
+	function href(guide: Guide) {
+		return buildGuideHref(guide, {
+			topicFilter: activeTopicFilter,
+			query: rawQuery,
+			from: "library",
+		});
+	}
+
 	return (
-		<motion.article
-			className="group relative flex h-full w-full flex-col justify-between overflow-hidden p-5 shadow-sm"
-			style={{ backgroundColor: accent, borderRadius: 16 }}
-			whileHover={prefersReducedMotion ? {} : { borderRadius: 32 }}
-			transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-		>
-			<Link
-				href={href}
-				className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-minuri-ocean/40"
-				aria-label={`Read guide: ${guide.title}`}
-			/>
-			<span className="relative z-20 text-[9px] font-black uppercase tracking-widest text-black/40">
-				{meta?.name ?? guide.topic}
-			</span>
-			<div className="relative z-20">
-				<h3
-					className="line-clamp-3 text-lg font-black leading-snug text-minuri-ocean"
-					style={{ fontFamily: "var(--font-hero-serif)" }}
-				>
-					{guide.title}
-				</h3>
-				<div className="mt-3 flex items-center justify-between">
-					<span className="text-[10px] text-black/45">
-						{guide.readingTimeMin} min read
-					</span>
-					<div className="flex size-7 items-center justify-center rounded-full bg-minuri-ocean transition-transform duration-200 group-hover:translate-x-0.5">
-						<ArrowRight className="size-3 text-white" />
+		<section>
+			{showHeader && (
+				<div className="mb-6 flex items-center gap-3 border-b border-minuri-silver/30 pb-3">
+					<span
+						className="h-3 w-3 rounded-full"
+						style={{ backgroundColor: accent }}
+					/>
+					<h2 className="text-xs font-black uppercase tracking-[0.18em] text-minuri-ocean">
+						{topicName}
+					</h2>
+				</div>
+			)}
+
+			{/* Hero + sidebar */}
+			<div className="lg:grid lg:grid-cols-3 lg:gap-8">
+				{/* Left 2/3: hero + list */}
+				<div className="lg:col-span-2">
+					<motion.div
+						initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, amount: 0.05 }}
+						transition={{ duration: 0.5, ease: entranceEase }}
+					>
+						<HeroCard
+							guide={hero}
+							href={href(hero)}
+							accent={accent}
+							meta={getTopicMeta(hero.topic)}
+							isBookmarked={isBookmarked(hero.slug)}
+							onToggleBookmark={() => toggleBookmark(hero.slug)}
+						/>
+					</motion.div>
+
+					{listItems.length > 0 && (
+						<div className="mt-6 border-t border-minuri-silver/20 pt-5">
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+								{listItems.map((guide, i) => (
+									<motion.div
+										key={guide.slug}
+										initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 12 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, amount: 0.1 }}
+										transition={{
+											duration: 0.4,
+											delay: prefersReducedMotion ? 0 : i * 0.06,
+											ease: entranceEase,
+										}}
+									>
+										<ListItem
+											guide={guide}
+											href={href(guide)}
+											accent={accent}
+											meta={getTopicMeta(guide.topic)}
+										/>
+									</motion.div>
+								))}
+							</div>
+						</div>
+					)}
+				</div>
+
+				{/* Right 1/3: sidebar — desktop only */}
+				{sidebarItems.length > 0 && (
+					<div className="hidden lg:col-span-1 lg:flex lg:flex-col lg:gap-6 lg:border-l lg:border-minuri-silver/30 lg:pl-8">
+						{sidebarItems.map((guide, i) => (
+							<motion.div
+								key={guide.slug}
+								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 12 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.1 }}
+								transition={{
+									duration: 0.4,
+									delay: prefersReducedMotion ? 0 : i * 0.08,
+									ease: entranceEase,
+								}}
+							>
+								<StackedCard
+									guide={guide}
+									href={href(guide)}
+									accent={accent}
+									meta={getTopicMeta(guide.topic)}
+									isBookmarked={isBookmarked(guide.slug)}
+									onToggleBookmark={() => toggleBookmark(guide.slug)}
+								/>
+							</motion.div>
+						))}
+					</div>
+				)}
+			</div>
+
+			{/* Overflow grid */}
+			{gridItems.length > 0 && (
+				<div className="mt-8 border-t border-minuri-silver/20 pt-6">
+					<div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+						{gridItems.map((guide, i) => (
+							<motion.div
+								key={guide.slug}
+								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 14 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, amount: 0.1 }}
+								transition={{
+									duration: 0.4,
+									delay: prefersReducedMotion ? 0 : (i % 4) * 0.05,
+									ease: entranceEase,
+								}}
+							>
+								<StackedCard
+									guide={guide}
+									href={href(guide)}
+									accent={accent}
+									meta={getTopicMeta(guide.topic)}
+									aspectClass="aspect-[16/9]"
+									isBookmarked={isBookmarked(guide.slug)}
+									onToggleBookmark={() => toggleBookmark(guide.slug)}
+								/>
+							</motion.div>
+						))}
 					</div>
 				</div>
-			</div>
-		</motion.article>
+			)}
+		</section>
 	);
 }
 
@@ -327,11 +384,16 @@ export function GuidesLibraryView() {
 	const rawQuery = searchParams.get("q") ?? "";
 	const deferredQuery = useDeferredValue(rawQuery);
 
-	const visibleGuides = filterGuides(
-		GUIDES,
-		activeTopicFilter,
-		deferredQuery,
-	);
+	const visibleGuides = filterGuides(GUIDES, activeTopicFilter, deferredQuery);
+
+	// Group by topic, preserving GUIDE_TOPICS order
+	const topicSections = GUIDE_TOPICS.map((topic) => ({
+		slug: topic.slug,
+		name: topic.name,
+		guides: visibleGuides.filter((g) => g.topic === topic.slug),
+	})).filter(({ guides }) => guides.length > 0);
+
+	const showHeaders = topicSections.length > 1;
 
 	function updateParams(updater: (params: URLSearchParams) => void) {
 		startTransition(() => {
@@ -370,10 +432,7 @@ export function GuidesLibraryView() {
 							onClick={() =>
 								updateParams((params) => params.delete("topic"))
 							}
-							initial={{
-								opacity: 0,
-								y: prefersReducedMotion ? 0 : 6,
-							}}
+							initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{
 								duration: prefersReducedMotion ? 0 : 0.3,
@@ -404,16 +463,11 @@ export function GuidesLibraryView() {
 										params.set("topic", topic.slug),
 									)
 								}
-								initial={{
-									opacity: 0,
-									y: prefersReducedMotion ? 0 : 6,
-								}}
+								initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
 								animate={{ opacity: 1, y: 0 }}
 								transition={{
 									duration: prefersReducedMotion ? 0 : 0.3,
-									delay: prefersReducedMotion
-										? 0
-										: (index + 1) * 0.04,
+									delay: prefersReducedMotion ? 0 : (index + 1) * 0.04,
 									ease: entranceEase,
 								}}
 								className={cn(
@@ -430,87 +484,12 @@ export function GuidesLibraryView() {
 										transition={springTransition}
 									/>
 								)}
-								<span className="relative z-10">
-									{topic.name}
-								</span>
+								<span className="relative z-10">{topic.name}</span>
 							</motion.button>
 						))}
 					</div>
 				</LayoutGroup>
 			</div>
-		</div>
-	);
-
-	const bentoGrid = (
-		<div className="grid grid-cols-2 gap-3 pb-20 lg:grid-cols-4 lg:gap-4 [grid-auto-flow:dense] auto-rows-[185px] lg:auto-rows-[230px]">
-			{visibleGuides.map((guide, i) => {
-				const guideIndex = GUIDE_INDEX_MAP.get(guide.slug) ?? i;
-				const { cols, rows, variant } = GUIDE_LAYOUT[guideIndex % GUIDE_LAYOUT.length];
-				const rotation = prefersReducedMotion ? 0 : Math.sin(guideIndex * 2.399) * 0.4;
-				const accent = TOPIC_COLORS[guide.topic] ?? "#00f5c8";
-				const meta = getTopicMeta(guide.topic);
-				const href = buildGuideHref(guide, {
-					topicFilter: activeTopicFilter,
-					query: rawQuery,
-					from: "library",
-				});
-
-				const colSpanClass = cols === 2 ? "col-span-2" : "col-span-1";
-				const rowSpanClass = rows === 2 ? "row-span-2" : "row-span-1";
-
-				return (
-					<motion.div
-						key={guide.slug}
-						className={cn(colSpanClass, rowSpanClass)}
-						initial={{
-							opacity: 0,
-							y: prefersReducedMotion ? 0 : 20,
-						}}
-						whileInView={{ opacity: 1, y: 0, rotate: rotation }}
-						viewport={{ once: true, amount: 0.05 }}
-						transition={{
-							duration: 0.45,
-							delay: prefersReducedMotion ? 0 : (i % 6) * 0.05,
-							ease: entranceEase,
-						}}
-					>
-						{variant === "color" ? (
-							<ColorCard
-								guide={guide}
-								href={href}
-								accent={accent}
-								meta={meta}
-								prefersReducedMotion={!!prefersReducedMotion}
-							/>
-						) : variant === "wide" ? (
-							<WideCard
-								guide={guide}
-								href={href}
-								accent={accent}
-								meta={meta}
-								isBookmarked={isBookmarked(guide.slug)}
-								onToggleBookmark={() =>
-									toggleBookmark(guide.slug)
-								}
-								prefersReducedMotion={!!prefersReducedMotion}
-							/>
-						) : (
-							<ImageCard
-								guide={guide}
-								href={href}
-								accent={accent}
-								meta={meta}
-								variant={variant}
-								isBookmarked={isBookmarked(guide.slug)}
-								onToggleBookmark={() =>
-									toggleBookmark(guide.slug)
-								}
-								prefersReducedMotion={!!prefersReducedMotion}
-							/>
-						)}
-					</motion.div>
-				);
-			})}
 		</div>
 	);
 
@@ -546,7 +525,23 @@ export function GuidesLibraryView() {
 						</section>
 					</div>
 				) : (
-					<div className="px-6 md:px-8">{bentoGrid}</div>
+					<div className="space-y-16 px-6 pb-20 md:px-8">
+						{topicSections.map((section) => (
+							<TopicSection
+								key={section.slug}
+								topicSlug={section.slug}
+								topicName={section.name}
+								guides={section.guides}
+								activeTopicFilter={activeTopicFilter}
+								rawQuery={rawQuery}
+								isBookmarked={isBookmarked}
+								toggleBookmark={toggleBookmark}
+								prefersReducedMotion={!!prefersReducedMotion}
+								entranceEase={entranceEase}
+								showHeader={showHeaders}
+							/>
+						))}
+					</div>
 				)}
 			</div>
 		</GuidesShell>

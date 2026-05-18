@@ -11,7 +11,7 @@ export type VibeLLM = {
 };
 
 export type IdentityLLM = {
-  species: "pioneer" | "settler" | "builder" | "openheart";
+  archetype: "first-timer" | "far-from-home" | "solo-arrival" | "reluctant-grownup";
   vibe: VibeLLM;
   letter_body: string;
   suburb_line: string;
@@ -35,7 +35,6 @@ export type WeekPlanLLM = {
 
 export type JourneyAPIResponse = {
   identity: IdentityLLM;
-  week_plan: WeekPlanLLM;
 };
 
 export function saveWeekPlan(plan: WeekPlanLLM): void {

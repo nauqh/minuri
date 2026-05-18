@@ -9,6 +9,7 @@ import { ArrowLeft, CheckCircle2, Loader2, MapPin, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
 	normalizeSuburbName,
+	preloadSuburbs,
 	rankAndFilterSuburbs,
 	type SuburbOption,
 } from "@/lib/suburbs";
@@ -39,67 +40,29 @@ export function NearMeEntry() {
 	const [selectedTopic, setSelectedTopic] =
 		useState<NearMeTopic>("food-eating");
 	const [query, setQuery] = useState("");
-	const [options, setOptions] = useState<SuburbOption[]>([]);
 	const [selected, setSelected] = useState<SuburbOption | null>(null);
 	const [activeIndex, setActiveIndex] = useState(-1);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const skipNextSearchRef = useRef(false);
 	const listboxId = useId();
-	const [debouncedQuery, setDebouncedQuery] = useState("");
+	const [allSuburbs, setAllSuburbs] = useState<SuburbOption[]>([]);
 
 	useEffect(() => {
-		const t = window.setTimeout(() => setDebouncedQuery(query), 250);
-		return () => window.clearTimeout(t);
-	}, [query]);
-
-	useEffect(() => {
-		let cancelled = false;
-		const normalizedQuery = normalizeSuburbName(debouncedQuery);
-
-		if (skipNextSearchRef.current) {
-			skipNextSearchRef.current = false;
+		preloadSuburbs().then((suburbs) => {
+			setAllSuburbs(suburbs);
 			setLoading(false);
-			setError("");
-			return;
-		}
-
-		if (!normalizedQuery || normalizedQuery.length < 3) {
-			setOptions([]);
+		}).catch(() => {
+			setError("Could not load suburbs right now.");
 			setLoading(false);
-			setError("");
-			return;
-		}
+		});
+	}, []);
 
-		async function loadSuburbs() {
-			setLoading(true);
-			setError("");
-			try {
-				const res = await fetch(
-					`/api/suburbs?q=${encodeURIComponent(normalizedQuery)}`,
-				);
-				if (!res.ok) throw new Error("Failed");
-				const payload = (await res.json()) as {
-					suburbs?: SuburbOption[];
-				};
-				if (!cancelled) setOptions(payload.suburbs ?? []);
-			} catch {
-				if (!cancelled) setError("Could not load suburbs right now.");
-			} finally {
-				if (!cancelled) setLoading(false);
-			}
-		}
-
-		void loadSuburbs();
-		return () => {
-			cancelled = true;
-		};
-	}, [debouncedQuery]);
-
-	const suggestions = useMemo(
-		() => rankAndFilterSuburbs(options, query),
-		[options, query],
-	);
+	const suggestions = useMemo(() => {
+		const normalized = normalizeSuburbName(query);
+		if (!normalized || normalized.length < 3) return [];
+		return rankAndFilterSuburbs(allSuburbs, query);
+	}, [allSuburbs, query]);
 	const normalizedQuery = normalizeSuburbName(query);
 	const hasConfirmedSelection =
 		selected !== null &&

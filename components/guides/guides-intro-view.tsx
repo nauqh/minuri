@@ -28,6 +28,14 @@ type TopicVisual = {
 	description: string;
 };
 
+const TOPIC_URGENCY: Record<string, string> = {
+	"food-eating": "I need to sort groceries and eating on a budget",
+	"getting-around": "I need to figure out transport and getting around",
+	"health-wellbeing": "I need a GP and to understand the health system",
+	"home-admin": "I need to sort rent, bills, and admin paperwork",
+	"social-belonging": "I want to meet people and stop feeling isolated",
+};
+
 const TOPIC_VISUALS: Record<GuideTopicSlug, TopicVisual> = {
 	"food-eating": {
 		icon: Sandwich,
@@ -346,6 +354,9 @@ export function GuidesIntroView() {
 									<p className="text-base font-bold leading-tight text-[#05292a]">
 										{topic.name}
 									</p>
+									<p className="text-xs font-semibold leading-snug text-[#05292a] px-1">
+										{TOPIC_URGENCY[topic.slug]}
+									</p>
 									<p className="text-xs font-medium text-[#05292a]/60">
 										{count} guides
 									</p>
@@ -449,8 +460,8 @@ export function GuidesIntroView() {
 										<h3 className="font-semibold leading-tight text-[#05292a]">
 											{topic.name}
 										</h3>
-										<p className="mt-1 text-xs leading-snug text-[#163a3a]">
-											{visual.description}
+										<p className="mt-1 text-xs font-semibold leading-snug text-[#05292a]">
+											{TOPIC_URGENCY[topic.slug]}
 										</p>
 									</div>
 									<span className="mt-auto text-xs font-semibold text-[#05292a]">
@@ -506,11 +517,13 @@ export function GuidesIntroView() {
 			</div>
 
 			{/* ── Divider ── */}
-			<div className="mx-auto max-w-screen-2xl mt-12 px-6 py-6">
-				<div className="flex items-center justify-center">
+			<div className="mt-12 px-6 py-6">
+				<div className="mx-auto flex max-w-screen-2xl items-center gap-4">
+					<div className="h-px flex-1 bg-gradient-to-r from-transparent to-minuri-silver/40" />
 					<span className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid">
 						or follow a journey
 					</span>
+					<div className="h-px flex-1 bg-gradient-to-l from-transparent to-minuri-silver/40" />
 				</div>
 			</div>
 

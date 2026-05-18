@@ -412,7 +412,7 @@ export function StartGateway() {
 							fill
 							sizes="(max-width: 768px) 100vw, 50vw"
 							className="object-cover"
-							priority={false}
+							priority={true}
 						/>
 
 						{/* Persistent label */}

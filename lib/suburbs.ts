@@ -35,6 +35,22 @@ export function toSuburbOption(input: SuburbRecord): SuburbOption {
 	};
 }
 
+// Singleton — fetches once, shared across all components in the session.
+let _allSuburbs: Promise<SuburbOption[]> | null = null;
+
+export function preloadSuburbs(): Promise<SuburbOption[]> {
+	if (!_allSuburbs) {
+		_allSuburbs = fetch("/api/suburbs")
+			.then((r) => r.json() as Promise<{ suburbs?: SuburbOption[] }>)
+			.then((d) => d.suburbs ?? [])
+			.catch(() => {
+				_allSuburbs = null; // allow retry on failure
+				return [];
+			});
+	}
+	return _allSuburbs;
+}
+
 export function normalizeSuburbName(raw: string) {
 	return raw.trim().replace(/\s+/g, " ");
 }
@@ -42,6 +58,7 @@ export function normalizeSuburbName(raw: string) {
 export function rankAndFilterSuburbs(
 	options: SuburbOption[],
 	query: string,
+	limit = 20,
 ) {
 	const normalizedQuery = normalizeSuburbName(query).toLowerCase();
 	const hasQuery = normalizedQuery.length > 0;
@@ -81,5 +98,5 @@ export function rankAndFilterSuburbs(
 		return a.locality.localeCompare(b.locality);
 	});
 
-	return ranked;
+	return ranked.slice(0, limit);
 }

@@ -4,25 +4,25 @@ import { fetchSuburbs } from "@/lib/near-me-api";
 import {
 	rankAndFilterSuburbs,
 	toSuburbOption,
+	type SuburbOption,
 } from "@/lib/suburbs";
+
+let cachedOptions: SuburbOption[] | null = null;
+
+async function getAllSuburbOptions(): Promise<SuburbOption[]> {
+	if (cachedOptions) return cachedOptions;
+	const upstreamSuburbs = await fetchSuburbs({});
+	cachedOptions = upstreamSuburbs.map(toSuburbOption);
+	return cachedOptions;
+}
 
 export async function GET(request: NextRequest) {
 	try {
-		const searchParams = request.nextUrl.searchParams;
-		const query = searchParams.get("q") ?? "";
+		const query = request.nextUrl.searchParams.get("q") ?? "";
+		const allOptions = await getAllSuburbOptions();
+		const options = query ? rankAndFilterSuburbs(allOptions, query) : allOptions;
 
-		const upstreamSuburbs = await fetchSuburbs({});
-		const allOptions = upstreamSuburbs.map(toSuburbOption);
-		const options = rankAndFilterSuburbs(allOptions, query);
-
-		return Response.json({
-			suburbs: options,
-			meta: {
-				query,
-				total: allOptions.length,
-				returned: options.length,
-			},
-		});
+		return Response.json({ suburbs: options });
 	} catch {
 		return Response.json(
 			{
