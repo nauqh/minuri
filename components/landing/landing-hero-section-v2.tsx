@@ -115,7 +115,8 @@ function CatRive() {
 				if (yProp) yProp.value = 50;
 			};
 			const handleCatLook = (e: Event) => {
-				const { x, y } = (e as CustomEvent<{ x: number; y: number }>).detail;
+				const { x, y } = (e as CustomEvent<{ x: number; y: number }>)
+					.detail;
 				if (xProp) xProp.value = x;
 				if (yProp) yProp.value = y;
 			};
@@ -157,7 +158,7 @@ function HeroTopicCard({
 	return (
 		<motion.div
 			ref={onRef}
-			className={`aspect-[5/4] ${className}`}
+			className={`aspect-square md:aspect-[5/4] ${className}`}
 			initial={{ opacity: 0, y: -800 }}
 			animate={{ opacity: 1, y: 0, scale: isActive ? 1.05 : 1 }}
 			transition={{
@@ -234,7 +235,20 @@ export function LandingHeroSectionV2({
 		}
 	}, []);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-	const cardRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null, null]);
+	const cardRefs = useRef<(HTMLDivElement | null)[]>([
+		null,
+		null,
+		null,
+		null,
+		null,
+	]);
+	const mobileCardRefs = useRef<(HTMLDivElement | null)[]>([
+		null,
+		null,
+		null,
+		null,
+		null,
+	]);
 	const lastMouseMoveRef = useRef(0);
 	const router = useRouter();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -258,7 +272,9 @@ export function LandingHeroSectionV2({
 	}, [onHeroReveal]);
 
 	useEffect(() => {
-		const onMove = () => { lastMouseMoveRef.current = Date.now(); };
+		const onMove = () => {
+			lastMouseMoveRef.current = Date.now();
+		};
 		window.addEventListener("mousemove", onMove);
 		return () => window.removeEventListener("mousemove", onMove);
 	}, []);
@@ -267,7 +283,8 @@ export function LandingHeroSectionV2({
 		if (!hasStartedWordCycle) return;
 		const isIdle = Date.now() - lastMouseMoveRef.current > 1000;
 		if (!isIdle) return;
-		const el = cardRefs.current[activeIndex];
+		const isMobile = window.innerWidth < 768;
+		const el = (isMobile ? mobileCardRefs : cardRefs).current[activeIndex];
 		if (!el) return;
 		const rect = el.getBoundingClientRect();
 		const cx = rect.left + rect.width / 2;
@@ -278,7 +295,7 @@ export function LandingHeroSectionV2({
 					x: (cx / window.innerWidth) * 100,
 					y: (cy / window.innerHeight) * 100,
 				},
-			})
+			}),
 		);
 	}, [activeIndex, hasStartedWordCycle]);
 
@@ -403,7 +420,7 @@ export function LandingHeroSectionV2({
 							}}
 						>
 							<motion.p
-								className="max-w-md pb-6 text-2xl font-medium leading-tight text-minuri-ocean lg:text-xl xl:text-xl min-[1500px]:max-w-2xl min-[1500px]:text-2xl"
+								className="max-w-md pb-6 font-medium mt-12 leading-tight text-minuri-ocean lg:text-xl xl:text-xl min-[1500px]:max-w-2xl min-[1500px]:text-2xl"
 								variants={{
 									hidden: { opacity: 0, y: 14 },
 									visible: {
@@ -421,7 +438,7 @@ export function LandingHeroSectionV2({
 							</motion.p>
 
 							<motion.div
-								className="relative flex items-center gap-5 pt-2"
+								className="relative flex flex-col gap-3 pt-2 md:flex-row md:items-center md:gap-5"
 								variants={{
 									hidden: { opacity: 0, y: 10 },
 									visible: {
@@ -435,24 +452,24 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<div className="group relative mb-3 mr-3">
+								<div className="group relative mb-3 w-[80%] self-start md:w-auto md:mr-3">
 									<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
 									<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 									<button
 										onClick={() => router.push("/start")}
-										className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
+										className="relative z-10 inline-flex w-full justify-center h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] md:w-auto md:justify-start lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
 									>
 										{hasActiveJourney
 											? "Start new journey"
 											: "Let’s get started"}
 									</button>
 								</div>
-								<div className="group relative mb-3 mr-3">
+								<div className="group relative mb-3 w-[80%] self-end md:w-auto md:self-auto md:mr-3">
 									<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
 									<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 									<Link
 										href="/about"
-										className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
+										className="relative z-10 inline-flex w-full justify-center h-12 cursor-pointer items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] md:w-auto md:justify-start lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
 									>
 										About us
 									</Link>
@@ -470,9 +487,79 @@ export function LandingHeroSectionV2({
 						</motion.div>
 					</div>
 
-					{/* RIGHT: 3-column staggered card layout */}
+					{/* RIGHT: card layout */}
 					<div className="relative z-10 flex h-full pb-4 min-[1500px]:pb-0">
-						<div className="flex w-full h-full gap-4 md:gap-5">
+						{/* Mobile only: 2×3 grid */}
+						<div className="grid w-full grid-cols-2 gap-4 md:hidden">
+							<motion.div
+								className="aspect-square"
+								initial={{ opacity: 0, y: -800 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{
+									opacity: {
+										duration: 0.35,
+										delay: 0.5 + 5 * 0.12,
+										ease: "easeOut",
+									},
+									y: {
+										type: "spring",
+										stiffness: 120,
+										damping: 18,
+										delay: 0.5 + 5 * 0.15,
+									},
+								}}
+							>
+								<motion.div
+									style={{ rotate: STICKY_ROTATE[5 % 4] }}
+									className="relative h-full"
+									animate={{ y: [0, -7, 0] }}
+									transition={{
+										duration: 3.2 + 0.3 * 0.28,
+										ease: "easeInOut",
+										repeat: Infinity,
+										delay: 0.3,
+									}}
+								>
+									<div
+										className="absolute left-1/2 z-10 rounded-[1px]"
+										style={{
+											top: -10,
+											width: 44,
+											height: 18,
+											transform:
+												"translateX(-50%) rotate(-1.5deg)",
+											background:
+												"rgba(253, 230, 138, 0.72)",
+											boxShadow:
+												"0 1px 3px rgba(0,0,0,0.1)",
+										}}
+									/>
+									<div className="relative h-full overflow-hidden rounded-[2px]">
+										<CatRive />
+									</div>
+								</motion.div>
+							</motion.div>
+							{HERO_TOPIC_CARDS.map((card, i) => (
+								<HeroTopicCard
+									key={card.title}
+									card={card}
+									index={i}
+									isActive={activeIndex === i}
+									onHover={() => {
+										setHasStartedWordCycle(true);
+										setActiveIndex(i);
+										restartCycle();
+									}}
+									onRef={(el) => {
+										mobileCardRefs.current[i] = el;
+									}}
+									entranceEase={entranceEase}
+									className=""
+								/>
+							))}
+						</div>
+						{/* Desktop: 3-column stagger */}
+						<div className="hidden w-full h-full gap-4 md:flex md:gap-5">
 							{/* Col 1 — cards at top */}
 							<div className="flex h-full flex-1 flex-col justify-start gap-4 md:gap-5">
 								<motion.div
@@ -533,7 +620,9 @@ export function LandingHeroSectionV2({
 										setActiveIndex(2);
 										restartCycle();
 									}}
-									onRef={(el) => { cardRefs.current[2] = el; }}
+									onRef={(el) => {
+										cardRefs.current[2] = el;
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -551,7 +640,9 @@ export function LandingHeroSectionV2({
 										setActiveIndex(0);
 										restartCycle();
 									}}
-									onRef={(el) => { cardRefs.current[0] = el; }}
+									onRef={(el) => {
+										cardRefs.current[0] = el;
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -565,7 +656,9 @@ export function LandingHeroSectionV2({
 										setActiveIndex(3);
 										restartCycle();
 									}}
-									onRef={(el) => { cardRefs.current[3] = el; }}
+									onRef={(el) => {
+										cardRefs.current[3] = el;
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -583,7 +676,9 @@ export function LandingHeroSectionV2({
 										setActiveIndex(1);
 										restartCycle();
 									}}
-									onRef={(el) => { cardRefs.current[1] = el; }}
+									onRef={(el) => {
+										cardRefs.current[1] = el;
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -597,7 +692,9 @@ export function LandingHeroSectionV2({
 										setActiveIndex(4);
 										restartCycle();
 									}}
-									onRef={(el) => { cardRefs.current[4] = el; }}
+									onRef={(el) => {
+										cardRefs.current[4] = el;
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
