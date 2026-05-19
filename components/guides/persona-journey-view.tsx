@@ -318,20 +318,19 @@ function FlipPanel({
 	const start = flipIndex / numFlips;
 	const end = (flipIndex + 1) / numFlips;
 
-	const rotateY = useTransform(
+	const x = useTransform(
 		scrollYProgress,
 		[start, end],
-		prefersReducedMotion ? [0, 0] : [-90, 0],
+		prefersReducedMotion ? ["0%", "0%"] : ["100%", "0%"],
 	);
 
 	return (
 		<motion.div
 			className="absolute inset-0"
 			style={{
-				rotateY,
+				x,
 				zIndex: flipIndex + 2,
 				backgroundColor: "#f0ede8",
-				transformOrigin: "left center",
 			}}
 		>
 			{children}
@@ -465,7 +464,6 @@ export function PersonaDetailFullscreen({
 					{/* Sticky viewport */}
 					<div
 						className="sticky top-0 h-screen overflow-hidden"
-						style={{ perspective: "1200px" }}
 					>
 						{/* Sliding strip: Persona → Day 1 */}
 						<motion.div

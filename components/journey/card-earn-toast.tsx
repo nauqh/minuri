@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpFromLine } from "lucide-react";
 
 type Props = {
   day: number;
@@ -26,37 +25,44 @@ export function CardEarnToast({ day, visible, onDone, onOpenCard }: Props) {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.button
-          type="button"
-          data-no-scale
-          className="fixed left-1/2 top-6 z-[60] -translate-x-1/2 cursor-pointer outline-none"
-          initial={{ opacity: 0, y: -28, scale: 0.94 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.96 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          onClick={handleClick}
+        <motion.div
           role="status"
           aria-live="polite"
-          aria-label={`Day ${day} complete — tap to see your card`}
+          initial={{ opacity: 0, y: -48 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -24, scale: 0.95 }}
+          transition={{
+            opacity: { duration: 0.28, ease: "easeOut" },
+            y: { type: "spring", stiffness: 280, damping: 24 },
+            scale: { duration: 0.2, ease: "easeIn" },
+          }}
+          className="fixed right-6 top-24 z-[60] w-52"
         >
-          <div className="flex items-center gap-3.5 rounded-2xl border border-minuri-teal/25 bg-white px-5 py-3.5 shadow-lg shadow-black/8">
-            <motion.span
+          <button
+            type="button"
+            data-no-scale
+            onClick={handleClick}
+            aria-label={`Day ${day} complete — tap to see your card`}
+            className="guide-sticky guide-sticky-b block w-full cursor-pointer text-left outline-none"
+          >
+            <motion.p
               className="text-xl leading-none"
               animate={{ rotate: [0, -14, 14, -7, 0], scale: [1, 1.45, 1] }}
               transition={{ duration: 0.65, ease: "easeOut" }}
             >
               ✦
-            </motion.span>
-            <div className="text-left">
-              <p className="text-sm font-black text-minuri-ocean">
-                Day {day} complete!
-              </p>
-              <p className="mt-0.5 text-xs font-semibold text-minuri-teal">
-                Your card updated — tap to see <ArrowUpFromLine className="inline size-3 translate-y-[-1px]" />
-              </p>
-            </div>
-          </div>
-        </motion.button>
+            </motion.p>
+            <p className="mt-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#05292a]/50">
+              Day {day} done
+            </p>
+            <p className="mt-1.5 text-sm font-bold leading-snug text-[#05292a]">
+              Your card just updated
+            </p>
+            <p className="mt-1 text-xs leading-snug text-[#05292a]/70">
+              Tap to open your identity card →
+            </p>
+          </button>
+        </motion.div>
       )}
     </AnimatePresence>
   );

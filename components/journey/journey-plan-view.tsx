@@ -24,7 +24,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { GUIDES, type Guide, type GuideTopicSlug } from "@/content/guides";
 import { cn } from "@/lib/utils";
 import { getTopicMeta } from "@/lib/guides";
-import { useJourneyState } from "@/hooks/use-journey-state";
+import { useJourneyState, LETTER_SEEN_KEY } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
@@ -777,6 +777,12 @@ export function JourneyPlanView() {
 	const [vibe, setVibe] = useState<Vibe>(() => getVibe(DEFAULT_VIBE_ID));
 	const [letterExpanded, setLetterExpanded] = useState(false);
 	const [planStage, setPlanStage] = useState<"letter" | "plan">("letter");
+
+	useEffect(() => {
+		if (typeof window !== "undefined" && localStorage.getItem(LETTER_SEEN_KEY) === "1") {
+			setPlanStage("plan");
+		}
+	}, []);
 	const [toastDay, setToastDay] = useState<number | null>(null);
 	const [toastVisible, setToastVisible] = useState(false);
 	const [hasCardNotif, setHasCardNotif] = useState(false);
@@ -832,7 +838,10 @@ export function JourneyPlanView() {
 			<LetterReveal
 				identity={identity}
 				suburb={suburb}
-				onContinue={() => setPlanStage("plan")}
+				onContinue={() => {
+					try { localStorage.setItem(LETTER_SEEN_KEY, "1"); } catch { /* ignore */ }
+					setPlanStage("plan");
+				}}
 			/>
 		);
 	}

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { CornerDownRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { useLenis } from "lenis/react";
 import { useRive, Layout, Fit } from "@rive-app/react-canvas";
 
 import { LandingHeader } from "@/components/landing/landing-header";
@@ -210,8 +209,14 @@ export function LandingHeroSectionV2({
 }) {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [hasStartedWordCycle, setHasStartedWordCycle] = useState(false);
+	const [hasActiveJourney, setHasActiveJourney] = useState(false);
+
+	useEffect(() => {
+		try {
+			setHasActiveJourney(!!localStorage.getItem("minuri:journey:v2"));
+		} catch { /* ignore */ }
+	}, []);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-	const lenis = useLenis();
 	const router = useRouter();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 	const headlineWord = hasStartedWordCycle
@@ -242,7 +247,7 @@ export function LandingHeroSectionV2({
 	}, []);
 
 	return (
-		<section className="relative flex h-auto min-h-svh flex-col bg-minuri-white text-minuri-ink md:h-svh md:overflow-hidden">
+		<section className="relative flex h-svh max-h-[900px] min-h-[600px] flex-col bg-minuri-white text-minuri-ink md:overflow-hidden">
 			{/* Grid background — lines + radial fade to white at edges */}
 			<div aria-hidden className="pointer-events-none absolute inset-0">
 				<div
@@ -265,14 +270,14 @@ export function LandingHeroSectionV2({
 				/>
 			</div>
 
-			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-4 pt-4 sm:px-6 md:px-6 md:pt-0 md:pb-40 min-[1500px]:max-w-[1600px] min-[1500px]:pb-48">
+			<div className="relative flex flex-1 flex-col mx-auto w-full max-w-screen px-4 pt-4 sm:px-6 md:px-6 md:pt-0 md:pb-10 min-[1500px]:max-w-[1600px] min-[1500px]:pb-12">
 				<LandingHeader
 					headerVisible={headerVisible}
 					onHeroReveal={onHeroReveal}
 				/>
 
 				<motion.div
-					className="flex flex-1 flex-col pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-0 md:pt-4"
+					className="flex flex-1 flex-col justify-between pb-12 pt-8 sm:pb-14 sm:pt-10 md:pb-0 md:pt-4"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -351,7 +356,7 @@ export function LandingHeroSectionV2({
 						</motion.h1>
 					</div>
 
-					<div className="mt-0 grid flex-1 gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-start md:gap-10">
+					<div className="mt-0 grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-start md:gap-10">
 						<div className="flex flex-col md:h-[350px] min-[1500px]:h-[380px]">
 							<motion.div
 								className="mt-auto space-y-6 pt-10 md:space-y-0 md:pt-0"
@@ -418,9 +423,19 @@ export function LandingHeroSectionV2({
 									</div>
 								</motion.div>
 
+								{hasActiveJourney && (
+									<Link
+										href="/journey/plan"
+										className="mt-1 inline-flex items-center gap-2 rounded-full border border-minuri-teal/50 bg-minuri-teal/8 px-4 py-2 text-xs font-semibold text-minuri-teal transition-colors hover:bg-minuri-teal/15 md:hidden"
+									>
+										<span className="size-1.5 rounded-full bg-minuri-teal" />
+										Continue your week →
+									</Link>
+								)}
+
 								{/* Desktop subheading */}
 								<motion.p
-									className="hidden max-w-sm text-2xl font-medium leading-snug text-minuri-ocean md:block md:leading-tight md:pb-6 min-[1500px]:max-w-md min-[1500px]:text-4xl"
+									className="hidden max-w-sm text-2xl font-medium leading-snug text-minuri-ocean md:block md:max-w-md md:leading-tight md:pb-6 lg:max-w-lg lg:text-xl xl:max-w-xl xl:text-xl min-[1500px]:max-w-2xl min-[1500px]:text-2xl"
 									variants={{
 										hidden: { opacity: 0, y: 14 },
 										visible: {
@@ -461,7 +476,7 @@ export function LandingHeroSectionV2({
 											onClick={() =>
 												router.push("/start")
 											}
-											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
 										>
 											Let’s get started
 										</button>
@@ -473,22 +488,37 @@ export function LandingHeroSectionV2({
 										<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
 										<Link
 											href="/about"
-											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
+											className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl border border-minuri-ocean/30 bg-minuri-white px-7 text-sm font-black uppercase tracking-widest text-minuri-ocean transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
 										>
 											About us
 										</Link>
 									</div>
 
 									<div className="hidden md:flex absolute top-full left-0 items-center gap-1.5 pt-2 text-minuri-ocean/50">
-										<CornerDownRight
-											className="size-4"
-											strokeWidth={2}
-										/>
+										<CornerDownRight className="size-4" strokeWidth={2} />
 										<span className="text-xs font-semibold uppercase tracking-widest">
 											or scroll to explore first
 										</span>
 									</div>
 								</motion.div>
+
+								{hasActiveJourney && (
+									<motion.div
+										initial={{ opacity: 0, y: 6 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={{ duration: 0.4, delay: 0.3, ease: entranceEase }}
+										className="hidden md:flex items-center gap-2 pt-8"
+									>
+										<Link
+											href="/journey/plan"
+											className="inline-flex items-center gap-2 rounded-full border border-minuri-teal/50 bg-minuri-teal/8 px-4 py-2 text-xs font-semibold text-minuri-teal transition-colors hover:bg-minuri-teal/15"
+										>
+											<span className="size-1.5 rounded-full bg-minuri-teal" />
+											Continue your week →
+										</Link>
+									</motion.div>
+								)}
+
 							</motion.div>
 						</div>
 
@@ -579,55 +609,10 @@ export function LandingHeroSectionV2({
 							</div>
 						</div>
 					</div>
+
 				</motion.div>
 			</div>
 
-			{/* Desktop bottom bar — absolute on section, content-div pb reserves the space */}
-			<motion.div
-				className="absolute bottom-0 left-0 right-0 hidden md:flex pb-8"
-				initial={{ opacity: 0, y: -8 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-			>
-				{/* Same max-width constraint as the content div above */}
-				<div className="relative mx-auto flex w-full max-w-screen items-end px-6 md:px-6 min-[1500px]:max-w-[1600px] min-[1500px]:px-8">
-					{/* Scroll indicator — centered within the constrained container */}
-					<motion.div
-						className="absolute bottom-0 left-1/2 -translate-x-1/2 flex cursor-pointer flex-col items-center gap-2"
-						onClick={() =>
-							lenis?.scrollTo(
-								window.scrollY + window.innerHeight,
-								{
-									duration: 1.2,
-									easing: (t) => 1 - Math.pow(1 - t, 4),
-								},
-							)
-						}
-						animate={{ scale: 1 }}
-						transition={{
-							duration: 2.5,
-							ease: "easeInOut",
-							times: [0, 0.25, 0.5, 0.75, 1],
-						}}
-						aria-label="Scroll down"
-					>
-						<span className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60">
-							Scroll to explore
-						</span>
-						<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
-							<motion.div
-								className="h-1.5 w-1 rounded-full bg-minuri-teal"
-								animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
-								transition={{
-									duration: 1.5,
-									repeat: Infinity,
-									ease: "easeInOut",
-								}}
-							/>
-						</div>
-					</motion.div>
-				</div>
-			</motion.div>
 		</section>
 	);
 }

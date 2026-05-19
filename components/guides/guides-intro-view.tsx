@@ -8,6 +8,7 @@ import {
 	Compass,
 	HeartPulse,
 	Home,
+	Route,
 	Sandwich,
 	Users,
 	type LucideIcon,
@@ -180,8 +181,37 @@ export function GuidesIntroView() {
 					What do you need most right now?
 				</motion.h1>
 
+				<motion.button
+					type="button"
+					className="mx-auto mt-8 flex cursor-pointer flex-col items-center gap-2 outline-none"
+					onClick={() =>
+						window.scrollBy({
+							top: window.innerHeight,
+							behavior: "smooth",
+						})
+					}
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
+					aria-label="Scroll down"
+				>
+					<span className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/50">
+						Scroll to explore
+					</span>
+					<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
+						<motion.div
+							className="h-1.5 w-1 rounded-full bg-minuri-teal"
+							animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
+							transition={{
+								duration: 1.5,
+								repeat: Infinity,
+								ease: "easeInOut",
+							}}
+						/>
+					</div>
+				</motion.button>
 				<motion.p
-					className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid mt-8"
+					className="mt-8 text-sm font-bold uppercase tracking-widest text-minuri-ocean"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.4, delay: 0.16, ease: EASE }}
@@ -516,119 +546,147 @@ export function GuidesIntroView() {
 				</div>
 			</div>
 
-			{/* ── Divider ── */}
-			<div className="mt-12 px-6 py-6">
-				<div className="mx-auto flex max-w-screen-2xl items-center gap-4">
-					<div className="h-px flex-1 bg-gradient-to-r from-transparent to-minuri-silver/40" />
-					<span className="text-sm font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-						or follow a journey
-					</span>
-					<div className="h-px flex-1 bg-gradient-to-l from-transparent to-minuri-silver/40" />
-				</div>
-			</div>
-
-			{/* ── Persona grid ── */}
-			<div className="mx-auto max-w-screen-2xl px-2 pb-16">
+			{/* ── Two-path section ── */}
+			<div className="mx-auto max-w-screen-2xl px-4 pb-20 md:px-6">
+				{/* Section heading — full width, above both columns */}
 				<div className="mb-6">
-					<p className="text-sm text-minuri-slate">
+					<span className="text-sm font-bold uppercase tracking-widest text-minuri-ocean">
+						Or follow a journey
+					</span>
+					<p className="mt-1 text-sm text-minuri-slate">
 						Choose someone like you, we&apos;ll show you their
 						curated week.
 					</p>
 				</div>
-				<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2 lg:grid-cols-6">
-					{PERSONAS.map((persona, i) => (
-						<motion.div
-							key={persona.id}
-							initial={{
-								opacity: 0,
-								y: prefersReducedMotion ? 0 : 14,
-							}}
-							animate={
-								selectedPersona &&
-								selectedPersona.id !== persona.id
-									? {
-											opacity: 0,
-											scale: 0.93,
-											y: 0,
-											filter: "blur(6px)",
+
+				<div className="flex flex-col gap-10 md:grid md:grid-cols-[1fr_360px] md:items-start md:gap-12 lg:gap-16">
+
+					{/* Journey card — top on mobile, sticky right on desktop */}
+					<Link
+						href="/journey"
+						className="group order-first block rounded-2xl bg-minuri-ocean p-8 text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl md:order-last md:sticky md:top-8"
+					>
+						<Route className="mb-6 size-10 opacity-60" aria-hidden />
+						<p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/50">
+							Prefer your own way?
+						</p>
+						<h2 className="text-3xl font-black uppercase leading-tight tracking-tight">
+							Build your own week
+						</h2>
+						<p className="mt-4 text-sm leading-relaxed text-white/70">
+							Pick your topics, set your own pace, and build a
+							plan that fits your life — not someone
+							else&apos;s.
+						</p>
+						<div className="mt-8 inline-flex items-center gap-2 rounded-sm bg-white px-6 py-3 text-sm font-bold text-minuri-ocean transition-all duration-200 group-hover:bg-minuri-teal group-hover:text-white">
+							Start building
+							<ArrowRight className="size-4" aria-hidden />
+						</div>
+					</Link>
+
+					{/* Persona cards */}
+					<div className="order-last md:order-first">
+						<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2">
+							{PERSONAS.map((persona, i) => (
+								<motion.div
+									key={persona.id}
+									initial={{
+										opacity: 0,
+										y: prefersReducedMotion ? 0 : 14,
+									}}
+									animate={
+										selectedPersona &&
+										selectedPersona.id !== persona.id
+											? {
+													opacity: 0,
+													scale: 0.93,
+													y: 0,
+													filter: "blur(6px)",
+												}
+											: {
+													opacity: 1,
+													y: 0,
+													scale: 1,
+													filter: "blur(0px)",
+												}
+									}
+									transition={
+										selectedPersona
+											? { duration: 0.28, ease: EASE }
+											: {
+													duration: 0.4,
+													delay: prefersReducedMotion
+														? 0
+														: 0.28 + i * 0.06,
+													ease: EASE,
+												}
+									}
+								>
+									<motion.button
+										type="button"
+										onClick={() =>
+											handlePersonaClick(persona)
 										}
-									: {
-											opacity: 1,
-											y: 0,
-											scale: 1,
-											filter: "blur(0px)",
-										}
-							}
-							transition={
-								selectedPersona
-									? { duration: 0.28, ease: EASE }
-									: {
-											duration: 0.4,
-											delay: prefersReducedMotion
-												? 0
-												: 0.28 + i * 0.06,
-											ease: EASE,
-										}
-							}
-						>
-							<motion.button
-								type="button"
-								onClick={() => handlePersonaClick(persona)}
-								className={cn(
-									"group relative block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50",
-									selectedPersona?.id !== persona.id
-										? "overflow-hidden"
-										: "",
-								)}
-								style={{ borderRadius: 16 }}
-								whileHover={
-									!selectedPersona && !prefersReducedMotion
-										? { borderRadius: 32 }
-										: {}
-								}
-								transition={{
-									duration: 0.5,
-									ease: [0.22, 1, 0.36, 1],
-								}}
-							>
-								<div className="relative aspect-[2/3]">
-									<motion.div
-										layoutId={`persona-photo-${persona.id}`}
-										className="absolute inset-0"
+										className={cn(
+											"group relative block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50",
+											selectedPersona?.id !== persona.id
+												? "overflow-hidden"
+												: "",
+										)}
 										style={{ borderRadius: 16 }}
+										whileHover={
+											!selectedPersona &&
+											!prefersReducedMotion
+												? { borderRadius: 32 }
+												: {}
+										}
 										transition={{
-											duration: 0.68,
+											duration: 0.5,
 											ease: [0.22, 1, 0.36, 1],
 										}}
 									>
-										<Image
-											src={persona.imageUrl}
-											alt={persona.name}
-											fill
-											sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-											className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-										/>
-									</motion.div>
+										<div className="relative aspect-[2/3]">
+											<motion.div
+												layoutId={`persona-photo-${persona.id}`}
+												className="absolute inset-0"
+												style={{ borderRadius: 16 }}
+												transition={{
+													duration: 0.68,
+													ease: [0.22, 1, 0.36, 1],
+												}}
+											>
+												<Image
+													src={persona.imageUrl}
+													alt={persona.name}
+													fill
+													sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+													className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+												/>
+											</motion.div>
 
-									{/* Name + role */}
-									<div
-										className={cn(
-											"pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-transparent px-3 py-3 text-left transition-opacity duration-100 sm:px-4 sm:py-4",
-											selectedPersona?.id ===
-												persona.id && "opacity-0",
-										)}
-									>
-										<p className="text-xs font-semibold uppercase tracking-[0.15em] text-white">
-											[{persona.role}]
-										</p>
-										<p className="mt-0.5 text-xl font-bold leading-snug text-white">
-											{persona.name}
-										</p>
-									</div>
-								</div>
-							</motion.button>
-						</motion.div>
-					))}
+											{/* Name + role */}
+											<div
+												className={cn(
+													"pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-transparent px-3 py-3 text-left transition-opacity duration-100 sm:px-4 sm:py-4",
+													selectedPersona?.id ===
+														persona.id &&
+														"opacity-0",
+												)}
+											>
+												<p className="text-xs font-semibold uppercase tracking-[0.15em] text-white">
+													[{persona.role}]
+												</p>
+												<p className="mt-0.5 text-xl font-bold leading-snug text-white">
+													{persona.name}
+												</p>
+											</div>
+										</div>
+									</motion.button>
+								</motion.div>
+							))}
+						</div>
+					</div>
+
 				</div>
 			</div>
 

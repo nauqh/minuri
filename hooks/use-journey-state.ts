@@ -12,6 +12,7 @@ export type JourneyState = {
 
 const STORAGE_KEY = "minuri:journey:v2";
 const TASKS_KEY = "minuri:journey:tasks:v1";
+export const LETTER_SEEN_KEY = "minuri:journey:letter-seen:v1";
 
 export function useJourneyState() {
     const [state, setState] = useState<JourneyState | null>(null);
@@ -39,6 +40,7 @@ export function useJourneyState() {
         try {
             localStorage.removeItem(STORAGE_KEY);
             localStorage.removeItem(TASKS_KEY);
+            localStorage.removeItem(LETTER_SEEN_KEY);
         } catch { /* ignore */ }
         clearWeekPlan();
         setState(null);
