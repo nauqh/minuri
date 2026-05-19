@@ -207,7 +207,7 @@
 }
 
 @keyframes redraw-oval {
-	from { stroke-dashoffset: 580; }
+	from { stroke-dashoffset: 400; }
 	to   { stroke-dashoffset: 0; }
 }
 
@@ -450,13 +450,19 @@ input[type="search"]::-webkit-search-cancel-button {
 .guide-sticky {
 	position: relative;
 	border-radius: 2px;
-	padding: 1.25rem 1.25rem 1.75rem;
+	padding: 0.75rem 0.75rem 1rem;
 	box-shadow:
 		2px 3px 0 rgba(0, 0, 0, 0.07),
 		5px 8px 16px rgba(0, 0, 0, 0.06);
 	transition:
 		transform 0.2s ease,
 		box-shadow 0.2s ease;
+}
+
+@media (min-width: 768px) {
+	.guide-sticky {
+		padding: 1.25rem 1.25rem 1.75rem;
+	}
 }
 
 .guide-sticky:hover {

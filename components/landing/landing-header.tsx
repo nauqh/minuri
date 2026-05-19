@@ -184,25 +184,22 @@ export function LandingHeader({
 								>
 									<svg
 										className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
-										width="200"
-										height="90"
-										viewBox="0 0 200 90"
+										width="160"
+										height="72"
+										viewBox="0 0 160 72"
 										fill="none"
 										aria-hidden
 									>
 										<path
-											d="M 30 22 C 52 4, 96 2, 124 8 C 158 14, 192 30, 190 50 C 188 70, 152 84, 112 84 C 74 84, 32 70, 22 52 C 17 44, 17 34, 22 26"
+											d="M 118 56 C 96 66, 60 66, 36 54 C 14 42, 14 24, 34 14 C 52 5, 86 3, 114 12 C 138 20, 148 36, 142 50 C 138 58, 128 62, 118 60"
 											stroke="currentColor"
-											strokeWidth="2.5"
+											strokeWidth="1.5"
 											strokeLinecap="round"
 											ref={ovalPathRef}
-										className="[stroke-dasharray:580] [stroke-dashoffset:0]"
+											className="[stroke-dasharray:400] [stroke-dashoffset:0]"
 										/>
 									</svg>
-									<span className="relative z-10 leading-none">
-										{journeyIdentity?.symbol ?? "🌱"}
-									</span>
-									<span className="relative z-10">My week</span>
+									<span className="relative z-10 uppercase tracking-wide">My week</span>
 								</Link>
 							</motion.div>
 						) : (
