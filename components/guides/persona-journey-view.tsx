@@ -31,7 +31,6 @@ function PersonaPickerCard({
 	persona,
 	onSelect,
 	animationDelay,
-	matched,
 }: {
 	persona: Persona;
 	onSelect: (p: Persona) => void;
