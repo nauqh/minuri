@@ -114,13 +114,20 @@ function CatRive() {
 				if (xProp) xProp.value = 50;
 				if (yProp) yProp.value = 50;
 			};
+			const handleCatLook = (e: Event) => {
+				const { x, y } = (e as CustomEvent<{ x: number; y: number }>).detail;
+				if (xProp) xProp.value = x;
+				if (yProp) yProp.value = y;
+			};
 			window.addEventListener("mousemove", handleMouseMove);
 			document.addEventListener("mouseleave", handleMouseLeave);
+			window.addEventListener("minuri:cat-look", handleCatLook);
 
 			return () => {
 				restoreCtx?.();
 				window.removeEventListener("mousemove", handleMouseMove);
 				document.removeEventListener("mouseleave", handleMouseLeave);
+				window.removeEventListener("minuri:cat-look", handleCatLook);
 			};
 		}
 
@@ -135,6 +142,7 @@ function HeroTopicCard({
 	index,
 	isActive,
 	onHover,
+	onRef,
 	entranceEase,
 	className = "",
 }: {
@@ -142,11 +150,13 @@ function HeroTopicCard({
 	index: number;
 	isActive: boolean;
 	onHover: () => void;
+	onRef?: (el: HTMLDivElement | null) => void;
 	entranceEase: [number, number, number, number];
 	className?: string;
 }) {
 	return (
 		<motion.div
+			ref={onRef}
 			className={`aspect-[5/4] ${className}`}
 			initial={{ opacity: 0, y: -800 }}
 			animate={{ opacity: 1, y: 0, scale: isActive ? 1.05 : 1 }}
@@ -224,6 +234,8 @@ export function LandingHeroSectionV2({
 		}
 	}, []);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const cardRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null, null]);
+	const lastMouseMoveRef = useRef(0);
 	const router = useRouter();
 	const entranceEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
 	const headlineWord = hasStartedWordCycle
@@ -244,6 +256,31 @@ export function LandingHeroSectionV2({
 	useEffect(() => {
 		onHeroReveal?.();
 	}, [onHeroReveal]);
+
+	useEffect(() => {
+		const onMove = () => { lastMouseMoveRef.current = Date.now(); };
+		window.addEventListener("mousemove", onMove);
+		return () => window.removeEventListener("mousemove", onMove);
+	}, []);
+
+	useEffect(() => {
+		if (!hasStartedWordCycle) return;
+		const isIdle = Date.now() - lastMouseMoveRef.current > 1000;
+		if (!isIdle) return;
+		const el = cardRefs.current[activeIndex];
+		if (!el) return;
+		const rect = el.getBoundingClientRect();
+		const cx = rect.left + rect.width / 2;
+		const cy = rect.top + rect.height / 2;
+		window.dispatchEvent(
+			new CustomEvent("minuri:cat-look", {
+				detail: {
+					x: (cx / window.innerWidth) * 100,
+					y: (cy / window.innerHeight) * 100,
+				},
+			})
+		);
+	}, [activeIndex, hasStartedWordCycle]);
 
 	useEffect(() => {
 		restartCycle();
@@ -496,6 +533,7 @@ export function LandingHeroSectionV2({
 										setActiveIndex(2);
 										restartCycle();
 									}}
+									onRef={(el) => { cardRefs.current[2] = el; }}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -513,6 +551,7 @@ export function LandingHeroSectionV2({
 										setActiveIndex(0);
 										restartCycle();
 									}}
+									onRef={(el) => { cardRefs.current[0] = el; }}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -526,6 +565,7 @@ export function LandingHeroSectionV2({
 										setActiveIndex(3);
 										restartCycle();
 									}}
+									onRef={(el) => { cardRefs.current[3] = el; }}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -543,6 +583,7 @@ export function LandingHeroSectionV2({
 										setActiveIndex(1);
 										restartCycle();
 									}}
+									onRef={(el) => { cardRefs.current[1] = el; }}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -556,6 +597,7 @@ export function LandingHeroSectionV2({
 										setActiveIndex(4);
 										restartCycle();
 									}}
+									onRef={(el) => { cardRefs.current[4] = el; }}
 									entranceEase={entranceEase}
 									className=""
 								/>
