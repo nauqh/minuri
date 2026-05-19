@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ChevronRight, BookOpen, MapPin } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronRight, BookOpen, MapPin, Route } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
@@ -98,7 +98,7 @@ export function StartGateway() {
 
 	return (
 		<div className="bg-minuri-ocean text-minuri-white">
-			{/* ── Page header — cream canvas (mirrors left panel) ── */}
+			{/* ── Screen 1: Hero + Journey CTA ── */}
 			<div className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden bg-minuri-white px-6 py-24 text-center">
 				{/* Back button */}
 				<Link
@@ -108,7 +108,8 @@ export function StartGateway() {
 					<ArrowLeft className="size-3.5" aria-hidden />
 					Back to Home
 				</Link>
-				{/* Grid — dark lines matching left panel */}
+
+				{/* Grid */}
 				<div
 					aria-hidden
 					className="pointer-events-none absolute inset-0"
@@ -120,8 +121,6 @@ export function StartGateway() {
 						backgroundSize: "72px 72px",
 					}}
 				/>
-
-				{/* Radial fade — soften grid at edges */}
 				<div
 					aria-hidden
 					className="pointer-events-none absolute inset-0"
@@ -151,55 +150,61 @@ export function StartGateway() {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.7, ease: easeOut, delay: 0.18 }}
 				>
-					Browse guides, find nearby support, or build a 7-day plan —
-					all built for your first weeks in Melbourne.
+					Tell us a little about yourself and we&apos;ll build a
+					personalised 7-day plan for your first week in Melbourne.
 				</motion.p>
 
-				{/* Scroll indicator */}
+				{/* Journey CTA */}
 				<motion.div
-					className="absolute bottom-8 left-1/2 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2"
+					className="mt-10 flex flex-col items-center gap-4"
+					initial={{ opacity: 0, y: 14 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.65, ease: easeOut, delay: 0.28 }}
+				>
+					<div className="group relative mb-3 mr-3">
+						<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
+						<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl bg-minuri-ocean/38 transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px]" />
+						<Link
+							href="/journey"
+							className="relative z-10 inline-flex h-14 cursor-pointer items-center gap-3 rounded-xl bg-minuri-ocean px-10 text-base font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px]"
+						>
+							<Route className="size-5" aria-hidden />
+							Build my journey
+						</Link>
+					</div>
+				</motion.div>
+
+				{/* Scroll hint */}
+				<motion.div
+					className="absolute bottom-8 left-1/2 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-3"
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
-					transition={{ duration: 0.6, delay: 0.4 }}
+					transition={{ duration: 0.6, delay: 0.6 }}
 					onClick={() =>
 						lenis?.scrollTo(window.scrollY + window.innerHeight, {
 							duration: 1.2,
 							easing: (t) => 1 - Math.pow(1 - t, 4),
 						})
 					}
-					aria-label="Scroll down"
+					aria-label="Scroll to explore individual features"
 				>
-					<motion.span
-						className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/60"
-						animate={{ opacity: [0.5, 1, 0.5] }}
-						transition={{
-							duration: 2,
-							repeat: Infinity,
-							ease: "easeInOut",
-						}}
+					<span className="rounded-full border border-minuri-ocean/20 bg-minuri-white/80 px-5 py-2 text-sm font-bold uppercase tracking-widest text-minuri-ocean shadow-sm backdrop-blur-sm">
+						Or scroll to explore individual features
+					</span>
+					<motion.div
+						animate={{ y: [0, 6, 0] }}
+						transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
 					>
-						Scroll to explore
-					</motion.span>
-					<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
-						<motion.div
-							className="h-1.5 w-1 rounded-full bg-minuri-teal"
-							animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
-							transition={{
-								duration: 1.5,
-								repeat: Infinity,
-								ease: "easeInOut",
-							}}
-						/>
-					</div>
+						<ChevronDown className="size-5 text-minuri-ocean/60" aria-hidden />
+					</motion.div>
 				</motion.div>
 			</div>
 
-			{/* ── Combined: heading + split screen + closing ── */}
+			{/* ── Screen 2: Guides + Near Me ── */}
 			<section
 				className="px-4 py-8 md:px-8 md:py-16"
 				style={{ background: "oklch(0.18 0.042 228)" }}
 			>
-				{/* Top heading */}
 				<motion.div
 					className="px-6 pb-10 pt-16 text-center"
 					initial={{ opacity: 0, y: 20 }}
@@ -208,7 +213,7 @@ export function StartGateway() {
 					transition={{ duration: 0.7, ease: easeOut }}
 				>
 					<h2 className="mt-4 text-3xl font-black tracking-wider leading-snug text-minuri-white md:text-4xl">
-						Start with what you need right now —
+						Or start with what you need right now —
 						<br className="hidden md:block" />
 						<span className="text-minuri-ice"> Guides</span> or{" "}
 						<span className="text-minuri-ice">Near-me</span>{" "}
@@ -216,7 +221,7 @@ export function StartGateway() {
 					</h2>
 				</motion.div>
 
-				{/* Split screen — contained like a lens */}
+				{/* Split screen */}
 				<div className="relative mx-auto max-w-[90rem] flex h-auto min-h-[85vh] flex-col overflow-hidden rounded-2xl md:h-[85vh] md:flex-row">
 					{/* ─── Guides panel ─── */}
 					<div
@@ -229,7 +234,6 @@ export function StartGateway() {
 						onMouseEnter={() => handlePanelEnter("guides")}
 						onMouseLeave={handlePanelLeave}
 					>
-						{/* Grid */}
 						<div
 							aria-hidden
 							className="pointer-events-none absolute inset-0"
@@ -279,7 +283,6 @@ export function StartGateway() {
 										},
 									}}
 								>
-									{/* Pushpin */}
 									<div className="absolute -top-3.5 left-1/2 z-10 flex size-7 -translate-x-1/2 items-center justify-center rounded-full bg-minuri-coral shadow-[0_3px_8px_rgba(0,0,0,0.28)]">
 										<div className="size-2.5 rounded-full bg-white/80" />
 									</div>
@@ -389,7 +392,7 @@ export function StartGateway() {
 						</motion.div>
 					</div>
 
-					{/* ─── Divider ─── */}
+					{/* Divider */}
 					<div
 						className="h-6 w-full md:h-full md:w-px md:shrink-0"
 						style={{ background: "oklch(0.18 0.042 228)" }}
@@ -405,7 +408,6 @@ export function StartGateway() {
 						onMouseEnter={() => handlePanelEnter("nearby")}
 						onMouseLeave={handlePanelLeave}
 					>
-						{/* Full-bleed map */}
 						<Image
 							src="/map-preview.png"
 							alt="Map preview"
@@ -462,35 +464,6 @@ export function StartGateway() {
 						</motion.div>
 					</div>
 				</div>
-				{/* end split screen */}
-
-				{/* Bottom closing */}
-				<motion.div
-					className="px-6 pt-10 pb-16 text-center"
-					initial={{ opacity: 0, y: 20 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, amount: 0.5 }}
-					transition={{ duration: 0.7, ease: easeOut }}
-				>
-					<h2 className="mt-20 text-3xl tracking-wider font-black leading-snug text-minuri-white md:text-4xl">
-						or, want us to design the{" "}
-						<span className="text-minuri-ice">Journey</span> for
-						you?
-					</h2>
-					<div className="group relative mt-8 inline-flex overflow-hidden rounded-sm bg-minuri-teal">
-						<Link
-							href="/journey"
-							className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-white group-hover:text-minuri-ocean"
-						>
-							Build my journey
-							<ChevronRight
-								className="size-4 transition-transform duration-200 group-hover:translate-x-1"
-								aria-hidden
-							/>
-						</Link>
-						<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-					</div>
-				</motion.div>
 			</section>
 		</div>
 	);
