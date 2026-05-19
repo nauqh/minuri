@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CornerDownRight } from "lucide-react";
+import { ChevronDown, CornerDownRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useRive, Layout, Fit } from "@rive-app/react-canvas";
@@ -71,7 +71,9 @@ function CatRive() {
 		// Patch canvas 2D context to skip artboard background fill.
 		// Rive render order per frame: clearRect → fillRect (bg) → draw cat.
 		// We intercept: after clearRect, drop the next fillRect call.
-		const canvas = (rive as unknown as { canvas: HTMLCanvasElement | undefined }).canvas;
+		const canvas = (
+			rive as unknown as { canvas: HTMLCanvasElement | undefined }
+		).canvas;
 		let restoreCtx: (() => void) | undefined;
 		if (canvas) {
 			const ctx = canvas.getContext("2d");
@@ -84,7 +86,10 @@ function CatRive() {
 					return originalClearRect(...args);
 				};
 				ctx.fillRect = (...args: Parameters<typeof ctx.fillRect>) => {
-					if (justCleared) { justCleared = false; return; }
+					if (justCleared) {
+						justCleared = false;
+						return;
+					}
 					return originalFillRect(...args);
 				};
 				restoreCtx = () => {
@@ -214,7 +219,9 @@ export function LandingHeroSectionV2({
 	useEffect(() => {
 		try {
 			setHasActiveJourney(!!localStorage.getItem("minuri:journey:v2"));
-		} catch { /* ignore */ }
+		} catch {
+			/* ignore */
+		}
 	}, []);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const router = useRouter();
@@ -297,7 +304,14 @@ export function LandingHeroSectionV2({
 								className="inline-flex rounded-sm bg-[#e2ffef] p-2 text-sm font-black uppercase text-minuri-ocean min-[1500px]:p-3 min-[1500px]:text-base"
 								variants={{
 									hidden: { opacity: 0, y: 8 },
-									visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: entranceEase } },
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											duration: 0.45,
+											ease: entranceEase,
+										},
+									},
 								}}
 							>
 								Living independently
@@ -306,7 +320,14 @@ export function LandingHeroSectionV2({
 								className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
 								variants={{
 									hidden: { opacity: 0, y: 22 },
-									visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: entranceEase } },
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											duration: 0.7,
+											ease: entranceEase,
+										},
+									},
 								}}
 							>
 								Feeling at home, wherever
@@ -317,7 +338,10 @@ export function LandingHeroSectionV2({
 										initial={{ opacity: 0, y: 0 }}
 										animate={{ opacity: 1, y: 0 }}
 										exit={{ opacity: 0, y: -10 }}
-										transition={{ duration: 0.28, ease: entranceEase }}
+										transition={{
+											duration: 0.28,
+											ease: entranceEase,
+										}}
 										style={{ color: headlineWordColor }}
 										className="inline-block"
 									>
@@ -331,24 +355,47 @@ export function LandingHeroSectionV2({
 							className="space-y-0"
 							variants={{
 								hidden: { opacity: 0, y: 14 },
-								visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: entranceEase } },
+								visible: {
+									opacity: 1,
+									y: 0,
+									transition: {
+										duration: 0.55,
+										ease: entranceEase,
+									},
+								},
 							}}
 						>
 							<motion.p
 								className="max-w-md pb-6 text-2xl font-medium leading-tight text-minuri-ocean lg:text-xl xl:text-xl min-[1500px]:max-w-2xl min-[1500px]:text-2xl"
 								variants={{
 									hidden: { opacity: 0, y: 14 },
-									visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: entranceEase } },
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											duration: 0.5,
+											ease: entranceEase,
+										},
+									},
 								}}
 							>
-								Your everyday support system to start living independently
+								Your everyday support system to start living
+								independently
 							</motion.p>
 
 							<motion.div
 								className="relative flex items-center gap-5 pt-2"
 								variants={{
 									hidden: { opacity: 0, y: 10 },
-									visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: entranceEase, delay: 0.12 } },
+									visible: {
+										opacity: 1,
+										y: 0,
+										transition: {
+											duration: 0.5,
+											ease: entranceEase,
+											delay: 0.12,
+										},
+									},
 								}}
 							>
 								<div className="group relative mb-3 mr-3">
@@ -358,7 +405,9 @@ export function LandingHeroSectionV2({
 										onClick={() => router.push("/start")}
 										className="relative z-10 inline-flex h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
 									>
-										{hasActiveJourney ? "Start new journey" : "Let’s get started"}
+										{hasActiveJourney
+											? "Start new journey"
+											: "Let’s get started"}
 									</button>
 								</div>
 								<div className="group relative mb-3 mr-3">
@@ -372,7 +421,10 @@ export function LandingHeroSectionV2({
 									</Link>
 								</div>
 								<div className="absolute top-full left-0 hidden md:flex items-center gap-1.5 pt-2 text-minuri-ocean/50">
-									<CornerDownRight className="size-4" strokeWidth={2} />
+									<CornerDownRight
+										className="size-4"
+										strokeWidth={2}
+									/>
 									<span className="text-xs font-semibold uppercase tracking-widest">
 										or scroll to explore first
 									</span>
@@ -391,15 +443,29 @@ export function LandingHeroSectionV2({
 									initial={{ opacity: 0, y: -800 }}
 									animate={{ opacity: 1, y: 0 }}
 									transition={{
-										opacity: { duration: 0.35, delay: 0.5 + 5 * 0.12, ease: "easeOut" },
-										y: { type: "spring", stiffness: 120, damping: 18, delay: 0.5 + 5 * 0.15 },
+										opacity: {
+											duration: 0.35,
+											delay: 0.5 + 5 * 0.12,
+											ease: "easeOut",
+										},
+										y: {
+											type: "spring",
+											stiffness: 120,
+											damping: 18,
+											delay: 0.5 + 5 * 0.15,
+										},
 									}}
 								>
 									<motion.div
 										style={{ rotate: STICKY_ROTATE[5 % 4] }}
 										className="relative h-full"
 										animate={{ y: [0, -7, 0] }}
-										transition={{ duration: 3.2 + 0.3 * 0.28, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
+										transition={{
+											duration: 3.2 + 0.3 * 0.28,
+											ease: "easeInOut",
+											repeat: Infinity,
+											delay: 0.3,
+										}}
 									>
 										<div
 											className="absolute left-1/2 z-10 rounded-[1px]"
@@ -407,9 +473,12 @@ export function LandingHeroSectionV2({
 												top: -10,
 												width: 44,
 												height: 18,
-												transform: "translateX(-50%) rotate(-1.5deg)",
-												background: "rgba(253, 230, 138, 0.72)",
-												boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+												transform:
+													"translateX(-50%) rotate(-1.5deg)",
+												background:
+													"rgba(253, 230, 138, 0.72)",
+												boxShadow:
+													"0 1px 3px rgba(0,0,0,0.1)",
 											}}
 										/>
 										<div className="relative h-full overflow-hidden rounded-[2px]">
@@ -422,7 +491,11 @@ export function LandingHeroSectionV2({
 									card={HERO_TOPIC_CARDS[2]}
 									index={2}
 									isActive={activeIndex === 2}
-									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(2); restartCycle(); }}
+									onHover={() => {
+										setHasStartedWordCycle(true);
+										setActiveIndex(2);
+										restartCycle();
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -435,7 +508,11 @@ export function LandingHeroSectionV2({
 									card={HERO_TOPIC_CARDS[0]}
 									index={0}
 									isActive={activeIndex === 0}
-									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(0); restartCycle(); }}
+									onHover={() => {
+										setHasStartedWordCycle(true);
+										setActiveIndex(0);
+										restartCycle();
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -444,7 +521,11 @@ export function LandingHeroSectionV2({
 									card={HERO_TOPIC_CARDS[3]}
 									index={3}
 									isActive={activeIndex === 3}
-									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(3); restartCycle(); }}
+									onHover={() => {
+										setHasStartedWordCycle(true);
+										setActiveIndex(3);
+										restartCycle();
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -457,7 +538,11 @@ export function LandingHeroSectionV2({
 									card={HERO_TOPIC_CARDS[1]}
 									index={1}
 									isActive={activeIndex === 1}
-									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(1); restartCycle(); }}
+									onHover={() => {
+										setHasStartedWordCycle(true);
+										setActiveIndex(1);
+										restartCycle();
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
@@ -466,17 +551,52 @@ export function LandingHeroSectionV2({
 									card={HERO_TOPIC_CARDS[4]}
 									index={4}
 									isActive={activeIndex === 4}
-									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(4); restartCycle(); }}
+									onHover={() => {
+										setHasStartedWordCycle(true);
+										setActiveIndex(4);
+										restartCycle();
+									}}
 									entranceEase={entranceEase}
 									className=""
 								/>
 							</div>
 						</div>
 					</div>
-
 				</motion.div>
 			</div>
 
-</section>
+			{/* Scroll indicator — center bottom */}
+			<motion.button
+				type="button"
+				aria-label="Scroll to next section"
+				onClick={() =>
+					document
+						.getElementById("services")
+						?.scrollIntoView({ behavior: "smooth" })
+				}
+				className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 cursor-pointer flex-col items-center gap-1.5 md:flex"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ delay: 1.2, duration: 0.6 }}
+				whileHover={{ opacity: 0.7 }}
+			>
+				<span className="text-xs font-semibold uppercase tracking-[0.2em] text-minuri-ocean">
+					Scroll to explore
+				</span>
+				<motion.div
+					animate={{ y: [0, 5, 0] }}
+					transition={{
+						duration: 1.6,
+						repeat: Infinity,
+						ease: "easeInOut",
+					}}
+				>
+					<ChevronDown
+						className="size-5 text-minuri-ocean"
+						strokeWidth={1.5}
+					/>
+				</motion.div>
+			</motion.button>
+		</section>
 	);
 }
