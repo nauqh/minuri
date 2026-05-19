@@ -25,7 +25,7 @@ export function HomeView() {
 				<LandingDataSection />
 				<SpotlightScrollSection />
 				<LandingCareSection />
-				<LandingAccessSection />
+				{/* <LandingAccessSection /> */}
 			</main>
 			<LandingFooter />
 			<ScrollToTopButton />

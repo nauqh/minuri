@@ -231,21 +231,43 @@ export function GuidesIntroView() {
 					onMouseLeave={() => setIsHovered(false)}
 				>
 					{/* Center CTA */}
+
+					{/* Ripple rings — unselected only */}
+					{selected.size === 0 && [0, 0.7, 1.4].map((delay) => (
+						<motion.div
+							key={delay}
+							className="absolute rounded-full border border-minuri-ocean/20 pointer-events-none"
+							style={{
+								width: 180,
+								height: 180,
+								left: (CONTAINER_W - 180) / 2,
+								top: (CONTAINER_H - 180) / 2,
+							}}
+							animate={{ scale: [1, 1.9], opacity: [0.5, 0] }}
+							transition={{
+								duration: 2.1,
+								repeat: Infinity,
+								ease: "easeOut",
+								delay,
+							}}
+						/>
+					))}
+
 					<motion.button
 						type="button"
 						onClick={handleExplore}
 						disabled={selected.size === 0}
 						className={cn(
-							"absolute z-10 flex flex-col items-center justify-center gap-2 rounded-full text-center transition-colors duration-300",
+							"absolute z-10 flex flex-col items-center justify-center gap-1.5 rounded-full text-center transition-all duration-300",
 							selected.size > 0
 								? "cursor-pointer bg-minuri-teal text-white shadow-[0_8px_24px_-6px_rgba(0,200,168,0.45)]"
-								: "cursor-pointer bg-minuri-silver/40 text-minuri-slate",
+								: "cursor-not-allowed border-2 border-dashed border-minuri-ocean/30 bg-white text-minuri-ocean",
 						)}
 						style={{
-							width: 150,
-							height: 150,
-							left: (CONTAINER_W - 150) / 2,
-							top: (CONTAINER_H - 150) / 2,
+							width: 180,
+							height: 180,
+							left: (CONTAINER_W - 180) / 2,
+							top: (CONTAINER_H - 180) / 2,
 						}}
 						animate={
 							selected.size > 0
@@ -254,28 +276,29 @@ export function GuidesIntroView() {
 						}
 						transition={
 							selected.size > 0
-								? {
-										duration: 1.8,
-										repeat: Infinity,
-										ease: "easeInOut",
-									}
+								? { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
 								: { duration: 0.3 }
 						}
 						whileHover={selected.size > 0 ? { scale: 1.1 } : {}}
 						whileTap={selected.size > 0 ? { scale: 0.95 } : {}}
 					>
 						{selected.size === 0 ? (
-							<span className="px-4 text-sm font-semibold leading-snug">
-								Pick a topic
-							</span>
+							<>
+								<span className="px-3 text-xs font-bold uppercase tracking-widest leading-snug text-minuri-ocean/70">
+									Tap a card
+								</span>
+								<span className="text-lg">↑</span>
+							</>
 						) : (
 							<>
-								<ArrowRight className="size-7" aria-hidden />
-								<span className="text-3xl font-black leading-none">
+								<span className="text-4xl font-black leading-none">
 									{totalSelected}
 								</span>
 								<span className="text-sm font-medium">
 									{totalSelected === 1 ? "guide" : "guides"}
+								</span>
+								<span className="text-xs font-bold uppercase text-minuri-white">
+									click to continue
 								</span>
 							</>
 						)}
