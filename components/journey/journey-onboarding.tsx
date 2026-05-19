@@ -303,85 +303,26 @@ export function JourneyOnboarding() {
 						ease: [0.22, 1, 0.36, 1],
 					}}
 				>
-					<div className="w-full max-w-4xl">
-						{/* Spinner + heading */}
-						<div className="text-center">
-							<motion.span
-								className="mx-auto block text-5xl"
-								animate={{
-									scale: [1, 1.15, 1],
-									rotate: [0, 5, -5, 0],
-								}}
-								transition={{
-									duration: 2.4,
-									repeat: Infinity,
-									ease: "easeInOut",
-								}}
-							>
-								🌱
-							</motion.span>
-							<p className="mt-6 text-2xl font-bold text-minuri-ocean md:text-3xl">
-								Reading your story...
-							</p>
-							<p className="mt-3 text-sm text-minuri-slate">
-								Crafting your Melbourne identity for{" "}
-								<span className="font-semibold text-minuri-teal">
-									{selectedSuburb?.locality}
-								</span>
-							</p>
-							<p className="mt-2 text-xs text-minuri-slate/50">
-								This can take up to 30 seconds
-							</p>
+					<div className="w-full max-w-lg">
+						<div className="mb-10 flex items-center gap-5">
+							<div className="h-[3px] w-12 bg-minuri-teal" />
+							<span className="text-[10px] font-black uppercase tracking-[0.2em] text-minuri-ocean/40">Building your plan</span>
 						</div>
-
-						{/* Guide thumbnail grid */}
-						{(() => {
-							const previewGuides = GUIDES.filter(
-								(g) =>
-									g.isPublished &&
-									(selectedTopics.length === 0 ||
-										selectedTopics.includes(g.topic)),
-							).slice(0, 8);
-							return (
-								<div className="mt-10 grid grid-cols-4 gap-3">
-									{previewGuides.map((guide, i) => (
-										<motion.div
-											key={guide.slug}
-											initial={{
-												opacity: 0,
-												y: prefersReducedMotion
-													? 0
-													: 14,
-											}}
-											animate={{ opacity: 1, y: 0 }}
-											transition={{
-												duration: prefersReducedMotion
-													? 0.01
-													: 0.32,
-												delay: prefersReducedMotion
-													? 0
-													: 0.25 + i * 0.07,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="overflow-hidden rounded-2xl bg-minuri-fog"
-										>
-											<div className="relative aspect-[4/3] w-full">
-												<Image
-													src={guide.thumbnailUrl}
-													alt={guide.title}
-													fill
-													className="object-cover"
-													sizes="(max-width: 640px) 40vw, 200px"
-												/>
-											</div>
-											<p className="line-clamp-2 px-2.5 py-2 text-[11px] font-medium leading-snug text-minuri-ocean">
-												{guide.title}
-											</p>
-										</motion.div>
-									))}
-								</div>
-							);
-						})()}
+						<p className="text-[clamp(2.5rem,6vw,4.5rem)] font-black leading-[0.92] tracking-tight text-minuri-ocean">
+							Reading<br />your story...
+						</p>
+						<p className="mt-8 text-base text-minuri-slate">
+							Crafting a week plan for{" "}
+							<span className="font-semibold text-minuri-teal">{selectedSuburb?.locality}</span>
+						</p>
+						<p className="mt-1 text-xs uppercase tracking-[0.14em] text-minuri-slate/40">This can take up to 30 seconds</p>
+						<div className="mt-10 h-[2px] w-full overflow-hidden bg-minuri-ocean/10">
+							<motion.div
+								className="h-full w-1/3 bg-minuri-ocean"
+								animate={{ x: ["-100%", "400%"] }}
+								transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+							/>
+						</div>
 					</div>
 				</motion.div>
 			) : (
@@ -485,7 +426,7 @@ export function JourneyOnboarding() {
 								<button
 									type="button"
 									onClick={() => router.back()}
-									className="inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
+									className="inline-flex items-center gap-1.5 text-sm font-semibold text-minuri-ocean/50 transition-colors duration-200 hover:text-minuri-ocean"
 								>
 									<ArrowLeft
 										className="size-3.5"
@@ -536,35 +477,15 @@ export function JourneyOnboarding() {
 											delay: prefersReducedMotion ? 0 : 0.7,
 										}}
 									>
-										<div className="mb-4 flex items-center gap-3">
-											<span
-												className={cn(
-													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
-													yourMoment.length >=
-														MIN_MOMENT_LENGTH
-														? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
-														: "border-2 border-minuri-teal/50 text-minuri-teal",
-												)}
-											>
-												{yourMoment.length >=
-												MIN_MOMENT_LENGTH ? (
-													<Check
-														className="size-3.5"
-														strokeWidth={3}
-													/>
-												) : (
-													"1"
-												)}
-											</span>
-											<div>
-												<p className="text-xl font-bold text-minuri-ocean">
-													Your moment
-												</p>
-												<p className="text-xs text-minuri-slate">
-													Pick a preset that sounds
-													like you, or write your own
-												</p>
+										<div className={cn("mb-6 flex items-start gap-4 border-l-[3px] pl-4 transition-colors duration-300", yourMoment.length >= MIN_MOMENT_LENGTH ? "border-minuri-teal" : "border-minuri-ocean/15")}>
+											<div className="flex-1">
+												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40">Step 01</p>
+												<p className="mt-0.5 text-2xl font-black text-minuri-ocean">Your moment</p>
+												<p className="mt-1 text-sm text-minuri-slate">Pick a preset that sounds like you, or write your own</p>
 											</div>
+											{yourMoment.length >= MIN_MOMENT_LENGTH && (
+												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
+											)}
 										</div>
 
 										{/* Preset cards */}
@@ -598,14 +519,14 @@ export function JourneyOnboarding() {
 															duration: 0.15,
 														}}
 														className={cn(
-															"relative flex gap-3.5 rounded-2xl border p-4 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
+															"relative flex gap-3.5 rounded-md border p-4 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
 															isActive
 																? "border-minuri-teal bg-minuri-mist/60 shadow-sm"
 																: "border-minuri-silver/70 bg-minuri-white hover:border-minuri-teal/40 hover:bg-minuri-fog/60",
 														)}
 														aria-pressed={isActive}
 													>
-														<span className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-white text-xl shadow-sm">
+														<span className="flex size-12 shrink-0 items-center justify-center rounded-sm bg-white text-xl shadow-sm">
 															{preset.icon}
 														</span>
 														<div className="min-w-0 pr-4">
@@ -740,7 +661,7 @@ export function JourneyOnboarding() {
 																"0.6rem",
 														}}
 														className={cn(
-															"w-full resize-none rounded-2xl border px-4 pb-3 text-sm outline-none transition",
+															"w-full resize-none rounded-md border px-4 pb-3 text-sm outline-none transition",
 															showMomentPrompt
 																? "border-amber-300 focus:border-amber-400"
 																: yourMoment.length >=
@@ -805,36 +726,15 @@ export function JourneyOnboarding() {
 											delay: prefersReducedMotion ? 0 : 0.95,
 										}}
 									>
-										<div className="mb-4 flex items-center gap-3">
-											<span
-												className={cn(
-													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
-													hasConfirmedSuburb
-														? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
-														: "border-2 border-minuri-teal/50 text-minuri-teal",
-												)}
-											>
-												{hasConfirmedSuburb ? (
-													<Check
-														className="size-3.5"
-														strokeWidth={3}
-													/>
-												) : (
-													"2"
-												)}
-											</span>
-											<div>
-												<label
-													htmlFor="suburb-input"
-													className="block cursor-pointer text-xl font-bold text-minuri-ocean"
-												>
-													Your Melbourne suburb
-												</label>
-												<p className="text-xs text-minuri-slate">
-													Type to search and confirm
-													your suburb
-												</p>
+										<div className={cn("mb-6 flex items-start gap-4 border-l-[3px] pl-4 transition-colors duration-300", hasConfirmedSuburb ? "border-minuri-teal" : "border-minuri-ocean/15")}>
+											<div className="flex-1">
+												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40">Step 02</p>
+												<label htmlFor="suburb-input" className="mt-0.5 block cursor-pointer text-2xl font-black text-minuri-ocean">Your Melbourne suburb</label>
+												<p className="mt-1 text-sm text-minuri-slate">Type to search and confirm your suburb</p>
 											</div>
+											{hasConfirmedSuburb && (
+												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
+											)}
 										</div>
 										<div className="relative mt-2.5">
 											<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-minuri-silver" />
@@ -901,7 +801,7 @@ export function JourneyOnboarding() {
 														: undefined
 												}
 												className={cn(
-													"h-12 w-full rounded-xl border pl-10 pr-3 text-sm outline-none transition",
+													"h-12 w-full rounded-md border pl-10 pr-3 text-sm outline-none transition",
 													hasConfirmedSuburb
 														? "cursor-not-allowed border-minuri-teal/60 bg-minuri-mist/30"
 														: "border-minuri-silver bg-minuri-fog/30 focus:border-minuri-teal",
@@ -942,7 +842,7 @@ export function JourneyOnboarding() {
 											<div
 												id={listboxId}
 												role="listbox"
-												className="mt-2 max-h-64 overflow-y-auto rounded-xl border border-minuri-silver/40 bg-minuri-white shadow-sm"
+												className="mt-2 max-h-64 overflow-y-auto rounded-md border border-minuri-silver/40 bg-minuri-white shadow-sm"
 											>
 												{suburbLoading && (
 													<div className="flex items-center gap-2 px-3 py-3 text-sm text-minuri-slate">
@@ -1033,32 +933,15 @@ export function JourneyOnboarding() {
 											delay: prefersReducedMotion ? 0 : 1.2,
 										}}
 									>
-										<div className="mb-4 flex items-center gap-3">
-											<span
-												className={cn(
-													"flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black transition-all duration-300",
-													selectedTopics.length >= 1
-														? "bg-minuri-teal text-white shadow-[0_2px_8px_-2px_rgba(61,191,184,0.5)]"
-														: "border-2 border-minuri-teal/50 text-minuri-teal",
-												)}
-											>
-												{selectedTopics.length >= 1 ? (
-													<Check
-														className="size-3.5"
-														strokeWidth={3}
-													/>
-												) : (
-													"3"
-												)}
-											</span>
-											<div>
-												<p className="text-xl font-bold text-minuri-ocean">
-													What matters most right now?
-												</p>
-												<p className="text-xs text-minuri-slate">
-													Select at least one topic to focus your plan
-												</p>
+										<div className={cn("mb-6 flex items-start gap-4 border-l-[3px] pl-4 transition-colors duration-300", selectedTopics.length >= 1 ? "border-minuri-teal" : "border-minuri-ocean/15")}>
+											<div className="flex-1">
+												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40">Step 03</p>
+												<p className="mt-0.5 text-2xl font-black text-minuri-ocean">What matters most right now?</p>
+												<p className="mt-1 text-sm text-minuri-slate">Select at least one topic to focus your plan</p>
 											</div>
+											{selectedTopics.length >= 1 && (
+												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
+											)}
 										</div>
 										<div
 											className="mt-3 -mr-6 pr-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 xl:-mr-[8vw] xl:pr-[8vw]"
@@ -1254,7 +1137,7 @@ export function JourneyOnboarding() {
 									type="button"
 									onClick={handleSubmit}
 									disabled={!isFormValid}
-									className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-minuri-teal px-12 py-4 text-base font-bold text-primary-foreground shadow-lg transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 md:w-auto"
+									className="group inline-flex w-full items-center justify-center gap-2 rounded-sm bg-minuri-ocean px-12 py-4 text-base font-bold text-minuri-white transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 md:w-auto"
 								>
 									Build My Guide Journey
 									{missingCount > 0 ? (

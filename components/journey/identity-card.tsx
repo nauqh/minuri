@@ -13,9 +13,10 @@ type Props = {
   identity: JourneyIdentity;
   cardState: IdentityCardState;
   className?: string;
+  plantDelay?: number;
 };
 
-export function IdentityCard({ identity, cardState, className = "" }: Props) {
+export function IdentityCard({ identity, cardState, className = "", plantDelay = 0 }: Props) {
   const [flipped, setFlipped] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
@@ -84,6 +85,7 @@ export function IdentityCard({ identity, cardState, className = "" }: Props) {
             stampsEarned={stampsEarned}
             constellationLit={constellationLit}
             primaryColor={primaryColor}
+            plantDelay={plantDelay}
           />
         </div>
 
@@ -134,6 +136,7 @@ type FrontProps = {
   stampsEarned: string[];
   constellationLit: number;
   primaryColor: string;
+  plantDelay?: number;
 };
 
 function CardFront({
@@ -147,6 +150,7 @@ function CardFront({
   stampsEarned,
   constellationLit,
   primaryColor,
+  plantDelay = 0,
 }: FrontProps) {
   return (
     <div
@@ -158,13 +162,14 @@ function CardFront({
         minHeight: 400,
       }}
     >
-      {/* Growing plant — replaces static emoji symbol */}
+      {/* Growing plant */}
       <div className="flex justify-center py-1">
         <PlantGrowth
           daysCompleted={constellationLit}
           archetype={archetype}
           color={primaryColor}
           saturation={saturation}
+          delay={plantDelay}
         />
       </div>
 

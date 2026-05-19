@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import {
 	CheckCircle2,
 	ChevronRight,
-	UserCircle,
 	ChevronDown,
 	Compass,
 	HeartPulse,
@@ -31,8 +30,6 @@ import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
 import { JourneyNearbyEvents } from "@/components/journey/journey-nearby-events";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
 import { loadWeekPlan, resolveWeekPlan } from "@/lib/journey/week-plan-store";
-import { getVibe, DEFAULT_VIBE_ID, type Vibe } from "@/lib/vibes";
-import { LANDING_KEYS } from "@/components/landing/landing-local-state";
 import { IdentityCard } from "@/components/journey/identity-card";
 import { CardEarnToast } from "@/components/journey/card-earn-toast";
 import { MelbourneLetter } from "@/components/journey/melbourne-letter";
@@ -265,6 +262,104 @@ function LetterReveal({
 	);
 }
 
+function LetterOverlay({
+	identity,
+	suburb,
+	onClose,
+}: {
+	identity: import("@/lib/journey/identity").JourneyIdentity;
+	suburb: string;
+	onClose: () => void;
+}) {
+	const prefersReducedMotion = useReducedMotion();
+	const accent = identity.palette[0].hex;
+
+	useEffect(() => {
+		const prevBody = document.body.style.overflow;
+		const prevHtml = document.documentElement.style.overflow;
+		document.body.style.overflow = "hidden";
+		document.documentElement.style.overflow = "hidden";
+		const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+		window.addEventListener("keydown", onKey);
+		return () => {
+			document.body.style.overflow = prevBody;
+			document.documentElement.style.overflow = prevHtml;
+			window.removeEventListener("keydown", onKey);
+		};
+	}, [onClose]);
+
+	return (
+		<motion.div
+			className="journey-notebook-bg fixed inset-0 z-50 flex flex-col overflow-hidden"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: prefersReducedMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+		>
+			{/* Notebook red margin line */}
+			<div
+				aria-hidden
+				className="pointer-events-none absolute inset-y-0"
+				style={{ left: "clamp(3rem, 8vw, 7rem)", width: "2px", background: "oklch(0.68 0.13 15 / 0.22)" }}
+			/>
+			{/* Soft radial fade */}
+			<div
+				aria-hidden
+				className="pointer-events-none absolute inset-0"
+				style={{ background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(255,255,255,0.55) 60%, white 82%)" }}
+			/>
+			{/* Close button */}
+			<div className="relative z-10 flex shrink-0 justify-end px-6 pt-5">
+				<button
+					type="button"
+					onClick={onClose}
+					className="flex items-center gap-2 rounded-full bg-minuri-ocean px-4 py-2 text-sm font-semibold text-white shadow-md transition-opacity hover:opacity-90"
+					aria-label="Close letter"
+				>
+					<X className="size-4" aria-hidden />
+					Close
+				</button>
+			</div>
+			<div className="relative z-10 flex flex-1 flex-col items-center overflow-y-auto px-6 pb-10">
+				<div className="w-full max-w-3xl">
+					<div className="mb-8 flex justify-center">
+						<div
+							className="flex size-20 items-center justify-center rounded-full text-4xl"
+							style={{ backgroundColor: `${accent}28`, boxShadow: `0 0 32px ${accent}50` }}
+						>
+							{identity.symbol}
+						</div>
+					</div>
+					<p
+						className="mb-3 text-center text-[11px] font-semibold uppercase tracking-[0.2em]"
+						style={{ color: accent }}
+					>
+						A letter for you
+					</p>
+					<h2 className="text-center text-3xl font-black text-minuri-ocean md:text-4xl">
+						{identity.archetype}
+					</h2>
+					<div className="mx-auto my-6 h-px w-20" style={{ backgroundColor: accent }} />
+					<div className="flex justify-center">
+						<MelbourneLetter
+							suburb={suburb}
+							body={identity.letter.body}
+							signOff={identity.letter.sign_off}
+							skipStream
+							onComplete={() => {}}
+							paragraphClassName="text-xl leading-[3rem] tracking-wide text-minuri-slate min-[1500px]:text-2xl"
+							className="max-w-3xl"
+						/>
+					</div>
+					<div className="mt-6 text-center">
+						<p className="text-base italic text-minuri-slate">&ldquo;{identity.mantra}&rdquo;</p>
+					</div>
+				</div>
+			</div>
+		</motion.div>
+	);
+}
+
 function isDayDone(plan: DayPlan, completedTasks: Set<string>) {
 	return (
 		plan.tasks.length > 0 &&
@@ -446,161 +541,132 @@ function GuideAccordionRow({
 	);
 }
 
-// ─── Week Drawer ──────────────────────────────────────────────────────────────
+// ─── Plan Sidebar ─────────────────────────────────────────────────────────────
 
-function WeekDrawer({
-	open,
+function PlanSidebar({
+	identity,
+	cardState,
 	weekPlan,
 	activeDay,
 	completedTasks,
-	vibe,
-	identity,
-	cardState,
 	suburb,
-	onSelectDay,
-	onClose,
 }: {
-	open: boolean;
+	identity: import("@/lib/journey/identity").JourneyIdentity;
+	cardState: import("@/lib/journey/identity").IdentityCardState;
 	weekPlan: DayPlan[];
 	activeDay: number;
 	completedTasks: Set<string>;
-	vibe: Vibe;
-	identity: import("@/lib/journey/identity").JourneyIdentity | null;
-	cardState: import("@/lib/journey/identity").IdentityCardState | null;
 	suburb: string;
-	onSelectDay: (day: number) => void;
-	onClose: () => void;
 }) {
-	const prefersReducedMotion = useReducedMotion();
 	const { bookmarks } = useGuideBookmarks();
 	const savedGuides = bookmarks
 		.map((slug) => GUIDES.find((g) => g.slug === slug))
 		.filter((g): g is Guide => Boolean(g));
 
-	useEffect(() => {
-		if (!open) return;
-		function onKey(e: KeyboardEvent) {
-			if (e.key === "Escape") onClose();
-		}
-		window.addEventListener("keydown", onKey);
-		return () => window.removeEventListener("keydown", onKey);
-	}, [open, onClose]);
-
-	useEffect(() => {
-		if (!open) document.body.style.overflow = "";
-		return () => { document.body.style.overflow = ""; };
-	}, [open]);
+	const dayPlan = weekPlan.find((d) => d.day === activeDay);
+	const taskTotal = dayPlan?.tasks.length ?? 0;
+	const taskDone =
+		taskTotal > 0
+			? dayPlan!.tasks.filter((_, i) => completedTasks.has(`${activeDay}-${i}`)).length
+			: 0;
+	const allDone = taskTotal > 0 && taskDone === taskTotal;
+	const accent = identity.palette[0].hex;
 
 	return (
-		<AnimatePresence>
-			{open && (
-				<>
-					<motion.div
-						key="backdrop"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{
-							duration: prefersReducedMotion ? 0.01 : 0.2,
-						}}
-						className="fixed inset-0 z-40 bg-black/30"
-						onClick={onClose}
-						aria-hidden
-					/>
-
-					<motion.div
-						key="panel"
-						initial={{ x: "100%" }}
-						animate={{ x: 0 }}
-						exit={{ x: "100%" }}
-						transition={{
-							duration: prefersReducedMotion ? 0.01 : 0.3,
-							ease: [0.22, 1, 0.36, 1],
-						}}
-						className="fixed right-0 top-0 z-50 flex h-auto max-h-screen w-full flex-col bg-minuri-white shadow-2xl sm:w-[30vw] sm:max-w-none"
-						role="dialog"
-						aria-label="Your week"
-						onMouseEnter={() => { document.body.style.overflow = "hidden"; }}
-						onMouseLeave={() => { document.body.style.overflow = ""; }}
+		<div className="divide-y divide-minuri-silver/40 overflow-hidden rounded-2xl">
+			{/* Plant hero */}
+			<div className="px-5 pb-5 pt-4">
+				<div className="flex items-center gap-4">
+					<div
+						className="flex size-14 shrink-0 items-center justify-center rounded-full text-3xl"
+						style={{ backgroundColor: `${accent}22` }}
 					>
-						{/* Sticky close bar */}
-						<div className="flex shrink-0 items-center justify-end px-4 py-3">
-							<button
-								type="button"
-								onClick={onClose}
-								data-no-scale
-								className="rounded-lg p-1.5 text-minuri-slate transition-colors hover:text-minuri-ocean"
-								aria-label="Close drawer"
-							>
-								<X className="size-4" />
-							</button>
-						</div>
-
-						{/* Scrollable body */}
-						<div className="overflow-y-auto overscroll-contain">
-							<div className="px-5 py-5">
-								<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-									Your vibe
-								</p>
-								<div className="mt-3 flex items-center gap-3">
-									<span
-										className="size-8 shrink-0 rounded-xl"
-										style={{ backgroundColor: vibe.hex }}
+						{identity.symbol}
+					</div>
+					<div className="flex-1 min-w-0">
+						<p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-minuri-slate/50">Your plant</p>
+						<p className="text-xl font-black text-minuri-ocean">
+							{cardState.daysCompleted.length} of {weekPlan.length} days grown
+						</p>
+						<div className="mt-2 flex gap-1">
+							{weekPlan.map((day) => {
+								const grown = cardState.daysCompleted.includes(day.day);
+								const isToday = day.day === activeDay;
+								return (
+									<div
+										key={day.day}
+										className="h-1.5 flex-1 rounded-full transition-all duration-300"
+										style={{ backgroundColor: accent, opacity: grown ? 1 : isToday ? 0.35 : 0.12 }}
 									/>
-									<div>
-										<p className="text-sm font-bold text-minuri-ocean">
-											{vibe.name}
-										</p>
-										<p className="font-mono text-[11px] text-minuri-slate">
-											{vibe.hex}
-										</p>
-									</div>
-								</div>
-								<p className="mt-3 text-xs leading-relaxed text-minuri-slate">
-									{vibe.traits}
-								</p>
-							</div>
-
-							{identity && cardState && (
-								<div className="border-t border-minuri-silver/40 px-5 pb-5 pt-4">
-									<IdentityCard identity={identity} cardState={cardState} />
-								</div>
-							)}
-
-							{savedGuides.length > 0 && (
-								<div className="border-t border-minuri-silver/40 px-5 pb-6 pt-4">
-									<p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
-										Saved guides
-									</p>
-									<div className="space-y-2">
-										{savedGuides.map((guide) => {
-											const topicMeta = getTopicMeta(guide.topic);
-											return (
-												<Link
-													key={guide.slug}
-													href={`/guides/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
-													onClick={onClose}
-													className="flex items-start gap-3 rounded-xl border border-minuri-silver/40 px-3 py-2.5 transition-colors hover:bg-minuri-fog"
-												>
-													<div className="min-w-0 flex-1">
-														<p className="text-sm font-medium leading-snug text-minuri-ocean">
-															{guide.title}
-														</p>
-														<p className="mt-0.5 text-[11px] text-minuri-slate">
-															{topicMeta?.name} · {guide.readingTimeMin} min
-														</p>
-													</div>
-												</Link>
-											);
-										})}
-									</div>
-								</div>
-							)}
+								);
+							})}
 						</div>
-					</motion.div>
-				</>
+					</div>
+				</div>
+				{taskTotal > 0 && (
+					<div className="mt-4 flex items-center justify-between gap-3 rounded-md bg-minuri-fog/70 px-3 py-2.5">
+						<p className="text-xs text-minuri-slate">
+							<span className="font-semibold text-minuri-ocean">Day {activeDay}</span>
+							{" · "}
+							{allDone ? (
+								<span className="font-semibold text-minuri-teal">All done ✓</span>
+							) : (
+								<>{taskDone}/{taskTotal} tasks done</>
+							)}
+						</p>
+						{!allDone && (
+							<div className="h-1 w-16 overflow-hidden rounded-full bg-minuri-ocean/10">
+								<div
+									className="h-full rounded-full transition-all duration-500"
+									style={{ width: `${Math.round((taskDone / taskTotal) * 100)}%`, backgroundColor: accent }}
+								/>
+							</div>
+						)}
+					</div>
+				)}
+				<p className="mt-3 text-[11px] leading-relaxed text-minuri-slate/55">
+					Tick every task on a day → day complete → your plant grows.
+				</p>
+			</div>
+
+			{/* Identity card */}
+			<div className="px-5 pb-5 pt-4">
+				<div className="mb-3 flex items-center gap-2.5">
+					<div className="h-5 w-1 rounded-full bg-minuri-teal" aria-hidden />
+					<p className="text-xl font-black text-minuri-ocean">Your identity card</p>
+				</div>
+				<IdentityCard identity={identity} cardState={cardState} plantDelay={0} />
+			</div>
+
+			{/* Saved guides */}
+			{savedGuides.length > 0 && (
+				<div className="px-5 pb-6 pt-4">
+					<div className="mb-3 flex items-center gap-2.5">
+						<div className="h-5 w-1 rounded-full bg-minuri-teal" aria-hidden />
+						<p className="text-xl font-black text-minuri-ocean">Saved guides</p>
+					</div>
+					<div className="space-y-2">
+						{savedGuides.map((guide) => {
+							const topicMeta = getTopicMeta(guide.topic);
+							return (
+								<Link
+									key={guide.slug}
+									href={`/guides/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
+									className="flex items-start gap-3 rounded-xl border border-minuri-silver/40 px-3 py-2.5 transition-colors hover:bg-minuri-fog"
+								>
+									<div className="min-w-0 flex-1">
+										<p className="text-sm font-medium leading-snug text-minuri-ocean">{guide.title}</p>
+										<p className="mt-0.5 text-[11px] text-minuri-slate">
+											{topicMeta?.name} · {guide.readingTimeMin} min
+										</p>
+									</div>
+								</Link>
+							);
+						})}
+					</div>
+				</div>
 			)}
-		</AnimatePresence>
+		</div>
 	);
 }
 
@@ -750,8 +816,6 @@ function DayContent({
 				)}
 			</div>
 			{/* end flex row */}
-
-			<JourneyDayPlaces suburb={suburb} topicSlug={plan.topicSlug} />
 		</motion.div>
 	);
 }
@@ -773,9 +837,7 @@ export function JourneyPlanView() {
 	const earnedDaysRef = useRef<Set<number>>(new Set());
 
 	const [activeDay, setActiveDay] = useState(1);
-	const [drawerOpen, setDrawerOpen] = useState(false);
-	const [vibe, setVibe] = useState<Vibe>(() => getVibe(DEFAULT_VIBE_ID));
-	const [letterExpanded, setLetterExpanded] = useState(false);
+	const [letterOverlayOpen, setLetterOverlayOpen] = useState(false);
 	const [planStage, setPlanStage] = useState<"letter" | "plan">("letter");
 
 	useEffect(() => {
@@ -788,19 +850,9 @@ export function JourneyPlanView() {
 	const [hasCardNotif, setHasCardNotif] = useState(false);
 
 	useEffect(() => {
-		const stored =
-			typeof window !== "undefined"
-				? (window.localStorage.getItem(LANDING_KEYS.vibe) ??
-					DEFAULT_VIBE_ID)
-				: DEFAULT_VIBE_ID;
-		setVibe(getVibe(stored));
-	}, []);
-
-	useEffect(() => {
 		if (!identity) return;
 		const color = identity.palette[0].hex;
 		document.documentElement.style.setProperty("--vibe-accent", color);
-		setVibe((v) => ({ ...v, hex: color }));
 	}, [identity]);
 
 	useEffect(() => {
@@ -852,11 +904,6 @@ export function JourneyPlanView() {
 	})();
 	const currentDay = weekPlan.find((d) => d.day === activeDay) ?? weekPlan[0];
 
-	const truncatedMoment =
-		yourMoment.length > 120
-			? yourMoment.slice(0, 117).trimEnd() + "..."
-			: yourMoment;
-
 	function selectDay(day: number) {
 		setActiveDay(day);
 		scrollRef.current?.scrollIntoView({
@@ -902,29 +949,23 @@ export function JourneyPlanView() {
 
 	return (
 		<>
-			{/* Drawer and toast outside scaled container — CSS transforms break fixed positioning */}
-			<WeekDrawer
-				open={drawerOpen}
-				weekPlan={weekPlan}
-				activeDay={activeDay}
-				completedTasks={completedTasks}
-				vibe={vibe}
-				identity={identity}
-				cardState={cardState}
-				suburb={suburb}
-				onSelectDay={selectDay}
-				onClose={() => setDrawerOpen(false)}
-			/>
+			{/* Letter overlay */}
+			<AnimatePresence>
+				{letterOverlayOpen && identity && (
+					<LetterOverlay
+						key="letter-overlay"
+						identity={identity}
+						suburb={suburb}
+						onClose={() => setLetterOverlayOpen(false)}
+					/>
+				)}
+			</AnimatePresence>
 
 			{toastDay !== null && (
 				<CardEarnToast
 					day={toastDay}
 					visible={toastVisible}
 					onDone={() => setToastVisible(false)}
-					onOpenCard={() => {
-						setDrawerOpen(true);
-						setHasCardNotif(false);
-					}}
 				/>
 			)}
 
@@ -944,57 +985,21 @@ export function JourneyPlanView() {
 						<Home className="size-3.5" aria-hidden />
 						Home
 					</Link>
-					<div className="flex items-center gap-2">
-						<motion.button
-							type="button"
-							data-no-scale
-							onClick={() => {
-								setDrawerOpen((o) => !o);
-								setHasCardNotif(false);
-							}}
-							className="relative inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
-							animate={
-								hasCardNotif && !drawerOpen
-									? { scale: [1, 1.13, 0.97, 1.1, 1] }
-									: { scale: 1 }
-							}
-							transition={{
-								duration: 2.5,
-								ease: "easeInOut",
-								times: [0, 0.25, 0.5, 0.75, 1],
-								repeat: hasCardNotif && !drawerOpen ? Infinity : 0,
-								repeatDelay: 1.2,
-							}}
-						>
-							{hasCardNotif && !drawerOpen && (
-								<span className="absolute -right-1 -top-1 size-2.5 rounded-full bg-minuri-teal ring-2 ring-white" />
-							)}
-							{drawerOpen ? (
-								<X className="size-3.5" aria-hidden />
-							) : (
-								<UserCircle
-									className="size-3.5"
-									aria-hidden
-								/>
-							)}
-							{drawerOpen ? "Close" : "My card"}
-						</motion.button>
-						<button
-							type="button"
-							onClick={handleStartOver}
-							className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
-						>
-							<RotateCcw className="size-3.5" aria-hidden />
-							Start over
-						</button>
-					</div>
+					<button
+						type="button"
+						onClick={handleStartOver}
+						className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
+					>
+						<RotateCcw className="size-3.5" aria-hidden />
+						Start over
+					</button>
 				</div>
 			</header>
 
 			<main className="mx-auto max-w-screen-xl px-6 py-10 md:py-12">
 				<div className="flex gap-10 items-start">
 					{/* ── Left: main plan content ── */}
-					<div className="min-w-0 flex-1 min-w-0">
+					<div className="min-w-0 flex-1">
 						{/* Hero */}
 						<motion.div
 							initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 18 }}
@@ -1003,9 +1008,9 @@ export function JourneyPlanView() {
 							viewport={{ once: true, margin: "-10% 0px -8% 0px" }}
 							transition={revealTransition}
 						>
-							<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
+							<span className="inline-flex rounded-sm bg-[#e2ffef] px-2 py-1.5 text-sm font-black uppercase text-minuri-ocean">
 								Your guide journey
-							</p>
+							</span>
 							<h1 className="mt-2 text-4xl font-black leading-tight text-minuri-ocean md:text-5xl">
 								Your first week in{" "}
 								<span style={{ color: "var(--vibe-accent)" }}>
@@ -1013,62 +1018,15 @@ export function JourneyPlanView() {
 								</span>
 							</h1>
 
-							{truncatedMoment && (
-								<motion.div
-									initial={{
-										opacity: 0,
-										y: prefersReducedMotion ? 0 : 6,
-									}}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{
-										duration: prefersReducedMotion ? 0.01 : 0.4,
-										delay: 0.1,
-									}}
-									className="mt-4 py-2 pl-4"
-									style={{
-										borderLeftWidth: "3px",
-										borderLeftStyle: "solid",
-										borderLeftColor: "var(--vibe-accent)",
-									}}
-								>
-									<p className="text-sm italic leading-relaxed text-minuri-slate">
-										{truncatedMoment}
-									</p>
-								</motion.div>
-							)}
-
 							{identity?.letter?.body && (
-								<motion.div
-									initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{
-										duration: prefersReducedMotion ? 0.01 : 0.45,
-										delay: 0.18,
-									}}
-									className="mt-5 rounded-2xl border border-minuri-silver/50 bg-minuri-fog/60 px-5 py-4"
+								<button
+									type="button"
+									onClick={() => setLetterOverlayOpen(true)}
+									className="mt-4 text-sm font-medium text-minuri-teal hover:underline"
 								>
-									<p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-minuri-teal">
-										A letter for you
-									</p>
-									<p className="text-sm leading-relaxed text-minuri-slate">
-										{letterExpanded
-											? identity.letter.body
-											: identity.letter.body.slice(0, 160).trimEnd() + "…"}
-									</p>
-									<button
-										type="button"
-										onClick={() => setLetterExpanded((v) => !v)}
-										className="mt-2 text-xs font-medium text-minuri-teal hover:underline"
-									>
-										{letterExpanded ? "Show less" : "Read more"}
-									</button>
-								</motion.div>
+									Read your letter →
+								</button>
 							)}
-
-							<p className="mt-4 text-sm text-minuri-slate">
-								Guides, tasks, and places near{" "}
-								{suburb} — one day at a time.
-							</p>
 						</motion.div>
 
 						{/* Day stepper */}
@@ -1120,12 +1078,33 @@ export function JourneyPlanView() {
 							)}
 						</div>
 
-						{/* Community near you */}
-						<div className="mt-12">
-							<JourneyNearbyEvents suburb={suburb} />
-						</div>
 					</div>
 
+					{/* ── Right: sticky sidebar ── */}
+					{identity && cardState && (
+						<aside className="hidden lg:block w-80 shrink-0 sticky top-6">
+							<PlanSidebar
+								identity={identity}
+								cardState={cardState}
+								weekPlan={weekPlan}
+								activeDay={activeDay}
+								completedTasks={completedTasks}
+								suburb={suburb}
+							/>
+						</aside>
+					)}
+				</div>
+
+				{/* Places to go — full width */}
+				{currentDay && (
+					<div key={activeDay} className="mt-10">
+						<JourneyDayPlaces suburb={suburb} topicSlug={currentDay.topicSlug} />
+					</div>
+				)}
+
+				{/* Community near you — full width */}
+				<div className="mt-12">
+					<JourneyNearbyEvents suburb={suburb} />
 				</div>
 			</main>
 		</motion.div>

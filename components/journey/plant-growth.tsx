@@ -28,9 +28,9 @@ const ARCHETYPE_TO_SPECIES: Record<string, SpeciesKey> = {
 
 // ── bloom renderers ───────────────────────────────────────────────────────────
 
-type BloomProps = { cx: number; cy: number; color: string; reduced: boolean };
+type BloomProps = { cx: number; cy: number; color: string; reduced: boolean; baseDelay: number };
 
-function FlowerBloom({ cx, cy, color, reduced }: BloomProps) {
+function FlowerBloom({ cx, cy, color, reduced, baseDelay }: BloomProps) {
   const petalR = 9;
   return (
     <g>
@@ -47,25 +47,25 @@ function FlowerBloom({ cx, cy, color, reduced }: BloomProps) {
             style={{ transformBox: "fill-box", transformOrigin: "center", rotate: ang + 90 }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.9 }}
-            transition={{ duration: reduced ? 0 : 0.45, delay: reduced ? 0 : 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduced ? 0 : 0.45, delay: reduced ? 0 : baseDelay + 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
           />
         );
       })}
       <motion.circle cx={cx} cy={cy} r={4.5} fill="#FFF8E1"
         style={{ transformBox: "fill-box", transformOrigin: "center" }}
         initial={{ scale: 0 }} animate={{ scale: 1 }}
-        transition={{ duration: reduced ? 0 : 0.35, delay: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduced ? 0 : 0.35, delay: reduced ? 0 : baseDelay + 0.45, ease: [0.22, 1, 0.36, 1] }}
       />
       <motion.circle cx={cx} cy={cy} r={2.5} fill="#F9A825"
         style={{ transformBox: "fill-box", transformOrigin: "center" }}
         initial={{ scale: 0 }} animate={{ scale: 1 }}
-        transition={{ duration: reduced ? 0 : 0.3, delay: reduced ? 0 : 0.55 }}
+        transition={{ duration: reduced ? 0 : 0.3, delay: reduced ? 0 : baseDelay + 0.55 }}
       />
     </g>
   );
 }
 
-function BlossomBloom({ cx, cy, color, reduced }: BloomProps) {
+function BlossomBloom({ cx, cy, color, reduced, baseDelay }: BloomProps) {
   return (
     <g>
       {[0, 90, 180, 270].map((ang, i) => {
@@ -80,20 +80,20 @@ function BlossomBloom({ cx, cy, color, reduced }: BloomProps) {
             style={{ transformBox: "fill-box", transformOrigin: "center", rotate: ang }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.85 }}
-            transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : baseDelay + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
           />
         );
       })}
       <motion.circle cx={cx} cy={cy} r={3} fill="#FFF8E1"
         style={{ transformBox: "fill-box", transformOrigin: "center" }}
         initial={{ scale: 0 }} animate={{ scale: 1 }}
-        transition={{ duration: reduced ? 0 : 0.3, delay: reduced ? 0 : 0.3 }}
+        transition={{ duration: reduced ? 0 : 0.3, delay: reduced ? 0 : baseDelay + 0.3 }}
       />
     </g>
   );
 }
 
-function SpiralBloom({ cx, cy, color, reduced }: BloomProps) {
+function SpiralBloom({ cx, cy, color, reduced, baseDelay }: BloomProps) {
   const steps = 24;
   const d = Array.from({ length: steps + 1 }, (_, k) => {
     const t = k / steps;
@@ -110,12 +110,12 @@ function SpiralBloom({ cx, cy, color, reduced }: BloomProps) {
       strokeLinecap="round"
       initial={{ pathLength: 0, opacity: 0 }}
       animate={{ pathLength: 1, opacity: 1 }}
-      transition={{ duration: reduced ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: reduced ? 0 : 0.9, delay: reduced ? 0 : baseDelay, ease: [0.22, 1, 0.36, 1] }}
     />
   );
 }
 
-function ClusterBloom({ cx, cy, color, reduced }: BloomProps) {
+function ClusterBloom({ cx, cy, color, reduced, baseDelay }: BloomProps) {
   return (
     <g>
       {[0, 1, 2].map((i) => {
@@ -130,7 +130,7 @@ function ClusterBloom({ cx, cy, color, reduced }: BloomProps) {
             style={{ transformBox: "fill-box", transformOrigin: "center" }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.9 }}
-            transition={{ duration: reduced ? 0 : 0.35, delay: reduced ? 0 : i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduced ? 0 : 0.35, delay: reduced ? 0 : baseDelay + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
           />
         );
       })}
@@ -138,7 +138,7 @@ function ClusterBloom({ cx, cy, color, reduced }: BloomProps) {
   );
 }
 
-function CrownBloom({ cx, cy, color, reduced }: BloomProps) {
+function CrownBloom({ cx, cy, color, reduced, baseDelay }: BloomProps) {
   return (
     <g>
       {[0, 1, 2, 3, 4].map((i) => {
@@ -153,7 +153,7 @@ function CrownBloom({ cx, cy, color, reduced }: BloomProps) {
             style={{ transformBox: "fill-box", transformOrigin: "center" }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.85 }}
-            transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : baseDelay + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
           />
         );
       })}
@@ -161,8 +161,8 @@ function CrownBloom({ cx, cy, color, reduced }: BloomProps) {
   );
 }
 
-function BloomRenderer({ bloom, color, reduced }: { bloom: BloomPoint; color: string; reduced: boolean }) {
-  const props: BloomProps = { cx: bloom.cx, cy: bloom.cy, color, reduced };
+function BloomRenderer({ bloom, color, reduced, baseDelay }: { bloom: BloomPoint; color: string; reduced: boolean; baseDelay: number }) {
+  const props: BloomProps = { cx: bloom.cx, cy: bloom.cy, color, reduced, baseDelay };
   switch (bloom.style) {
     case "flower":  return <FlowerBloom {...props} />;
     case "blossom": return <BlossomBloom {...props} />;
@@ -180,6 +180,7 @@ type Props = {
   color: string;
   saturation?: number;
   className?: string;
+  delay?: number;
 };
 
 export function PlantGrowth({
@@ -188,8 +189,10 @@ export function PlantGrowth({
   color,
   saturation = 100,
   className = "",
+  delay = 0,
 }: Props) {
   const reduced = useReducedMotion() ?? false;
+  const baseDelay = reduced ? 0 : delay;
   const key = ARCHETYPE_TO_SPECIES[archetype] ?? "pioneer";
   const { branches, leaves, blooms, leafColor } = ALL_SPECIES[key];
   const glowing = daysCompleted >= 5;
@@ -221,7 +224,7 @@ export function PlantGrowth({
         style={{ transformBox: "fill-box", transformOrigin: "center" }}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ duration: reduced ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduced ? 0 : 0.5, delay: baseDelay, ease: [0.22, 1, 0.36, 1] }}
       />
 
       {/* Branches — deepest first so trunk renders on top */}
@@ -238,8 +241,8 @@ export function PlantGrowth({
             initial={{ pathLength: 0, opacity: 0 }}
             animate={visible ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
             transition={{
-              pathLength: { duration: reduced ? 0 : 0.65 + b.depth * 0.08, ease: [0.22, 1, 0.36, 1] },
-              opacity: { duration: reduced ? 0 : 0.15 },
+              pathLength: { duration: reduced ? 0 : 0.65 + b.depth * 0.08, delay: baseDelay, ease: [0.22, 1, 0.36, 1] },
+              opacity: { duration: reduced ? 0 : 0.15, delay: baseDelay },
             }}
           />
         );
@@ -269,8 +272,8 @@ export function PlantGrowth({
               initial={{ scale: 0, opacity: 0 }}
               animate={visible ? { scale: 1, opacity: 0.85 } : { scale: 0, opacity: 0 }}
               transition={{
-                scale: { duration: reduced ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] },
-                opacity: { duration: reduced ? 0 : 0.25 },
+                scale: { duration: reduced ? 0 : 0.5, delay: baseDelay, ease: [0.22, 1, 0.36, 1] },
+                opacity: { duration: reduced ? 0 : 0.25, delay: baseDelay },
               }}
             />
           </motion.g>
@@ -281,7 +284,7 @@ export function PlantGrowth({
       {blooms
         .filter((bl) => daysCompleted >= bl.day)
         .map((bl) => (
-          <BloomRenderer key={bl.id} bloom={bl} color={color} reduced={reduced} />
+          <BloomRenderer key={bl.id} bloom={bl} color={color} reduced={reduced} baseDelay={baseDelay} />
         ))}
     </svg>
   );

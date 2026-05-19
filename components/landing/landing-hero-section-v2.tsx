@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronDown, CornerDownRight } from "lucide-react";
+import { ChevronDown, CornerDownRight, Sandwich, Compass, HeartPulse, Home, Users, type LucideIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useRive, Layout, Fit } from "@rive-app/react-canvas";
@@ -15,6 +15,7 @@ const HERO_TOPIC_CARDS: {
 	bg: string;
 	floatPhase: number;
 	word: string;
+	icon: LucideIcon;
 }[] = [
 	{
 		title: "Food & Eating",
@@ -22,6 +23,7 @@ const HERO_TOPIC_CARDS: {
 		bg: "#00f5c8",
 		floatPhase: 0,
 		word: "eat",
+		icon: Sandwich,
 	},
 	{
 		title: "Getting Around",
@@ -29,6 +31,7 @@ const HERO_TOPIC_CARDS: {
 		bg: "#5dd6ff",
 		floatPhase: 1.1,
 		word: "travel",
+		icon: Compass,
 	},
 	{
 		title: "Health & Wellbeing",
@@ -36,6 +39,7 @@ const HERO_TOPIC_CARDS: {
 		bg: "#fcf300",
 		floatPhase: 0.5,
 		word: "thrive",
+		icon: HeartPulse,
 	},
 	{
 		title: "Home & Admin",
@@ -43,6 +47,7 @@ const HERO_TOPIC_CARDS: {
 		bg: "#ffc2d1",
 		floatPhase: 0.8,
 		word: "settle",
+		icon: Home,
 	},
 	{
 		title: "Social & Belonging",
@@ -50,6 +55,7 @@ const HERO_TOPIC_CARDS: {
 		bg: "#cae9ff",
 		floatPhase: 1.4,
 		word: "belong",
+		icon: Users,
 	},
 ];
 
@@ -182,7 +188,7 @@ function HeroTopicCard({
 					rotate: STICKY_ROTATE[index % 4],
 					backgroundColor: card.bg,
 				}}
-				className="guide-sticky flex h-full flex-col"
+				className="guide-sticky flex h-full flex-col items-center justify-center gap-1.5 text-center"
 				animate={{ y: [0, -7, 0] }}
 				transition={{
 					duration: 3.2 + card.floatPhase * 0.28,
@@ -191,24 +197,16 @@ function HeroTopicCard({
 					delay: card.floatPhase,
 				}}
 			>
-				<p className="text-xs font-black uppercase tracking-[0.18em] text-[#05292a]">
+				<card.icon
+					className="size-11 shrink-0 text-[#05292a] transition-opacity duration-300"
+					style={{ opacity: isActive ? 1 : 0.7 }}
+					strokeWidth={1.5}
+					aria-hidden
+				/>
+				<p className="text-base font-medium leading-tight text-[#05292a]">
 					{card.title}
 				</p>
-
-				<div className="flex flex-1 items-center py-1">
-					<span
-						className="font-hero-serif italic leading-none transition-opacity duration-300 text-5xl md:text-5xl min-[1500px]:text-6xl"
-						style={{
-							color: "#05292a",
-							opacity: isActive ? 1 : 0.18,
-							fontVariationSettings: "'opsz' 144",
-						}}
-					>
-						{card.word}
-					</span>
-				</div>
-
-				<p className="text-[0.8rem] leading-snug text-[#163a3a]">
+				<p className="px-1 text-xs font-normal leading-snug text-[#05292a]">
 					{card.desc}
 				</p>
 			</motion.div>
@@ -338,7 +336,7 @@ export function LandingHeroSectionV2({
 				/>
 
 				<motion.div
-					className="grid flex-1 grid-cols-1 md:grid-cols-[2fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
+					className="grid flex-1 grid-cols-1 md:grid-cols-[2fr_2fr] gap-4 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-6 md:pb-0 md:pt-4 min-[1500px]:gap-10"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -371,7 +369,7 @@ export function LandingHeroSectionV2({
 								Living independently
 							</motion.span>
 							<motion.h1
-								className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
+								className="mt-5 w-full text-4xl font-black leading-snug tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
 								variants={{
 									hidden: { opacity: 0, y: 22 },
 									visible: {
@@ -397,7 +395,7 @@ export function LandingHeroSectionV2({
 											ease: entranceEase,
 										}}
 										style={{ color: headlineWordColor }}
-										className="inline-block"
+										className="inline-block font-hero-serif italic normal-case tracking-wider text-5xl md:text-[clamp(5rem,6.5vw,7rem)]"
 									>
 										{headlineWord}
 									</motion.span>

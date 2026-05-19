@@ -7,20 +7,14 @@ type Props = {
   day: number;
   visible: boolean;
   onDone: () => void;
-  onOpenCard: () => void;
 };
 
-export function CardEarnToast({ day, visible, onDone, onOpenCard }: Props) {
+export function CardEarnToast({ day, visible, onDone }: Props) {
   useEffect(() => {
     if (!visible) return;
-    const t = setTimeout(onDone, 4000);
+    const t = setTimeout(onDone, 4500);
     return () => clearTimeout(t);
   }, [visible, onDone]);
-
-  function handleClick() {
-    onDone();
-    onOpenCard();
-  }
 
   return (
     <AnimatePresence>
@@ -38,30 +32,27 @@ export function CardEarnToast({ day, visible, onDone, onOpenCard }: Props) {
           }}
           className="fixed right-6 top-24 z-[60] w-52"
         >
-          <button
-            type="button"
+          <div
             data-no-scale
-            onClick={handleClick}
-            aria-label={`Day ${day} complete — tap to see your card`}
-            className="guide-sticky guide-sticky-b block w-full cursor-pointer text-left outline-none"
+            className="guide-sticky guide-sticky-b block w-full text-left"
           >
             <motion.p
-              className="text-xl leading-none"
-              animate={{ rotate: [0, -14, 14, -7, 0], scale: [1, 1.45, 1] }}
-              transition={{ duration: 0.65, ease: "easeOut" }}
+              className="text-2xl leading-none"
+              animate={{ scale: [1, 1.5, 0.9, 1.2, 1], rotate: [0, -10, 10, -5, 0] }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              ✦
+              🌱
             </motion.p>
             <p className="mt-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#05292a]/50">
-              Day {day} done
+              Day {day} complete
             </p>
             <p className="mt-1.5 text-sm font-bold leading-snug text-[#05292a]">
-              Your card just updated
+              Your plant just grew
             </p>
             <p className="mt-1 text-xs leading-snug text-[#05292a]/70">
-              Tap to open your identity card →
+              {day} of 7 days — keep going
             </p>
-          </button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
