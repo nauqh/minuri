@@ -258,18 +258,15 @@ export function JourneyOnboarding() {
 		});
 		setStage("loading");
 		try {
-			const res = await fetch(
-				`${process.env.NEXT_PUBLIC_MINURI_SERVER_BASE_URL}journey`,
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						suburb: selectedSuburb.locality,
-						your_moment: yourMoment,
-						selected_topics: selectedTopics,
-					}),
-				},
-			);
+			const res = await fetch("/api/journey", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					suburb: selectedSuburb.locality,
+					your_moment: yourMoment,
+					selected_topics: selectedTopics,
+				}),
+			});
 			if (!res.ok) throw new Error("API error");
 			const data = (await res.json()) as JourneyAPIResponse;
 			saveWeekPlan(
@@ -788,6 +785,9 @@ export function JourneyOnboarding() {
 															</motion.p>
 														)}
 													</AnimatePresence>
+												<p className="text-xs text-minuri-slate/70 mt-1">
+													Your description is sent to an AI model to personalise your plan. It is not stored after generation.
+												</p>
 												</motion.div>
 											)}
 										</AnimatePresence>

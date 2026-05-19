@@ -12,6 +12,9 @@ export async function GET(request: NextRequest) {
 				{ status: 400 },
 			);
 		}
+		if (suburb.length > 200) {
+			return Response.json({ error: "Query parameter too long" }, { status: 400 });
+		}
 
 		const payload = await fetchNearbyEvents({ suburb });
 		return Response.json(payload, {

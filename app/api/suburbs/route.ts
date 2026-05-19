@@ -18,7 +18,11 @@ async function getAllSuburbOptions(): Promise<SuburbOption[]> {
 
 export async function GET(request: NextRequest) {
 	try {
-		const query = request.nextUrl.searchParams.get("q") ?? "";
+		const rawQ = request.nextUrl.searchParams.get("q") ?? "";
+		if (rawQ.length > 200) {
+			return Response.json({ error: "Query parameter too long" }, { status: 400 });
+		}
+		const query = rawQ;
 		const allOptions = await getAllSuburbOptions();
 		const options = query ? rankAndFilterSuburbs(allOptions, query) : allOptions;
 

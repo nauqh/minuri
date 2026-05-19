@@ -15,6 +15,9 @@ export async function GET(request: NextRequest) {
 				{ status: 400 },
 			);
 		}
+		if (suburb.length > 200 || (topic && topic.length > 200) || (subtype && subtype.length > 200)) {
+			return Response.json({ error: "Query parameter too long" }, { status: 400 });
+		}
 
 		const payload = await fetchNearbyInterest({ suburb, topic, subtype });
 		return Response.json(payload, {
