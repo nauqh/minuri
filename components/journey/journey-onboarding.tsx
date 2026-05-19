@@ -634,14 +634,7 @@ export function JourneyOnboarding() {
 																: undefined
 														}
 														style={{
-															backgroundColor:
-																"var(--minuri-white)",
-															backgroundImage:
-																"repeating-linear-gradient(transparent, transparent 1.75rem, oklch(0.72 0.03 220 / 0.18) 1.75rem, oklch(0.72 0.03 220 / 0.18) calc(1.75rem + 1px))",
-															lineHeight:
-																"1.75rem",
-															paddingTop:
-																"0.6rem",
+															paddingTop: "0.6rem",
 														}}
 														className={cn(
 															"w-full resize-none rounded-md border bg-minuri-white px-4 pb-3 text-base outline-none transition min-[1500px]:text-lg",
@@ -692,12 +685,12 @@ export function JourneyOnboarding() {
 												<p className="text-[11px] text-minuri-slate/60">
 													Your description is sent to an AI model to personalise your plan. It is not stored after generation.
 												</p>
-											</motion.div>
-										)}
-									</AnimatePresence>
-								</motion.div>
+												</motion.div>
+											)}
+										</AnimatePresence>
+									</motion.div>
 
-								{/* ── Suburb ── */}
+									{/* ── Suburb ── */}
 									<motion.div
 										initial={{
 											opacity: 0,
@@ -1100,19 +1093,6 @@ export function JourneyOnboarding() {
 									delay: prefersReducedMotion ? 0 : 0.05,
 								}}
 							>
-								{/* Scissors tear-off line */}
-								<div
-									aria-hidden
-									className="pointer-events-none absolute inset-x-0 top-0 flex items-center"
-								>
-									<span
-										className="pr-1.5 text-sm text-minuri-slate/40"
-										style={{ background: "white" }}
-									>
-										✂
-									</span>
-									<div className="flex-1 border-t border-dashed border-minuri-slate/25" />
-								</div>
 								<p className="mb-6 text-sm text-minuri-slate min-[1500px]:text-base">
 									Ready to generate your personalised guide?
 								</p>
