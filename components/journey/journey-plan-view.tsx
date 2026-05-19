@@ -939,9 +939,10 @@ export function JourneyPlanView() {
 				<div className="mx-auto flex max-w-screen-xl items-center justify-between">
 					<Link
 						href="/"
-						className="text-2xl font-black uppercase tracking-tight text-minuri-ocean"
+						className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
 					>
-						Minuri
+						<Home className="size-3.5" aria-hidden />
+						Home
 					</Link>
 					<div className="flex items-center gap-2">
 						<motion.button

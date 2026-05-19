@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ChevronDown, ChevronRight, BookOpen, MapPin, Route } from "lucide-react";
+import { ArrowLeft, ChevronDown, BookOpen, MapPin, Route } from "lucide-react";
 import { motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+
 import { useLenis } from "lenis/react";
 
 const GUIDE_NOTES = [
@@ -51,50 +51,6 @@ const panelTransition = "width 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
 
 export function StartGateway() {
 	const lenis = useLenis();
-	const [hovered, setHovered] = useState<"guides" | "nearby" | null>(null);
-	const [isMobile, setIsMobile] = useState(false);
-	const rafRef = useRef<number | null>(null);
-	const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-	const handlePanelEnter = (panel: "guides" | "nearby") => {
-		if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-		hoverTimerRef.current = setTimeout(() => setHovered(panel), 250);
-	};
-
-	const handlePanelLeave = () => {
-		if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-		setHovered(null);
-	};
-
-	useEffect(() => {
-		const check = () => setIsMobile(window.innerWidth < 768);
-		check();
-		const onResize = () => {
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
-			rafRef.current = requestAnimationFrame(check);
-		};
-		window.addEventListener("resize", onResize);
-		return () => {
-			window.removeEventListener("resize", onResize);
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
-		};
-	}, []);
-
-	const guidesWidth = isMobile
-		? "100%"
-		: hovered === "nearby"
-			? "38%"
-			: hovered === "guides"
-				? "62%"
-				: "50%";
-
-	const nearbyWidth = isMobile
-		? "100%"
-		: hovered === "guides"
-			? "38%"
-			: hovered === "nearby"
-				? "62%"
-				: "50%";
 
 	return (
 		<div className="bg-minuri-ocean text-minuri-white">
@@ -188,14 +144,14 @@ export function StartGateway() {
 					}
 					aria-label="Scroll to explore individual features"
 				>
-					<span className="rounded-full border border-minuri-ocean/20 bg-minuri-white/80 px-5 py-2 text-sm font-bold uppercase tracking-widest text-minuri-ocean shadow-sm backdrop-blur-sm">
+					<span className="text-sm font-semibold uppercase tracking-widest text-minuri-ocean/50">
 						Or scroll to explore individual features
 					</span>
 					<motion.div
 						animate={{ y: [0, 6, 0] }}
 						transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
 					>
-						<ChevronDown className="size-5 text-minuri-ocean/60" aria-hidden />
+						<ChevronDown className="size-8 text-minuri-ocean/60" aria-hidden />
 					</motion.div>
 				</motion.div>
 			</div>
@@ -225,14 +181,8 @@ export function StartGateway() {
 				<div className="relative mx-auto max-w-[90rem] flex h-auto min-h-[85vh] flex-col overflow-hidden rounded-2xl md:h-[85vh] md:flex-row">
 					{/* ─── Guides panel ─── */}
 					<div
-						className="relative min-h-[75vh] overflow-hidden md:min-h-0"
-						style={{
-							width: guidesWidth,
-							transition: panelTransition,
-							background: "oklch(0.96 0.022 75)",
-						}}
-						onMouseEnter={() => handlePanelEnter("guides")}
-						onMouseLeave={handlePanelLeave}
+						className="relative min-h-[75vh] flex-1 overflow-hidden md:min-h-0"
+						style={{ background: "oklch(0.96 0.022 75)" }}
 					>
 						<div
 							aria-hidden
@@ -347,67 +297,41 @@ export function StartGateway() {
 
 						{/* Persistent label */}
 						<div className="absolute right-6 top-6 z-20 inline-flex items-center gap-2 rounded-lg bg-minuri-ocean px-4 py-2.5 shadow-md">
-							<BookOpen
-								className="size-4 text-white"
-								aria-hidden
-							/>
-							<span className="text-xs font-black uppercase tracking-widest text-white">
-								Guides
-							</span>
+							<BookOpen className="size-4 text-white" aria-hidden />
+							<span className="text-xs font-black uppercase tracking-widest text-white">Guides</span>
 						</div>
 
-						{/* Hover drawer */}
-						<motion.div
-							className="absolute bottom-6 left-6 z-30 max-w-sm rounded-2xl bg-minuri-mid p-6 shadow-xl"
-							animate={{ y: hovered === "guides" ? 0 : "100%" }}
-							transition={{ duration: 0.45, ease: easeOut }}
-						>
+						{/* Static card */}
+						<div className="absolute bottom-6 left-6 z-30 w-4/5 rounded-2xl bg-minuri-mid p-6 shadow-xl">
 							<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-white/15 px-3.5 py-1.5 backdrop-blur-sm">
-								<BookOpen
-									className="size-3.5 text-minuri-white"
-									aria-hidden
-								/>
-								<span className="text-xs font-black uppercase tracking-widest text-minuri-white">
-									Guides
-								</span>
+								<BookOpen className="size-3.5 text-minuri-white" aria-hidden />
+								<span className="text-xs font-black uppercase tracking-widest text-minuri-white">Guides</span>
 							</div>
 							<h3 className="mt-1 text-base font-medium leading-snug text-minuri-white">
-								Step-by-step guides for Medicare, Myki, rental
-								bonds, banking, and more — everything you need
-								to settle in.
+								Step-by-step guides for Medicare, Myki, rental bonds, banking, and more — everything you need to settle in.
 							</h3>
 							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-ice">
 								<Link
 									href="/guides"
-									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-ocean"
+									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-minuri-ocean"
 								>
 									Explore first-time guides
-									<ChevronRight
-										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
-										aria-hidden
-									/>
+									<ChevronDown className="size-4 -rotate-90 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
 								</Link>
-								<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+								<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 							</div>
-						</motion.div>
+						</div>
+
 					</div>
 
 					{/* Divider */}
 					<div
-						className="h-6 w-full md:h-full md:w-px md:shrink-0"
+						className="h-px w-full md:h-full md:w-px md:shrink-0"
 						style={{ background: "oklch(0.18 0.042 228)" }}
 					/>
 
 					{/* ─── Near Me panel ─── */}
-					<div
-						className="relative min-h-[75vh] overflow-hidden md:min-h-0"
-						style={{
-							width: nearbyWidth,
-							transition: panelTransition,
-						}}
-						onMouseEnter={() => handlePanelEnter("nearby")}
-						onMouseLeave={handlePanelLeave}
-					>
+					<div className="relative min-h-[75vh] flex-1 overflow-hidden md:min-h-0">
 						<Image
 							src="/map-preview.png"
 							alt="Map preview"
@@ -416,52 +340,32 @@ export function StartGateway() {
 							className="object-cover"
 							priority={true}
 						/>
-
 						{/* Persistent label */}
 						<div className="absolute right-6 top-6 z-20 inline-flex items-center gap-2 rounded-lg bg-minuri-white px-4 py-2.5 shadow-md">
-							<MapPin
-								className="size-4 text-minuri-ocean"
-								aria-hidden
-							/>
-							<span className="text-xs font-black uppercase tracking-widest text-minuri-ocean">
-								Near Me
-							</span>
+							<MapPin className="size-4 text-minuri-ocean" aria-hidden />
+							<span className="text-xs font-black uppercase tracking-widest text-minuri-ocean">Near Me</span>
 						</div>
 
-						{/* Hover drawer */}
-						<motion.div
-							className="absolute bottom-6 left-6 z-30 max-w-sm rounded-2xl bg-minuri-mid p-6 shadow-xl"
-							animate={{ y: hovered === "nearby" ? 0 : "100%" }}
-							transition={{ duration: 0.45, ease: easeOut }}
-						>
+						{/* Static card */}
+						<div className="absolute bottom-6 left-6 z-30 w-4/5 rounded-2xl bg-minuri-mid p-6 shadow-xl">
 							<div className="mb-5 inline-flex items-center gap-2 rounded-full bg-minuri-white/15 px-3.5 py-1.5 backdrop-blur-sm">
-								<MapPin
-									className="size-3.5 text-minuri-white"
-									aria-hidden
-								/>
-								<span className="text-xs font-black uppercase tracking-widest text-minuri-white">
-									Near Me
-								</span>
+								<MapPin className="size-3.5 text-minuri-white" aria-hidden />
+								<span className="text-xs font-black uppercase tracking-widest text-minuri-white">Near Me</span>
 							</div>
 							<h3 className="mt-1 text-base font-medium leading-snug text-minuri-white">
-								GP clinics, food banks, legal aid, community
-								centres — filtered by your suburb and what you
-								need right now.
+								GP clinics, food banks, legal aid, community centres — filtered by your suburb and what you need right now.
 							</h3>
 							<div className="group relative mt-7 inline-flex overflow-hidden rounded-sm bg-minuri-ice">
 								<Link
 									href="/near-me"
-									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-minuri-ocean transition-colors duration-300 group-hover:text-minuri-ocean"
+									className="relative z-10 inline-flex h-12 items-center gap-2 px-7 text-sm font-bold uppercase tracking-wider text-minuri-ocean"
 								>
 									Find nearby support
-									<ChevronRight
-										className="size-4 transition-transform duration-200 group-hover:translate-x-1"
-										aria-hidden
-									/>
+									<ChevronDown className="size-4 -rotate-90 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
 								</Link>
-								<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+								<span className="absolute inset-0 -translate-x-full bg-minuri-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
 							</div>
-						</motion.div>
+						</div>
 					</div>
 				</div>
 			</section>

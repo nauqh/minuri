@@ -404,13 +404,13 @@ export function GuidesIntroView() {
 										className="size-11 shrink-0 text-[#05292a]"
 										aria-hidden
 									/>
-									<p className="text-base font-bold leading-tight text-[#05292a]">
+									<p className="text-base font-medium leading-tight text-[#05292a]">
 										{topic.name}
 									</p>
-									<p className="text-xs font-semibold leading-snug text-[#05292a] px-1">
+									<p className="text-xs font-normal leading-snug text-[#05292a] px-1">
 										{TOPIC_URGENCY[topic.slug]}
 									</p>
-									<p className="text-xs font-medium text-[#05292a]/60">
+									<p className="text-xs font-normal text-[#05292a]/60">
 										{count} guides
 									</p>
 								</motion.button>
@@ -510,14 +510,14 @@ export function GuidesIntroView() {
 										aria-hidden
 									/>
 									<div className="flex-1">
-										<h3 className="font-semibold leading-tight text-[#05292a]">
+										<h3 className="font-medium leading-tight text-[#05292a]">
 											{topic.name}
 										</h3>
-										<p className="mt-1 text-xs font-semibold leading-snug text-[#05292a]">
+										<p className="mt-1 text-xs font-normal leading-snug text-[#05292a]">
 											{TOPIC_URGENCY[topic.slug]}
 										</p>
 									</div>
-									<span className="mt-auto text-xs font-semibold text-[#05292a]">
+									<span className="mt-auto text-xs font-normal text-[#05292a]/70">
 										{count}{" "}
 										{count === 1 ? "guide" : "guides"}
 									</span>

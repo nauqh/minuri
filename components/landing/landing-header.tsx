@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
 	ArrowRight,
 	BookOpen,
+	CalendarDays,
 	Compass,
 	LifeBuoy,
 	MapPin,
@@ -32,7 +33,34 @@ export function LandingHeader({
 }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [ctaHighlighted, setCtaHighlighted] = useState(false);
+	const [hasActiveJourney, setHasActiveJourney] = useState(false);
+	const [journeyIdentity, setJourneyIdentity] = useState<{
+		symbol: string;
+		archetype: string;
+		accentHex: string;
+	} | null>(null);
 	const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
+
+	useEffect(() => {
+		try {
+			const hasJourney = !!localStorage.getItem("minuri:journey:v2");
+			setHasActiveJourney(hasJourney);
+			if (hasJourney) {
+				const raw = localStorage.getItem("minuri:journey:identity:v1");
+				if (raw) {
+					const parsed = JSON.parse(raw);
+					const id = parsed?.identity;
+					if (id?.symbol && id?.archetype) {
+						setJourneyIdentity({
+							symbol: id.symbol,
+							archetype: id.archetype,
+							accentHex: id.palette?.[0]?.hex ?? "#14b8a6",
+						});
+					}
+				}
+			}
+		} catch { /* ignore */ }
+	}, []);
 
 	useEffect(() => {
 		let clearHighlight: ReturnType<typeof setTimeout> | undefined;
@@ -131,40 +159,70 @@ export function LandingHeader({
 						ease: entranceEase,
 					}}
 				>
-					<div className="hidden md:flex items-center gap-2">
-						<Link
-							href="/guides"
-							className="inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm border border-minuri-ocean/25 px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-ocean transition-all duration-200 ease-out hover:bg-minuri-ocean/5 hover:border-minuri-ocean/50"
-						>
-							<BookOpen className="size-4" strokeWidth={2} aria-hidden />
-							Guides
-						</Link>
-						<motion.div
-							className="inline-flex rounded-sm"
-							animate={
-								ctaHighlighted
-									? { scale: [1, 1.13, 0.97, 1.1, 1] }
-									: { scale: 1 }
-							}
-							transition={{
-								duration: 2.5,
-								ease: "easeInOut",
-								times: [0, 0.25, 0.5, 0.75, 1],
-							}}
-						>
-							<Link
-								href="/near-me"
-								className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
+					<AnimatePresence mode="wait" initial={false}>
+						{hasActiveJourney ? (
+							<motion.div
+								key="journey-cta"
+								initial={{ opacity: 0, x: 10 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: 10 }}
+								transition={{ duration: 0.28, ease: entranceEase }}
+								className="hidden md:flex items-center"
 							>
-								<MapPin
-									className="size-4 transition-transform duration-200 group-hover:scale-110"
-									strokeWidth={2}
-									aria-hidden
-								/>
-								Near me
-							</Link>
-						</motion.div>
-					</div>
+								<Link
+									href="/journey/plan"
+									className="inline-flex h-12 min-[1500px]:h-14 items-center gap-2.5 rounded-sm bg-minuri-teal px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-white transition-all duration-200 ease-out hover:scale-[1.04] hover:brightness-105"
+								>
+									<span className="text-base leading-none">
+										{journeyIdentity?.symbol ?? "🌱"}
+									</span>
+									My week
+								</Link>
+							</motion.div>
+						) : (
+							<motion.div
+								key="default-cta"
+								initial={{ opacity: 0, x: 10 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: 10 }}
+								transition={{ duration: 0.28, ease: entranceEase }}
+								className="hidden md:flex items-center gap-2"
+							>
+								<Link
+									href="/guides"
+									className="inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm border border-minuri-ocean/25 px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-ocean transition-all duration-200 ease-out hover:bg-minuri-ocean/5 hover:border-minuri-ocean/50"
+								>
+									<BookOpen className="size-4" strokeWidth={2} aria-hidden />
+									Guides
+								</Link>
+								<motion.div
+									className="inline-flex rounded-sm"
+									animate={
+										ctaHighlighted
+											? { scale: [1, 1.13, 0.97, 1.1, 1] }
+											: { scale: 1 }
+									}
+									transition={{
+										duration: 2.5,
+										ease: "easeInOut",
+										times: [0, 0.25, 0.5, 0.75, 1],
+									}}
+								>
+									<Link
+										href="/near-me"
+										className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
+									>
+										<MapPin
+											className="size-4 transition-transform duration-200 group-hover:scale-110"
+											strokeWidth={2}
+											aria-hidden
+										/>
+										Near me
+									</Link>
+								</motion.div>
+							</motion.div>
+						)}
+					</AnimatePresence>
 					<div className="relative flex self-stretch md:hidden">
 						<button
 							type="button"
@@ -235,7 +293,15 @@ export function LandingHeader({
 							<div className="flex-1 overflow-y-auto px-6 pb-8 pt-2">
 								<nav aria-label="Mobile navigation">
 									<ul>
-										{MOBILE_NAV_ITEMS.map((item, i) => (
+										{(hasActiveJourney
+											? [
+												{ icon: CalendarDays, label: "My week", href: "/journey/plan" },
+												{ icon: BookOpen, label: "First-time guides", href: "/guides" },
+												{ icon: MapPin, label: "Near me", href: "/near-me" },
+												{ icon: LifeBuoy, label: "Get support", href: "#contact" },
+											]
+											: MOBILE_NAV_ITEMS
+										).map((item, i) => (
 											<motion.li
 												key={item.href}
 												initial={{ opacity: 0, y: 10 }}
@@ -280,18 +346,43 @@ export function LandingHeader({
 									}}
 									className="mt-6"
 								>
-									<Link
-										href="/journey"
-										onClick={closeMobileMenu}
-										className="flex h-14 items-center justify-center gap-2 rounded-sm bg-minuri-teal text-base font-semibold text-primary-foreground transition-transform duration-200 ease-out active:scale-[0.97]"
-									>
-										Start your journey
-										<ArrowRight
-											className="size-4"
-											strokeWidth={2.25}
-											aria-hidden
-										/>
-									</Link>
+									{hasActiveJourney ? (
+										<Link
+											href="/journey/plan"
+											onClick={closeMobileMenu}
+											className="flex items-center gap-3 rounded-xl border border-white/15 bg-white/10 px-4 py-3.5 transition-all active:scale-[0.97]"
+										>
+											<span
+												className="flex size-8 shrink-0 items-center justify-center rounded-full text-sm"
+												style={{
+													backgroundColor: journeyIdentity?.accentHex
+														? `${journeyIdentity.accentHex}40`
+														: "rgba(255,255,255,0.2)",
+												}}
+											>
+												{journeyIdentity?.symbol ?? "🌱"}
+											</span>
+											<span className="flex min-w-0 flex-1 flex-col">
+												<span className="truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-white/50">
+													{journeyIdentity?.archetype ?? "My Journey"}
+												</span>
+												<span className="text-sm font-bold text-white">My week →</span>
+											</span>
+										</Link>
+									) : (
+										<Link
+											href="/journey"
+											onClick={closeMobileMenu}
+											className="flex h-14 items-center justify-center gap-2 rounded-sm bg-minuri-teal text-base font-semibold text-primary-foreground transition-transform duration-200 ease-out active:scale-[0.97]"
+										>
+											Start your journey
+											<ArrowRight
+												className="size-4"
+												strokeWidth={2.25}
+												aria-hidden
+											/>
+										</Link>
+									)}
 								</motion.div>
 							</div>
 						</motion.div>
