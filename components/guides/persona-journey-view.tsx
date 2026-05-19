@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ChevronRight, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import {
 	AnimatePresence,
 	motion,
 	useReducedMotion,
-	useScroll,
-	useTransform,
 } from "motion/react";
 import Lenis from "lenis";
 import { useLenis } from "lenis/react";
@@ -17,10 +15,13 @@ import { useRouter } from "next/navigation";
 
 import { PERSONAS, type Persona } from "@/content/personas";
 import { getGuidesFromSlugs } from "@/lib/guides";
+import { loadWeekPlan, resolveWeekPlan } from "@/lib/journey/week-plan-store";
+import type { DayPlan } from "@/lib/journey-week";
 import { GuideCard } from "@/components/guides/guide-card";
 import { GuidesShell } from "@/components/guides/guides-shell";
 import { GuidesTabNav } from "@/components/guides/guides-tab-nav";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
+import { useJourneyState } from "@/hooks/use-journey-state";
 
 const DOT_PATTERN = `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='white' fill-opacity='0.18'/%3E%3C/svg%3E")`;
 
@@ -30,6 +31,7 @@ function PersonaPickerCard({
 	persona,
 	onSelect,
 	animationDelay,
+	matched,
 }: {
 	persona: Persona;
 	onSelect: (p: Persona) => void;
@@ -38,10 +40,7 @@ function PersonaPickerCard({
 	const prefersReducedMotion = useReducedMotion();
 
 	return (
-		<motion.button
-			type="button"
-			onClick={() => onSelect(persona)}
-			className="group relative overflow-hidden rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50"
+		<motion.div
 			initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.12 }}
@@ -50,42 +49,50 @@ function PersonaPickerCard({
 				delay: prefersReducedMotion ? 0 : animationDelay,
 				ease: [0.22, 1, 0.36, 1],
 			}}
-			whileHover={{ scale: prefersReducedMotion ? 1 : 1.015 }}
+			whileHover={prefersReducedMotion ? {} : { scale: 1.02, borderRadius: "8px" }}
+			style={{ borderRadius: "16px", border: "2px solid #000" }}
 		>
-			<Image
-				src={persona.imageUrl}
-				alt={persona.name}
-				fill
-				sizes="(max-width: 640px) 50vw, 33vw"
-				className="object-cover"
-			/>
-			<div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/15" />
+			<button
+				type="button"
+				onClick={() => onSelect(persona)}
+				className="block w-full overflow-hidden text-left focus-visible:outline-none"
+				style={{ borderRadius: "14px" }}
+			>
+				{/* Image */}
+				<div
+					className="relative flex aspect-[3/4] items-end justify-start"
+					style={{ backgroundColor: `${persona.accentColor}18` }}
+				>
+					<Image
+						src={persona.imageUrl}
+						alt={persona.name}
+						fill
+						sizes="(max-width: 640px) 50vw, 33vw"
+						className="object-contain object-bottom"
+					/>
 
-			<div className="relative flex aspect-[3/4] flex-col justify-between p-5 sm:p-6">
-				{/* Top — role + age */}
-				<div className="flex items-start justify-between gap-2">
-					<span className="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
-						{persona.role}
-					</span>
-					<span className="text-[10px] text-white/50">
-						{persona.age} · {persona.origin}
-					</span>
+					{/* Bottom info bar */}
+					<div className="relative z-10 w-full px-3 pb-3 pt-8 bg-gradient-to-t from-black/60 to-transparent">
+						<div className="flex items-end justify-between gap-2">
+							<div>
+								<p
+									className="text-xs font-black uppercase tracking-widest"
+									style={{ color: persona.accentColor }}
+								>
+									{persona.role}
+								</p>
+								<h3
+									className="text-lg font-bold text-white"
+									style={{ fontFamily: "var(--font-hero-serif)" }}
+								>
+									{persona.name}
+								</h3>
+							</div>
+						</div>
+					</div>
 				</div>
-
-				{/* Bottom — name + tagline */}
-				<div className="relative">
-					<h3
-						className="text-xl font-bold text-white sm:text-2xl"
-						style={{ fontFamily: "var(--font-hero-serif)" }}
-					>
-						{persona.name}
-					</h3>
-					<p className="mt-1 line-clamp-2 text-xs italic leading-snug text-white/70 sm:text-sm">
-						&ldquo;{persona.tagline}&rdquo;
-					</p>
-				</div>
-			</div>
-		</motion.button>
+			</button>
+		</motion.div>
 	);
 }
 
@@ -283,7 +290,7 @@ function DayPageContent({
 				/>
 			</div>
 
-			{/* Right — journal + week arc */}
+			{/* Right — journal + week arc + plant */}
 			<div
 				className="hidden flex-1 flex-col justify-between px-10 py-14 md:flex lg:px-14"
 				style={{ boxShadow: "inset 12px 0 18px -8px rgba(0,0,0,0.06)" }}
@@ -302,42 +309,6 @@ function DayPageContent({
 	);
 }
 
-function FlipPanel({
-	children,
-	flipIndex,
-	numFlips,
-	scrollYProgress,
-	prefersReducedMotion,
-}: {
-	children: React.ReactNode;
-	flipIndex: number;
-	numFlips: number;
-	scrollYProgress: ReturnType<typeof useScroll>["scrollYProgress"];
-	prefersReducedMotion: boolean | null;
-}) {
-	const start = flipIndex / numFlips;
-	const end = (flipIndex + 1) / numFlips;
-
-	const x = useTransform(
-		scrollYProgress,
-		[start, end],
-		prefersReducedMotion ? ["0%", "0%"] : ["100%", "0%"],
-	);
-
-	return (
-		<motion.div
-			className="absolute inset-0"
-			style={{
-				x,
-				zIndex: flipIndex + 2,
-				backgroundColor: "#f0ede8",
-			}}
-		>
-			{children}
-		</motion.div>
-	);
-}
-
 export function PersonaDetailFullscreen({
 	persona,
 	onBack,
@@ -345,31 +316,15 @@ export function PersonaDetailFullscreen({
 	persona: Persona;
 	onBack: () => void;
 }) {
-	const scrollRef = useRef<HTMLDivElement>(null);
-	const contentRef = useRef<HTMLDivElement>(null);
 	const prefersReducedMotion = useReducedMotion();
 	const { isBookmarked, toggleBookmark } = useGuideBookmarks();
 	const rootLenis = useLenis();
-	const { scrollYProgress } = useScroll({ container: scrollRef });
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const contentRef = useRef<HTMLDivElement>(null);
 
 	const validDays = persona.journey
 		.map((slugs, i) => ({ dayIndex: i, guides: getGuidesFromSlugs(slugs) }))
 		.filter((d) => d.guides.length > 0);
-
-	// 1 description panel + one panel per day
-	const numPanels = 1 + validDays.length;
-	const numFlips = validDays.length;
-	const trackHeight = `${numPanels * 100}vh`;
-
-	const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
-
-	const day1 = validDays[0] ?? null;
-	const flipDays = validDays.slice(1);
-	const stripX = useTransform(
-		scrollYProgress,
-		[0, 1 / numFlips],
-		prefersReducedMotion ? ["0vw", "0vw"] : ["0vw", "-100vw"],
-	);
 
 	useEffect(() => {
 		function onKeyDown(e: KeyboardEvent) {
@@ -396,6 +351,7 @@ export function PersonaDetailFullscreen({
 		const lenis = new Lenis({
 			wrapper,
 			content,
+			orientation: "horizontal",
 			lerp: 0.068,
 			smoothWheel: true,
 		});
@@ -432,7 +388,7 @@ export function PersonaDetailFullscreen({
 			exit={{ opacity: 0 }}
 			transition={{ duration: prefersReducedMotion ? 0.01 : 0.25 }}
 		>
-			{/* Background — fades in separately so layoutId image morphs at full opacity */}
+			{/* Background */}
 			<motion.div
 				className="pointer-events-none absolute inset-0"
 				style={{ backgroundColor: "#f0ede8" }}
@@ -454,181 +410,172 @@ export function PersonaDetailFullscreen({
 				<X className="size-4" aria-hidden />
 			</button>
 
-			{/* Scroll container — ref here, scrollbar fully hidden */}
-			<div
-				ref={scrollRef}
-				className="h-full w-full overflow-x-hidden overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-			>
-				{/* Tall scroll track — height = numPanels × 100vh */}
-				<div ref={contentRef} style={{ height: trackHeight }}>
-					{/* Sticky viewport */}
-					<div
-						className="sticky top-0 h-screen overflow-hidden"
+			{/* Horizontal scroll container */}
+			<div ref={scrollRef} className="h-full w-full overflow-x-auto overflow-y-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+				<div ref={contentRef} className="flex h-full">
+				{/* Persona panel */}
+				<div
+					className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
+					style={{ backgroundColor: "#f0ede8" }}
+				>
+					{/* Far left — huge vertical name */}
+					<motion.div
+						className="hidden md:flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6"
+						initial={{ y: prefersReducedMotion ? 0 : 70, opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						transition={{
+							duration: 0.6,
+							delay: 0.38,
+							ease: [0.22, 1, 0.36, 1],
+						}}
 					>
-						{/* Sliding strip: Persona → Day 1 */}
-						<motion.div
-							className="flex h-full"
-							style={{ x: stripX, width: "200vw" }}
+						<span
+							className="select-none font-black leading-none text-gray-900"
+							style={{
+								fontFamily: "var(--font-hero-serif)",
+								fontSize: "clamp(5rem, 12vw, 10rem)",
+								writingMode: "vertical-rl",
+								transform: "rotate(180deg)",
+								letterSpacing: "-0.05em",
+							}}
+							aria-hidden
 						>
-						{/* ── Persona panel ── */}
-						<div
-							className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
-							style={{ backgroundColor: "#f0ede8" }}
-						>
-								{/* Far left — huge vertical name */}
-								<motion.div
-									className="hidden md:flex w-24 shrink-0 items-center justify-center px-2 ml-6 mr-4 md:w-32 md:px-3 md:ml-10 md:mr-6"
-									initial={{
-										y: prefersReducedMotion ? 0 : 70,
-										opacity: 0,
-									}}
-									animate={{ y: 0, opacity: 1 }}
-									transition={{
-										duration: 0.6,
-										delay: 0.38,
-										ease: [0.22, 1, 0.36, 1],
-									}}
-								>
-									<span
-										className="select-none font-black leading-none text-gray-900"
-										style={{
-											fontFamily:
-												"var(--font-hero-serif)",
-											fontSize:
-												"clamp(5rem, 12vw, 10rem)",
-											writingMode: "vertical-rl",
-											transform: "rotate(180deg)",
-											letterSpacing: "-0.05em",
-										}}
-										aria-hidden
-									>
-										{persona.name}
-									</span>
-								</motion.div>
+							{persona.name}
+						</span>
+					</motion.div>
 
-								{/* Center — persona photo (layoutId shared element from intro card) */}
-								<motion.div
-									className="relative h-[45vh] w-full shrink-0 md:h-auto md:w-[42%]"
-									layoutId={`persona-photo-${persona.id}`}
-									transition={{
-										duration: 0.68,
-										ease: [0.22, 1, 0.36, 1],
-									}}
-								>
-									<Image
-										src={persona.imageUrl}
-										alt={persona.name}
-										fill
-										sizes="42vw"
-										priority
-										className="object-cover"
-									/>
-								</motion.div>
+					{/* Center — persona photo (layoutId shared element from intro card) */}
+					<motion.div
+						className="relative h-[45vh] w-full shrink-0 md:h-auto md:w-[42%]"
+						layoutId={`persona-photo-${persona.id}`}
+						transition={{
+							duration: 0.68,
+							ease: [0.22, 1, 0.36, 1],
+						}}
+					>
+						<Image
+							src={persona.imageUrl}
+							alt={persona.name}
+							fill
+							sizes="42vw"
+							priority
+							className="object-cover"
+						/>
+					</motion.div>
 
-								{/* Right — role / hint / quote */}
-								<motion.div
-									className="flex flex-1 flex-col justify-between px-6 py-5 md:px-8 md:py-10 lg:px-10 lg:py-12"
-									style={{ backgroundColor: "#f0ede8" }}
-									initial={{
-										x: prefersReducedMotion ? 0 : 55,
-										opacity: 0,
-									}}
-									animate={{ x: 0, opacity: 1 }}
-									transition={{
-										duration: 0.55,
-										delay: 0.48,
-										ease: [0.22, 1, 0.36, 1],
-									}}
-								>
-									<div className="flex items-start">
-										<p
-											className="text-lg font-black uppercase tracking-[0.18em]"
-											style={{
-												color: persona.accentColor,
-											}}
-										>
-											{persona.role}
-										</p>
-									</div>
-
-									<motion.p
-										style={{ opacity: scrollHintOpacity }}
-										className="text-[9px] font-semibold uppercase tracking-[0.2em] text-gray-400"
-									>
-										Scroll for more
-									</motion.p>
-
-									<div>
-										<p
-											className="text-base font-medium leading-relaxed text-gray-800 md:text-2xl lg:text-3xl"
-											style={{
-												fontFamily:
-													"var(--font-hero-serif)",
-											}}
-										>
-											&ldquo;{persona.tagline}&rdquo;
-										</p>
-										<p className="mt-8 text-md leading-6 text-gray-500">
-											{persona.situation}
-										</p>
-										<p className="mt-3 text-sm text-gray-400">
-											{persona.name}, {persona.age} ·{" "}
-											{persona.origin}
-										</p>
-									</div>
-								</motion.div>
-							</div>
-
-							{/* Day 1 in the strip */}
-							{day1 && (
-								<div
-									className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
-									style={{ backgroundColor: "#f0ede8" }}
-								>
-									<DayPageContent
-										dayIndex={day1.dayIndex}
-										guides={day1.guides}
-										panelNumber={1}
-										totalPanels={validDays.length}
-										persona={persona}
-										isBookmarked={isBookmarked}
-										toggleBookmark={toggleBookmark}
-										validDays={validDays}
-									/>
-								</div>
-							)}
-						</motion.div>
-
-						{/* Days 2+: flip in on top */}
-						{flipDays.map(({ dayIndex, guides }, i) => (
-							<FlipPanel
-								key={dayIndex}
-								flipIndex={i + 1}
-								numFlips={numFlips}
-								scrollYProgress={scrollYProgress}
-								prefersReducedMotion={prefersReducedMotion}
+					{/* Right — role / hint / quote */}
+					<motion.div
+						className="flex flex-1 flex-col justify-between px-6 py-5 md:px-8 md:py-10 lg:px-10 lg:py-12"
+						style={{ backgroundColor: "#f0ede8" }}
+						initial={{ x: prefersReducedMotion ? 0 : 55, opacity: 0 }}
+						animate={{ x: 0, opacity: 1 }}
+						transition={{
+							duration: 0.55,
+							delay: 0.48,
+							ease: [0.22, 1, 0.36, 1],
+						}}
+					>
+						<div className="flex items-start">
+							<p
+								className="text-lg font-black uppercase tracking-[0.18em]"
+								style={{ color: persona.accentColor }}
 							>
-								<div
-									className="absolute inset-0 flex flex-col md:flex-row"
-									style={{ backgroundColor: "#f0ede8" }}
-								>
-									<DayPageContent
-										dayIndex={dayIndex}
-										guides={guides}
-										panelNumber={i + 2}
-										totalPanels={validDays.length}
-										persona={persona}
-										isBookmarked={isBookmarked}
-										toggleBookmark={toggleBookmark}
-										validDays={validDays}
-									/>
-								</div>
-							</FlipPanel>
-						))}
+								{persona.role}
+							</p>
+						</div>
+
+						<p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-gray-400">
+							Scroll for more
+						</p>
+
+						<div>
+							<p
+								className="text-base font-medium leading-relaxed text-gray-800 md:text-2xl lg:text-3xl"
+								style={{ fontFamily: "var(--font-hero-serif)" }}
+							>
+								&ldquo;{persona.tagline}&rdquo;
+							</p>
+							<p className="mt-8 text-md leading-6 text-gray-500">
+								{persona.situation}
+							</p>
+							<p className="mt-3 text-sm text-gray-400">
+								{persona.name}, {persona.age} ·{" "}
+								{persona.origin}
+							</p>
+						</div>
+					</motion.div>
+				</div>
+
+				{/* Day panels */}
+				{validDays.map(({ dayIndex, guides }, i) => (
+					<div
+						key={dayIndex}
+						className="relative flex h-screen w-screen shrink-0 flex-col md:flex-row"
+						style={{ backgroundColor: "#f0ede8" }}
+					>
+						<DayPageContent
+							dayIndex={dayIndex}
+							guides={guides}
+							panelNumber={i + 1}
+							totalPanels={validDays.length}
+							persona={persona}
+							isBookmarked={isBookmarked}
+							toggleBookmark={toggleBookmark}
+							validDays={validDays}
+						/>
 					</div>
+				))}
 				</div>
 			</div>
 		</motion.div>
+	);
+}
+
+const TOPIC_COLOR: Record<string, string> = {
+	"food-eating":      "#00c49a",
+	"getting-around":   "#38bdf8",
+	"health-wellbeing": "#facc15",
+	"home-admin":       "#f9a8d4",
+	"social-belonging": "#a5f3fc",
+};
+
+function YourPlanStrip({ days }: { days: DayPlan[] }) {
+	return (
+		<div className="mb-8 rounded-2xl border border-black/8 bg-white/60 px-5 py-4 backdrop-blur-sm">
+			<div className="mb-3 flex items-center justify-between">
+				<p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
+					Your 7-day plan
+				</p>
+				<Link
+					href="/journey/plan"
+					className="text-[10px] font-semibold text-gray-400 underline-offset-2 hover:underline"
+				>
+					View full plan →
+				</Link>
+			</div>
+			<div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+				{days.map((day) => (
+					<div
+						key={day.day}
+						className="flex w-20 shrink-0 flex-col gap-1 rounded-xl px-2.5 py-2.5"
+						style={{ backgroundColor: `${TOPIC_COLOR[day.topicSlug] ?? "#e5e7eb"}22` }}
+					>
+						<span
+							className="text-[8px] font-bold uppercase tracking-[0.14em]"
+							style={{ color: TOPIC_COLOR[day.topicSlug] ?? "#6b7280" }}
+						>
+							Day {day.day}
+						</span>
+						<span className="text-[11px] font-semibold leading-tight text-gray-800">
+							{day.shortLabel}
+						</span>
+						<span className="line-clamp-2 text-[9px] leading-tight text-gray-500">
+							{day.theme}
+						</span>
+					</div>
+				))}
+			</div>
+		</div>
 	);
 }
 
@@ -645,6 +592,13 @@ export function PersonaJourneyView({
 				: null,
 	);
 	const prefersReducedMotion = useReducedMotion();
+	const { journeyState } = useJourneyState();
+	const [weekDays, setWeekDays] = useState<DayPlan[] | null>(null);
+
+	useEffect(() => {
+		const raw = loadWeekPlan();
+		if (raw) setWeekDays(resolveWeekPlan(raw));
+	}, []);
 
 	function handleBack() {
 		setSelectedPersona(null);
@@ -670,6 +624,10 @@ export function PersonaJourneyView({
 			>
 				<GuidesTabNav />
 
+				{weekDays && weekDays.length > 0 && (
+					<YourPlanStrip days={weekDays} />
+				)}
+
 				<motion.div
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
@@ -682,7 +640,7 @@ export function PersonaJourneyView({
 								persona={persona}
 								onSelect={setSelectedPersona}
 								animationDelay={(index % 3) * 0.08}
-							/>
+								/>
 						))}
 					</div>
 				</motion.div>

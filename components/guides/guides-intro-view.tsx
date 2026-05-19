@@ -222,7 +222,27 @@ export function GuidesIntroView() {
 			</div>
 
 			{/* ── Topic cards ── */}
-			<div className="mx-auto max-w-screen-2xl px-6 pb-8">
+			<div className="relative mx-auto max-w-screen-2xl overflow-hidden px-6 pb-8">
+				{/* Grid background */}
+				<div aria-hidden className="pointer-events-none absolute inset-0">
+					<div
+						className="absolute inset-0"
+						style={{
+							backgroundImage: [
+								"linear-gradient(to right, rgba(2,24,25,0.07) 1px, transparent 1px)",
+								"linear-gradient(to bottom, rgba(2,24,25,0.07) 1px, transparent 1px)",
+							].join(", "),
+							backgroundSize: "96px 96px",
+						}}
+					/>
+					<div
+						className="absolute inset-0"
+						style={{
+							background:
+								"radial-gradient(ellipse 75% 70% at 50% 42%, transparent 25%, rgba(255,255,255,0.6) 55%, white 78%)",
+						}}
+					/>
+				</div>
 				{/* Desktop — magnetic cluster */}
 				<div
 					className="relative mx-auto hidden md:block"
@@ -609,7 +629,7 @@ export function GuidesIntroView() {
 
 					{/* Persona cards */}
 					<div className="order-last md:order-first">
-						<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2">
+						<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-4">
 							{PERSONAS.map((persona, i) => (
 								<motion.div
 									key={persona.id}
@@ -650,13 +670,8 @@ export function GuidesIntroView() {
 										onClick={() =>
 											handlePersonaClick(persona)
 										}
-										className={cn(
-											"group relative block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50",
-											selectedPersona?.id !== persona.id
-												? "overflow-hidden"
-												: "",
-										)}
-										style={{ borderRadius: 16 }}
+										className="group relative block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/50"
+										style={{ borderRadius: 16, border: "2px solid #000" }}
 										whileHover={
 											!selectedPersona &&
 											!prefersReducedMotion
@@ -671,8 +686,8 @@ export function GuidesIntroView() {
 										<div className="relative aspect-[2/3]">
 											<motion.div
 												layoutId={`persona-photo-${persona.id}`}
-												className="absolute inset-0"
-												style={{ borderRadius: 16 }}
+												className="absolute inset-0 overflow-hidden"
+												style={{ borderRadius: 14 }}
 												transition={{
 													duration: 0.68,
 													ease: [0.22, 1, 0.36, 1],
@@ -683,26 +698,24 @@ export function GuidesIntroView() {
 													alt={persona.name}
 													fill
 													sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-													className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+													className="object-contain transition-transform duration-500 ease-out group-hover:scale-105"
 												/>
 											</motion.div>
+										</div>
 
-											{/* Name + role */}
-											<div
-												className={cn(
-													"pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-transparent px-3 py-3 text-left transition-opacity duration-100 sm:px-4 sm:py-4",
-													selectedPersona?.id ===
-														persona.id &&
-														"opacity-0",
-												)}
-											>
-												<p className="text-xs font-semibold uppercase tracking-[0.15em] text-white">
-													[{persona.role}]
-												</p>
-												<p className="mt-0.5 text-xl font-bold leading-snug text-white">
-													{persona.name}
-												</p>
-											</div>
+										{/* Name + role */}
+										<div
+											className={cn(
+												"px-3 pb-4 pt-0 text-center transition-opacity duration-100",
+												selectedPersona?.id === persona.id && "opacity-0",
+											)}
+										>
+											<p className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
+												[ {persona.role} ]
+											</p>
+											<p className="text-2xl font-bold leading-snug text-gray-900">
+												{persona.name}
+											</p>
 										</div>
 									</motion.button>
 								</motion.div>
