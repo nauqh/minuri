@@ -35,7 +35,7 @@ const HERO_TOPIC_CARDS: {
 		desc: "Stay healthy and supported",
 		bg: "#fcf300",
 		floatPhase: 0.5,
-		word: "heal",
+		word: "thrive",
 	},
 	{
 		title: "Home & Admin",
@@ -303,7 +303,7 @@ export function LandingHeroSectionV2({
 								Living independently
 							</motion.span>
 							<motion.h1
-								className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-7xl md:leading-none min-[1500px]:mt-4 min-[1500px]:text-8xl"
+								className="mt-5 w-full text-4xl font-black uppercase leading-snug tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
 								variants={{
 									hidden: { opacity: 0, y: 22 },
 									visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: entranceEase } },
@@ -381,58 +381,96 @@ export function LandingHeroSectionV2({
 						</motion.div>
 					</div>
 
-					{/* RIGHT: 2×3 card grid — fills full column height */}
-					<div className="relative z-10 flex md:items-end pb-4 min-[1500px]:pb-0">
-						<div className="grid w-full grid-cols-3 gap-4 md:gap-5">
-							{/* Cat — slot 0 */}
-							<motion.div
-								className="aspect-[5/4]"
-								initial={{ opacity: 0, y: -800 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{
-									opacity: { duration: 0.35, delay: 0.5 + 5 * 0.12, ease: "easeOut" },
-									y: { type: "spring", stiffness: 120, damping: 18, delay: 0.5 + 5 * 0.15 },
-								}}
-							>
+					{/* RIGHT: 3-column staggered card layout */}
+					<div className="relative z-10 flex h-full pb-4 min-[1500px]:pb-0">
+						<div className="flex w-full h-full gap-4 md:gap-5">
+							{/* Col 1 — cards at top */}
+							<div className="flex h-full flex-1 flex-col justify-start gap-4 md:gap-5">
 								<motion.div
-									style={{ rotate: STICKY_ROTATE[5 % 4] }}
-									className="relative h-full"
-									animate={{ y: [0, -7, 0] }}
-									transition={{ duration: 3.2 + 0.3 * 0.28, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
-								>
-									<div
-										className="absolute left-1/2 z-10 rounded-[1px]"
-										style={{
-											top: -10,
-											width: 44,
-											height: 18,
-											transform: "translateX(-50%) rotate(-1.5deg)",
-											background: "rgba(253, 230, 138, 0.72)",
-											boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-										}}
-									/>
-									<div className="relative h-full overflow-hidden rounded-[2px]">
-										<CatRive />
-									</div>
-								</motion.div>
-							</motion.div>
-
-							{/* 5 topic cards — slots 1-5 */}
-							{HERO_TOPIC_CARDS.map((card, i) => (
-								<HeroTopicCard
-									key={card.title}
-									card={card}
-									index={i}
-									isActive={activeIndex === i}
-									onHover={() => {
-										setHasStartedWordCycle(true);
-										setActiveIndex(i);
-										restartCycle();
+									className="aspect-[5/4]"
+									initial={{ opacity: 0, y: -800 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										opacity: { duration: 0.35, delay: 0.5 + 5 * 0.12, ease: "easeOut" },
+										y: { type: "spring", stiffness: 120, damping: 18, delay: 0.5 + 5 * 0.15 },
 									}}
+								>
+									<motion.div
+										style={{ rotate: STICKY_ROTATE[5 % 4] }}
+										className="relative h-full"
+										animate={{ y: [0, -7, 0] }}
+										transition={{ duration: 3.2 + 0.3 * 0.28, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
+									>
+										<div
+											className="absolute left-1/2 z-10 rounded-[1px]"
+											style={{
+												top: -10,
+												width: 44,
+												height: 18,
+												transform: "translateX(-50%) rotate(-1.5deg)",
+												background: "rgba(253, 230, 138, 0.72)",
+												boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+											}}
+										/>
+										<div className="relative h-full overflow-hidden rounded-[2px]">
+											<CatRive />
+										</div>
+									</motion.div>
+								</motion.div>
+								<HeroTopicCard
+									key={HERO_TOPIC_CARDS[2].title}
+									card={HERO_TOPIC_CARDS[2]}
+									index={2}
+									isActive={activeIndex === 2}
+									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(2); restartCycle(); }}
 									entranceEase={entranceEase}
 									className=""
 								/>
-							))}
+							</div>
+
+							{/* Col 2 — cards centered */}
+							<div className="flex h-full flex-1 flex-col justify-center gap-4 md:gap-5">
+								<HeroTopicCard
+									key={HERO_TOPIC_CARDS[0].title}
+									card={HERO_TOPIC_CARDS[0]}
+									index={0}
+									isActive={activeIndex === 0}
+									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(0); restartCycle(); }}
+									entranceEase={entranceEase}
+									className=""
+								/>
+								<HeroTopicCard
+									key={HERO_TOPIC_CARDS[3].title}
+									card={HERO_TOPIC_CARDS[3]}
+									index={3}
+									isActive={activeIndex === 3}
+									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(3); restartCycle(); }}
+									entranceEase={entranceEase}
+									className=""
+								/>
+							</div>
+
+							{/* Col 3 — cards at bottom */}
+							<div className="flex h-full flex-1 flex-col justify-end gap-4 md:gap-5">
+								<HeroTopicCard
+									key={HERO_TOPIC_CARDS[1].title}
+									card={HERO_TOPIC_CARDS[1]}
+									index={1}
+									isActive={activeIndex === 1}
+									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(1); restartCycle(); }}
+									entranceEase={entranceEase}
+									className=""
+								/>
+								<HeroTopicCard
+									key={HERO_TOPIC_CARDS[4].title}
+									card={HERO_TOPIC_CARDS[4]}
+									index={4}
+									isActive={activeIndex === 4}
+									onHover={() => { setHasStartedWordCycle(true); setActiveIndex(4); restartCycle(); }}
+									entranceEase={entranceEase}
+									className=""
+								/>
+							</div>
 						</div>
 					</div>
 

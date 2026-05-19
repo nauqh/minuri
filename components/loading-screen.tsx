@@ -107,10 +107,7 @@ export function LoadingScreen({ onComplete }: { onComplete?: () => void }) {
 						>
 							Loading..
 						</span>
-						<div
-							className="flex-1 overflow-hidden rounded-full h-[3px]"
-							style={{ backgroundColor: "rgba(2,24,25,0.12)" }}
-						>
+						<div className="flex-1 overflow-hidden h-[3px]">
 							<div
 								className="h-full rounded-full"
 								style={{

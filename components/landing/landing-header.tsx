@@ -13,7 +13,7 @@ import {
 	type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const MOBILE_NAV_ITEMS: { icon: LucideIcon; label: string; href: string }[] = [
 	{ icon: Compass, label: "Start my journey", href: "/journey" },
@@ -40,6 +40,14 @@ export function LandingHeader({
 		accentHex: string;
 	} | null>(null);
 	const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
+	const ovalPathRef = useRef<SVGPathElement>(null);
+	const restartOvalAnimation = useCallback(() => {
+		const el = ovalPathRef.current;
+		if (!el) return;
+		el.style.animation = "none";
+		void el.getBoundingClientRect();
+		el.style.animation = "redraw-oval 0.7s ease-out forwards";
+	}, []);
 
 	useEffect(() => {
 		try {
@@ -167,11 +175,12 @@ export function LandingHeader({
 								animate={{ opacity: 1, x: 0 }}
 								exit={{ opacity: 0, x: 10 }}
 								transition={{ duration: 0.28, ease: entranceEase }}
-								className="hidden md:flex items-center"
+								className="hidden md:flex items-center mr-6"
 							>
 								<Link
 									href="/journey/plan"
 									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2 px-3 min-[1500px]:px-4 text-base min-[1500px]:text-xl font-semibold text-minuri-ocean"
+									onMouseEnter={restartOvalAnimation}
 								>
 									<svg
 										className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
@@ -186,7 +195,8 @@ export function LandingHeader({
 											stroke="currentColor"
 											strokeWidth="2.5"
 											strokeLinecap="round"
-											className="[stroke-dasharray:580] [stroke-dashoffset:580] transition-[stroke-dashoffset] duration-700 ease-out group-hover:[stroke-dashoffset:0]"
+											ref={ovalPathRef}
+										className="[stroke-dasharray:580] [stroke-dashoffset:0]"
 										/>
 									</svg>
 									<span className="relative z-10 leading-none">

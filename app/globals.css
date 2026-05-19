@@ -206,6 +206,11 @@
 	font-family: var(--font-hero-serif), ui-serif, Georgia, serif;
 }
 
+@keyframes redraw-oval {
+	from { stroke-dashoffset: 580; }
+	to   { stroke-dashoffset: 0; }
+}
+
 /* Concept §9.2 — Deep Ocean hero + Mid Teal dot grid */
 .landing-hero-dots {
 	background-color: var(--minuri-ocean);
