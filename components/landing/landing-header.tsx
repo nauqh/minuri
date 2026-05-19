@@ -105,7 +105,7 @@ export function LandingHeader({
 				}}
 			>
 				<motion.div
-					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-0 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12 min-[1500px]:gap-16"
+					className="flex min-h-14 flex-1 items-center justify-start gap-8 border-r border-minuri-ocean/15 bg-minuri-white pl-0 pr-3 md:min-h-0 md:flex-initial md:border-0 md:bg-transparent md:px-0 md:gap-12 min-[1500px]:gap-20"
 					initial={{ opacity: 0, y: 12 }}
 					animate={{ opacity: headerVisible ? 1 : 0, y: 0 }}
 					transition={{
@@ -116,33 +116,33 @@ export function LandingHeader({
 				>
 					<Link
 						href="/"
-						className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem] min-[1500px]:text-[2.6rem]"
+						className="flex items-center gap-2 text-2xl font-black tracking-tight text-minuri-ocean md:text-[2.1rem] min-[1500px]:text-[3rem]"
 					>
 						<span className="uppercase">Minuri</span>
 					</Link>
 
-					<nav className="hidden items-center gap-10 text-base min-[1500px]:gap-14 min-[1500px]:text-lg font-medium text-minuri-ocean">
+					<nav className="hidden items-center gap-10 text-base min-[1500px]:gap-16 min-[1500px]:text-xl font-medium text-minuri-ocean">
 						<Link
 							href="#services"
-							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							Services
 						</Link>
 						<Link
 							href="#service"
-							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							How it works
 						</Link>
 						<Link
 							href="#care"
-							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							Topics
 						</Link>
 						<Link
 							href="#contact"
-							className="minuri-link-underline inline-flex h-12  items-center whitespace-nowrap"
+							className="minuri-link-underline inline-flex h-12 min-[1500px]:h-16 items-center whitespace-nowrap"
 						>
 							Get support
 						</Link>
@@ -150,7 +150,7 @@ export function LandingHeader({
 				</motion.div>
 
 				<motion.div
-					className="flex items-stretch gap-2.5 md:ml-auto md:items-center md:gap-3.5"
+					className="flex items-stretch gap-2.5 md:ml-auto md:items-center md:gap-3.5 min-[1500px]:gap-5"
 					initial={{ opacity: 0, x: 12 }}
 					animate={{ opacity: headerVisible ? 1 : 0, x: 0 }}
 					transition={{
@@ -171,13 +171,13 @@ export function LandingHeader({
 							>
 								<Link
 									href="/journey/plan"
-									className="group relative inline-flex h-12 min-[1500px]:h-14 items-center gap-2.5 rounded-sm bg-gradient-to-br from-minuri-teal to-minuri-seafoam px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-white shadow-sm shadow-minuri-teal/20 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-minuri-teal/35"
+									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2.5 rounded-sm bg-gradient-to-br from-minuri-teal to-minuri-seafoam px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-white shadow-sm shadow-minuri-teal/20 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-minuri-teal/35"
 								>
-									<span className="relative z-10 text-base leading-none transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5">
+									<span className="relative z-10 text-base min-[1500px]:text-xl leading-none transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5">
 										{journeyIdentity?.symbol ?? "🌱"}
 									</span>
 									<span className="relative z-10">My week</span>
-									<ArrowRight className="relative z-10 size-4 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" strokeWidth={2} aria-hidden />
+									<ArrowRight className="relative z-10 size-4 min-[1500px]:size-5 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" strokeWidth={2} aria-hidden />
 								</Link>
 							</motion.div>
 						) : (
@@ -191,9 +191,9 @@ export function LandingHeader({
 							>
 								<Link
 									href="/guides"
-									className="inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm border border-minuri-ocean/25 px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-ocean transition-all duration-200 ease-out hover:bg-minuri-ocean/5 hover:border-minuri-ocean/50"
+									className="inline-flex h-12 min-[1500px]:h-16 items-center gap-2 rounded-sm border border-minuri-ocean/25 px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-minuri-ocean transition-all duration-200 ease-out hover:bg-minuri-ocean/5 hover:border-minuri-ocean/50"
 								>
-									<BookOpen className="size-4" strokeWidth={2} aria-hidden />
+									<BookOpen className="size-4 min-[1500px]:size-5" strokeWidth={2} aria-hidden />
 									Guides
 								</Link>
 								<motion.div
@@ -211,10 +211,10 @@ export function LandingHeader({
 								>
 									<Link
 										href="/near-me"
-										className="group inline-flex h-12 min-[1500px]:h-14 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
+										className="group inline-flex h-12 min-[1500px]:h-16 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
 									>
 										<MapPin
-											className="size-4 transition-transform duration-200 group-hover:scale-110"
+											className="size-4 min-[1500px]:size-5 transition-transform duration-200 group-hover:scale-110"
 											strokeWidth={2}
 											aria-hidden
 										/>
