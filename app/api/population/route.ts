@@ -13,6 +13,9 @@ export async function GET(request: NextRequest) {
 				{ status: 400 },
 			);
 		}
+		if (location.length > 200) {
+			return Response.json({ error: "Query param too long" }, { status: 400 });
+		}
 
 		const payload = await fetchPopulation({ location });
 

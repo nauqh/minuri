@@ -1,6 +1,6 @@
 import { type SuburbRecord } from "@/lib/suburbs";
 
-const MINURI_SERVER_BASE = process.env.NEXT_PUBLIC_MINURI_SERVER_BASE_URL;
+const MINURI_SERVER_BASE = process.env.MINURI_SERVER_BASE_URL;
 
 function buildMinuriServerUrl(pathname: string, params?: URLSearchParams) {
 	const normalizedBase = MINURI_SERVER_BASE?.replace(/\/+$/, "");

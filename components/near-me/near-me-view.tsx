@@ -115,6 +115,7 @@ export function NearMeView({
 		lat: number;
 		lng: number;
 	} | null>(null);
+	const [showGeoConsent, setShowGeoConsent] = useState(false);
 	const locationRef = useRef<HTMLDivElement>(null);
 
 	// Browsing state
@@ -418,6 +419,11 @@ export function NearMeView({
 	}
 
 	function useMyLocation() {
+		setShowGeoConsent(true);
+	}
+
+	function confirmGeoAccess() {
+		setShowGeoConsent(false);
 		setUsingLocation(true);
 		setSuburb(suggestions[0]?.locality ?? "Carlton");
 		setLocationPickerOpen(false);
@@ -430,7 +436,7 @@ export function NearMeView({
 					});
 				},
 				() => {
-					/* ignore */
+					setSuburbError("Location access was denied. Please type your suburb.");
 				},
 			);
 		}
@@ -480,14 +486,38 @@ export function NearMeView({
 										/>
 									</div>
 								</div>
-								<button
-									type="button"
-									onClick={useMyLocation}
-									className="flex w-full cursor-pointer items-center gap-2 border-t border-minuri-silver/30 px-4 py-2.5 text-left text-xs font-medium text-minuri-teal transition hover:bg-minuri-fog"
-								>
-									<LocateFixed className="size-3.5" />
-									Use my location
-								</button>
+								{showGeoConsent ? (
+									<div className="border-t border-minuri-silver/30 px-4 py-3 space-y-2">
+										<p className="text-xs text-minuri-slate leading-snug">
+											Minuri will use your device location to find nearby places. Your coordinates are not stored.
+										</p>
+										<div className="flex gap-2">
+											<button
+												type="button"
+												onClick={confirmGeoAccess}
+												className="flex-1 cursor-pointer rounded-lg bg-minuri-teal px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-minuri-teal/90"
+											>
+												Allow
+											</button>
+											<button
+												type="button"
+												onClick={() => setShowGeoConsent(false)}
+												className="flex-1 cursor-pointer rounded-lg border border-minuri-silver/80 px-3 py-1.5 text-xs font-medium text-minuri-slate transition hover:bg-minuri-fog"
+											>
+												Cancel
+											</button>
+										</div>
+									</div>
+								) : (
+									<button
+										type="button"
+										onClick={useMyLocation}
+										className="flex w-full cursor-pointer items-center gap-2 border-t border-minuri-silver/30 px-4 py-2.5 text-left text-xs font-medium text-minuri-teal transition hover:bg-minuri-fog"
+									>
+										<LocateFixed className="size-3.5" />
+										Use my location
+									</button>
+								)}
 								<div className="max-h-48 overflow-y-auto border-t border-minuri-silver/30">
 									{suburbLoading && (
 										<div className="px-4 py-2 text-xs text-minuri-slate">
@@ -862,6 +892,7 @@ export function NearMeView({
 						{mobileMapCard.thumbnail && (
 							<div className="relative h-28 w-full overflow-hidden">
 								<Image
+									unoptimized
 									src={mobileMapCard.thumbnail}
 									alt={mobileMapCard.name}
 									fill
