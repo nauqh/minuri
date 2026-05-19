@@ -171,12 +171,13 @@ export function LandingHeader({
 							>
 								<Link
 									href="/journey/plan"
-									className="inline-flex h-12 min-[1500px]:h-14 items-center gap-2.5 rounded-sm bg-minuri-teal px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-white transition-all duration-200 ease-out hover:scale-[1.04] hover:brightness-105"
+									className="group relative inline-flex h-12 min-[1500px]:h-14 items-center gap-2.5 rounded-sm bg-gradient-to-br from-minuri-teal to-minuri-seafoam px-5 min-[1500px]:px-6 text-sm min-[1500px]:text-base font-semibold text-white shadow-sm shadow-minuri-teal/20 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-minuri-teal/35"
 								>
-									<span className="text-base leading-none">
+									<span className="relative z-10 text-base leading-none transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5">
 										{journeyIdentity?.symbol ?? "🌱"}
 									</span>
-									My week
+									<span className="relative z-10">My week</span>
+									<ArrowRight className="relative z-10 size-4 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" strokeWidth={2} aria-hidden />
 								</Link>
 							</motion.div>
 						) : (

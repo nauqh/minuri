@@ -247,7 +247,7 @@ export function LandingHeroSectionV2({
 	}, []);
 
 	return (
-		<section className="relative flex h-svh max-h-[1100px] min-h-[600px] flex-col bg-minuri-white text-minuri-ink md:overflow-hidden">
+		<section className="relative flex min-h-[600px] flex-col bg-minuri-white text-minuri-ink md:h-svh md:max-h-[1100px] md:overflow-hidden">
 			{/* Grid background — lines + radial fade to white at edges */}
 			<div aria-hidden className="pointer-events-none absolute inset-0">
 				<div
@@ -277,7 +277,7 @@ export function LandingHeroSectionV2({
 				/>
 
 				<motion.div
-					className="grid flex-1 grid-cols-[3fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
+					className="grid flex-1 grid-cols-1 md:grid-cols-[3fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -371,7 +371,7 @@ export function LandingHeroSectionV2({
 										About us
 									</Link>
 								</div>
-								<div className="absolute top-full left-0 flex items-center gap-1.5 pt-2 text-minuri-ocean/50">
+								<div className="absolute top-full left-0 hidden md:flex items-center gap-1.5 pt-2 text-minuri-ocean/50">
 									<CornerDownRight className="size-4" strokeWidth={2} />
 									<span className="text-xs font-semibold uppercase tracking-widest">
 										or scroll to explore first
@@ -382,8 +382,8 @@ export function LandingHeroSectionV2({
 					</div>
 
 					{/* RIGHT: 2×3 card grid — fills full column height */}
-					<div className="relative z-10 flex items-end pb-4 min-[1500px]:pb-0">
-						<div className="grid w-full grid-cols-2 grid-rows-3 gap-4 md:gap-5 md:h-[450px] min-[1500px]:h-[960px]">
+					<div className="relative z-10 flex md:items-end pb-4 min-[1500px]:pb-0">
+						<div className="grid w-full grid-cols-2 grid-rows-3 gap-4 md:gap-5 md:h-[540px] min-[1500px]:h-[1080px]">
 							{/* Cat — slot 0 */}
 							<motion.div
 								initial={{ opacity: 0, y: -800 }}
