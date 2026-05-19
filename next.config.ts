@@ -15,7 +15,7 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://picsum.photos https://*.googleusercontent.com https://cdn-icons-png.flaticon.com",
-      "connect-src 'self' https://api.maptiler.com",
+      "connect-src 'self' https://api.maptiler.com https://unpkg.com https://cdn.jsdelivr.net",
       "font-src 'self'",
       "frame-src 'none'",
       "object-src 'none'",
