@@ -277,7 +277,7 @@ export function LandingHeroSectionV2({
 				/>
 
 				<motion.div
-					className="grid flex-1 grid-cols-1 md:grid-cols-[4fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
+					className="grid flex-1 grid-cols-1 md:grid-cols-[2fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -382,8 +382,8 @@ export function LandingHeroSectionV2({
 					</div>
 
 					{/* RIGHT: 2×3 card grid — fills full column height */}
-					<div className="relative z-10 flex md:items-end min-[1500px]:items-start pb-4 min-[1500px]:pb-0">
-						<div className="grid w-full grid-cols-2 gap-4 md:gap-5">
+					<div className="relative z-10 flex md:items-center pb-4 min-[1500px]:pb-0">
+						<div className="grid w-full grid-cols-3 gap-4 md:gap-5">
 							{/* Cat — slot 0 */}
 							<motion.div
 								className="aspect-[5/4]"

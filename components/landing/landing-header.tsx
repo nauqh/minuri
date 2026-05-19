@@ -171,8 +171,24 @@ export function LandingHeader({
 							>
 								<Link
 									href="/journey/plan"
-									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2.5 rounded-sm bg-gradient-to-br from-minuri-teal to-minuri-seafoam px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-white shadow-sm shadow-minuri-teal/20 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-minuri-teal/35"
+									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2.5 px-6 min-[1500px]:px-8 text-sm min-[1500px]:text-lg font-semibold text-minuri-ocean"
 								>
+									<svg
+										className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+										viewBox="0 0 180 58"
+										preserveAspectRatio="none"
+										fill="none"
+										aria-hidden
+									>
+										<path
+											d="M 10 38 C 6 18, 48 1, 90 1 C 132 1, 172 14, 172 29 C 172 46, 134 58, 90 58 C 52 58, 12 48, 10 34 M 160 48 C 164 56, 161 65, 154 69"
+											stroke="currentColor"
+											strokeWidth="2"
+											strokeLinecap="round"
+											className="[stroke-dasharray:600] [stroke-dashoffset:600] transition-[stroke-dashoffset] duration-700 ease-out group-hover:[stroke-dashoffset:0]"
+											style={{ vectorEffect: "non-scaling-stroke" }}
+										/>
+									</svg>
 									<span className="relative z-10 text-base min-[1500px]:text-xl leading-none transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5">
 										{journeyIdentity?.symbol ?? "🌱"}
 									</span>
