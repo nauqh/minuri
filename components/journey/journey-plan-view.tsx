@@ -517,7 +517,7 @@ function WeekDrawer({
 							duration: prefersReducedMotion ? 0.01 : 0.3,
 							ease: [0.22, 1, 0.36, 1],
 						}}
-						className="fixed inset-y-0 right-0 z-50 flex w-full flex-col bg-minuri-white shadow-2xl sm:max-w-md"
+						className="fixed right-0 top-0 z-50 flex h-auto max-h-screen w-full flex-col bg-minuri-white shadow-2xl sm:w-[30vw] sm:max-w-none"
 						role="dialog"
 						aria-label="Your week"
 						onMouseEnter={() => { document.body.style.overflow = "hidden"; }}
@@ -537,7 +537,7 @@ function WeekDrawer({
 						</div>
 
 						{/* Scrollable body */}
-						<div className="flex-1 overflow-y-auto overscroll-contain">
+						<div className="overflow-y-auto overscroll-contain">
 							<div className="px-5 py-5">
 								<p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-minuri-mid">
 									Your vibe
@@ -901,12 +901,8 @@ export function JourneyPlanView() {
 	const nextDay = weekPlan.find((d) => d.day === activeDay + 1);
 
 	return (
-		<motion.div
-			className="min-h-screen overflow-x-hidden bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]"
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-		>
+		<>
+			{/* Drawer and toast outside scaled container — CSS transforms break fixed positioning */}
 			<WeekDrawer
 				open={drawerOpen}
 				weekPlan={weekPlan}
@@ -932,6 +928,12 @@ export function JourneyPlanView() {
 				/>
 			)}
 
+		<motion.div
+			className="min-h-screen overflow-x-hidden bg-minuri-white text-minuri-ink min-[1500px]:origin-top min-[1500px]:scale-[1.18]"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+		>
 			{/* Header */}
 			<header className="px-6 py-4">
 				<div className="mx-auto flex max-w-screen-xl items-center justify-between">
@@ -1126,5 +1128,6 @@ export function JourneyPlanView() {
 				</div>
 			</main>
 		</motion.div>
+		</>
 	);
 }
