@@ -171,29 +171,28 @@ export function LandingHeader({
 							>
 								<Link
 									href="/journey/plan"
-									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2.5 px-6 min-[1500px]:px-8 text-sm min-[1500px]:text-lg font-semibold text-minuri-ocean"
+									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2 px-3 min-[1500px]:px-4 text-base min-[1500px]:text-xl font-semibold text-minuri-ocean"
 								>
 									<svg
-										className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-										viewBox="0 0 180 58"
-										preserveAspectRatio="none"
+										className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
+										width="200"
+										height="90"
+										viewBox="0 0 200 90"
 										fill="none"
 										aria-hidden
 									>
 										<path
-											d="M 10 38 C 6 18, 48 1, 90 1 C 132 1, 172 14, 172 29 C 172 46, 134 58, 90 58 C 52 58, 12 48, 10 34 M 160 48 C 164 56, 161 65, 154 69"
+											d="M 30 22 C 52 4, 96 2, 124 8 C 158 14, 192 30, 190 50 C 188 70, 152 84, 112 84 C 74 84, 32 70, 22 52 C 17 44, 17 34, 22 26"
 											stroke="currentColor"
-											strokeWidth="2"
+											strokeWidth="2.5"
 											strokeLinecap="round"
-											className="[stroke-dasharray:600] [stroke-dashoffset:600] transition-[stroke-dashoffset] duration-700 ease-out group-hover:[stroke-dashoffset:0]"
-											style={{ vectorEffect: "non-scaling-stroke" }}
+											className="[stroke-dasharray:580] [stroke-dashoffset:580] transition-[stroke-dashoffset] duration-700 ease-out group-hover:[stroke-dashoffset:0]"
 										/>
 									</svg>
-									<span className="relative z-10 text-base min-[1500px]:text-xl leading-none transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-0.5">
+									<span className="relative z-10 leading-none">
 										{journeyIdentity?.symbol ?? "🌱"}
 									</span>
 									<span className="relative z-10">My week</span>
-									<ArrowRight className="relative z-10 size-4 min-[1500px]:size-5 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" strokeWidth={2} aria-hidden />
 								</Link>
 							</motion.div>
 						) : (

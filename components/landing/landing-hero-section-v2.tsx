@@ -382,7 +382,7 @@ export function LandingHeroSectionV2({
 					</div>
 
 					{/* RIGHT: 2×3 card grid — fills full column height */}
-					<div className="relative z-10 flex md:items-center pb-4 min-[1500px]:pb-0">
+					<div className="relative z-10 flex md:items-end pb-4 min-[1500px]:pb-0">
 						<div className="grid w-full grid-cols-3 gap-4 md:gap-5">
 							{/* Cat — slot 0 */}
 							<motion.div
