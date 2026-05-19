@@ -16,6 +16,7 @@ import {
 	Sandwich,
 	Search,
 	Users,
+	X,
 	type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -151,6 +152,7 @@ export function JourneyOnboarding() {
 	const [yourMoment, setYourMoment] = useState("");
 	const [selectedPreset, setSelectedPreset] = useState<PresetId | null>(null);
 	const [showTextarea, setShowTextarea] = useState(false);
+	const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
 	const [suburbQuery, setSuburbQuery] = useState("");
 	const [selectedSuburb, setSelectedSuburb] = useState<SuburbOption | null>(
@@ -336,74 +338,7 @@ export function JourneyOnboarding() {
 						},
 					}}
 				>
-					{/* Notebook red margin line */}
-					<div
-						aria-hidden
-						className="pointer-events-none absolute inset-y-0"
-						style={{
-							left: "clamp(2.5rem, 7vw, 6rem)",
-							width: "2px",
-							background: "oklch(0.68 0.13 15 / 0.2)",
-						}}
-					/>
-
-					{/* How it works — sticky note pinned to right */}
-					<motion.div
-						className="pointer-events-none absolute right-16 top-44 hidden w-72 select-none xl:block min-[1500px]:right-20 2xl:right-24 2xl:w-80"
-						initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 24 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ ...revealTransition, delay: prefersReducedMotion ? 0 : 1.5 }}
-					>
-						<div className="guide-sticky guide-sticky-a">
-							<p
-								className="text-xs font-black uppercase tracking-[0.16em]"
-								style={{ color: "rgba(2,18,20,0.45)" }}
-							>
-								How it works
-							</p>
-							<ol className="mt-3 space-y-4">
-								{HOW_IT_WORKS_STEPS.map((step, index) => (
-									<li
-										key={step.title}
-										className="flex items-start gap-2.5"
-									>
-										<span
-											className="flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-											style={{
-												background: "rgba(2,18,20,0.1)",
-												color: "#05292a",
-											}}
-										>
-											{index + 1}
-										</span>
-										<div>
-											<p
-												className="text-xs font-bold leading-snug"
-												style={{ color: "#05292a" }}
-											>
-												{step.title}
-											</p>
-											<p
-												className="mt-1 text-[11px] leading-snug"
-												style={{
-													color: "rgba(2,18,20,0.55)",
-												}}
-											>
-												{step.body}
-											</p>
-										</div>
-									</li>
-								))}
-							</ol>
-						</div>
-					</motion.div>
-					<div
-						className="max-w-4xl min-[1500px]:max-w-5xl pl-0 pr-6 py-8 md:py-10 xl:mr-[5%]"
-						style={{
-							marginLeft:
-								"max(1.5rem, calc(clamp(2.5rem, 7vw, 6rem) + 48px))",
-						}}
-					>
+					<div className="mx-auto max-w-4xl min-[1500px]:max-w-5xl px-6 py-8 md:py-12">
 						<motion.div
 							className="flex flex-col"
 							initial={{ opacity: 0 }}
@@ -412,7 +347,7 @@ export function JourneyOnboarding() {
 						>
 							{/* ── Header ── */}
 							<motion.div
-								className="flex items-center"
+								className="relative flex items-center justify-between"
 								initial={{
 									opacity: 0,
 									y: prefersReducedMotion ? 0 : -10,
@@ -426,14 +361,65 @@ export function JourneyOnboarding() {
 								<button
 									type="button"
 									onClick={() => router.back()}
-									className="inline-flex items-center gap-1.5 text-sm font-semibold text-minuri-ocean/50 transition-colors duration-200 hover:text-minuri-ocean"
+									className="inline-flex items-center gap-2 text-base font-semibold text-minuri-ocean/50 transition-colors duration-200 hover:text-minuri-ocean"
 								>
-									<ArrowLeft
-										className="size-3.5"
-										aria-hidden
-									/>
+									<ArrowLeft className="size-4" aria-hidden />
 									Back
 								</button>
+								<button
+									type="button"
+									onClick={() => setHowItWorksOpen((v) => !v)}
+									className="inline-flex items-center gap-1.5 rounded-full bg-minuri-ocean px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+								>
+									How it works
+								</button>
+
+								{/* Sticky note popover — no backdrop, floats over content */}
+								<AnimatePresence>
+									{howItWorksOpen && (
+										<motion.div
+											key="hiw-card"
+											className="absolute right-0 top-full z-20 mt-3 w-96"
+											initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -8, scale: 0.97 }}
+											animate={{ opacity: 1, y: 0, scale: 1 }}
+											exit={{ opacity: 0, y: -6, scale: 0.97 }}
+											transition={{ duration: prefersReducedMotion ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}
+										>
+											<div className="guide-sticky guide-sticky-a">
+												<div className="mb-3 flex justify-end">
+													<button
+														type="button"
+														onClick={() => setHowItWorksOpen(false)}
+														className="rounded-full p-1 text-[#05292a]/40 transition-colors hover:text-[#05292a]"
+														aria-label="Close"
+													>
+														<X className="size-4" />
+													</button>
+												</div>
+												<ol className="space-y-4">
+													{HOW_IT_WORKS_STEPS.map((step, index) => (
+														<li key={step.title} className="flex items-start gap-2.5">
+															<span
+																className="flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+																style={{ background: "rgba(2,18,20,0.1)", color: "#05292a" }}
+															>
+																{index + 1}
+															</span>
+															<div>
+																<p className="text-sm font-bold leading-snug" style={{ color: "#05292a" }}>
+																	{step.title}
+																</p>
+																<p className="mt-1 text-xs leading-snug" style={{ color: "rgba(2,18,20,0.55)" }}>
+																	{step.body}
+																</p>
+															</div>
+														</li>
+													))}
+												</ol>
+											</div>
+										</motion.div>
+									)}
+								</AnimatePresence>
 							</motion.div>
 
 							{/* ── Page intro ── */}
@@ -449,10 +435,7 @@ export function JourneyOnboarding() {
 									delay: prefersReducedMotion ? 0 : 0.55,
 								}}
 							>
-								<p className="text-xs font-semibold uppercase tracking-[0.14em] text-minuri-teal">
-									Your guide journey
-								</p>
-								<h1 className="mt-3 text-2xl font-black leading-tight text-minuri-ocean md:text-3xl min-[1500px]:text-4xl">
+								<h1 className="text-2xl font-black leading-tight text-minuri-ocean md:text-3xl min-[1500px]:text-4xl">
 									Where are you and what do you need?
 								</h1>
 								<p className="mt-3 text-base leading-relaxed text-minuri-slate md:text-lg min-[1500px]:text-xl">
@@ -463,7 +446,7 @@ export function JourneyOnboarding() {
 							</motion.div>
 
 							{/* ── Form sections ── */}
-							<div>
+							<div className="mt-10">
 								<div className="space-y-12">
 									{/* ── Your moment ── */}
 									<motion.div
@@ -479,9 +462,9 @@ export function JourneyOnboarding() {
 									>
 										<div className={cn("mb-6 flex items-start gap-4 border-l-[3px] pl-4 transition-colors duration-300", yourMoment.length >= MIN_MOMENT_LENGTH ? "border-minuri-teal" : "border-minuri-ocean/15")}>
 											<div className="flex-1">
-												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40">Step 01</p>
-												<p className="mt-0.5 text-2xl font-black text-minuri-ocean">Your moment</p>
-												<p className="mt-1 text-sm text-minuri-slate">Pick a preset that sounds like you, or write your own</p>
+												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40 min-[1500px]:text-xs">Step 01</p>
+												<p className="mt-0.5 text-2xl font-black text-minuri-ocean min-[1500px]:text-3xl">Your moment</p>
+												<p className="mt-1 text-sm text-minuri-slate min-[1500px]:text-base">Pick a preset that sounds like you, or write your own</p>
 											</div>
 											{yourMoment.length >= MIN_MOMENT_LENGTH && (
 												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
@@ -526,16 +509,16 @@ export function JourneyOnboarding() {
 														)}
 														aria-pressed={isActive}
 													>
-														<span className="flex size-12 shrink-0 items-center justify-center rounded-sm bg-white text-xl shadow-sm">
+														<span className="flex size-12 shrink-0 items-center justify-center rounded-sm bg-white text-xl shadow-sm min-[1500px]:size-14 min-[1500px]:text-2xl">
 															{preset.icon}
 														</span>
 														<div className="min-w-0 pr-4">
-															<p className="text-sm font-semibold text-minuri-ocean">
+															<p className="text-sm font-semibold text-minuri-ocean min-[1500px]:text-base">
 																{
 																	preset.headline
 																}
 															</p>
-															<p className="mt-0.5 line-clamp-2 text-base italic leading-relaxed text-minuri-slate">
+															<p className="mt-0.5 line-clamp-2 text-base italic leading-relaxed text-minuri-slate min-[1500px]:text-lg">
 																{preset.preview}
 															</p>
 														</div>
@@ -573,7 +556,7 @@ export function JourneyOnboarding() {
 											type="button"
 											onClick={handleWriteOwn}
 											className={cn(
-												"mt-3 inline-flex items-center gap-1.5 text-xs transition-colors",
+												"mt-3 inline-flex items-center gap-1.5 text-xs min-[1500px]:text-sm transition-colors",
 												showTextarea &&
 													selectedPreset === null
 													? "font-semibold text-minuri-teal"
@@ -654,14 +637,14 @@ export function JourneyOnboarding() {
 															backgroundColor:
 																"var(--minuri-white)",
 															backgroundImage:
-																"repeating-linear-gradient(transparent, transparent 1.5rem, oklch(0.72 0.03 220 / 0.18) 1.5rem, oklch(0.72 0.03 220 / 0.18) calc(1.5rem + 1px))",
+																"repeating-linear-gradient(transparent, transparent 1.75rem, oklch(0.72 0.03 220 / 0.18) 1.75rem, oklch(0.72 0.03 220 / 0.18) calc(1.75rem + 1px))",
 															lineHeight:
-																"1.5rem",
+																"1.75rem",
 															paddingTop:
 																"0.6rem",
 														}}
 														className={cn(
-															"w-full resize-none rounded-md border px-4 pb-3 text-sm outline-none transition",
+															"w-full resize-none rounded-md border bg-minuri-white px-4 pb-3 text-base outline-none transition min-[1500px]:text-lg",
 															showMomentPrompt
 																? "border-amber-300 focus:border-amber-400"
 																: yourMoment.length >=
@@ -728,9 +711,9 @@ export function JourneyOnboarding() {
 									>
 										<div className={cn("mb-6 flex items-start gap-4 border-l-[3px] pl-4 transition-colors duration-300", hasConfirmedSuburb ? "border-minuri-teal" : "border-minuri-ocean/15")}>
 											<div className="flex-1">
-												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40">Step 02</p>
-												<label htmlFor="suburb-input" className="mt-0.5 block cursor-pointer text-2xl font-black text-minuri-ocean">Your Melbourne suburb</label>
-												<p className="mt-1 text-sm text-minuri-slate">Type to search and confirm your suburb</p>
+												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40 min-[1500px]:text-xs">Step 02</p>
+												<label htmlFor="suburb-input" className="mt-0.5 block cursor-pointer text-2xl font-black text-minuri-ocean min-[1500px]:text-3xl">Your Melbourne suburb</label>
+												<p className="mt-1 text-sm text-minuri-slate min-[1500px]:text-base">Type to search and confirm your suburb</p>
 											</div>
 											{hasConfirmedSuburb && (
 												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
@@ -935,9 +918,9 @@ export function JourneyOnboarding() {
 									>
 										<div className={cn("mb-6 flex items-start gap-4 border-l-[3px] pl-4 transition-colors duration-300", selectedTopics.length >= 1 ? "border-minuri-teal" : "border-minuri-ocean/15")}>
 											<div className="flex-1">
-												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40">Step 03</p>
-												<p className="mt-0.5 text-2xl font-black text-minuri-ocean">What matters most right now?</p>
-												<p className="mt-1 text-sm text-minuri-slate">Select at least one topic to focus your plan</p>
+												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40 min-[1500px]:text-xs">Step 03</p>
+												<p className="mt-0.5 text-2xl font-black text-minuri-ocean min-[1500px]:text-3xl">What matters most right now?</p>
+												<p className="mt-1 text-sm text-minuri-slate min-[1500px]:text-base">Select at least one topic to focus your plan</p>
 											</div>
 											{selectedTopics.length >= 1 && (
 												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
@@ -1130,14 +1113,14 @@ export function JourneyOnboarding() {
 									</span>
 									<div className="flex-1 border-t border-dashed border-minuri-slate/25" />
 								</div>
-								<p className="mb-6 text-sm text-minuri-slate">
+								<p className="mb-6 text-sm text-minuri-slate min-[1500px]:text-base">
 									Ready to generate your personalised guide?
 								</p>
 								<button
 									type="button"
 									onClick={handleSubmit}
 									disabled={!isFormValid}
-									className="group inline-flex w-full items-center justify-center gap-2 rounded-sm bg-minuri-ocean px-12 py-4 text-base font-bold text-minuri-white transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 md:w-auto"
+									className="group inline-flex w-full items-center justify-center gap-2 rounded-sm bg-minuri-ocean px-12 py-4 text-base font-bold text-minuri-white transition-transform duration-200 ease-out hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 md:w-auto min-[1500px]:text-lg min-[1500px]:px-16 min-[1500px]:py-5"
 								>
 									Build My Guide Journey
 									{missingCount > 0 ? (
