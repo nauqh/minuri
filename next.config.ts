@@ -14,7 +14,8 @@ const securityHeaders = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://picsum.photos https://*.googleusercontent.com https://cdn-icons-png.flaticon.com",
+      "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://picsum.photos https://*.googleusercontent.com https://cdn-icons-png.flaticon.com https://streetviewpixels-pa.googleapis.com",
+      "worker-src blob:",
       "connect-src 'self' https://api.maptiler.com https://unpkg.com https://cdn.jsdelivr.net",
       "font-src 'self'",
       "frame-src 'none'",
@@ -33,6 +34,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "plus.unsplash.com", pathname: "/**" },
       { protocol: "https", hostname: "**.googleusercontent.com", pathname: "/**" },
       { protocol: "https", hostname: "wsrv.nl", pathname: "/**" },
+      { protocol: "https", hostname: "streetviewpixels-pa.googleapis.com", pathname: "/**" },
     ],
   },
   async headers() {
