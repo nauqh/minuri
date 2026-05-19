@@ -52,6 +52,16 @@ function getHostname(url: string): string {
 	}
 }
 
+function safeHref(url: string | undefined | null): string | undefined {
+	if (!url) return undefined;
+	try {
+		const { protocol } = new URL(url);
+		return protocol === "https:" || protocol === "http:" ? url : undefined;
+	} catch {
+		return undefined;
+	}
+}
+
 const TRANSIT_EMOJI_MAP: Array<[string, string]> = [
 	["train", "🚂"],
 	["tram", "🚊"],
@@ -147,7 +157,7 @@ function PlacePhoto({
 	}
 	return (
 		<div className={cn("relative shrink-0 overflow-hidden bg-minuri-fog", className)}>
-			<Image src={place.thumbnail} alt={place.name} fill sizes="200px" className="object-cover" />
+			<Image unoptimized src={place.thumbnail} alt={place.name} fill sizes="200px" className="object-cover" />
 		</div>
 	);
 }
@@ -196,6 +206,7 @@ function GridCard({
 			<div className="relative h-44 w-full overflow-hidden">
 				{place.thumbnail ? (
 					<Image
+						unoptimized
 						src={place.thumbnail}
 						alt={place.name}
 						fill
@@ -353,7 +364,7 @@ function ListCard({
 				<div className="mb-3 flex gap-1.5">
 					{place.photos!.slice(0, 3).map((photo, i) => (
 						<div key={i} className="relative h-20 flex-1 overflow-hidden rounded-lg bg-minuri-fog">
-							<Image src={photo} alt="" fill sizes="120px" className="object-cover" />
+							<Image unoptimized src={photo} alt="" fill sizes="120px" className="object-cover" />
 						</div>
 					))}
 				</div>
@@ -450,9 +461,9 @@ function ListCard({
 								{place.phone}
 							</a>
 						)}
-						{isHome && place.website && (
+						{isHome && safeHref(place.website) && (
 							<a
-								href={place.website}
+								href={safeHref(place.website)}
 								target="_blank"
 								rel="noreferrer"
 								onClick={(e) => e.stopPropagation()}
@@ -484,16 +495,16 @@ function ListCard({
 										Call
 									</a>
 								)}
-								{place.website && (
+								{safeHref(place.website) && (
 									<a
-										href={place.website}
+										href={safeHref(place.website)}
 										target="_blank"
 										rel="noreferrer"
 										onClick={(e) => e.stopPropagation()}
 										className="inline-flex items-center gap-1 rounded-full border border-minuri-silver/60 px-2.5 py-1 text-[11px] font-medium text-minuri-slate transition hover:border-minuri-teal hover:text-minuri-teal"
 									>
 										<ExternalLink className="size-3" />
-										{getHostname(place.website)}
+										{getHostname(place.website!)}
 									</a>
 								)}
 							</>
