@@ -142,7 +142,7 @@ function HeroTopicCard({
 }) {
 	return (
 		<motion.div
-			className={className}
+			className={`aspect-[5/4] ${className}`}
 			initial={{ opacity: 0, y: -800 }}
 			animate={{ opacity: 1, y: 0, scale: isActive ? 1.05 : 1 }}
 			transition={{
@@ -277,7 +277,7 @@ export function LandingHeroSectionV2({
 				/>
 
 				<motion.div
-					className="grid flex-1 grid-cols-1 md:grid-cols-[3fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
+					className="grid flex-1 grid-cols-1 md:grid-cols-[4fr_2fr] gap-6 pb-12 pt-8 sm:pb-14 sm:pt-10 md:gap-10 md:pb-0 md:pt-4 min-[1500px]:gap-16"
 					initial="hidden"
 					animate="visible"
 					variants={{
@@ -382,10 +382,11 @@ export function LandingHeroSectionV2({
 					</div>
 
 					{/* RIGHT: 2×3 card grid — fills full column height */}
-					<div className="relative z-10 flex md:items-end pb-4 min-[1500px]:pb-0">
-						<div className="grid w-full grid-cols-2 grid-rows-3 gap-4 md:gap-5 md:h-[540px] min-[1500px]:h-[1080px]">
+					<div className="relative z-10 flex md:items-end min-[1500px]:items-start pb-4 min-[1500px]:pb-0">
+						<div className="grid w-full grid-cols-2 gap-4 md:gap-5">
 							{/* Cat — slot 0 */}
 							<motion.div
+								className="aspect-[5/4]"
 								initial={{ opacity: 0, y: -800 }}
 								animate={{ opacity: 1, y: 0 }}
 								transition={{
