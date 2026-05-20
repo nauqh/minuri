@@ -188,7 +188,7 @@ function HeroTopicCard({
 					rotate: STICKY_ROTATE[index % 4],
 					backgroundColor: card.bg,
 				}}
-				className="guide-sticky flex h-full flex-col items-center justify-center gap-1.5 text-center"
+				className={`guide-sticky flex h-full flex-col items-center justify-center gap-1.5 text-center transition-[border-radius] duration-500 ease-in-out ${isActive ? "!rounded-[2.5rem]" : ""}`}
 				animate={{ y: [0, -7, 0] }}
 				transition={{
 					duration: 3.2 + card.floatPhase * 0.28,
@@ -198,12 +198,18 @@ function HeroTopicCard({
 				}}
 			>
 				<card.icon
-					className="size-11 shrink-0 text-[#05292a] transition-opacity duration-300"
-					style={{ opacity: isActive ? 1 : 0.7 }}
-					strokeWidth={1.5}
+					className="shrink-0 text-[#05292a] transition-all duration-200"
+					style={{
+						opacity: isActive ? 1 : 0.6,
+						width: isActive ? 48 : 44,
+						height: isActive ? 48 : 44,
+					}}
+					strokeWidth={isActive ? 2 : 1.5}
 					aria-hidden
 				/>
-				<p className="text-base font-medium leading-tight text-[#05292a]">
+				<p
+					className={`text-base leading-tight text-[#05292a] transition-all duration-200 ${isActive ? "font-bold" : "font-medium"}`}
+				>
 					{card.title}
 				</p>
 				<p className="px-1 text-xs font-normal leading-snug text-[#05292a]">
@@ -369,7 +375,7 @@ export function LandingHeroSectionV2({
 								Living independently
 							</motion.span>
 							<motion.h1
-								className="mt-5 w-full text-4xl font-black leading-snug tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
+								className="mt-5 w-full text-5xl font-black leading-tight tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
 								variants={{
 									hidden: { opacity: 0, y: 22 },
 									visible: {
@@ -395,7 +401,7 @@ export function LandingHeroSectionV2({
 											ease: entranceEase,
 										}}
 										style={{ color: headlineWordColor }}
-										className="inline-block font-hero-serif italic normal-case tracking-wider text-5xl md:text-[clamp(5rem,6.5vw,7rem)]"
+										className="inline-block font-hero-serif italic normal-case tracking-wider text-6xl md:text-[clamp(5rem,6.5vw,7rem)]"
 									>
 										{headlineWord}
 									</motion.span>
