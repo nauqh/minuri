@@ -483,21 +483,19 @@ export function LandingHeroSectionV2({
 									<motion.div
 										className="absolute inset-0 rounded-xl bg-minuri-ocean/38"
 										variants={{
-											rest:   { x: 6,  y: 6  },
-											hover:  { x: 10, y: 10 },
-											pushed: { x: 10, y: 10 },
+											rest:   { x: 6,  y: 6,  transition: { duration: 0.2,  ease: "easeOut" } },
+											hover:  { x: 10, y: 10, transition: { duration: 0.15, ease: "easeOut" } },
+											pushed: { x: 10, y: 10, transition: { duration: 0.9,  ease: "easeOut" } },
 										}}
-										transition={{ duration: 0.35, ease: "easeOut" }}
 									/>
 									<motion.button
 										onClick={() => router.push("/start")}
 										className="relative z-10 inline-flex w-full justify-center h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white md:w-auto md:justify-start lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
 										variants={{
-											rest:   { x: 0, y: 0 },
-											hover:  { x: 9, y: 9 },
-											pushed: { x: 9, y: 9 },
+											rest:   { x: 0, y: 0, transition: { duration: 0.2,  ease: "easeOut" } },
+											hover:  { x: 9, y: 9, transition: { duration: 0.15, ease: "easeOut" } },
+											pushed: { x: 9, y: 9, transition: { duration: 0.9,  ease: "easeOut" } },
 										}}
-										transition={{ duration: 0.35, ease: "easeOut" }}
 									>
 										{hasActiveJourney
 											? "Start new journey"
