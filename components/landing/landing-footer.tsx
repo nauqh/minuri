@@ -178,17 +178,18 @@ export function LandingFooter() {
 					<p className="text-[0.85rem] font-medium text-minuri-ink/35">
 						© {new Date().getFullYear()} Minuri
 					</p>
-					<button
-						type="button"
-						onClick={scrollToTopAndHighlightLandingCta}
-						className="group flex items-center gap-1 text-[0.85rem] font-semibold text-minuri-ink/40 transition-colors hover:text-minuri-teal"
-					>
-						Start where you are
-						<ArrowUpRight
-							className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-							aria-hidden
-						/>
-					</button>
+					<div className="group relative">
+						<div className="absolute inset-0 translate-x-[10px] translate-y-[10px] rounded-lg bg-minuri-ocean/18" />
+						<div className="absolute inset-0 translate-x-[5px] translate-y-[5px] rounded-lg bg-minuri-ocean/35 transition-transform duration-200 ease-out group-hover:translate-x-[8px] group-hover:translate-y-[8px]" />
+						<button
+							type="button"
+							onClick={scrollToTopAndHighlightLandingCta}
+							className="relative z-10 flex items-center gap-1.5 rounded-lg bg-minuri-ocean px-4 py-2 text-[0.85rem] font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[7px] group-hover:translate-y-[7px]"
+						>
+							Start where you are
+							<ArrowUpRight className="size-3.5" aria-hidden />
+						</button>
+					</div>
 				</div>
 			</div>
 		</footer>

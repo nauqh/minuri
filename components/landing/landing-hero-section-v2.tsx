@@ -188,7 +188,7 @@ function HeroTopicCard({
 					rotate: STICKY_ROTATE[index % 4],
 					backgroundColor: card.bg,
 				}}
-				className={`guide-sticky flex h-full flex-col items-center justify-center gap-1.5 text-center transition-[border-radius] duration-500 ease-in-out ${isActive ? "!rounded-[2.5rem]" : ""}`}
+				className={`guide-sticky flex h-full flex-col items-center justify-center gap-1.5 text-center transition-[border-radius] duration-700 ease-in-out ${isActive ? "!rounded-[2.5rem]" : ""}`}
 				animate={{ y: [0, -7, 0] }}
 				transition={{
 					duration: 3.2 + card.floatPhase * 0.28,
@@ -208,7 +208,7 @@ function HeroTopicCard({
 					aria-hidden
 				/>
 				<p
-					className={`text-base leading-tight text-[#05292a] transition-all duration-200 ${isActive ? "font-bold" : "font-medium"}`}
+					className={`text-base leading-tight text-[#05292a] transition-all duration-200 ${isActive ? "font-bold" : "font-semibold"}`}
 				>
 					{card.title}
 				</p>
@@ -230,6 +230,7 @@ export function LandingHeroSectionV2({
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [hasStartedWordCycle, setHasStartedWordCycle] = useState(false);
 	const [hasActiveJourney, setHasActiveJourney] = useState(false);
+	const [ctaHighlighted, setCtaHighlighted] = useState(false);
 
 	useEffect(() => {
 		try {
@@ -238,6 +239,22 @@ export function LandingHeroSectionV2({
 			/* ignore */
 		}
 	}, []);
+
+	useEffect(() => {
+		const timers: ReturnType<typeof setTimeout>[] = [];
+		const handler = () => {
+			timers.forEach(clearTimeout);
+			timers.length = 0;
+			timers.push(setTimeout(() => setCtaHighlighted(true), 200));
+			timers.push(setTimeout(() => setCtaHighlighted(false), 700));
+		};
+		window.addEventListener("minuri:highlight-cta", handler);
+		return () => {
+			window.removeEventListener("minuri:highlight-cta", handler);
+			timers.forEach(clearTimeout);
+		};
+	}, []);
+	const ctaWrapperRef = useRef<HTMLDivElement>(null);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const cardRefs = useRef<(HTMLDivElement | null)[]>([
 		null,
@@ -456,18 +473,37 @@ export function LandingHeroSectionV2({
 									},
 								}}
 							>
-								<div className="group relative mb-3 w-[80%] self-start md:w-auto md:mr-3">
+								<motion.div
+									ref={ctaWrapperRef}
+									className="relative mb-3 w-[80%] self-start md:w-auto md:mr-3"
+									whileHover="hover"
+									animate={ctaHighlighted ? "pushed" : "rest"}
+								>
 									<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
-									<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />
-									<button
+									<motion.div
+										className="absolute inset-0 rounded-xl bg-minuri-ocean/38"
+										variants={{
+											rest:   { x: 6,  y: 6  },
+											hover:  { x: 10, y: 10 },
+											pushed: { x: 10, y: 10 },
+										}}
+										transition={{ duration: 0.35, ease: "easeOut" }}
+									/>
+									<motion.button
 										onClick={() => router.push("/start")}
-										className="relative z-10 inline-flex w-full justify-center h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white transition-transform duration-200 ease-out group-hover:translate-x-[9px] group-hover:translate-y-[9px] md:w-auto md:justify-start lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
+										className="relative z-10 inline-flex w-full justify-center h-12 cursor-pointer items-center rounded-xl bg-minuri-ocean px-7 text-sm font-black uppercase tracking-widest text-white md:w-auto md:justify-start lg:h-14 lg:px-9 lg:text-base min-[1500px]:h-16 min-[1500px]:px-11 min-[1500px]:text-lg"
+										variants={{
+											rest:   { x: 0, y: 0 },
+											hover:  { x: 9, y: 9 },
+											pushed: { x: 9, y: 9 },
+										}}
+										transition={{ duration: 0.35, ease: "easeOut" }}
 									>
 										{hasActiveJourney
 											? "Start new journey"
 											: "Let’s get started"}
-									</button>
-								</div>
+									</motion.button>
+								</motion.div>
 								<div className="group relative mb-3 w-[80%] self-end md:w-auto md:self-auto md:mr-3">
 									<div className="absolute inset-0 translate-x-[12px] translate-y-[12px] rounded-xl bg-minuri-ocean/18" />
 									<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] rounded-xl transition-transform duration-200 ease-out group-hover:translate-x-[10px] group-hover:translate-y-[10px] bg-minuri-ocean/38" />

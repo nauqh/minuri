@@ -32,7 +32,6 @@ export function LandingHeader({
 	onHeroReveal?: () => void;
 }) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [ctaHighlighted, setCtaHighlighted] = useState(false);
 	const [hasActiveJourney, setHasActiveJourney] = useState(false);
 	const [journeyIdentity, setJourneyIdentity] = useState<{
 		symbol: string;
@@ -70,19 +69,6 @@ export function LandingHeader({
 		} catch { /* ignore */ }
 	}, []);
 
-	useEffect(() => {
-		let clearHighlight: ReturnType<typeof setTimeout> | undefined;
-		const handler = () => {
-			setCtaHighlighted(true);
-			if (clearHighlight) clearTimeout(clearHighlight);
-			clearHighlight = setTimeout(() => setCtaHighlighted(false), 2800);
-		};
-		window.addEventListener("minuri:highlight-cta", handler);
-		return () => {
-			window.removeEventListener("minuri:highlight-cta", handler);
-			if (clearHighlight) clearTimeout(clearHighlight);
-		};
-	}, []);
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
@@ -218,31 +204,17 @@ export function LandingHeader({
 									<BookOpen className="size-4 min-[1500px]:size-5" strokeWidth={2} aria-hidden />
 									Guides
 								</Link>
-								<motion.div
-									className="inline-flex rounded-sm"
-									animate={
-										ctaHighlighted
-											? { scale: [1, 1.13, 0.97, 1.1, 1] }
-											: { scale: 1 }
-									}
-									transition={{
-										duration: 2.5,
-										ease: "easeInOut",
-										times: [0, 0.25, 0.5, 0.75, 1],
-									}}
+								<Link
+									href="/near-me"
+									className="group inline-flex h-12 min-[1500px]:h-16 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
 								>
-									<Link
-										href="/near-me"
-										className="group inline-flex h-12 min-[1500px]:h-16 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
-									>
-										<MapPin
-											className="size-4 min-[1500px]:size-5 transition-transform duration-200 group-hover:scale-110"
-											strokeWidth={2}
-											aria-hidden
-										/>
-										Near me
-									</Link>
-								</motion.div>
+									<MapPin
+										className="size-4 min-[1500px]:size-5 transition-transform duration-200 group-hover:scale-110"
+										strokeWidth={2}
+										aria-hidden
+									/>
+									Near me
+								</Link>
 							</motion.div>
 						)}
 					</AnimatePresence>
