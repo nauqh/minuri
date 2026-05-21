@@ -87,7 +87,7 @@ const TOPIC_URGENCY: Record<string, string> = {
 
 const MIN_MOMENT_LENGTH = 30;
 
-const CARD_SIZE = 130;
+const CARD_SIZE = 180;
 const CENTER_SIZE = 120;
 const CONTAINER_W = 680;
 const CONTAINER_H = 560;
@@ -114,43 +114,39 @@ const SCATTER_POS = [
 const MOMENT_PRESETS = [
 	{
 		id: 1,
-		icon: "🎓",
-		headline: "Just started uni",
-		preview:
-			"Everything feels new and a bit overwhelming — classes, a new city, figuring out the basics all at once.",
+		label: "Just started uni",
+		persona: "/persona/mei.svg",
+		personaBg: "#e8f9f5",
 		fullText:
 			"I've just moved to Melbourne to start university and I don't know where to begin. I need to sort out a GP, figure out public transport, find affordable food — all while adjusting to a completely new city and starting classes.",
 	},
 	{
 		id: 2,
-		icon: "💼",
-		headline: "First job in the city",
-		preview:
-			"I've started working and need the practical stuff sorted — budget, transport, getting home safely.",
+		label: "First job here",
+		persona: "/persona/jordan.svg",
+		personaBg: "#e8f3fb",
 		fullText:
 			"I've just started my first real job in Melbourne and need to get the basics sorted quickly. I want a budget that actually works, utilities set up properly, and to understand how to get around the city without overpaying.",
 	},
 	{
 		id: 3,
-		icon: "✈️",
-		headline: "Just moved from overseas",
-		preview:
-			"Australia is still very new — I'm figuring out things like Medicare, banking, and how everything works here.",
+		label: "From overseas",
+		persona: "/persona/priya.svg",
+		personaBg: "#fef9e8",
 		fullText:
 			"I've just moved to Melbourne from overseas and there's a lot I don't understand yet. I need to get a local SIM, figure out Medicare and whether I'm eligible, open a bank account, and learn how to get around — all while adjusting to a completely different city and system.",
 	},
 	{
 		id: 4,
-		icon: "🏙️",
-		headline: "Moved from another city",
-		preview:
-			"Melbourne is bigger and busier than I expected — I want to find my feet and stop feeling like a visitor.",
+		label: "New to Melbourne",
+		persona: "/persona/chloe.svg",
+		personaBg: "#fdeef2",
 		fullText:
 			"I've just moved to Melbourne from another city in Australia and it's more complex than I expected. I want to build a proper routine, find affordable places to eat, and stop feeling like a tourist in a place I'm supposed to call home.",
 	},
-] as const;
+];
 
-type PresetId = (typeof MOMENT_PRESETS)[number]["id"];
+type PresetId = number;
 
 const HOW_IT_WORKS_STEPS = [
 	{
@@ -189,13 +185,6 @@ export function JourneyOnboarding() {
 	const [selectedTopics, setSelectedTopics] = useState<GuideTopicSlug[]>([]);
 	const [stage, setStage] = useState<"form" | "loading">("form");
 	const [isHovered, setIsHovered] = useState(false);
-
-	const guideCounts = new Map(
-		GUIDE_TOPICS.map((t) => [
-			t.slug,
-			GUIDES.filter((g) => g.topic === t.slug).length,
-		]),
-	);
 
 	const listboxId = useId();
 
@@ -488,111 +477,83 @@ export function JourneyOnboarding() {
 											<div className="flex-1">
 												<p className="text-[10px] font-black uppercase tracking-[0.16em] text-minuri-ocean/40 min-[1500px]:text-xs">Step 01</p>
 												<p className="mt-0.5 text-2xl font-black text-minuri-ocean min-[1500px]:text-3xl">Your moment</p>
-												<p className="mt-1 text-sm text-minuri-slate min-[1500px]:text-base">Pick a preset that sounds like you, or write your own</p>
+												<p className="mt-1 text-sm text-minuri-slate min-[1500px]:text-base">Pick who sounds like you</p>
 											</div>
 											{yourMoment.length >= MIN_MOMENT_LENGTH && (
 												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
 											)}
 										</div>
 
-										{/* Preset cards */}
-										<div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+										{/* Persona cards */}
+										<div className="mt-4 flex gap-3 overflow-x-auto pb-2">
 											{MOMENT_PRESETS.map((preset) => {
-												const isActive =
-													selectedPreset ===
-													preset.id;
+												const isActive = selectedPreset === preset.id;
 												return (
 													<motion.button
 														key={preset.id}
 														type="button"
-														onClick={() =>
-															handleSelectPreset(
-																preset,
-															)
-														}
-														whileHover={
-															prefersReducedMotion
-																? undefined
-																: { y: -2 }
-														}
-														whileTap={
-															prefersReducedMotion
-																? undefined
-																: {
-																		scale: 0.98,
-																	}
-														}
-														transition={{
-															duration: 0.15,
-														}}
+														data-no-scale
+														onClick={() => handleSelectPreset(preset)}
+														whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
 														className={cn(
-															"relative flex gap-3.5 rounded-md border p-4 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
+															"relative shrink-0 flex flex-col overflow-hidden rounded-2xl border-2 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
 															isActive
-																? "border-minuri-teal bg-minuri-mist/60 shadow-sm"
-																: "border-minuri-silver/70 bg-minuri-white hover:border-minuri-teal/40 hover:bg-minuri-fog/60",
+																? "border-minuri-teal shadow-md"
+																: "border-transparent hover:border-minuri-teal/30",
 														)}
+														style={{ width: 152, height: 210 }}
 														aria-pressed={isActive}
 													>
-														<span className="flex size-12 shrink-0 items-center justify-center rounded-sm bg-white text-xl shadow-sm min-[1500px]:size-14 min-[1500px]:text-2xl">
-															{preset.icon}
-														</span>
-														<div className="min-w-0 pr-4">
-															<p className="text-sm font-semibold text-minuri-ocean min-[1500px]:text-base">
-																{
-																	preset.headline
-																}
-															</p>
-															<p className="mt-0.5 line-clamp-2 text-base italic leading-relaxed text-minuri-slate min-[1500px]:text-lg">
-																{preset.preview}
+														<div
+															className="relative w-full flex-1 overflow-hidden"
+															style={{ backgroundColor: preset.personaBg }}
+														>
+															<Image
+																src={preset.persona}
+																alt=""
+																fill
+																className="object-contain object-bottom"
+																sizes="152px"
+															/>
+														</div>
+														<div className={cn(
+															"w-full px-3 py-2.5 transition-colors duration-200",
+															isActive ? "bg-minuri-teal" : "bg-white",
+														)}>
+															<p className={cn(
+																"text-sm font-semibold leading-tight",
+																isActive ? "text-white" : "text-minuri-ocean",
+															)}>
+																{preset.label}
 															</p>
 														</div>
-														<AnimatePresence>
-															{isActive && (
-																<motion.span
-																	initial={{
-																		opacity: 0,
-																		scale: 0.5,
-																	}}
-																	animate={{
-																		opacity: 1,
-																		scale: 1,
-																	}}
-																	exit={{
-																		opacity: 0,
-																		scale: 0.5,
-																	}}
-																	transition={{
-																		duration: 0.18,
-																	}}
-																	className="absolute right-3 top-3"
-																>
-																	<CheckCircle2 className="size-4 text-minuri-teal" />
-																</motion.span>
-															)}
-														</AnimatePresence>
+														{isActive && (
+															<CheckCircle2 className="absolute right-2 top-2 size-4 text-minuri-teal drop-shadow-sm" aria-hidden />
+														)}
 													</motion.button>
 												);
 											})}
-										</div>
 
-										{/* Write your own */}
-										<button
-											type="button"
-											onClick={handleWriteOwn}
-											className={cn(
-												"mt-3 inline-flex items-center gap-1.5 text-xs min-[1500px]:text-sm transition-colors",
-												showTextarea &&
-													selectedPreset === null
-													? "font-semibold text-minuri-teal"
-													: "text-minuri-slate hover:text-minuri-teal",
-											)}
-										>
-											<Pencil
-												className="size-3"
-												aria-hidden
-											/>
-											Something else? Write your own
-										</button>
+											{/* Write my own */}
+											<motion.button
+												type="button"
+												data-no-scale
+												onClick={handleWriteOwn}
+												whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
+												className={cn(
+													"relative shrink-0 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-minuri-teal/60",
+													showTextarea && selectedPreset === null
+														? "border-minuri-teal bg-minuri-mist/40"
+														: "border-dashed border-minuri-silver hover:border-minuri-teal/40",
+												)}
+												style={{ width: 152, height: 210 }}
+											>
+												<Pencil className="size-6 text-minuri-slate" aria-hidden />
+												<p className="px-4 text-sm font-semibold leading-tight text-center text-minuri-slate">
+													Write my own
+												</p>
+											</motion.button>
+										</div>
 
 										{/* Textarea */}
 										<AnimatePresence>
@@ -706,8 +667,8 @@ export function JourneyOnboarding() {
 															</motion.p>
 														)}
 													</AnimatePresence>
-												<p className="text-[11px] text-minuri-slate/60">
-													Your description is sent to an AI model to personalise your plan. It is not stored after generation.
+												<p className="text-sm text-minuri-slate">
+													Your story is used to shape your plan — we don&apos;t keep it.
 												</p>
 												</motion.div>
 											)}
@@ -994,7 +955,6 @@ export function JourneyOnboarding() {
 												const visual = TOPIC_VISUALS[topic.slug];
 												const Icon = visual.icon;
 												const isSelected = selectedTopics.includes(topic.slug);
-												const count = guideCounts.get(topic.slug) ?? 0;
 												const shouldSnap = isHovered || isSelected;
 												const target = shouldSnap ? PENTAGON_POS[i] : SCATTER_POS[i];
 												return (
@@ -1016,11 +976,11 @@ export function JourneyOnboarding() {
 															aria-checked={isSelected}
 															onClick={() => toggleTopic(topic.slug)}
 															className={cn(
-																"relative flex h-full w-full flex-col items-center justify-center gap-1.5 rounded-full border-2 p-3 text-center outline-none",
+																"group relative flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center outline-none",
 																"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 																isSelected
 																	? "shadow-[0_12px_32px_-8px_rgba(2,24,25,0.30)] ring-[2.5px] ring-[#05292a]/25 ring-offset-2"
-																	: "shadow-md",
+																	: "shadow-md hover:shadow-lg",
 															)}
 															style={{ backgroundColor: visual.heroBg, borderColor: visual.heroBg }}
 															animate={{ y: !isSelected && !prefersReducedMotion ? [0, -FLOAT_AMP[i], 0] : 0 }}
@@ -1032,13 +992,13 @@ export function JourneyOnboarding() {
 															whileTap={{ scale: prefersReducedMotion ? 1 : 0.95 }}
 														>
 															{isSelected && (
-																<div className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
+																<div className="absolute right-2 top-2 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
 																	<Check className="size-3 text-white" strokeWidth={3} />
 																</div>
 															)}
-															<Icon className="size-8 shrink-0 text-[#05292a]" aria-hidden />
-															<p className="text-[11px] font-semibold leading-tight text-[#05292a] px-1">{topic.name}</p>
-															<p className="text-[10px] text-[#05292a]/60">{count} guides</p>
+															<Icon className="size-11 shrink-0 text-[#05292a]" aria-hidden />
+															<p className="text-base font-medium leading-tight text-[#05292a]">{topic.name}</p>
+															<p className="text-xs font-normal leading-snug text-[#05292a] px-1">{TOPIC_URGENCY[topic.slug]}</p>
 														</motion.button>
 													</motion.div>
 												);
@@ -1052,7 +1012,6 @@ export function JourneyOnboarding() {
 													const visual = TOPIC_VISUALS[topic.slug];
 													const Icon = visual.icon;
 													const isSelected = selectedTopics.includes(topic.slug);
-													const count = guideCounts.get(topic.slug) ?? 0;
 													return (
 														<motion.div
 															key={topic.slug}
@@ -1066,11 +1025,11 @@ export function JourneyOnboarding() {
 																aria-checked={isSelected}
 																onClick={() => toggleTopic(topic.slug)}
 																className={cn(
-																	"relative flex flex-col items-center justify-center gap-1.5 rounded-full border-2 p-3 text-center outline-none",
+																	"group relative flex flex-col cursor-pointer items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center outline-none",
 																	"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 																	isSelected
 																		? "shadow-[0_12px_32px_-8px_rgba(2,24,25,0.30)] ring-[2.5px] ring-[#05292a]/25 ring-offset-2"
-																		: "shadow-md",
+																		: "shadow-md hover:shadow-lg",
 																)}
 																style={{ backgroundColor: visual.heroBg, borderColor: visual.heroBg, width: CARD_SIZE, height: CARD_SIZE }}
 																animate={{ y: !isSelected && !prefersReducedMotion ? [0, -FLOAT_AMP[i], 0] : 0 }}
@@ -1082,13 +1041,13 @@ export function JourneyOnboarding() {
 																whileTap={{ scale: prefersReducedMotion ? 1 : 0.95 }}
 															>
 																{isSelected && (
-																	<div className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
+																	<div className="absolute right-2 top-2 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
 																		<Check className="size-3 text-white" strokeWidth={3} />
 																	</div>
 																)}
-																<Icon className="size-8 shrink-0 text-[#05292a]" aria-hidden />
-																<p className="text-[11px] font-semibold leading-tight text-[#05292a] px-1">{topic.name}</p>
-																<p className="text-[10px] text-[#05292a]/60">{count} guides</p>
+																<Icon className="size-11 shrink-0 text-[#05292a]" aria-hidden />
+																<p className="text-base font-medium leading-tight text-[#05292a]">{topic.name}</p>
+																<p className="text-xs font-normal leading-snug text-[#05292a] px-1">{TOPIC_URGENCY[topic.slug]}</p>
 															</motion.button>
 														</motion.div>
 													);
@@ -1100,7 +1059,6 @@ export function JourneyOnboarding() {
 													const visual = TOPIC_VISUALS[topic.slug];
 													const Icon = visual.icon;
 													const isSelected = selectedTopics.includes(topic.slug);
-													const count = guideCounts.get(topic.slug) ?? 0;
 													return (
 														<motion.div
 															key={topic.slug}
@@ -1114,11 +1072,11 @@ export function JourneyOnboarding() {
 																aria-checked={isSelected}
 																onClick={() => toggleTopic(topic.slug)}
 																className={cn(
-																	"relative flex flex-col items-center justify-center gap-1.5 rounded-full border-2 p-3 text-center outline-none",
+																	"group relative flex flex-col cursor-pointer items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center outline-none",
 																	"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 																	isSelected
 																		? "shadow-[0_12px_32px_-8px_rgba(2,24,25,0.30)] ring-[2.5px] ring-[#05292a]/25 ring-offset-2"
-																		: "shadow-md",
+																		: "shadow-md hover:shadow-lg",
 																)}
 																style={{ backgroundColor: visual.heroBg, borderColor: visual.heroBg, width: CARD_SIZE, height: CARD_SIZE }}
 																animate={{ y: !isSelected && !prefersReducedMotion ? [0, -FLOAT_AMP[globalI], 0] : 0 }}
@@ -1130,13 +1088,13 @@ export function JourneyOnboarding() {
 																whileTap={{ scale: prefersReducedMotion ? 1 : 0.95 }}
 															>
 																{isSelected && (
-																	<div className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
+																	<div className="absolute right-2 top-2 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
 																		<Check className="size-3 text-white" strokeWidth={3} />
 																	</div>
 																)}
-																<Icon className="size-8 shrink-0 text-[#05292a]" aria-hidden />
-																<p className="text-[11px] font-semibold leading-tight text-[#05292a] px-1">{topic.name}</p>
-																<p className="text-[10px] text-[#05292a]/60">{count} guides</p>
+																<Icon className="size-11 shrink-0 text-[#05292a]" aria-hidden />
+																<p className="text-base font-medium leading-tight text-[#05292a]">{topic.name}</p>
+																<p className="text-xs font-normal leading-snug text-[#05292a] px-1">{TOPIC_URGENCY[topic.slug]}</p>
 															</motion.button>
 														</motion.div>
 													);
