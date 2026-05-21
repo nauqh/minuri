@@ -7,14 +7,20 @@ type Props = {
   day: number;
   visible: boolean;
   onDone: () => void;
+  onHighlight?: () => void;
 };
 
-export function CardEarnToast({ day, visible, onDone }: Props) {
+export function CardEarnToast({ day, visible, onDone, onHighlight }: Props) {
   useEffect(() => {
     if (!visible) return;
     const t = setTimeout(onDone, 4500);
     return () => clearTimeout(t);
   }, [visible, onDone]);
+
+  function handleClick() {
+    onHighlight?.();
+    onDone();
+  }
 
   return (
     <AnimatePresence>
@@ -30,7 +36,8 @@ export function CardEarnToast({ day, visible, onDone }: Props) {
             y: { type: "spring", stiffness: 280, damping: 24 },
             scale: { duration: 0.2, ease: "easeIn" },
           }}
-          className="fixed right-6 top-24 z-[60] w-52"
+          className="fixed right-6 top-24 z-[60] w-52 cursor-pointer"
+          onClick={handleClick}
         >
           <div
             data-no-scale
@@ -50,7 +57,7 @@ export function CardEarnToast({ day, visible, onDone }: Props) {
               Your plant just grew
             </p>
             <p className="mt-1 text-xs leading-snug text-[#05292a]/70">
-              {day} of 7 days — keep going
+              Tap to see it grow
             </p>
           </div>
         </motion.div>

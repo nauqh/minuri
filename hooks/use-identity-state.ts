@@ -44,6 +44,21 @@ export function useIdentityState() {
     [],
   );
 
+  const saveSeedIntent = useCallback((text: string) => {
+    setStore((prev) => {
+      if (!prev) return prev;
+      const next: IdentityStore = {
+        ...prev,
+        cardState: {
+          ...prev.cardState,
+          memoryLines: { ...prev.cardState.memoryLines, 0: text },
+        },
+      };
+      saveIdentityStore(next);
+      return next;
+    });
+  }, []);
+
   const clearIdentity = useCallback(() => {
     clearIdentityStore();
     setStore(null);
@@ -56,6 +71,7 @@ export function useIdentityState() {
     cardState: store?.cardState ?? null,
     initIdentity,
     earnDay,
+    saveSeedIntent,
     clearIdentity,
   };
 }

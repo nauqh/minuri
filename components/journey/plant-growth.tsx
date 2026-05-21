@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { BloomPoint, BloomStyle, SpeciesKey } from "@/lib/journey/plants/types";
 import { W, H, BASE_X, BASE_Y } from "@/lib/journey/plants/utils";
@@ -181,6 +182,7 @@ type Props = {
   saturation?: number;
   className?: string;
   delay?: number;
+  highlight?: number;
 };
 
 export function PlantGrowth({
@@ -190,6 +192,7 @@ export function PlantGrowth({
   saturation = 100,
   className = "",
   delay = 0,
+  highlight = 0,
 }: Props) {
   const reduced = useReducedMotion() ?? false;
   const baseDelay = reduced ? 0 : delay;
@@ -197,7 +200,21 @@ export function PlantGrowth({
   const { branches, leaves, blooms, leafColor } = ALL_SPECIES[key];
   const glowing = daysCompleted >= 5;
 
+  const [pulsing, setPulsing] = useState(false);
+
+  useEffect(() => {
+    if (!highlight || reduced) return;
+    setPulsing(true);
+    const t = setTimeout(() => setPulsing(false), 900);
+    return () => clearTimeout(t);
+  }, [highlight, reduced]);
+
   return (
+    <motion.div
+      className="inline-flex items-center justify-center"
+      animate={pulsing ? { scale: [1, 1.18, 0.93, 1.07, 1] } : { scale: 1 }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+    >
     <svg
       width={W}
       height={H}
@@ -287,5 +304,6 @@ export function PlantGrowth({
           <BloomRenderer key={bl.id} bloom={bl} color={color} reduced={reduced} baseDelay={baseDelay} />
         ))}
     </svg>
+    </motion.div>
   );
 }

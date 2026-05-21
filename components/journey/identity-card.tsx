@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { type JourneyIdentity, type IdentityCardState, TITLE_LABELS } from "@/lib/journey/identity";
+import { type JourneyIdentity, type IdentityCardState } from "@/lib/journey/identity";
 import { Constellation } from "./constellation";
 import { TraitRadar } from "./trait-radar";
 import { PaletteSwatch } from "./palette-swatch";
@@ -14,16 +14,28 @@ type Props = {
   cardState: IdentityCardState;
   className?: string;
   plantDelay?: number;
+  highlight?: number;
+  onFlipChange?: (flipped: boolean) => void;
 };
 
-export function IdentityCard({ identity, cardState, className = "", plantDelay = 0 }: Props) {
+export function IdentityCard({ identity, cardState, className = "", plantDelay = 0, highlight = 0, onFlipChange }: Props) {
   const [flipped, setFlipped] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const backRef = useRef<HTMLDivElement>(null);
+  const [backHeight, setBackHeight] = useState(0);
+
+  useEffect(() => {
+    const el = backRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setBackHeight(el.scrollHeight));
+    ro.observe(el);
+    setBackHeight(el.scrollHeight);
+    return () => ro.disconnect();
+  }, []);
 
   const { palette, traits, archetype, suburb_line, mantra, final_mantra } = identity;
   const {
     saturation,
-    titleTier,
     stampsEarned,
     constellationLit,
     fullyUnlocked,
@@ -36,7 +48,11 @@ export function IdentityCard({ identity, cardState, className = "", plantDelay =
 
   function handleFlip() {
     if (daysCompleted.length === 0) return;
-    setFlipped((v) => !v);
+    setFlipped((v) => {
+      const next = !v;
+      onFlipChange?.(next);
+      return next;
+    });
   }
 
   return (
@@ -59,6 +75,8 @@ export function IdentityCard({ identity, cardState, className = "", plantDelay =
           width: "100%",
           transformStyle: "preserve-3d",
           position: "relative",
+          minHeight: flipped && backHeight ? backHeight : undefined,
+          transition: "min-height 0.3s ease",
         }}
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={
@@ -81,36 +99,40 @@ export function IdentityCard({ identity, cardState, className = "", plantDelay =
             palette={palette}
             traits={traits}
             saturation={saturation}
-            titleTier={titleTier}
             stampsEarned={stampsEarned}
             constellationLit={constellationLit}
             primaryColor={primaryColor}
             plantDelay={plantDelay}
+            highlight={highlight}
           />
         </div>
 
         {/* ── BACK ── */}
         <div
+          ref={backRef}
           style={{
             position: "absolute",
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
           }}
         >
           <div
-            className="h-full rounded-2xl border"
+            className="rounded-2xl border"
             style={{
               background: `linear-gradient(135deg, ${palette[0].hex}18, ${palette[1].hex}12)`,
               borderColor: `${primaryColor}30`,
               color: "#1A2A3A",
-              minHeight: 400,
             }}
           >
             <IdentityCardBack
               memoryLines={memoryLines}
               daysCompleted={daysCompleted}
+              traits={traits}
+              primaryColor={primaryColor}
             />
           </div>
         </div>
@@ -132,11 +154,11 @@ type FrontProps = {
   palette: JourneyIdentity["palette"];
   traits: JourneyIdentity["traits"];
   saturation: number;
-  titleTier: IdentityCardState["titleTier"];
   stampsEarned: string[];
   constellationLit: number;
   primaryColor: string;
   plantDelay?: number;
+  highlight?: number;
 };
 
 function CardFront({
@@ -146,61 +168,64 @@ function CardFront({
   palette,
   traits,
   saturation,
-  titleTier,
   stampsEarned,
   constellationLit,
   primaryColor,
   plantDelay = 0,
+  highlight = 0,
 }: FrontProps) {
   return (
     <div
-      className="rounded-2xl border px-5 pb-5 pt-0 flex flex-col gap-3"
+      className="rounded-2xl border flex flex-col overflow-hidden"
       style={{
-        background: `linear-gradient(160deg, ${palette[0].hex}22, ${palette[1].hex}14, ${palette[2].hex}10)`,
-        borderColor: `${primaryColor}35`,
+        background: `linear-gradient(160deg, ${palette[0].hex}18, ${palette[1].hex}10, ${palette[2].hex}08)`,
+        borderColor: `${primaryColor}30`,
         color: "#1A2A3A",
-        minHeight: 400,
       }}
     >
-      {/* Growing plant */}
-      <div className="flex justify-center py-1">
-        <PlantGrowth
-          daysCompleted={constellationLit}
-          archetype={archetype}
-          color={primaryColor}
-          saturation={saturation}
-          delay={plantDelay}
-        />
-      </div>
-
-      {/* Archetype + suburb */}
-      <div>
+      {/* ── Archetype ── */}
+      <div className="px-5 pt-5 pb-3">
         <p
-          className="text-base font-black uppercase tracking-tight leading-tight"
+          className="text-xl font-black uppercase tracking-wide leading-tight"
           style={{ color: primaryColor }}
         >
           {archetype}
         </p>
-        <p className="mt-0.5 text-[11px] opacity-55 leading-snug">{suburb_line}</p>
       </div>
 
-      {/* Mantra */}
+      {/* ── Plant ── */}
+      <div className="flex justify-center py-1">
+        {constellationLit === 0 ? (
+          <svg
+            width="160"
+            height="200"
+            viewBox="0 0 160 200"
+            aria-label="A seed, not yet grown"
+          >
+            <ellipse cx="80" cy="192" rx="28" ry="7" fill={primaryColor} opacity="0.12" />
+            <ellipse cx="80" cy="168" rx="15" ry="22" fill={primaryColor} opacity="0.9" transform="rotate(-10 80 168)" />
+            <path d="M 78 148 Q 82 168 78 188" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.22" transform="rotate(-10 80 168)" />
+            <ellipse cx="73" cy="157" rx="4" ry="7" fill="white" opacity="0.2" transform="rotate(-10 73 157)" />
+          </svg>
+        ) : (
+          <PlantGrowth
+            daysCompleted={constellationLit}
+            archetype={archetype}
+            color={primaryColor}
+            saturation={saturation}
+            delay={plantDelay}
+            highlight={highlight}
+          />
+        )}
+      </div>
+
+      {/* ── Mantra ── */}
       <p
-        className="text-sm italic leading-snug opacity-70"
+        className="mx-5 mb-4 mt-2 text-lg italic leading-relaxed text-minuri-ocean text-center"
         style={{ fontFamily: "var(--font-handwriting, serif)" }}
       >
         &ldquo;{mantra}&rdquo;
       </p>
-
-      {/* Radar */}
-      <div className="flex justify-center">
-        <TraitRadar
-          traits={traits}
-          size={210}
-          color={primaryColor}
-          animate={false}
-        />
-      </div>
 
     </div>
   );

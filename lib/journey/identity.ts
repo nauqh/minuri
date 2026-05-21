@@ -88,7 +88,7 @@ const BLUEPRINTS: Record<string, ArchetypeBlueprint> = {
     archetype: "The First-Timer",
     mantra: "Everything's new. That's okay.",
     final_mantra: "Turns out, I had it in me.",
-    symbol: "🔑",
+    symbol: "🌱",
     mood: "cautiously hopeful",
     palette: [
       { hex: "#E9C46A", name: "Laneway Gold" },

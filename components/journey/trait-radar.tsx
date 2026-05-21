@@ -36,7 +36,7 @@ function axisEnd(angle: number, cx: number, maxR: number) {
 }
 
 function labelPos(angle: number, cx: number, maxR: number) {
-  const pad = 18;
+  const pad = 22;
   const rad = (angle * Math.PI) / 180;
   return {
     x: cx + (maxR + pad) * Math.cos(rad),
@@ -129,8 +129,7 @@ export function TraitRadar({ traits, size = 220, color = "#4A90D9", animate = tr
               textAnchor="middle"
               dominantBaseline="middle"
               fontSize={9}
-              fill="currentColor"
-              opacity={0.5}
+              fill="var(--color-minuri-ocean)"
             >
               {label}
             </text>

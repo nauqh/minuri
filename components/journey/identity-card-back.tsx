@@ -1,10 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
+import { TraitRadar } from "./trait-radar";
+import type { JourneyIdentity } from "@/lib/journey/identity";
 
 type Props = {
   memoryLines: Record<number, string>;
   daysCompleted: number[];
+  traits: JourneyIdentity["traits"];
+  primaryColor: string;
 };
 
 const FALLBACK_LINES: Record<number, string> = {
@@ -17,9 +21,25 @@ const FALLBACK_LINES: Record<number, string> = {
   7: "The week you became a Melburnian.",
 };
 
-export function IdentityCardBack({ memoryLines, daysCompleted }: Props) {
+export function IdentityCardBack({ memoryLines, daysCompleted, traits, primaryColor }: Props) {
+  const fullyUnlocked = daysCompleted.length >= 7;
   return (
     <div className="flex h-full flex-col px-5 py-5">
+      {fullyUnlocked && memoryLines[0] && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="mb-4 rounded-lg bg-current/5 px-3 py-2.5"
+        >
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] opacity-40">
+            You wanted to feel
+          </p>
+          <p className="mt-1 text-[12px] italic leading-relaxed opacity-70">
+            &ldquo;{memoryLines[0]}&rdquo;
+          </p>
+        </motion.div>
+      )}
       <p className="text-[11px] font-black uppercase tracking-[0.14em] opacity-40">
         Your Week
       </p>
@@ -55,6 +75,15 @@ export function IdentityCardBack({ memoryLines, daysCompleted }: Props) {
           );
         })}
       </ol>
+
+      <div className="mt-4 pt-3 border-t border-current/10">
+        <p className="text-[9px] font-black uppercase tracking-[0.18em] opacity-40 mb-1">
+          Traits
+        </p>
+        <div className="flex justify-center">
+          <TraitRadar traits={traits} size={170} color={primaryColor} animate={false} />
+        </div>
+      </div>
     </div>
   );
 }

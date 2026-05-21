@@ -392,7 +392,7 @@ export function LandingHeroSectionV2({
 								Living independently
 							</motion.span>
 							<motion.h1
-								className="mt-5 w-full text-5xl font-black leading-tight tracking-tight text-minuri-teal md:text-[clamp(4.5rem,5.5vw,5.75rem)] md:leading-none min-[1500px]:mt-4"
+								className="mt-5 w-full text-6xl font-black leading-tight tracking-tight text-minuri-teal md:text-[clamp(5.5rem,6.5vw,7rem)] md:leading-none min-[1500px]:mt-4"
 								variants={{
 									hidden: { opacity: 0, y: 22 },
 									visible: {
@@ -418,7 +418,7 @@ export function LandingHeroSectionV2({
 											ease: entranceEase,
 										}}
 										style={{ color: headlineWordColor }}
-										className="inline-block font-hero-serif italic normal-case tracking-wider text-6xl md:text-[clamp(5rem,6.5vw,7rem)]"
+										className="inline-block font-hero-serif italic normal-case tracking-wider text-7xl md:text-[clamp(6rem,8vw,8.5rem)]"
 									>
 										{headlineWord}
 									</motion.span>
