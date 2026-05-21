@@ -89,26 +89,26 @@ const MIN_MOMENT_LENGTH = 30;
 
 const CARD_SIZE = 180;
 const CENTER_SIZE = 120;
-const CONTAINER_W = 680;
-const CONTAINER_H = 560;
+const CONTAINER_W = 760;
+const CONTAINER_H = 640;
 const FLOAT_AMP = [14, 16, 12, 15, 13];
 const FLOAT_DUR = [3.2, 2.8, 3.6, 3.0, 2.5];
 const FLOAT_DEL = [0, 0.9, 1.5, 0.4, 1.2];
 
 const PENTAGON_POS = [
-  { x: 271, y: 34 },
-  { x: 469, y: 162 },
-  { x: 394, y: 367 },
-  { x: 148, y: 367 },
-  { x: 72, y: 162 },
+  { x: 315, y: 44 },
+  { x: 539, y: 198 },
+  { x: 453, y: 430 },
+  { x: 173, y: 433 },
+  { x: 82, y: 197 },
 ];
 
 const SCATTER_POS = [
-  { x: 244, y: 12 },
-  { x: 507, y: 178 },
-  { x: 404, y: 397 },
-  { x: 107, y: 388 },
-  { x: 23, y: 169 },
+  { x: 283, y: 27 },
+  { x: 572, y: 217 },
+  { x: 459, y: 457 },
+  { x: 132, y: 448 },
+  { x: 38, y: 207 },
 ];
 
 const MOMENT_PRESETS = [
