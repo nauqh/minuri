@@ -37,4 +37,4 @@ export type SpeciesData = {
   leafColor: string;
 };
 
-export type SpeciesKey = "pioneer" | "settler" | "builder" | "openheart";
+export type SpeciesKey = "pioneer" | "builder";

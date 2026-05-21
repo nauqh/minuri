@@ -87,6 +87,30 @@ const TOPIC_URGENCY: Record<string, string> = {
 
 const MIN_MOMENT_LENGTH = 30;
 
+const CARD_SIZE = 130;
+const CENTER_SIZE = 120;
+const CONTAINER_W = 680;
+const CONTAINER_H = 560;
+const FLOAT_AMP = [14, 16, 12, 15, 13];
+const FLOAT_DUR = [3.2, 2.8, 3.6, 3.0, 2.5];
+const FLOAT_DEL = [0, 0.9, 1.5, 0.4, 1.2];
+
+const PENTAGON_POS = [
+  { x: 271, y: 34 },
+  { x: 469, y: 162 },
+  { x: 394, y: 367 },
+  { x: 148, y: 367 },
+  { x: 72, y: 162 },
+];
+
+const SCATTER_POS = [
+  { x: 244, y: 12 },
+  { x: 507, y: 178 },
+  { x: 404, y: 397 },
+  { x: 107, y: 388 },
+  { x: 23, y: 169 },
+];
+
 const MOMENT_PRESETS = [
 	{
 		id: 1,
@@ -164,7 +188,7 @@ export function JourneyOnboarding() {
 	const [allSuburbs, setAllSuburbs] = useState<SuburbOption[]>([]);
 	const [selectedTopics, setSelectedTopics] = useState<GuideTopicSlug[]>([]);
 	const [stage, setStage] = useState<"form" | "loading">("form");
-
+	const [isHovered, setIsHovered] = useState(false);
 
 	const guideCounts = new Map(
 		GUIDE_TOPICS.map((t) => [
@@ -713,7 +737,7 @@ export function JourneyOnboarding() {
 											)}
 										</div>
 										<div className="relative mt-2.5">
-											<Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-minuri-silver" />
+											<Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-minuri-silver" />
 											<input
 												id="suburb-input"
 												value={suburbQuery}
@@ -777,10 +801,10 @@ export function JourneyOnboarding() {
 														: undefined
 												}
 												className={cn(
-													"h-12 w-full rounded-md border pl-10 pr-3 text-sm outline-none transition",
+													"h-16 w-full rounded-md border pl-12 pr-4 text-lg outline-none transition",
 													hasConfirmedSuburb
 														? "cursor-not-allowed border-minuri-teal/60 bg-minuri-mist/30"
-														: "border-minuri-silver bg-minuri-fog/30 focus:border-minuri-teal",
+														: "border-minuri-silver bg-minuri-white focus:border-minuri-teal",
 												)}
 											/>
 										</div>
@@ -856,6 +880,7 @@ export function JourneyOnboarding() {
 																	activeSuburbIndex ===
 																	index
 																}
+																data-no-scale
 																onMouseDown={(
 																	e,
 																) =>
@@ -867,27 +892,21 @@ export function JourneyOnboarding() {
 																	)
 																}
 																className={cn(
-																	"flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm transition hover:bg-minuri-fog",
+																	"flex w-full items-center gap-3 px-4 py-3.5 text-left text-base transition-colors hover:bg-minuri-fog",
 																	activeSuburbIndex ===
 																		index
 																		? "bg-minuri-teal/10 ring-1 ring-inset ring-minuri-teal/30"
 																		: "",
 																)}
 															>
-																<MapPin className="mt-0.5 size-3.5 shrink-0 text-minuri-teal" />
+																<MapPin className="size-4.5 shrink-0 text-minuri-teal" />
 																<span>
 																	<span className="font-medium text-minuri-mid">
-																		{
-																			option.locality
-																		}
+																		{option.locality}
 																	</span>
-																	<span className="ml-1 text-minuri-slate">
-																		{
-																			option.state
-																		}{" "}
-																		{
-																			option.postcode
-																		}
+																	<span className="ml-1.5 text-sm text-minuri-slate">
+																		{option.state}{" "}
+																		{option.postcode}
 																	</span>
 																</span>
 															</button>
@@ -919,146 +938,212 @@ export function JourneyOnboarding() {
 												<Check className="mt-1 size-4 shrink-0 text-minuri-teal" strokeWidth={2.5} aria-hidden />
 											)}
 										</div>
+										{/* Desktop — pentagon orbit */}
 										<div
-											className="mt-3 -mr-6 pr-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 xl:-mr-[8vw] xl:pr-[8vw]"
-											role="group"
-											aria-label="Topic selection"
+											className="relative mx-auto mt-3 hidden md:block"
+											style={{ width: CONTAINER_W, height: CONTAINER_H }}
+											onMouseEnter={() => setIsHovered(true)}
+											onMouseLeave={() => setIsHovered(false)}
 										>
+											{/* Ripple rings */}
+											{selectedTopics.length === 0 && [0, 0.7, 1.4].map((delay) => (
+												<motion.div
+													key={delay}
+													className="absolute rounded-full border border-minuri-ocean/20 pointer-events-none"
+													style={{
+														width: CENTER_SIZE,
+														height: CENTER_SIZE,
+														left: (CONTAINER_W - CENTER_SIZE) / 2,
+														top: (CONTAINER_H - CENTER_SIZE) / 2,
+													}}
+													animate={{ scale: [1, 1.9], opacity: [0.5, 0] }}
+													transition={{ duration: 2.1, repeat: Infinity, ease: "easeOut", delay }}
+												/>
+											))}
+
+											{/* Center circle */}
+											<div
+												className="absolute z-10 flex flex-col items-center justify-center rounded-full text-center transition-colors duration-300"
+												style={{
+													width: CENTER_SIZE,
+													height: CENTER_SIZE,
+													left: (CONTAINER_W - CENTER_SIZE) / 2,
+													top: (CONTAINER_H - CENTER_SIZE) / 2,
+													backgroundColor: selectedTopics.length > 0 ? "#05292a" : "transparent",
+													border: selectedTopics.length > 0 ? "none" : "2px dashed rgba(2,24,25,0.25)",
+												}}
+											>
+												{selectedTopics.length === 0 ? (
+													<span className="px-3 text-xs font-bold uppercase tracking-widest leading-snug text-minuri-ocean/50">
+														Tap a card
+													</span>
+												) : (
+													<>
+														<span className="text-3xl font-black text-white leading-none">
+															{selectedTopics.length}
+														</span>
+														<span className="text-xs font-medium text-white/80">
+															{selectedTopics.length === 1 ? "topic" : "topics"}
+														</span>
+													</>
+												)}
+											</div>
+
+											{/* Orbiting topic circles */}
 											{GUIDE_TOPICS.map((topic, i) => {
-												const visual =
-													TOPIC_VISUALS[topic.slug];
+												const visual = TOPIC_VISUALS[topic.slug];
 												const Icon = visual.icon;
-												const isSelected =
-													selectedTopics.includes(
-														topic.slug,
-													);
-												const count =
-													guideCounts.get(
-														topic.slug,
-													) ?? 0;
+												const isSelected = selectedTopics.includes(topic.slug);
+												const count = guideCounts.get(topic.slug) ?? 0;
+												const shouldSnap = isHovered || isSelected;
+												const target = shouldSnap ? PENTAGON_POS[i] : SCATTER_POS[i];
 												return (
-													<motion.button
+													<motion.div
 														key={topic.slug}
-														type="button"
-														role="checkbox"
-														aria-checked={
-															isSelected
-														}
-														onClick={() =>
-															toggleTopic(
-																topic.slug,
-															)
-														}
-														className={cn(
-															"group relative flex min-h-[8rem] flex-col gap-2 rounded-2xl border p-4 text-left outline-none transition-[opacity,filter] duration-300",
-															"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
-															isSelected
-																? "shadow-[0_16px_32px_-12px_rgba(2,24,25,0.28)]"
-																: "hover:shadow-sm opacity-60 hover:opacity-85",
-														)}
-														style={{
-															backgroundColor:
-																visual.heroBg,
-															borderColor:
-																visual.heroBg,
-														}}
-														initial={{
-															opacity: 0,
-															y: prefersReducedMotion
-																? 0
-																: 16,
-														}}
-														animate={{
-															opacity: 1,
-															y: 0,
-															scale:
-																isSelected &&
-																!prefersReducedMotion
-																	? 1.03
-																	: 1,
-														}}
+														className="absolute"
+														style={{ width: CARD_SIZE, height: CARD_SIZE, left: 0, top: 0 }}
+														initial={{ x: SCATTER_POS[i].x, y: SCATTER_POS[i].y, opacity: 0 }}
+														animate={{ x: target.x, y: target.y, opacity: 1 }}
 														transition={{
-															opacity: {
-																duration: 0.4,
-																delay: prefersReducedMotion
-																	? 0
-																	: i * 0.06,
-																ease: [
-																	0.22, 1,
-																	0.36, 1,
-																],
-															},
-															y: {
-																duration: 0.4,
-																delay: prefersReducedMotion
-																	? 0
-																	: i * 0.06,
-																ease: [
-																	0.22, 1,
-																	0.36, 1,
-																],
-															},
-															scale: {
-																type: "spring",
-																stiffness: 380,
-																damping: 26,
-															},
-														}}
-														whileHover={{
-															scale: prefersReducedMotion
-																? 1
-																: isSelected
-																	? 1.03
-																	: 1.02,
-														}}
-														whileTap={{
-															scale: prefersReducedMotion
-																? 1
-																: 0.97,
+															x: { type: "spring", stiffness: 180, damping: 22 },
+															y: { type: "spring", stiffness: 180, damping: 22 },
+															opacity: { duration: 0.4, delay: prefersReducedMotion ? 0 : i * 0.08, ease: [0.22, 1, 0.36, 1] },
 														}}
 													>
-														<div
+														<motion.button
+															type="button"
+															role="checkbox"
+															aria-checked={isSelected}
+															onClick={() => toggleTopic(topic.slug)}
 															className={cn(
-																"absolute right-2 top-2 flex size-5 items-center justify-center rounded-full border-2 transition-all duration-200",
+																"relative flex h-full w-full flex-col items-center justify-center gap-1.5 rounded-full border-2 p-3 text-center outline-none",
+																"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
 																isSelected
-																	? "border-[#05292a] bg-[#05292a]"
-																	: "border-[#05292a]/30 bg-white/20",
+																	? "shadow-[0_12px_32px_-8px_rgba(2,24,25,0.30)] ring-[2.5px] ring-[#05292a]/25 ring-offset-2"
+																	: "shadow-md",
 															)}
-															aria-hidden
+															style={{ backgroundColor: visual.heroBg, borderColor: visual.heroBg }}
+															animate={{ y: !isSelected && !prefersReducedMotion ? [0, -FLOAT_AMP[i], 0] : 0 }}
+															transition={
+																!isSelected && !prefersReducedMotion
+																	? { duration: FLOAT_DUR[i], repeat: Infinity, ease: "easeInOut", delay: FLOAT_DEL[i] }
+																	: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+															}
+															whileTap={{ scale: prefersReducedMotion ? 1 : 0.95 }}
 														>
 															{isSelected && (
-																<Check
-																	className="size-3 text-white"
-																	strokeWidth={
-																		3
-																	}
-																/>
+																<div className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
+																	<Check className="size-3 text-white" strokeWidth={3} />
+																</div>
 															)}
-														</div>
-														<Icon
-															className="size-8 shrink-0 text-[#05292a] transition-transform duration-200 group-hover:scale-110"
-															aria-hidden
-														/>
-														<div className="flex-1">
-															<p className="text-[10px] font-semibold uppercase tracking-wide text-[#05292a]/50">
-																{topic.name}
-															</p>
-															<h3 className="mt-1 text-xs font-semibold leading-snug text-[#05292a]">
-																{TOPIC_URGENCY[
-																	topic.slug
-																] ?? topic.name}
-															</h3>
-														</div>
-														<span className="mt-auto text-xs font-semibold text-[#05292a]">
-															{count}{" "}
-															{count === 1
-																? "guide"
-																: "guides"}
-														</span>
-													</motion.button>
+															<Icon className="size-8 shrink-0 text-[#05292a]" aria-hidden />
+															<p className="text-[11px] font-semibold leading-tight text-[#05292a] px-1">{topic.name}</p>
+															<p className="text-[10px] text-[#05292a]/60">{count} guides</p>
+														</motion.button>
+													</motion.div>
 												);
 											})}
 										</div>
+
+										{/* Mobile — 3+2 stacked rows */}
+										<div className="mt-3 flex flex-col items-center gap-4 md:hidden">
+											<div className="flex gap-4">
+												{GUIDE_TOPICS.slice(0, 3).map((topic, i) => {
+													const visual = TOPIC_VISUALS[topic.slug];
+													const Icon = visual.icon;
+													const isSelected = selectedTopics.includes(topic.slug);
+													const count = guideCounts.get(topic.slug) ?? 0;
+													return (
+														<motion.div
+															key={topic.slug}
+															initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+															animate={{ opacity: 1, y: 0 }}
+															transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+														>
+															<motion.button
+																type="button"
+																role="checkbox"
+																aria-checked={isSelected}
+																onClick={() => toggleTopic(topic.slug)}
+																className={cn(
+																	"relative flex flex-col items-center justify-center gap-1.5 rounded-full border-2 p-3 text-center outline-none",
+																	"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
+																	isSelected
+																		? "shadow-[0_12px_32px_-8px_rgba(2,24,25,0.30)] ring-[2.5px] ring-[#05292a]/25 ring-offset-2"
+																		: "shadow-md",
+																)}
+																style={{ backgroundColor: visual.heroBg, borderColor: visual.heroBg, width: CARD_SIZE, height: CARD_SIZE }}
+																animate={{ y: !isSelected && !prefersReducedMotion ? [0, -FLOAT_AMP[i], 0] : 0 }}
+																transition={
+																	!isSelected && !prefersReducedMotion
+																		? { duration: FLOAT_DUR[i], repeat: Infinity, ease: "easeInOut", delay: FLOAT_DEL[i] }
+																		: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+																}
+																whileTap={{ scale: prefersReducedMotion ? 1 : 0.95 }}
+															>
+																{isSelected && (
+																	<div className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
+																		<Check className="size-3 text-white" strokeWidth={3} />
+																	</div>
+																)}
+																<Icon className="size-8 shrink-0 text-[#05292a]" aria-hidden />
+																<p className="text-[11px] font-semibold leading-tight text-[#05292a] px-1">{topic.name}</p>
+																<p className="text-[10px] text-[#05292a]/60">{count} guides</p>
+															</motion.button>
+														</motion.div>
+													);
+												})}
+											</div>
+											<div className="flex gap-4">
+												{GUIDE_TOPICS.slice(3).map((topic, i) => {
+													const globalI = i + 3;
+													const visual = TOPIC_VISUALS[topic.slug];
+													const Icon = visual.icon;
+													const isSelected = selectedTopics.includes(topic.slug);
+													const count = guideCounts.get(topic.slug) ?? 0;
+													return (
+														<motion.div
+															key={topic.slug}
+															initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+															animate={{ opacity: 1, y: 0 }}
+															transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : globalI * 0.06, ease: [0.22, 1, 0.36, 1] }}
+														>
+															<motion.button
+																type="button"
+																role="checkbox"
+																aria-checked={isSelected}
+																onClick={() => toggleTopic(topic.slug)}
+																className={cn(
+																	"relative flex flex-col items-center justify-center gap-1.5 rounded-full border-2 p-3 text-center outline-none",
+																	"focus-visible:ring-2 focus-visible:ring-minuri-teal/50 focus-visible:ring-offset-2",
+																	isSelected
+																		? "shadow-[0_12px_32px_-8px_rgba(2,24,25,0.30)] ring-[2.5px] ring-[#05292a]/25 ring-offset-2"
+																		: "shadow-md",
+																)}
+																style={{ backgroundColor: visual.heroBg, borderColor: visual.heroBg, width: CARD_SIZE, height: CARD_SIZE }}
+																animate={{ y: !isSelected && !prefersReducedMotion ? [0, -FLOAT_AMP[globalI], 0] : 0 }}
+																transition={
+																	!isSelected && !prefersReducedMotion
+																		? { duration: FLOAT_DUR[globalI], repeat: Infinity, ease: "easeInOut", delay: FLOAT_DEL[globalI] }
+																		: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+																}
+																whileTap={{ scale: prefersReducedMotion ? 1 : 0.95 }}
+															>
+																{isSelected && (
+																	<div className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-[#05292a]" aria-hidden>
+																		<Check className="size-3 text-white" strokeWidth={3} />
+																	</div>
+																)}
+																<Icon className="size-8 shrink-0 text-[#05292a]" aria-hidden />
+																<p className="text-[11px] font-semibold leading-tight text-[#05292a] px-1">{topic.name}</p>
+																<p className="text-[10px] text-[#05292a]/60">{count} guides</p>
+															</motion.button>
+														</motion.div>
+													);
+												})}
+											</div>
+										</div>
+
 										{selectedTopics.length >= 1 && (
 											<motion.p
 												initial={{ opacity: 0, y: -4 }}
@@ -1068,11 +1153,8 @@ export function JourneyOnboarding() {
 											>
 												Your 7-day plan will cover{" "}
 												{selectedTopics.length}{" "}
-												{selectedTopics.length === 1
-													? "topic"
-													: "topics"}{" "}
-												— guides, tasks, and nearby
-												places per day.
+												{selectedTopics.length === 1 ? "topic" : "topics"}{" "}
+												— guides, tasks, and nearby places per day.
 											</motion.p>
 										)}
 									</motion.div>

@@ -5,25 +5,21 @@ import { motion, useReducedMotion } from "motion/react";
 import { BloomPoint, BloomStyle, SpeciesKey } from "@/lib/journey/plants/types";
 import { W, H, BASE_X, BASE_Y } from "@/lib/journey/plants/utils";
 import { buildPioneer } from "@/lib/journey/plants/pioneer";
-import { buildSettler } from "@/lib/journey/plants/settler";
 import { buildBuilder } from "@/lib/journey/plants/builder";
-import { buildOpenHeart } from "@/lib/journey/plants/openheart";
 
 // ── species registry ──────────────────────────────────────────────────────────
 
 const ALL_SPECIES = {
-  pioneer:   buildPioneer(),
-  settler:   buildSettler(),
-  builder:   buildBuilder(),
-  openheart: buildOpenHeart(),
+  pioneer: buildPioneer(),
+  builder: buildBuilder(),
 } satisfies Record<SpeciesKey, ReturnType<typeof buildPioneer>>;
 
 const ARCHETYPE_TO_SPECIES: Record<string, SpeciesKey> = {
   "The Quiet Pioneer":   "pioneer",
   "The Urban Explorer":  "pioneer",
-  "The Careful Settler": "settler",
+  "The Careful Settler": "pioneer",
   "The Steady Builder":  "builder",
-  "The Open Heart":      "openheart",
+  "The Open Heart":      "builder",
   "The Hungry Wanderer": "builder",
 };
 

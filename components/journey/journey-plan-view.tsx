@@ -649,7 +649,7 @@ function PlanSidebar({
 	activeDay: number;
 	completedTasks: Set<string>;
 	suburb: string;
-	plantRef?: RefObject<HTMLDivElement>;
+	plantRef?: RefObject<HTMLDivElement | null>;
 	highlightPlant?: number;
 }) {
 	const { bookmarks } = useGuideBookmarks();

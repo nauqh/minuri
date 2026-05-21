@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-const JOURNEY_URL = `${process.env.MINURI_SERVER_BASE_URL}/journey`;
+const JOURNEY_URL = `${process.env.MINURI_SERVER_BASE_URL?.replace(/\/+$/, "")}/journey`;
 const TIMEOUT_MS = 65_000;
 
 export async function POST(request: NextRequest) {
