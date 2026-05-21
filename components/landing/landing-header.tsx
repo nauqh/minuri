@@ -15,6 +15,8 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { AppNav } from "@/components/app-nav";
+
 const MOBILE_NAV_ITEMS: { icon: LucideIcon; label: string; href: string }[] = [
 	{ icon: Compass, label: "Start my journey", href: "/journey" },
 	{ icon: BookOpen, label: "First-time guides", href: "/guides" },
@@ -161,32 +163,9 @@ export function LandingHeader({
 								animate={{ opacity: 1, x: 0 }}
 								exit={{ opacity: 0, x: 10 }}
 								transition={{ duration: 0.28, ease: entranceEase }}
-								className="hidden md:flex items-center mr-6"
+								className="hidden md:flex items-center mr-3"
 							>
-								<Link
-									href="/journey/plan"
-									className="group relative inline-flex h-12 min-[1500px]:h-16 items-center gap-2 px-3 min-[1500px]:px-4 text-base min-[1500px]:text-xl font-semibold text-minuri-ocean"
-									onMouseEnter={restartOvalAnimation}
-								>
-									<svg
-										className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible"
-										width="160"
-										height="72"
-										viewBox="0 0 160 72"
-										fill="none"
-										aria-hidden
-									>
-										<path
-											d="M 118 56 C 96 66, 60 66, 36 54 C 14 42, 14 24, 34 14 C 52 5, 86 3, 114 12 C 138 20, 148 36, 142 50 C 138 58, 128 62, 118 60"
-											stroke="currentColor"
-											strokeWidth="1.5"
-											strokeLinecap="round"
-											ref={ovalPathRef}
-											className="[stroke-dasharray:400] [stroke-dashoffset:0]"
-										/>
-									</svg>
-									<span className="relative z-10 uppercase tracking-wide">My week</span>
-								</Link>
+								<AppNav large />
 							</motion.div>
 						) : (
 							<motion.div
@@ -195,26 +174,9 @@ export function LandingHeader({
 								animate={{ opacity: 1, x: 0 }}
 								exit={{ opacity: 0, x: 10 }}
 								transition={{ duration: 0.28, ease: entranceEase }}
-								className="hidden md:flex items-center gap-2"
+								className="hidden md:flex items-center mr-3"
 							>
-								<Link
-									href="/guides"
-									className="inline-flex h-12 min-[1500px]:h-16 items-center gap-2 rounded-sm border border-minuri-ocean/25 px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-minuri-ocean transition-all duration-200 ease-out hover:bg-minuri-ocean/5 hover:border-minuri-ocean/50"
-								>
-									<BookOpen className="size-4 min-[1500px]:size-5" strokeWidth={2} aria-hidden />
-									Guides
-								</Link>
-								<Link
-									href="/near-me"
-									className="group inline-flex h-12 min-[1500px]:h-16 items-center gap-2 rounded-sm bg-minuri-ocean px-5 min-[1500px]:px-7 text-sm min-[1500px]:text-lg font-semibold text-minuri-white transition-all duration-200 ease-out hover:scale-[1.04]"
-								>
-									<MapPin
-										className="size-4 min-[1500px]:size-5 transition-transform duration-200 group-hover:scale-110"
-										strokeWidth={2}
-										aria-hidden
-									/>
-									Near me
-								</Link>
+								<AppNav large />
 							</motion.div>
 						)}
 					</AnimatePresence>

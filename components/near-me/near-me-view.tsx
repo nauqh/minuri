@@ -41,6 +41,7 @@ import {
 	savePlaceToHub,
 	unsavePlaceFromHub,
 } from "@/components/landing/landing-local-state";
+import { AppNav } from "@/components/app-nav";
 import { PlaceCard, type CardLayout } from "@/components/near-me/place-card";
 import { getCachedPlaces, setCachedPlaces } from "@/lib/near-me-cache";
 
@@ -565,14 +566,7 @@ export function NearMeView({
 								your area
 							</span>
 						)}
-						<button
-							type="button"
-							onClick={() => router.push("/")}
-							className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-minuri-silver/80 bg-minuri-white px-3.5 py-1.5 text-xs font-medium text-minuri-slate transition-transform duration-200 ease-out hover:scale-105"
-						>
-							<ArrowLeft className="size-3.5" aria-hidden />
-							Back to home
-						</button>
+						<AppNav />
 					</div>
 				</div>
 			</div>

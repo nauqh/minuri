@@ -96,6 +96,7 @@ export function buildGuideHref(
         topicFilter: GuideTopicFilter;
         query: string;
         from: GuideOrigin;
+        day?: number;
     },
 ) {
     const params = new URLSearchParams();
@@ -112,6 +113,10 @@ export function buildGuideHref(
         params.set("q", state.query.trim());
     }
 
+    if (state.from === "journey" && state.day != null) {
+        params.set("day", String(state.day));
+    }
+
     const queryString = params.toString();
     const basePath = `/guides/${guide.slug}`;
     return queryString ? `${basePath}?${queryString}` : basePath;
@@ -121,7 +126,12 @@ export function buildBackHref(state: {
     topicFilter: GuideTopicFilter;
     query: string;
     from: GuideOrigin;
+    day?: number;
 }) {
+    if (state.from === "journey") {
+        return state.day != null ? `/journey/plan?day=${state.day}` : "/journey/plan";
+    }
+
     const params = new URLSearchParams();
     const basePath = state.from === "bookmarks" ? "/guides/bookmarks" : "/guides";
 

@@ -48,11 +48,9 @@ export function IdentityCard({ identity, cardState, className = "", plantDelay =
 
   function handleFlip() {
     if (daysCompleted.length === 0) return;
-    setFlipped((v) => {
-      const next = !v;
-      onFlipChange?.(next);
-      return next;
-    });
+    const next = !flipped;
+    setFlipped(next);
+    onFlipChange?.(next);
   }
 
   return (

@@ -26,6 +26,7 @@ import { getTopicMeta } from "@/lib/guides";
 import { useJourneyState, LETTER_SEEN_KEY } from "@/hooks/use-journey-state";
 import { useIdentityState } from "@/hooks/use-identity-state";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
+import { AppNav } from "@/components/app-nav";
 import { JourneyDayPlaces } from "@/components/journey/journey-day-places";
 import { JourneyNearbyEvents } from "@/components/journey/journey-nearby-events";
 import { buildWeekPlan, type DayPlan } from "@/lib/journey-week";
@@ -537,11 +538,13 @@ function DayStepperNav({
 function GuideAccordionRow({
 	guide,
 	suburb,
+	day,
 	open,
 	onToggle,
 }: {
 	guide: Guide;
 	suburb: string;
+	day: number;
 	open: boolean;
 	onToggle: () => void;
 }) {
@@ -617,7 +620,7 @@ function GuideAccordionRow({
 									{guide.summary}
 								</p>
 								<Link
-									href={`/guides/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey`}
+									href={`/guides/${guide.slug}?suburb=${encodeURIComponent(suburb)}&from=journey&day=${day}`}
 									className="mt-3 inline-flex text-sm font-medium text-minuri-teal hover:underline"
 								>
 									Read guide →
@@ -848,6 +851,7 @@ function DayContent({
 								key={guide.slug}
 								guide={guide}
 								suburb={suburb}
+								day={plan.day}
 								open={openGuides.has(guide.slug)}
 								onToggle={() => toggleGuide(guide.slug)}
 							/>
@@ -1088,13 +1092,6 @@ export function JourneyPlanView() {
 				{/* Header */}
 				<header className="px-6 py-4">
 					<div className="mx-auto flex max-w-screen-xl items-center justify-between">
-						<Link
-							href="/"
-							className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
-						>
-							<Home className="size-3.5" aria-hidden />
-							Home
-						</Link>
 						<button
 							type="button"
 							onClick={handleStartOver}
@@ -1103,6 +1100,7 @@ export function JourneyPlanView() {
 							<RotateCcw className="size-3.5" aria-hidden />
 							Start over
 						</button>
+						<AppNav />
 					</div>
 				</header>
 

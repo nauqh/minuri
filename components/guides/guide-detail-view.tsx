@@ -13,6 +13,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import type { Guide } from "@/content/guides";
 import type { GuideOrigin, GuideTopicFilter } from "@/lib/guides";
+import { AppNav } from "@/components/app-nav";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 import { GuideMarkdown } from "@/components/guides/guide-markdown";
 import { GuideSectionLabel } from "@/components/guides/guide-section-label";
@@ -28,6 +29,7 @@ type GuideDetailViewProps = {
 	query: string;
 	from: GuideOrigin;
 	suburb?: string;
+	journeyDay?: number;
 };
 
 type GuideContentJsonSection = {
@@ -153,6 +155,7 @@ export function GuideDetailView({
 	query,
 	from,
 	suburb,
+	journeyDay,
 }: GuideDetailViewProps) {
 	const { isBookmarked, toggleBookmark } = useGuideBookmarks();
 	const topicMeta = getTopicMeta(guide.topic);
@@ -321,7 +324,11 @@ export function GuideDetailView({
 							className="inline-flex items-center gap-2 text-sm font-medium text-minuri-slate transition-colors hover:text-minuri-teal"
 						>
 							<ArrowLeft className="size-4" aria-hidden="true" />
-							{from === "journey" ? "Back to your plan" : "Back to guides"}
+							{from === "journey"
+								? journeyDay != null
+									? `Day ${journeyDay} · Your plan`
+									: "Back to your plan"
+								: "Back to guides"}
 						</Link>
 						<div className="flex items-center gap-2">
 							<BookmarkButton
@@ -329,25 +336,7 @@ export function GuideDetailView({
 								onToggle={handleBookmarkToggle}
 								className="size-9 border-minuri-silver/80 text-minuri-teal hover:bg-minuri-fog"
 							/>
-							{hasJourney ? (
-								<Link
-									href="/journey/plan"
-									className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
-								>
-									<span
-										className="size-2 shrink-0 rounded-full"
-										style={{ backgroundColor: "var(--vibe-accent, var(--color-minuri-teal))" }}
-									/>
-									My Journey · {readingProgress}%
-								</Link>
-							) : (
-								<Link
-									href="/journey"
-									className="inline-flex items-center gap-2 rounded-full border border-minuri-silver/80 px-4 py-2 text-sm font-medium text-minuri-slate transition-colors hover:border-minuri-teal/50 hover:text-minuri-teal"
-								>
-									Build your week →
-								</Link>
-							)}
+							<AppNav journeyDay={journeyDay} />
 						</div>
 					</div>
 				</div>

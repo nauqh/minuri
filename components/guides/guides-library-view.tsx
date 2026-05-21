@@ -9,6 +9,7 @@ import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 
 import { GUIDE_TOPICS, GUIDES } from "@/content/guides";
 import type { Guide } from "@/content/guides";
+import { AppNav } from "@/components/app-nav";
 import { BookmarkButton } from "@/components/guides/bookmark-button";
 import { GuidesShell } from "@/components/guides/guides-shell";
 import { useGuideBookmarks } from "@/hooks/use-guide-bookmarks";
@@ -16,6 +17,7 @@ import {
 	buildGuideHref,
 	filterGuides,
 	getTopicMeta,
+	parseGuideOrigin,
 	parseGuideTopicFilter,
 	type GuideTopicFilter,
 } from "@/lib/guides";
@@ -384,6 +386,7 @@ export function GuidesLibraryView() {
 	const activeTopicFilter = parseGuideTopicFilter(searchParams.get("topic"));
 	const rawQuery = searchParams.get("q") ?? "";
 	const deferredQuery = useDeferredValue(rawQuery);
+	const fromOrigin = parseGuideOrigin(searchParams.get("from"));
 
 	const visibleGuides = filterGuides(GUIDES, activeTopicFilter, deferredQuery);
 
@@ -496,11 +499,11 @@ export function GuidesLibraryView() {
 
 	const libraryBackHome = (
 		<Link
-			href="/guides"
+			href={fromOrigin === "journey" ? "/journey/plan" : "/guides"}
 			className="inline-flex items-center gap-2 rounded-sm border border-minuri-ocean/20 bg-minuri-white/80 px-6 py-2 text-base font-semibold text-minuri-ocean shadow-xs backdrop-blur-sm transition-colors duration-200 hover:bg-minuri-ocean hover:text-minuri-white"
 		>
 			<ArrowLeft className="size-3.5" aria-hidden />
-			Back
+			{fromOrigin === "journey" ? "Back to your plan" : "Back"}
 		</Link>
 	);
 
@@ -509,6 +512,7 @@ export function GuidesLibraryView() {
 			title="Your First-Time Guides"
 			description="Every topic, one guide at a time."
 			headerStart={libraryBackHome}
+			headerEnd={<AppNav />}
 		>
 			<div className="mx-auto w-full max-w-screen-2xl">
 				{guidesSearchFilter}

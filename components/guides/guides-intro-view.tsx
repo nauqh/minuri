@@ -18,6 +18,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { AppNav } from "@/components/app-nav";
+
 import { GUIDE_TOPICS, GUIDES, type GuideTopicSlug } from "@/content/guides";
 import { PERSONAS, type Persona } from "@/content/personas";
 import { PersonaDetailFullscreen } from "@/components/guides/persona-journey-view";
@@ -152,13 +154,7 @@ export function GuidesIntroView() {
 					<ArrowLeft className="size-3.5" aria-hidden />
 					Back to Start
 				</Link>
-				<button
-					type="button"
-					onClick={handleSkip}
-					className="text-xs font-medium text-minuri-slate transition-colors hover:text-minuri-ocean"
-				>
-					Browse all {GUIDES.length} guides →
-				</button>
+				<AppNav />
 			</div>
 
 			{/* ── Hero ── */}
@@ -181,35 +177,6 @@ export function GuidesIntroView() {
 					What do you need most right now?
 				</motion.h1>
 
-				<motion.button
-					type="button"
-					className="mx-auto mt-8 flex cursor-pointer flex-col items-center gap-2 outline-none"
-					onClick={() =>
-						window.scrollBy({
-							top: window.innerHeight,
-							behavior: "smooth",
-						})
-					}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-					aria-label="Scroll down"
-				>
-					<span className="text-xs font-semibold uppercase tracking-widest text-minuri-ocean/50">
-						Scroll to explore
-					</span>
-					<div className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-minuri-ocean/40 pt-1.5">
-						<motion.div
-							className="h-1.5 w-1 rounded-full bg-minuri-teal"
-							animate={{ y: [0, 14, 0], opacity: [1, 0, 1] }}
-							transition={{
-								duration: 1.5,
-								repeat: Infinity,
-								ease: "easeInOut",
-							}}
-						/>
-					</div>
-				</motion.button>
 				<motion.p
 					className="mt-8 text-sm font-bold uppercase tracking-widest text-minuri-ocean"
 					initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 10 }}

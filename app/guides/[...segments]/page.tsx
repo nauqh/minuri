@@ -30,6 +30,7 @@ export default async function GuidesSegmentsPage({
         q?: string | string[];
         from?: string | string[];
         suburb?: string | string[];
+        day?: string | string[];
     }>;
 }) {
     const { segments } = await params;
@@ -58,16 +59,19 @@ export default async function GuidesSegmentsPage({
     const query = parseSingleParam(incomingSearchParams.q) ?? "";
     const from = parseGuideOrigin(parseSingleParam(incomingSearchParams.from));
     const suburb = parseSingleParam(incomingSearchParams.suburb);
+    const dayRaw = parseSingleParam(incomingSearchParams.day);
+    const journeyDay = dayRaw ? parseInt(dayRaw, 10) || undefined : undefined;
 
     return (
         <>
             <GuideDetailView
                 guide={guide}
-                backHref={buildBackHref({ topicFilter, query, from })}
+                backHref={buildBackHref({ topicFilter, query, from, day: journeyDay })}
                 topicFilter={topicFilter}
                 query={query}
                 from={from}
                 suburb={suburb}
+                journeyDay={journeyDay}
             />
             <ScrollToTopButton />
         </>

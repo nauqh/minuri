@@ -24,26 +24,26 @@ const FALLBACK_LINES: Record<number, string> = {
 export function IdentityCardBack({ memoryLines, daysCompleted, traits, primaryColor }: Props) {
   const fullyUnlocked = daysCompleted.length >= 7;
   return (
-    <div className="flex h-full flex-col px-5 py-5">
+    <div className="flex h-full flex-col px-5 py-5 text-minuri-ocean">
       {fullyUnlocked && memoryLines[0] && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="mb-4 rounded-lg bg-current/5 px-3 py-2.5"
+          className="mb-4 rounded-lg bg-minuri-fog px-3 py-2.5"
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] opacity-40">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-minuri-slate">
             You wanted to feel
           </p>
-          <p className="mt-1 text-[12px] italic leading-relaxed opacity-70">
+          <p className="mt-1 text-[12px] italic leading-relaxed text-minuri-ocean">
             &ldquo;{memoryLines[0]}&rdquo;
           </p>
         </motion.div>
       )}
-      <p className="text-[11px] font-black uppercase tracking-[0.14em] opacity-40">
+      <p className="text-[11px] font-black uppercase tracking-[0.14em] text-minuri-slate">
         Your Week
       </p>
-      <div className="mt-3 h-px w-full bg-current opacity-10" />
+      <div className="mt-3 h-px w-full bg-minuri-silver" />
 
       <ol className="mt-4 flex flex-1 flex-col gap-2.5">
         {Array.from({ length: 7 }, (_, i) => {
@@ -59,14 +59,14 @@ export function IdentityCardBack({ memoryLines, daysCompleted, traits, primaryCo
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: i * 0.06 }}
             >
-              <span className="mt-0.5 text-[10px] font-black opacity-30 shrink-0">
+              <span className="mt-0.5 text-[10px] font-black text-minuri-slate shrink-0">
                 D{day}
               </span>
               {isComplete ? (
-                <p className="text-[11px] leading-relaxed opacity-75">{line}</p>
+                <p className="text-[11px] leading-relaxed text-minuri-ocean">{line}</p>
               ) : (
                 <div
-                  className="mt-1 h-2.5 w-full max-w-[180px] rounded-full bg-current opacity-10 blur-[1px]"
+                  className="mt-1 h-2.5 w-full max-w-[180px] rounded-full bg-minuri-fog blur-[1px]"
                   aria-label={`Day ${day} memory locked`}
                   aria-hidden
                 />
@@ -76,8 +76,8 @@ export function IdentityCardBack({ memoryLines, daysCompleted, traits, primaryCo
         })}
       </ol>
 
-      <div className="mt-4 pt-3 border-t border-current/10">
-        <p className="text-[9px] font-black uppercase tracking-[0.18em] opacity-40 mb-1">
+      <div className="mt-4 pt-3 border-t border-minuri-silver">
+        <p className="text-[9px] font-black uppercase tracking-[0.18em] text-minuri-slate mb-1">
           Traits
         </p>
         <div className="flex justify-center">
