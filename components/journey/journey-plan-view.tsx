@@ -73,6 +73,14 @@ const TOPIC_COLORS: Record<
 	},
 };
 
+const GUIDE_LABEL: Record<GuideTopicSlug, string> = {
+	"food-eating":      "Find your feed",
+	"getting-around":   "Find your way",
+	"health-wellbeing": "Look after yourself",
+	"home-admin":       "Get settled",
+	"social-belonging": "Meet your people",
+};
+
 const WHY_TODAY: Record<GuideTopicSlug, string> = {
 	"food-eating":
 		"Sorting food early means one less daily decision while you're still finding your feet.",
@@ -831,7 +839,7 @@ function DayContent({
 							aria-hidden
 						/>
 						<p className="text-xl font-black md:text-2xl text-minuri-ocean">
-							Guides
+							{GUIDE_LABEL[plan.topicSlug]}
 						</p>
 					</div>
 					<div>

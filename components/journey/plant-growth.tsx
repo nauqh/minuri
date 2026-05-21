@@ -205,15 +205,15 @@ export function PlantGrowth({
   useEffect(() => {
     if (!highlight || reduced) return;
     setPulsing(true);
-    const t = setTimeout(() => setPulsing(false), 900);
+    const t = setTimeout(() => setPulsing(false), 2000);
     return () => clearTimeout(t);
   }, [highlight, reduced]);
 
   return (
     <motion.div
       className="inline-flex items-center justify-center"
-      animate={pulsing ? { scale: [1, 1.18, 0.93, 1.07, 1] } : { scale: 1 }}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      animate={pulsing ? { scale: [1, 1.1, 0.96, 1.04, 1] } : { scale: 1 }}
+      transition={{ duration: 1.6, ease: "easeInOut" }}
     >
     <svg
       width={W}
