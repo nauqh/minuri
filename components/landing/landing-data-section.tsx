@@ -18,7 +18,7 @@ const STAT_CARDS = [
 	},
 	{
 		stat: "98%",
-		label: "Of international students report anxiety in their first semester — 86% report financial stress",
+		label: "Of first-year students report anxiety in their first semester — 86% report financial stress",
 		source: "Monash Intl Student Health Survey, 2023",
 		fullCitation:
 			"Monash University International Student Health and Wellbeing Survey 2023. Prevalence of anxiety and financial stress among first-semester international students.",
