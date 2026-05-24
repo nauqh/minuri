@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc *)",
-      "Bash(grep -rn \"className=\\\\\"[^\\\\\"]*\\\\\" *$\" /d/Laboratory/Projects/2026/minuri/components/landing/landing-hero-section-v2.tsx)"
+      "Bash(grep -rn \"className=\\\\\"[^\\\\\"]*\\\\\" *$\" /d/Laboratory/Projects/2026/minuri/components/landing/landing-hero-section-v2.tsx)",
+      "Bash(xargs grep *)"
     ]
   }
 }
